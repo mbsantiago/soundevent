@@ -50,7 +50,7 @@ pip install soundevent
 ## Documentation
 
 For detailed information on how to use the package, please refer to the
-documentation.
+[documentation](https://github.com/mbsantiago/soundevent/settings/pages).
 
 ## Example Usage
 

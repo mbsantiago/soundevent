@@ -3,6 +3,8 @@ site_url: https://mbsantiago.github.io/soundevent/
 
 nav:
   - Home: README.md
+  - Contributing: CONTRIBUTING.md
+  - Code of Conduct: CODE_OF_CONDUCT.md
 
 theme:
   name: material
@@ -10,3 +12,6 @@ theme:
 plugins:
   - search
   - mkdocstrings
+
+markdown_extensions:
+  - pymdownx.snippets
