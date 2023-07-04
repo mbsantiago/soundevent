@@ -1,0 +1,12 @@
+site_name: soundevent
+site_url: https://mbsantiago.github.io/soundevent/
+
+nav:
+  - Home: README.md
+
+theme:
+  name: material
+
+plugins:
+  - search
+  - mkdocstrings
