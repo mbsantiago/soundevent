@@ -12,6 +12,7 @@ dev = [
     "mkdocs-material>=9.1.18",
     "isort>=5.11.5",
     "mkdocstrings[python]>=0.22.0",
+    "tox>=4.6.3",
 ]
 
 [project]
@@ -21,7 +22,9 @@ description = "soundevent is an open-source Python package for the computational
 authors = [
     {name = "Santiago Martinez", email = "santiago.balvanera.20@ucl.ac.uk"},
 ]
-dependencies = []
+dependencies = [
+    "pydantic>=2.0",
+]
 requires-python = ">=3.7"
 readme = "README.md"
 license = {text = "MIT"}
