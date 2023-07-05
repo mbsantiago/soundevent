@@ -51,12 +51,18 @@ By offering these geometry types, the soundevent package provides a
 comprehensive framework for accurately and flexibly describing the
 location and extent of sound events within a recording.
 """
+import sys
 from abc import ABC, abstractmethod
-from typing import Literal
+from typing import List, Tuple
 
-from pydantic import BaseModel, Field, PrivateAttr, validator
+from pydantic import BaseModel, ConfigDict, Field, PrivateAttr, field_validator
 from shapely import geometry
 from shapely.geometry.base import BaseGeometry
+
+if sys.version_info >= (3, 8):
+    from typing import Literal
+else:
+    from typing_extensions import Literal
 
 __all__ = [
     "Time",
@@ -106,19 +112,18 @@ class Geometry(BaseModel, ABC):
     geometry object is always in sync with the Shapely geometry object.
     """
 
+    model_config = ConfigDict(
+        arbitrary_types_allowed=True,
+        frozen=True,
+    )
+
     type: GeometryType = Field(
         ...,
-        description="The type of geometry used to locate the sound event.",
+        description="the type of geometry used to locate the sound event.",
     )
 
     _geom: BaseGeometry = PrivateAttr()
     """The Shapely geometry object representing the geometry."""
-
-    class Config:
-        """Pydantic configuration."""
-
-        arbitrary_types_allowed = True
-        allow_mutation = False
 
     @classmethod
     def geom_type(cls) -> str:
@@ -143,12 +148,12 @@ class Geometry(BaseModel, ABC):
         return self._geom
 
     @property
-    def bounds(self) -> tuple[Time, Frequency, Time, Frequency]:
+    def bounds(self) -> Tuple[Time, Frequency, Time, Frequency]:
         """Get the bounds of the geometry.
 
         Returns
         -------
-        tuple[Time, Frequency, Time, Frequency]
+        Tuple[Time, Frequency, Time, Frequency]
             The bounds of the geometry.
         """
         return self._geom.bounds
@@ -213,7 +218,7 @@ class TimeInterval(Geometry):
 
     type: Literal["TimeInterval"] = "TimeInterval"
 
-    coordinates: tuple[Time, Time] = Field(
+    coordinates: Tuple[Time, Time] = Field(
         ...,
         description="The time interval of the sound event.",
     )
@@ -222,13 +227,13 @@ class TimeInterval(Geometry):
     The time interval is relative to the start of the recording.
     """
 
-    @validator("coordinates")
-    def validate_time_interval(cls, v: tuple[Time, Time]) -> tuple[Time, Time]:
+    @field_validator("coordinates")
+    def validate_time_interval(cls, v: Tuple[Time, Time]) -> Tuple[Time, Time]:
         """Validate that the time interval is valid.
 
         Parameters
         ----------
-        v : tuple[Time, Time]
+        v : Tuple[Time, Time]
             The time interval to validate.
 
         Returns
@@ -264,7 +269,7 @@ class Point(Geometry):
 
     type: Literal["Point"] = "Point"
 
-    coordinates: tuple[Time, Frequency] = Field(
+    coordinates: Tuple[Time, Frequency] = Field(
         ...,
         description="The points of the sound event.",
     )
@@ -294,7 +299,7 @@ class LineString(Geometry):
 
     type: Literal["LineString"] = "LineString"
 
-    coordinates: list[tuple[Time, Frequency]] = Field(
+    coordinates: List[Tuple[Time, Frequency]] = Field(
         ...,
         description="The line of the sound event.",
     )
@@ -313,19 +318,19 @@ class LineString(Geometry):
         """
         return geometry.LineString(self.coordinates)
 
-    @validator("coordinates")
+    @field_validator("coordinates")
     def has_at_least_two_points(
-        cls, v: list[tuple[Time, Frequency]]
-    ) -> list[tuple[Time, Frequency]]:
+        cls, v: List[Tuple[Time, Frequency]]
+    ) -> List[Tuple[Time, Frequency]]:
         """Validate that the line has at least two points."""
         if len(v) < 2:
             raise ValueError("The line must have at least two points.")
         return v
 
-    @validator("coordinates")
+    @field_validator("coordinates")
     def is_ordered_by_time(
-        cls, v: list[tuple[Time, Frequency]]
-    ) -> list[tuple[Time, Frequency]]:
+        cls, v: List[Tuple[Time, Frequency]]
+    ) -> List[Tuple[Time, Frequency]]:
         """Validate that the line is ordered by time."""
         if not all(v[i][0] <= v[i + 1][0] for i in range(len(v) - 1)):
             raise ValueError("The line must be ordered by time.")
@@ -342,7 +347,7 @@ class Polygon(Geometry):
 
     type: Literal["Polygon"] = "Polygon"
 
-    coordinates: list[list[tuple[Time, Frequency]]] = Field(
+    coordinates: List[List[Tuple[Time, Frequency]]] = Field(
         ...,
         description="The polygon of the sound event.",
     )
@@ -350,10 +355,10 @@ class Polygon(Geometry):
 
     All times are relative to the start of the recording."""
 
-    @validator("coordinates")
+    @field_validator("coordinates")
     def has_at_least_one_ring(
-        cls, v: list[list[tuple[Time, Frequency]]]
-    ) -> list[list[tuple[Time, Frequency]]]:
+        cls, v: List[List[Tuple[Time, Frequency]]]
+    ) -> List[List[Tuple[Time, Frequency]]]:
         """Validate that the polygon has at least one ring."""
         if len(v) == 0:
             raise ValueError("The polygon must have at least one ring.")
@@ -381,7 +386,7 @@ class BoundingBox(Geometry):
 
     type: Literal["BoundingBox"] = "BoundingBox"
 
-    coordinates: tuple[Time, Frequency, Time, Frequency] = Field(
+    coordinates: Tuple[Time, Frequency, Time, Frequency] = Field(
         ...,
         description="The bounding box of the sound event.",
     )
@@ -391,11 +396,11 @@ class BoundingBox(Geometry):
     All times are relative to the start of the recording.
     """
 
-    @validator("coordinates")
+    @field_validator("coordinates")
     def validate_bounding_box(
         cls,
-        v: tuple[Time, Frequency, Time, Frequency],
-    ) -> tuple[Time, Frequency, Time, Frequency]:
+        v: Tuple[Time, Frequency, Time, Frequency],
+    ) -> Tuple[Time, Frequency, Time, Frequency]:
         """Validate that the bounding box is valid."""
         if v[0] > v[2]:
             raise ValueError("The start time must be before the end time.")
@@ -428,7 +433,7 @@ class MultiPoint(Geometry):
 
     type: Literal["MultiPoint"] = "MultiPoint"
 
-    coordinates: list[tuple[Time, Frequency]] = Field(
+    coordinates: List[Tuple[Time, Frequency]] = Field(
         ...,
         description="The points of the sound event.",
     )
@@ -457,7 +462,7 @@ class MultiLineString(Geometry):
 
     type: Literal["MultiLineString"] = "MultiLineString"
 
-    coordinates: list[list[tuple[Time, Frequency]]] = Field(
+    coordinates: List[List[Tuple[Time, Frequency]]] = Field(
         ...,
         description="The lines of the sound event.",
     )
@@ -474,28 +479,28 @@ class MultiLineString(Geometry):
         """
         return geometry.MultiLineString(self.coordinates)
 
-    @validator("coordinates")
+    @field_validator("coordinates")
     def has_at_least_one_line(
-        cls, v: list[list[tuple[Time, Frequency]]]
-    ) -> list[list[tuple[Time, Frequency]]]:
+        cls, v: List[List[Tuple[Time, Frequency]]]
+    ) -> List[List[Tuple[Time, Frequency]]]:
         """Validate that the multiline has at least one line."""
         if len(v) == 0:
             raise ValueError("The multiline must have at least one line.")
         return v
 
-    @validator("coordinates")
+    @field_validator("coordinates")
     def each_line_has_at_least_two_points(
-        cls, v: list[list[tuple[Time, Frequency]]]
-    ) -> list[list[tuple[Time, Frequency]]]:
+        cls, v: List[List[Tuple[Time, Frequency]]]
+    ) -> List[List[Tuple[Time, Frequency]]]:
         """Validate that each line has at least two points."""
         if not all(len(line) >= 2 for line in v):
             raise ValueError("Each line must have at least two points.")
         return v
 
-    @validator("coordinates")
+    @field_validator("coordinates")
     def each_line_is_ordered_by_time(
-        cls, v: list[list[tuple[Time, Frequency]]]
-    ) -> list[list[tuple[Time, Frequency]]]:
+        cls, v: List[List[Tuple[Time, Frequency]]]
+    ) -> List[List[Tuple[Time, Frequency]]]:
         """Validate that each line is ordered by time."""
         for line in v:
             if not all(
@@ -517,7 +522,7 @@ class MultiPolygon(Geometry):
 
     type: Literal["MultiPolygon"] = "MultiPolygon"
 
-    coordinates: list[list[list[tuple[Time, Frequency]]]] = Field(
+    coordinates: List[List[List[Tuple[Time, Frequency]]]] = Field(
         ...,
         description="The polygons of the sound event.",
     )
@@ -525,10 +530,10 @@ class MultiPolygon(Geometry):
 
     All times are relative to the start of the recording."""
 
-    @validator("coordinates")
+    @field_validator("coordinates")
     def has_at_least_one_polygon(
-        cls, v: list[list[list[tuple[Time, Frequency]]]]
-    ) -> list[list[list[tuple[Time, Frequency]]]]:
+        cls, v: List[List[List[Tuple[Time, Frequency]]]]
+    ) -> List[List[List[Tuple[Time, Frequency]]]]:
         """Validate that the multipolygon has at least one polygon."""
         if len(v) == 0:
             raise ValueError(
@@ -536,10 +541,10 @@ class MultiPolygon(Geometry):
             )
         return v
 
-    @validator("coordinates")
+    @field_validator("coordinates")
     def each_polygon_has_at_least_one_ring(
-        cls, v: list[list[list[tuple[Time, Frequency]]]]
-    ) -> list[list[list[tuple[Time, Frequency]]]]:
+        cls, v: List[List[List[Tuple[Time, Frequency]]]]
+    ) -> List[List[List[Tuple[Time, Frequency]]]]:
         """Validate that each polygon has at least one ring."""
         for polygon in v:
             if len(polygon) == 0:

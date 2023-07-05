@@ -37,6 +37,7 @@ of the sound events.
 """
 
 from uuid import UUID, uuid4
+from typing import List
 
 from pydantic import BaseModel, Field
 
@@ -62,8 +63,8 @@ class SoundEvent(BaseModel):
     geometry: Geometry
     """The geometry locating the sound event within the recording."""
 
-    tags: list[Tag] = Field(default_factory=list)
+    tags: List[Tag] = Field(default_factory=list)
     """The tags associated with the sound event."""
 
-    features: list[Feature] = Field(default_factory=list)
+    features: List[Feature] = Field(default_factory=list)
     """The features associated with the sound event."""

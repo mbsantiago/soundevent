@@ -1,4 +1,4 @@
-"""Annotation Tasks
+"""Annotation Tasks.
 
 Annotation tasks form a fundamental component of annotation projects
 in bioacoustic research. The `soundevent` package introduces the

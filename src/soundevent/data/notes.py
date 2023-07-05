@@ -43,6 +43,7 @@ and researchers involved in the project.
 """
 
 import datetime
+from typing import Optional
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
@@ -59,7 +60,7 @@ class Note(BaseModel):
     message: str
     """The message of the note."""
 
-    created_by: str
+    created_by: Optional[str] = None
     """The id of the user who created the note."""
 
     is_issue: bool = False
@@ -69,11 +70,6 @@ class Note(BaseModel):
         default_factory=datetime.datetime.now
     )
     """The time at which the note was created."""
-
-    class Config:
-        """Pydantic configuration."""
-
-        orm_mode = True
 
     def __hash__(self):
         """Hash the Note object."""

@@ -38,16 +38,14 @@ more comprehensive understanding and analysis of the events' acoustic
 content.
 
 """
-
-
 from typing import List
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
 
 from soundevent.data.features import Feature
-from soundevent.data.sound_events import SoundEvent
 from soundevent.data.predicted_tags import PredictedTag
+from soundevent.data.sound_events import SoundEvent
 
 __all__ = [
     "PredictedSoundEvent",

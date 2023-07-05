@@ -51,7 +51,7 @@ related fields.
 
 import datetime
 from pathlib import Path
-from typing import Optional
+from typing import Optional, List
 
 from pydantic import BaseModel, Field
 
@@ -85,25 +85,25 @@ class Recording(BaseModel):
     hash: Optional[str] = None
     """The md5 hash of the audio file."""
 
-    date: datetime.date | None = None
+    date: Optional[datetime.date] = None
     """The date on which the recording was made."""
 
-    time: datetime.time | None = None
+    time: Optional[datetime.time] = None
     """The time at which the recording was made."""
 
-    latitude: float | None = None
+    latitude: Optional[float] = None
     """The latitude coordinate of the site of recording."""
 
-    longitude: float | None = None
+    longitude: Optional[float] = None
     """The longitude coordinate of the site of recording."""
 
-    tags: list[Tag] = Field(default_factory=list)
+    tags: List[Tag] = Field(default_factory=list)
     """The tags associated with the recording."""
 
-    features: list[Feature] = Field(default_factory=list)
+    features: List[Feature] = Field(default_factory=list)
     """A list of features associated with the recording."""
 
-    notes: list[Note] = Field(default_factory=list)
+    notes: List[Note] = Field(default_factory=list)
     """A list of notes associated with the recording."""
 
     def __hash__(self):

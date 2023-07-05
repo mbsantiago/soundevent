@@ -43,7 +43,7 @@ within a recording.
 from typing import List
 from uuid import UUID, uuid4
 
-from pydantic import BaseModel, Field, root_validator
+from pydantic import BaseModel, Field, model_validator
 
 from soundevent.data.features import Feature
 from soundevent.data.recordings import Recording
@@ -75,7 +75,7 @@ class Clip(BaseModel):
     features: List[Feature] = Field(default_factory=list)
     """List of features associated with the clip."""
 
-    @root_validator  # type: ignore
+    @model_validator(mode="before")
     def validate_times(cls, values):
         """Validate that start_time < end_time."""
         if values["start_time"] > values["end_time"]:
