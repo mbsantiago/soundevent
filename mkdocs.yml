@@ -3,6 +3,7 @@ site_url: https://mbsantiago.github.io/soundevent/
 
 nav:
   - Home: README.md
+  - Data: data.md
   - Contributing: CONTRIBUTING.md
   - Code of Conduct: CODE_OF_CONDUCT.md
 
@@ -11,7 +12,28 @@ theme:
 
 plugins:
   - search
-  - mkdocstrings
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_root_heading: true
+            show_source: false
+            show_symbol_type_toc: true
+            show_root_toc_entry: true
+            show_category_heading: true
+            show_symbol_type_heading: true
+            docstring_options:
+              ignore_init_summary: false
+            merge_init_into_class: true
+
+watch:
+  - docs
+  - src
 
 markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
   - pymdownx.snippets
+  - toc:
+      toc_depth: 3

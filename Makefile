@@ -71,6 +71,12 @@ docs:             ## Build the documentation.
 	@$(ENV_PREFIX)mkdocs build
 	URL="site/index.html"; xdg-open $$URL || sensible-browser $$URL || x-www-browser $$URL || gnome-open $$URL
 
+.PHONY: docs-serve
+docs-serve:             ## Build the documentation and watch for changes.
+	@echo "building documentation ..."
+	URL="http://localhost:8000/soundevent/"; xdg-open $$URL || sensible-browser $$URL || x-www-browser $$URL || gnome-open $$URL
+	@$(ENV_PREFIX)mkdocs serve
+
 .PHONY: init
 init:             ## Initialize the project based on an application template.
 	@./.github/init.sh

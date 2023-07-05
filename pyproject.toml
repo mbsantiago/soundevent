@@ -24,6 +24,7 @@ authors = [
 ]
 dependencies = [
     "pydantic>=2.0",
+    "shapely>=2.0.1",
 ]
 requires-python = ">=3.7"
 readme = "README.md"
@@ -35,3 +36,16 @@ build-backend = "pdm.backend"
 
 [tool.black]
 line-length = 79
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
+include = ["src", "tests"]
+verboseOutput = true
+useLibraryCodeForTypes = true
+
+[tool.pydocstyle]
+convention = "numpy"
+
+[tool.isort]
+profile = "black"
