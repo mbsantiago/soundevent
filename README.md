@@ -1,5 +1,10 @@
 # soundevent
 
+> **Warning**
+> This package is under active development use with caution. 
+> However, most of the data definitions are not expected to change. 
+> Will be adding data loading/exporting and prediction evaluation functions soon. 
+
 `soundevent` is an open-source Python package that aims to support the
 computational biocoustic community in developing well-tested, coherent, and
 standardized software tools for bioacoustic analysis. The main goal of the
