@@ -121,7 +121,6 @@ class Geometry(BaseModel, ABC):
         allow_mutation = False
 
     @classmethod
-    @property
     def geom_type(cls) -> str:
         """Get the geometry type.
 
@@ -130,7 +129,7 @@ class Geometry(BaseModel, ABC):
         str
             The Shapely geometry type.
         """
-        type_field = cls.__fields__["type"]  # type: ignore
+        type_field = cls.model_fields["type"]
         return type_field.default
 
     @property
