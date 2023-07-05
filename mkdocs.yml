@@ -9,6 +9,8 @@ nav:
 
 theme:
   name: material
+  features:
+    - content.code.copy
 
 plugins:
   - search
@@ -35,6 +37,11 @@ markdown_extensions:
   - pymdownx.details
   - pymdownx.superfences
   - pymdownx.snippets
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
   - toc:
       toc_depth: 3
       permalink: "#"

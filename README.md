@@ -56,14 +56,23 @@ For detailed information on how to use the package, please refer to the
 
 Here's a brief example demonstrating the usage of `soundevent` package:
 
-```{python}
+``` py
 import soundevent
+
+dataset = soundevent.load_dataset("example_dataset.json", audio_dir="audio")
+print(f"Dataset {dataset.name} has {len(dataset.recordings)} Recordings")
+
+recording = dataset.recordings[0]
+print(f"Recording {recording.id}:  duration={recording.duration}, samplerate={recording.samplerate}")
+
+wav = soundevent.load_recording_audio(recording)
+
 ```
 
 ## Contributing
 
 We welcome contributions from the community to make `soundevent` even better. If
-you would like to contribute, please refer to the contribution guidelines.
+you would like to contribute, please refer to the [contribution guidelines](CONTRIBUTING.md).
 
 ## License
 
