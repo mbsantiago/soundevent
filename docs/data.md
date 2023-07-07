@@ -22,7 +22,8 @@ covers the following key topics:
   analysis.
 
 - [Sound Event](#sound-events): Clear definition and methods of locating sound
-  events within a recording, including different geometries.
+events within a recording, including different geometries and sequences of
+sound events.
 
 - [Annotation](#annotations): Objects related to the process of audio
   annotation, including annotation tasks and human-labeled sound events
@@ -359,6 +360,48 @@ specific purpose in describing the location of sound events:
 By offering these geometry types, the `soundevent` package provides a
 comprehensive framework for accurately and flexibly describing the location and
 extent of [sound events](#sound_events_1) within a [recording](#recordings).
+
+### Sequences
+
+Animal communication is a fascinating and intricate phenomenon, often
+consisting of multiple vocalizations that form a cohesive message. In the
+`soundevent` package, we introduce the concept of a `Sequence` object to
+represent these complex vocalization patterns. A `Sequence` groups together
+multiple [sound event](#sound-events) objects, allowing researchers to analyze
+and understand the composition and dynamics of animal communication in a
+structured manner.
+
+#### Flexible Modeling of Vocalization Patterns
+
+The `Sequence` object is designed to provide flexibility to researchers,
+allowing them to model a wide range of sequence types and behaviors. While the
+[sound events](#sound_events_1) within a sequence should originate from the
+same recording, no other restrictions are imposed, empowering researchers to
+tailor the structure to their specific research needs.
+
+#### Sequence Description
+
+Similar to individual [sound events](#sound_events_1), sequences can be
+enriched with additional information using [tags](#tags),
+[features](#features), and [notes](#notes). Researchers can attach categorical
+[tags](#tags) to describe the type of sequence or the associated behavior,
+providing valuable insights into the communication context. Additionally,
+numerical [features](#features) can capture important characteristics of the
+sequence, such as overall duration, inter-pulse interval, or any other relevant
+acoustic properties.
+
+#### Hierarchical Structure
+
+Furthermore, recognizing the hierarchical nature of animal communication, the
+`Sequence` object allows the inclusion of subsequences. Researchers can specify
+a parent sequence, facilitating the representation of complex hierarchical
+relationships within the vocalization structure.
+
+By incorporating sequences into the analysis workflow, researchers gain a
+flexible and expressive framework to explore and study the intricacies of
+animal communication. The `Sequence` object, along with its associated tags,
+features, and hierarchical capabilities, provides a powerful tool for
+understanding the rich complexity of vocalization sequences.
 
 ## Annotations
 
