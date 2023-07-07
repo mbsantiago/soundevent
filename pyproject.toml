@@ -17,7 +17,7 @@ dev = [
 
 [project]
 name = "soundevent"
-version = "0.1.1"
+version = "0.2.0"
 description = "soundevent is an open-source Python package for the computational biocoustic community, providing standardized tools for sound event analysis and data management."
 authors = [
     {name = "Santiago Martinez", email = "santiago.balvanera.20@ucl.ac.uk"},
