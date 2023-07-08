@@ -25,6 +25,9 @@ authors = [
 dependencies = [
     "pydantic>=2.0",
     "shapely>=2.0.1",
+    "scipy>=1.6.1",
+    "xarray>=0.20.2",
+    "matplotlib>=3.5.3",
 ]
 requires-python = ">=3.7"
 readme = "README.md"
