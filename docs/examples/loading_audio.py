@@ -79,7 +79,7 @@ print(repr(subwav2))
 # the [`audio.load_clip`][soundevent.audio.load_clip] function is generally
 # preferred for efficiency.
 #
-# You can verify the similarity of the clips using numpy.allclose:
+# You can verify the similarity of the clips:
 
 import numpy as np
 print(np.allclose(subwav[:-1], subwav2))

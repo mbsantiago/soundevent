@@ -36,18 +36,20 @@ class MediaInfo:
 def get_media_info(path: os.PathLike) -> MediaInfo:
     """Return the media information from the WAV file.
 
+    The information extracted from the WAV file is the audio format,
+    the bit depth, the sample rate, the duration, the number of
+    samples, and the number of channels. See the documentation of
+    [`MediaInfo`][soundevent.audio.MediaInfo] for more information.
+
     Parameters
     ----------
-    wav : BinaryIO
-        Open file object of the WAV file.
-
-    chunk : Chunk
-        The RIFF chunk info, which is the root chunk. Should include
-        the fmt and data chunks as subchunks.
+    path : os.PathLike
+        Path to the WAV file.
 
     Returns
     -------
-    MediaInfo
+    [MediaInfo][soundevent.audio.MediaInfo]
+        Information about the WAV file.
 
     Raises
     ------
