@@ -16,7 +16,7 @@ definition. The package comprises three key components:
 
 ### 1. Data Classes for Bioacoustic Analysis
 
-The `soundevent` package defines several data classes that conceptualize and
+The `soundevent` package defines several [data classes](https://mbsantiago.github.io/soundevent/data/) that conceptualize and
 standardize different recurrent objects in bioacoustic analysis. These data
 classes establish the relationships between various concepts and specify the
 attributes each object possesses. They are designed to be flexible enough to
@@ -55,24 +55,12 @@ pip install soundevent
 ## Documentation
 
 For detailed information on how to use the package, please refer to the
-[documentation](https://github.com/mbsantiago/soundevent/settings/pages).
+[documentation](https://mbsantiago.github.io/soundevent/).
 
 ## Example Usage
 
-Here's a brief example demonstrating the usage of `soundevent` package:
-
-``` py
-import soundevent
-
-dataset = soundevent.load_dataset("example_dataset.json", audio_dir="audio")
-print(f"Dataset {dataset.name} has {len(dataset.recordings)} Recordings")
-
-recording = dataset.recordings[0]
-print(f"Recording {recording.id}:  duration={recording.duration}, samplerate={recording.samplerate}")
-
-wav = soundevent.load_recording_audio(recording)
-
-```
+To see practical examples of how to use soundevent, you can explore the collection of examples provided in the
+[documentation's gallery](https://mbsantiago.github.io/soundevent/generated/gallery/).
 
 ## Contributing
 
