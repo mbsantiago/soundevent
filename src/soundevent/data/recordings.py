@@ -50,11 +50,13 @@ related fields.
 """
 
 import datetime
+import os
 from pathlib import Path
-from typing import Optional, List
+from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
+from soundevent.audio.media_info import get_media_info
 from soundevent.data.features import Feature
 from soundevent.data.notes import Note
 from soundevent.data.tags import Tag
@@ -71,13 +73,25 @@ class Recording(BaseModel):
     """The path to the audio file."""
 
     duration: float
-    """The duration of the audio file in seconds."""
+    """The duration of the audio file in seconds.
+
+    The duration of the audio file is adjusted by the time expansion
+    factor if the audio file is time expanded. Hence this duration
+    is the real duration of the recorded audio, and might be different
+    from the duration reported by the media information.
+    """
 
     channels: int
     """The number of channels in the audio file."""
 
     samplerate: int
-    """The sample rate of the audio file in Hz."""
+    """The sample rate of the audio file in Hz.
+
+    The sample rate of the audio file is adjusted by the time expansion
+    factor if the audio file is time expanded. Hence this sample rate
+    is the real sample rate of the recorded audio, and might be different
+    from the sample rate reported by the media information.
+    """
 
     time_expansion: float = 1.0
     """The time expansion factor of the audio file."""
@@ -109,3 +123,37 @@ class Recording(BaseModel):
     def __hash__(self):
         """Hash function."""
         return hash(self.hash)
+
+    @classmethod
+    def from_file(
+        cls,
+        path: os.PathLike,
+        time_expansion: float = 1,
+        **kwargs,
+    ) -> "Recording":
+        """Create a recording object from a file.
+
+        This function does not load the audio data itself, but rather
+        extracts the metadata from the file and creates a recording
+        object with the appropriate metadata.
+
+        Parameters
+        ----------
+        path : Path
+        **kwargs
+            Additional keyword arguments to pass to the constructor.
+
+        Returns
+        -------
+        Recording
+            The recording object.
+        """
+        media_info = get_media_info(path)
+        return cls(
+            path=Path(path),
+            duration=media_info.duration_s / time_expansion,
+            channels=media_info.channels,
+            samplerate=int(media_info.samplerate_hz * time_expansion),
+            time_expansion=time_expansion,
+            **kwargs,
+        )

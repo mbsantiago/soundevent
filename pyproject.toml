@@ -13,6 +13,7 @@ dev = [
     "isort>=5.11.5",
     "mkdocstrings[python]>=0.22.0",
     "tox>=4.6.3",
+    "hypothesis>=6.79.4",
 ]
 
 [project]
