@@ -10,7 +10,8 @@ import numpy as np
 import xarray as xr
 from scipy.io import wavfile
 
-from soundevent import data
+from soundevent.data.clips import Clip
+from soundevent.data.recordings import Recording
 
 __all__ = [
     "load_audio",
@@ -67,7 +68,7 @@ def load_audio(
     return data, samplerate
 
 
-def load_recording(recording: data.Recording) -> xr.DataArray:
+def load_recording(recording: Recording) -> xr.DataArray:
     """Load a recording from a file.
 
     Parameters
@@ -102,7 +103,7 @@ def load_recording(recording: data.Recording) -> xr.DataArray:
     )
 
 
-def load_clip(clip: data.Clip) -> xr.DataArray:
+def load_clip(clip: Clip) -> xr.DataArray:
     """Load a clip from a file.
 
     Parameters

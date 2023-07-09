@@ -139,7 +139,7 @@ def test_read_clip(
     )
 
     # Check that we can slice the recording array to get the same clip
-    # Load recording with xarray
+    # Load recording with xarray.
     rec_xr = load_recording(recording)
     assert rec_xr.attrs["samplerate"] == samplerate
     assert rec_xr.shape == (samples, channels)

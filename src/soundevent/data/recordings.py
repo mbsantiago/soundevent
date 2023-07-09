@@ -56,7 +56,6 @@ from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
-from soundevent.audio.media_info import get_media_info
 from soundevent.data.features import Feature
 from soundevent.data.notes import Note
 from soundevent.data.tags import Tag
@@ -96,28 +95,28 @@ class Recording(BaseModel):
     time_expansion: float = 1.0
     """The time expansion factor of the audio file."""
 
-    hash: Optional[str] = None
+    hash: Optional[str] = Field(default=None, repr=False)
     """The md5 hash of the audio file."""
 
-    date: Optional[datetime.date] = None
+    date: Optional[datetime.date] = Field(default=None, repr=False)
     """The date on which the recording was made."""
 
-    time: Optional[datetime.time] = None
+    time: Optional[datetime.time] = Field(default=None, repr=False)
     """The time at which the recording was made."""
 
-    latitude: Optional[float] = None
+    latitude: Optional[float] = Field(default=None, repr=False)
     """The latitude coordinate of the site of recording."""
 
-    longitude: Optional[float] = None
+    longitude: Optional[float] = Field(default=None, repr=False)
     """The longitude coordinate of the site of recording."""
 
-    tags: List[Tag] = Field(default_factory=list)
+    tags: List[Tag] = Field(default_factory=list, repr=False)
     """The tags associated with the recording."""
 
-    features: List[Feature] = Field(default_factory=list)
+    features: List[Feature] = Field(default_factory=list, repr=False)
     """A list of features associated with the recording."""
 
-    notes: List[Note] = Field(default_factory=list)
+    notes: List[Note] = Field(default_factory=list, repr=False)
     """A list of notes associated with the recording."""
 
     def __hash__(self):
@@ -148,6 +147,8 @@ class Recording(BaseModel):
         Recording
             The recording object.
         """
+        from soundevent.audio.media_info import get_media_info
+
         media_info = get_media_info(path)
         return cls(
             path=Path(path),

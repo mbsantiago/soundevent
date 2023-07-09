@@ -15,10 +15,7 @@ and metadata.
 """
 import os
 from dataclasses import dataclass, field
-from typing import BinaryIO, List, Optional, Union
-
-PathLike = Union[os.PathLike, str]
-
+from typing import BinaryIO, Dict, List, Optional
 
 CHUNKS_WITH_SUBCHUNKS = ["RIFF", "LIST"]
 
@@ -40,15 +37,15 @@ class Chunk:
         The position of the chunk in the file.
     chunk_size : int
         The chunk size.
-    subchunks : List[Chunk]
-        The subchunks of the chunk.
+    subchunks : Dict[Chunk]
+        A dictionary holding the subchunks of the chunk.
     """
 
     chunk_id: str
     size: int
     position: int
     identifier: Optional[str] = None
-    subchunks: List["Chunk"] = field(default_factory=list)
+    subchunks: Dict[str, "Chunk"] = field(default_factory=dict)
 
 
 def _get_subchunks(riff: BinaryIO, size: int) -> List[Chunk]:
@@ -106,7 +103,10 @@ def _read_chunk(riff: BinaryIO) -> Chunk:
     )
 
     if chunk_id in CHUNKS_WITH_SUBCHUNKS:
-        chunk.subchunks = _get_subchunks(riff, size - 4)
+        chunk.subchunks = {
+            subchunk.chunk_id: subchunk
+            for subchunk in _get_subchunks(riff, size - 4)
+        }
     else:
         riff.seek(size, os.SEEK_CUR)
 

@@ -1,6 +1,6 @@
 """Functions for getting media information from WAV files."""
-from dataclasses import dataclass
 import os
+from dataclasses import dataclass
 
 from soundevent.audio.chunks import parse_into_chunks
 
@@ -59,7 +59,7 @@ def get_media_info(path: os.PathLike) -> MediaInfo:
 
         # Get info from the fmt chunk. The fmt chunk is the first
         # subchunk of the root chunk.
-        fmt_chunk = chunk.subchunks[0]
+        fmt_chunk = chunk.subchunks["fmt "]
 
         # Go to the start of the fmt chunk after the chunk id and
         # chunk size.
@@ -75,7 +75,7 @@ def get_media_info(path: os.PathLike) -> MediaInfo:
         # Get size of data chunk. Notice that the size of the data
         # chunk is the size of the data subchunk divided by the number
         # of channels and the bit depth.
-        data_chunk = chunk.subchunks[2]
+        data_chunk = chunk.subchunks["data"]
         samples = 8 * data_chunk.size // (channels * bit_depth)
 
         duration = samples / samplerate
