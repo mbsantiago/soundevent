@@ -1,5 +1,12 @@
 # soundevent
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![PyPI version](https://badge.fury.io/py/soundevent.svg)](https://badge.fury.io/py/soundevent)
+![tests](https://github.com/mbsantiago/soundevent/actions/workflows/test.yml/badge.svg)
+[![docs](https://github.com/mbsantiago/soundevent/actions/workflows/docs.yml/badge.svg)](https://mbsantiago.github.io/soundevent/)
+![Python 3.8 +](https://img.shields.io/badge/python->=_3.8-blue.svg)
+![Static Badge](https://img.shields.io/badge/formatting-black-black)
+
 > **Warning**
 > This package is under active development use with caution. 
 > However, most of the data definitions are not expected to change. 
