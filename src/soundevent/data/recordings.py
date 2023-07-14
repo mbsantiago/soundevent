@@ -51,6 +51,7 @@ related fields.
 
 import datetime
 import os
+from uuid import UUID, uuid4
 from pathlib import Path
 from typing import List, Optional
 
@@ -67,6 +68,9 @@ __all__ = [
 
 class Recording(BaseModel):
     """Recordings."""
+
+    id: UUID = Field(default_factory=uuid4, repr=False)
+    """The unique identifier of the recording."""
 
     path: Path
     """The path to the audio file."""
