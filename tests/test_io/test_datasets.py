@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 
 from soundevent import data
-from soundevent.io import save_dataset, load_dataset
+from soundevent.io import load_dataset, save_dataset
 
 
 def test_save_empty_dataset_to_aoef_format(tmp_path: Path):
@@ -270,7 +270,6 @@ def test_save_dataset_with_one_recording_with_features(
     }
 
 
-
 def test_save_and_load_dataset_recover_the_same_object(
     tmp_path: Path,
 ):
@@ -323,7 +322,7 @@ def test_save_and_load_dataset_recover_the_same_object(
                         created_by="John Doe",
                         created_at=datetime.datetime(2021, 1, 1, 12, 34, 56),
                     ),
-                ]
+                ],
             )
         ],
     )
