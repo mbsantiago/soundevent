@@ -285,7 +285,7 @@ def save_dataset_json_format(
         recordings.append(
             RecordingObject(
                 id=recording.id,
-                path=recording.path.relative_to(audio_dir),
+                path=recording.path.resolve().relative_to(audio_dir),
                 duration=recording.duration,
                 channels=recording.channels,
                 samplerate=recording.samplerate,

@@ -62,7 +62,7 @@ from soundevent.data.recordings import Recording
 class Dataset(BaseModel):
     """Datasets."""
 
-    id: UUID = Field(default_factory=uuid4)
+    id: UUID = Field(default_factory=uuid4, repr=False)
     """The unique identifier of the dataset."""
 
     name: str
@@ -71,5 +71,5 @@ class Dataset(BaseModel):
     description: Optional[str] = None
     """A description of the dataset."""
 
-    recordings: List[Recording] = Field(default_factory=list)
+    recordings: List[Recording] = Field(default_factory=list, repr=False)
     """List of recordings associated with the dataset."""
