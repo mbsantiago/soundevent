@@ -51,9 +51,9 @@ related fields.
 
 import datetime
 import os
-from uuid import UUID, uuid4
 from pathlib import Path
 from typing import List, Optional
+from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
 
@@ -125,7 +125,7 @@ class Recording(BaseModel):
 
     def __hash__(self):
         """Hash function."""
-        return hash(self.hash)
+        return hash(self.id)
 
     @classmethod
     def from_file(

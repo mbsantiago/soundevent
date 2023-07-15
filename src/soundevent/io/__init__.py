@@ -6,7 +6,6 @@ sound event data.
 
 from soundevent.io.datasets import load_dataset, save_dataset
 
-
 __all__ = [
     "load_dataset",
     "save_dataset",

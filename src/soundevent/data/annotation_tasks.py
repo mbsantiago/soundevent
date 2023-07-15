@@ -47,7 +47,9 @@ enabling comprehensive analysis of audio recordings in bioacoustic
 research projects.
 
 """
+import datetime
 from typing import List, Optional
+from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
 
@@ -60,6 +62,9 @@ from soundevent.data.tags import Tag
 class AnnotationTask(BaseModel):
     """Annotation task."""
 
+    id: UUID = Field(default_factory=uuid4)
+    """Unique identifier for the annotation task."""
+
     clip: Clip
     """The annotated clip."""
 
@@ -69,6 +74,9 @@ class AnnotationTask(BaseModel):
     completed_by: Optional[str] = None
     """The user who completed the annotation task."""
 
+    completed_on: Optional[datetime.datetime] = None
+    """The date and time when the annotation task was completed."""
+
     notes: List[Note] = Field(default_factory=list)
     """Notes associated with the annotation task."""
 
@@ -77,3 +85,7 @@ class AnnotationTask(BaseModel):
 
     completed: bool = False
     """Whether the annotation task has been completed."""
+
+    def __hash__(self):
+        """Compute the hash value for the annotation task."""
+        return hash(self.id)

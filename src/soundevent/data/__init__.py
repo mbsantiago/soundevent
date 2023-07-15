@@ -36,7 +36,6 @@ from soundevent.data.annotations import Annotation
 from soundevent.data.clips import Clip
 from soundevent.data.dataset import Dataset
 from soundevent.data.features import Feature
-from soundevent.data.sequences import Sequence
 from soundevent.data.geometries import (
     MAX_FREQUENCY,
     BoundingBox,
@@ -60,6 +59,7 @@ from soundevent.data.predicted_sound_events import PredictedSoundEvent
 from soundevent.data.predicted_tags import PredictedTag
 from soundevent.data.processed_clip import ProcessedClip
 from soundevent.data.recordings import Recording
+from soundevent.data.sequences import Sequence
 from soundevent.data.sound_events import SoundEvent
 from soundevent.data.tags import Tag
 

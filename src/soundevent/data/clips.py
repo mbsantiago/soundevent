@@ -57,6 +57,9 @@ __all__ = [
 class Clip(BaseModel):
     """Clip model."""
 
+    uuid: UUID = Field(default_factory=uuid4)
+    """The unique identifier of the clip."""
+
     recording: Recording
     """The recording that the clip belongs to."""
 
@@ -65,9 +68,6 @@ class Clip(BaseModel):
 
     end_time: float
     """The end time of the clip in seconds."""
-
-    uuid: UUID = Field(default_factory=uuid4)
-    """The unique identifier of the clip."""
 
     tags: List[Tag] = Field(default_factory=list)
     """List of tags associated with the clip."""
@@ -81,3 +81,7 @@ class Clip(BaseModel):
         if values["start_time"] > values["end_time"]:
             raise ValueError("start_time must be less than end_time")
         return values
+
+    def __hash__(self):
+        """Hash clip object."""
+        return hash((self.recording, self.start_time, self.end_time))

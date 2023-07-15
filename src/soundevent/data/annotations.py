@@ -77,10 +77,14 @@ class Annotation(BaseModel):
     tags: List[Tag] = Field(default_factory=list)
     """User provided tags to the annotated sound event."""
 
-    created_on: datetime.datetime = Field(
+    created_on: Optional[datetime.datetime] = Field(
         default_factory=datetime.datetime.now
     )
     """The time at which the annotation was created.
 
     Important for tracking the progress of an annotation task.
     """
+
+    def __hash__(self):
+        """Compute the hash of the annotation."""
+        return hash(self.id)

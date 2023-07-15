@@ -48,14 +48,17 @@ from soundevent.data.annotation_tasks import AnnotationTask
 class AnnotationProject(BaseModel):
     """Annotation collection."""
 
-    id: UUID = Field(default_factory=uuid4)
+    id: UUID = Field(default_factory=uuid4, repr=False)
     """Unique identifier for the annotation collection."""
 
     name: str
     """Name of the annotation project."""
 
-    description: Optional[str] = None
+    description: Optional[str] = Field(None, repr=False)
     """Description of the annotation collection."""
 
-    tasks: List[AnnotationTask] = Field(default_factory=list)
+    tasks: List[AnnotationTask] = Field(default_factory=list, repr=False)
     """List of annotation tasks in the project."""
+
+    instructions: Optional[str] = Field(default=None, repr=False)
+    """Instructions for annotators."""

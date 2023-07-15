@@ -27,9 +27,9 @@ def test_save_empty_dataset_to_aoef_format(tmp_path: Path):
     content = json.loads(path.read_text())
     assert content["info"]["name"] == "test_dataset"
     assert content["info"]["description"] == "A test dataset."
-    assert content["info"]["id"] == str(dataset.id)
+    assert content["info"]["uuid"] == str(dataset.id)
     assert content["recordings"] == []
-    assert content["tags"] == []
+    assert "tags" not in content
 
 
 def test_save_dataset_contains_datetime_of_creation(
@@ -95,13 +95,13 @@ def test_save_dataset_with_one_simple_recording(tmp_path: Path):
     # Check that the dataset info is correct.
     assert content["info"]["name"] == "test_dataset"
     assert content["info"]["description"] == "A test dataset."
-    assert content["info"]["id"] == str(dataset.id)
+    assert content["info"]["uuid"] == str(dataset.id)
 
     # Check that the recording object is present.
     assert len(content["recordings"]) == 1
 
     # Check that the recording object contains all the required fields.
-    assert content["recordings"][0]["id"] == str(dataset.recordings[0].id)
+    assert content["recordings"][0]["uuid"] == str(dataset.recordings[0].id)
     assert content["recordings"][0]["path"] == "audio.wav"
     assert content["recordings"][0]["duration"] == 10.0
     assert content["recordings"][0]["channels"] == 1
@@ -153,9 +153,9 @@ def test_save_dataset_with_one_recording_with_full_metadata(
     content = json.loads(path.read_text())
     assert content["info"]["name"] == "test_dataset"
     assert content["info"]["description"] == "A test dataset."
-    assert content["info"]["id"] == str(dataset.id)
+    assert content["info"]["uuid"] == str(dataset.id)
     assert len(content["recordings"]) == 1
-    assert content["recordings"][0]["id"] == str(dataset.recordings[0].id)
+    assert content["recordings"][0]["uuid"] == str(dataset.recordings[0].id)
     assert content["recordings"][0]["path"] == "audio.wav"
     assert content["recordings"][0]["duration"] == 10.0
     assert content["recordings"][0]["channels"] == 1

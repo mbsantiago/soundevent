@@ -4,20 +4,13 @@ Here you can find the classes and functions for reading and writing
 Datasets of recordings.
 """
 
-import datetime
 import os
 import sys
 from pathlib import Path
-from typing import Callable, Dict, List, Union
+from typing import Callable, Dict, Union
 
 from soundevent import data
-from soundevent.io.format import (
-    DatasetInfoObject,
-    DatasetObject,
-    RecordingObject,
-    TagObject,
-    is_json,
-)
+from soundevent.io.format import DatasetObject, is_json
 
 if sys.version_info < (3, 6):
     from typing_extensions import Literal
@@ -186,49 +179,7 @@ def load_dataset_json_format(
     with open(path, "r") as f:
         dataset = DatasetObject.model_validate_json(f.read())
 
-    tags: Dict[int, data.Tag] = {}
-    recordings: List[data.Recording] = []
-
-    for tag in dataset.tags or []:
-        tags[tag.id] = data.Tag(key=tag.key, value=tag.value)
-
-    for recording in dataset.recordings:
-        recording_tags = []
-        for tag_id in recording.tags or []:
-            recording_tags.append(tags[tag_id])
-
-        features = []
-        if recording.features:
-            features = [
-                data.Feature(name=name, value=value)
-                for name, value in recording.features.items()
-            ]
-
-        recordings.append(
-            data.Recording(
-                id=recording.id,
-                path=audio_dir / recording.path,
-                duration=recording.duration,
-                channels=recording.channels,
-                samplerate=recording.samplerate,
-                time_expansion=recording.time_expansion or 1.0,
-                hash=recording.hash,
-                date=recording.date,
-                time=recording.time,
-                latitude=recording.latitude,
-                longitude=recording.longitude,
-                tags=recording_tags,
-                features=features,
-                notes=recording.notes or [],
-            )
-        )
-
-    return data.Dataset(
-        id=dataset.info.id,
-        name=dataset.info.name,
-        description=dataset.info.description,
-        recordings=recordings,
-    )
+    return dataset.to_dataset(audio_dir=audio_dir)
 
 
 LOAD_FORMATS["json"] = load_dataset_json_format
@@ -254,59 +205,9 @@ def save_dataset_json_format(
     """
     audio_dir = Path(audio_dir).resolve()
 
-    info = DatasetInfoObject(
-        id=dataset.id,
-        name=dataset.name,
-        description=dataset.description,
-        date_created=datetime.datetime.now(),
-    )
-
-    tags: Dict[data.Tag, TagObject] = {}
-    recordings: List[RecordingObject] = []
-
-    for recording in dataset.recordings:
-        tag_ids = []
-        for tag in recording.tags:
-            if tag not in tags:
-                tags[tag] = TagObject(
-                    id=len(tags),
-                    key=tag.key,
-                    value=tag.value,
-                )
-
-            tag_ids.append(tags[tag].id)
-
-        features = None
-        if recording.features:
-            features = {
-                feature.name: feature.value for feature in recording.features
-            }
-
-        recordings.append(
-            RecordingObject(
-                id=recording.id,
-                path=recording.path.resolve().relative_to(audio_dir),
-                duration=recording.duration,
-                channels=recording.channels,
-                samplerate=recording.samplerate,
-                time_expansion=recording.time_expansion
-                if recording.time_expansion != 1.0
-                else None,
-                hash=recording.hash,
-                date=recording.date,
-                time=recording.time,
-                latitude=recording.latitude,
-                longitude=recording.longitude,
-                tags=tag_ids if tag_ids else None,
-                features=features if features else None,
-                notes=recording.notes if recording.notes else None,
-            )
-        )
-
-    dataset_object = DatasetObject(
-        info=info,
-        tags=list(tags.values()),
-        recordings=recordings,
+    dataset_object = DatasetObject.from_dataset(
+        dataset,
+        audio_dir=audio_dir,
     )
 
     with open(path, "w") as f:

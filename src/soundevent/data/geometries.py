@@ -53,9 +53,9 @@ location and extent of sound events within a recording.
 """
 import sys
 from abc import ABC, abstractmethod
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
-from pydantic import BaseModel, ConfigDict, Field, PrivateAttr, field_validator
+from pydantic import BaseModel, Field, PrivateAttr, field_validator
 from shapely import geometry
 from shapely.geometry.base import BaseGeometry
 
@@ -112,14 +112,16 @@ class Geometry(BaseModel, ABC):
     geometry object is always in sync with the Shapely geometry object.
     """
 
-    model_config = ConfigDict(
-        arbitrary_types_allowed=True,
+    type: str = Field(
+        description="the type of geometry used to locate the sound event.",
         frozen=True,
+        include=True,
     )
 
-    type: GeometryType = Field(
-        ...,
-        description="the type of geometry used to locate the sound event.",
+    coordinates: Union[float, List, Tuple] = Field(
+        description="the coordinates of the geometry.",
+        frozen=True,
+        include=True,
     )
 
     _geom: BaseGeometry = PrivateAttr()
@@ -182,7 +184,7 @@ class TimeStamp(Geometry):
     time interval.
     """
 
-    type: Literal["TimeStamp"] = "TimeStamp"
+    type: str = "TimeStamp"
 
     coordinates: Time = Field(
         ...,
@@ -216,10 +218,9 @@ class TimeInterval(Geometry):
     not have a clear frequency range.
     """
 
-    type: Literal["TimeInterval"] = "TimeInterval"
+    type: str = "TimeInterval"
 
     coordinates: Tuple[Time, Time] = Field(
-        ...,
         description="The time interval of the sound event.",
     )
     """The time interval of the sound event.
@@ -267,7 +268,7 @@ class Point(Geometry):
     time and frequency.
     """
 
-    type: Literal["Point"] = "Point"
+    type: str = "Point"
 
     coordinates: Tuple[Time, Frequency] = Field(
         ...,
@@ -297,7 +298,7 @@ class LineString(Geometry):
     trajectory.
     """
 
-    type: Literal["LineString"] = "LineString"
+    type: str = "LineString"
 
     coordinates: List[Tuple[Time, Frequency]] = Field(
         ...,
@@ -345,7 +346,7 @@ class Polygon(Geometry):
     frequency trajectory and that are bounded by a clear start and end time.
     """
 
-    type: Literal["Polygon"] = "Polygon"
+    type: str = "Polygon"
 
     coordinates: List[List[Tuple[Time, Frequency]]] = Field(
         ...,
@@ -384,7 +385,7 @@ class BoundingBox(Geometry):
     range and start and stop times.
     """
 
-    type: Literal["BoundingBox"] = "BoundingBox"
+    type: str = "BoundingBox"
 
     coordinates: Tuple[Time, Frequency, Time, Frequency] = Field(
         ...,
@@ -431,7 +432,7 @@ class MultiPoint(Geometry):
     together form a sound event.
     """
 
-    type: Literal["MultiPoint"] = "MultiPoint"
+    type: str = "MultiPoint"
 
     coordinates: List[Tuple[Time, Frequency]] = Field(
         ...,
@@ -460,7 +461,7 @@ class MultiLineString(Geometry):
     harmonics.
     """
 
-    type: Literal["MultiLineString"] = "MultiLineString"
+    type: str = "MultiLineString"
 
     coordinates: List[List[Tuple[Time, Frequency]]] = Field(
         ...,
@@ -520,7 +521,7 @@ class MultiPolygon(Geometry):
     polygons.
     """
 
-    type: Literal["MultiPolygon"] = "MultiPolygon"
+    type: str = "MultiPolygon"
 
     coordinates: List[List[List[Tuple[Time, Frequency]]]] = Field(
         ...,

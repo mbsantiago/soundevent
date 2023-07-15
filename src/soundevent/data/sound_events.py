@@ -36,8 +36,8 @@ models. Features offer valuable insights into the acoustic properties
 of the sound events.
 """
 
+from typing import List, Optional
 from uuid import UUID, uuid4
-from typing import List
 
 from pydantic import BaseModel, Field
 
@@ -60,7 +60,7 @@ class SoundEvent(BaseModel):
     recording: Recording
     """The recording containing the sound event."""
 
-    geometry: Geometry
+    geometry: Optional[Geometry]
     """The geometry locating the sound event within the recording."""
 
     tags: List[Tag] = Field(default_factory=list)
@@ -68,3 +68,7 @@ class SoundEvent(BaseModel):
 
     features: List[Feature] = Field(default_factory=list)
     """The features associated with the sound event."""
+
+    def __hash__(self):
+        """Compute the hash of the sound event."""
+        return hash(self.uuid)
