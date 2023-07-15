@@ -77,3 +77,11 @@ markdown_extensions:
       toc_depth: 4
       permalink: "#"
       separator: "_"
+
+extra_javascript:
+  - javascripts/jquery-3.3.1.min.js
+  - javascripts/jquery.json-viewer.js
+  - javascripts/json-viewer.js
+
+extra_css:
+  - stylesheets/jquery.json-viewer.css

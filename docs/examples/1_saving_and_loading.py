@@ -11,20 +11,36 @@ examples below:
 
 """
 
+import json
+
+
+class JSON:
+    def __init__(self, data):
+        if isinstance(data, dict):
+            json_str = json.dumps(data)
+        else:
+            json_str = data
+
+        self.json_str = json_str
+
+    def _repr_html_(self):
+        return (
+            f'<pre class="json">{self.json_str}</pre>'
+        )
+
 # %%
 # ## Loading Datasets
 # Suppose we have an example dataset stored in the **AOEF** format. The dataset
 # is stored as a text file following the JSON structure. To view the contents
 # of the file, you can use the following code.
 
-import json
 from pathlib import Path
 
 dataset_path = Path("example_dataset.json")
 with open(dataset_path) as file:
     dataset_contents = json.load(file)
 
-print(json.dumps(dataset_contents, indent=4))
+JSON(dataset_contents)
 
 # %%
 # However, using the loading functions provided by the `soundevent` package,
