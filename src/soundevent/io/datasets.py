@@ -4,89 +4,21 @@ Here you can find the classes and functions for reading and writing
 Datasets of recordings.
 """
 
-import os
-import sys
 from pathlib import Path
-from typing import Callable, Dict, Union
+from typing import Dict
 
 from soundevent import data
-from soundevent.io.format import DatasetObject, is_json
-
-if sys.version_info < (3, 6):
-    from typing_extensions import Literal
-else:
-    from typing import Literal
-
-if sys.version_info < (3, 8):
-    from typing_extensions import Protocol
-else:
-    from typing import Protocol
+from soundevent.io.formats import aoef, infer_format
+from soundevent.io.types import Loader, PathLike, Saver
 
 __all__ = [
     "load_dataset",
     "save_dataset",
 ]
 
-PathLike = Union[str, os.PathLike]
 
-
-DatasetFormat = Literal["csv", "json"]
-
-
-class Saver(Protocol):
-    def __call__(
-        self,
-        dataset: data.Dataset,
-        path: PathLike,
-        audio_dir: PathLike = ".",
-    ) -> None:
-        ...
-
-
-class Loader(Protocol):
-    def __call__(
-        self, path: PathLike, audio_dir: PathLike = "."
-    ) -> data.Dataset:
-        ...
-
-
-Inferrer = Callable[[PathLike], bool]
-
-SAVE_FORMATS: Dict[DatasetFormat, Saver] = {}
-
-LOAD_FORMATS: Dict[DatasetFormat, Loader] = {}
-
-INFER_FORMATS: Dict[DatasetFormat, Inferrer] = {
-    "json": is_json,
-}
-
-
-def infer_format(path: PathLike) -> DatasetFormat:
-    """Infer the format of a file.
-
-    Parameters
-    ----------
-    path : Path
-        Path to the file to infer the format of.
-
-    Returns
-    -------
-    format : DatasetFormat
-        The inferred format of the file.
-
-    Raises
-    ------
-    ValueError
-        If the format of the file cannot be inferred.
-
-    """
-    for format_, inferrer in INFER_FORMATS.items():
-        if inferrer(path):
-            return format_
-
-    raise ValueError(
-        f"Cannot infer format of file {path}, or format not supported."
-    )
+SAVE_FORMATS: Dict[str, Saver[data.Dataset]] = {}
+LOAD_FORMATS: Dict[str, Loader[data.Dataset]] = {}
 
 
 def load_dataset(path: PathLike, audio_dir: PathLike = ".") -> data.Dataset:
@@ -112,6 +44,11 @@ def load_dataset(path: PathLike, audio_dir: PathLike = ".") -> data.Dataset:
         If the format of the file is not supported.
 
     """
+    path = Path(path)
+
+    if not path.exists():
+        raise FileNotFoundError(f"Path {path} does not exist.")
+
     try:
         format_ = infer_format(path)
     except ValueError as e:
@@ -125,7 +62,7 @@ def save_dataset(
     dataset: data.Dataset,
     path: PathLike,
     audio_dir: PathLike = ".",
-    format: DatasetFormat = "json",
+    format: str = "aoef",
 ) -> None:
     """Save a Dataset to a file.
 
@@ -138,7 +75,7 @@ def save_dataset(
     audio_dir : Path, optional
         Path to the directory containing the audio files, by default ".".
     format : DatasetFormat, optional
-        The format to save the dataset in, by default "json".
+        The format to save the dataset in, by default "aoef".
 
     Raises
     ------
@@ -154,7 +91,7 @@ def save_dataset(
     saver(dataset, path, audio_dir=audio_dir)
 
 
-def load_dataset_json_format(
+def load_dataset_aoef_format(
     path: PathLike,
     audio_dir: PathLike = ".",
 ) -> data.Dataset:
@@ -177,16 +114,13 @@ def load_dataset_json_format(
     audio_dir = Path(audio_dir).resolve()
 
     with open(path, "r") as f:
-        dataset = DatasetObject.model_validate_json(f.read())
+        dataset = aoef.DatasetObject.model_validate_json(f.read())
 
     return dataset.to_dataset(audio_dir=audio_dir)
 
 
-LOAD_FORMATS["json"] = load_dataset_json_format
-
-
-def save_dataset_json_format(
-    dataset: data.Dataset,
+def save_dataset_aoef_format(
+    obj: data.Dataset,
     path: PathLike,
     audio_dir: PathLike = ".",
 ) -> None:
@@ -205,8 +139,8 @@ def save_dataset_json_format(
     """
     audio_dir = Path(audio_dir).resolve()
 
-    dataset_object = DatasetObject.from_dataset(
-        dataset,
+    dataset_object = aoef.DatasetObject.from_dataset(
+        obj,
         audio_dir=audio_dir,
     )
 
@@ -214,4 +148,5 @@ def save_dataset_json_format(
         f.write(dataset_object.model_dump_json(indent=None, exclude_none=True))
 
 
-SAVE_FORMATS["json"] = save_dataset_json_format
+SAVE_FORMATS["aoef"] = save_dataset_aoef_format
+LOAD_FORMATS["aoef"] = load_dataset_aoef_format

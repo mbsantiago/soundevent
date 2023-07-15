@@ -1,73 +1,63 @@
 """Save and loading functions for annotation projects."""
-
-import os
-import sys
 from pathlib import Path
-from typing import Callable, Dict, Union
+from typing import Dict
 
 from soundevent import data
-from soundevent.io.format import AnnotationProjectObject, is_json
+from soundevent.io.formats import aoef, infer_format
+from soundevent.io.types import Loader, PathLike, Saver
 
-if sys.version_info < (3, 8):
-    from typing_extensions import Protocol
-else:
-    from typing import Protocol
-
-
-PathLike = Union[str, os.PathLike]
+SAVE_FORMATS: Dict[str, Saver[data.AnnotationProject]] = {}
+LOAD_FORMATS: Dict[str, Loader[data.AnnotationProject]] = {}
 
 
-class Saver(Protocol):
-    """Protocol for saving annotation projects."""
+def load_annotation_project(
+    path: PathLike,
+    audio_dir: PathLike = ".",
+) -> data.AnnotationProject:
+    """Load annotation project from path.
 
-    def __call__(
-        self,
-        project: data.AnnotationProject,
-        path: PathLike,
-        audio_dir: PathLike = ".",
-    ) -> None:
-        """Save annotation project to path."""
-        ...
+    Parameters
+    ----------
+    path: PathLike
+        Path to the file with the annotation project.
 
+    audio_dir: PathLike, optional
+        Path to the directory containing the audio files, by default ".". The
+        audio file paths in the annotation project will be relative to this
+        directory.
 
-class Loader(Protocol):
-    """Protocol for loading annotation projects."""
+    Returns
+    -------
+    annotation_project: data.AnnotationProject
+        The loaded annotation project.
 
-    def __call__(
-        self, path: PathLike, audio_dir: PathLike = "."
-    ) -> data.AnnotationProject:
-        """Load annotation project from path."""
-        ...
+    Raises
+    ------
+    FileNotFoundError
+        If the path does not exist.
 
-
-SAVE_FORMATS: Dict[str, Saver] = {}
-LOAD_FORMATS: Dict[str, Loader] = {}
-FORMATS: Dict[str, Callable[[PathLike], bool]] = {}
-
-
-def load_annotation_project(path: PathLike) -> data.AnnotationProject:
-    """Load annotation project from path."""
+    NotImplementedError
+        If the format of the file is not supported.
+    """
     path = Path(path)
 
     if not path.exists():
         raise FileNotFoundError(f"Path {path} does not exist.")
 
-    for format_name, is_format in FORMATS.items():
-        if not is_format(path):
-            continue
+    try:
+        format_ = infer_format(path)
+    except ValueError as e:
+        raise NotImplementedError(f"File {path} format not supported.") from e
 
-        return LOAD_FORMATS[format_name](path)
-
-    raise NotImplementedError(
-        f"Could not find a loader for {path}. "
-        f"Supported formats are: {list(FORMATS.keys())}"
-    )
+    loader = LOAD_FORMATS[format_]
+    return loader(path, audio_dir=audio_dir)
 
 
 def save_annotation_project(
     project: data.AnnotationProject,
     path: PathLike,
     audio_dir: PathLike = ".",
+    format: str = "aoef",
 ) -> None:
     """Save annotation project to path.
 
@@ -75,26 +65,36 @@ def save_annotation_project(
     ----------
     project: data.AnnotationProject
         Annotation project to save.
+
     path: PathLike
         Path to save annotation project to.
+
+    audio_dir: PathLike, optional
+        Path to the directory containing the audio files, by default ".". The
+        audio file paths in the annotation project will be relative to this
+        directory.
+
+    format: str, optional
+        Format to save the annotation project in, by default "aoef".
+
+    Raises
+    ------
+    NotImplementedError
+        If the format is not supported.
+
     """
     path = Path(path)
 
-    for format_name, is_format in FORMATS.items():
-        if not is_format(path):
-            continue
+    try:
+        saver = SAVE_FORMATS[format]
+    except KeyError as e:
+        raise NotImplementedError(f"Format {format} not supported.") from e
 
-        SAVE_FORMATS[format_name](project, path, audio_dir=audio_dir)
-        return
-
-    raise NotImplementedError(
-        f"Could not find a saver for {path}. "
-        f"Supported formats are: {list(FORMATS.keys())}"
-    )
+    saver(project, path, audio_dir=audio_dir)
 
 
 def save_annotation_project_in_aoef_format(
-    project: data.AnnotationProject,
+    obj: data.AnnotationProject,
     path: PathLike,
     audio_dir: PathLike = ".",
 ) -> None:
@@ -102,8 +102,8 @@ def save_annotation_project_in_aoef_format(
     path = Path(path)
     audio_dir = Path(audio_dir).resolve()
     annotation_project_object = (
-        AnnotationProjectObject.from_annotation_project(
-            project,
+        aoef.AnnotationProjectObject.from_annotation_project(
+            obj,
             audio_dir=audio_dir,
         )
     )
@@ -122,12 +122,11 @@ def load_annotation_project_in_aoef_format(
     """Load annotation project from path in AOEF format."""
     path = Path(path)
     audio_dir = Path(audio_dir).resolve()
-    annotation_project_object = AnnotationProjectObject.model_validate_json(
-        path.read_text()
+    annotation_project_object = (
+        aoef.AnnotationProjectObject.model_validate_json(path.read_text())
     )
     return annotation_project_object.to_annotation_project(audio_dir=audio_dir)
 
 
 SAVE_FORMATS["aoef"] = save_annotation_project_in_aoef_format
 LOAD_FORMATS["aoef"] = load_annotation_project_in_aoef_format
-FORMATS["aoef"] = is_json

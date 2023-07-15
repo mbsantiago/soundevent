@@ -28,10 +28,10 @@ import datetime
 import os
 import sys
 from pathlib import Path
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Optional, Tuple, Union
 from uuid import UUID, uuid4
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from soundevent import data
 
@@ -792,6 +792,364 @@ class AnnotationProjectObject(BaseModel):
             description=self.info.description,
             instructions=self.info.instructions,
             tasks=list(tasks.values()),
+        )
+
+
+class PredictedSoundEventObject(BaseModel):
+    id: int
+
+    uuid: UUID
+
+    sound_event: int
+
+    score: float = Field(..., ge=0.0, le=1.0)
+
+    tags: Optional[List[Tuple[int, float]]] = None
+
+    features: Optional[Dict[str, float]] = None
+
+    @classmethod
+    def from_predicted_sound_event(
+        cls,
+        predicted_sound_event: data.PredictedSoundEvent,
+        predicted_sound_events: Dict[data.PredictedSoundEvent, Self],
+        recordings: Dict[data.Recording, RecordingObject],
+        sound_events: Dict[data.SoundEvent, SoundEventObject],
+        tags: Dict[data.Tag, TagObject],
+        audio_dir: Path = Path("."),
+    ) -> Self:
+        """Convert a predicted sound event to a predicted sound event object."""
+        if predicted_sound_event in predicted_sound_events:
+            return predicted_sound_events[predicted_sound_event]
+
+        predicted_tags = [
+            (TagObject.from_tag(tag.tag, tags).id, tag.score)
+            for tag in predicted_sound_event.tags
+        ]
+
+        return cls(
+            id=len(predicted_sound_events),
+            uuid=predicted_sound_event.id,
+            sound_event=SoundEventObject.from_sound_event(
+                predicted_sound_event.sound_event,
+                sound_events=sound_events,
+                recordings=recordings,
+                tags=tags,
+                audio_dir=audio_dir,
+            ).id,
+            score=predicted_sound_event.score,
+            tags=predicted_tags if predicted_tags else None,
+            features={
+                feature.name: feature.value
+                for feature in predicted_sound_event.features
+            }
+            if predicted_sound_event.features
+            else None,
+        )
+
+    def to_predicted_sound_event(
+        self,
+        recordings: Optional[Dict[int, data.Recording]] = None,
+        sound_events: Optional[Dict[int, data.SoundEvent]] = None,
+        tags: Optional[Dict[int, data.Tag]] = None,
+    ) -> data.PredictedSoundEvent:
+        """Convert a predicted sound event object to a predicted sound event."""
+        if recordings is None:
+            recordings = {}
+
+        if sound_events is None:
+            sound_events = {}
+
+        if tags is None:
+            tags = {}
+
+        if self.sound_event not in sound_events:
+            raise ValueError(
+                f"Sound event with ID {self.sound_event} not found "
+                "in sound events."
+            )
+
+        return data.PredictedSoundEvent(
+            id=self.uuid,
+            sound_event=sound_events[self.sound_event],
+            score=self.score,
+            tags=[
+                data.PredictedTag(
+                    tag=tags[tag[0]],
+                    score=tag[1],
+                )
+                for tag in self.tags or []
+                if tag[0] in tags
+            ],
+            features=[
+                data.Feature(
+                    name=feature[0],
+                    value=feature[1],
+                )
+                for feature in (self.features or {}).items()
+            ],
+        )
+
+
+class ProcessedClipObject(BaseModel):
+    id: int
+
+    uuid: UUID
+
+    clip: int
+
+    sound_events: Optional[List[int]] = None
+
+    tags: Optional[List[Tuple[int, float]]] = None
+
+    features: Optional[Dict[str, float]] = None
+
+    @classmethod
+    def from_processed_clip(
+        cls,
+        processed_clip: data.ProcessedClip,
+        processed_clips: Dict[data.ProcessedClip, Self],
+        recordings: Dict[data.Recording, RecordingObject],
+        clips: Dict[data.Clip, ClipObject],
+        tags: Dict[data.Tag, TagObject],
+        sound_events: Dict[data.SoundEvent, SoundEventObject],
+        predicted_sound_events: Dict[
+            data.PredictedSoundEvent, PredictedSoundEventObject
+        ],
+        audio_dir: Path = Path("."),
+    ) -> Self:
+        """Convert a processed clip to a processed clip object."""
+        if processed_clip in processed_clips:
+            return processed_clips[processed_clip]
+
+        predicted_sound_events_ids = [
+            PredictedSoundEventObject.from_predicted_sound_event(
+                sound_event,
+                predicted_sound_events=predicted_sound_events,
+                recordings=recordings,
+                sound_events=sound_events,
+                tags=tags,
+                audio_dir=audio_dir,
+            ).id
+            for sound_event in processed_clip.sound_events
+        ]
+
+        predicted_tags = [
+            (TagObject.from_tag(tag.tag, tags).id, tag.score)
+            for tag in processed_clip.tags
+        ]
+
+        return cls(
+            id=len(processed_clips),
+            uuid=processed_clip.uuid,
+            clip=ClipObject.from_clip(
+                processed_clip.clip,
+                clips=clips,
+                recordings=recordings,
+                tags=tags,
+                audio_dir=audio_dir,
+            ).id,
+            sound_events=predicted_sound_events_ids
+            if predicted_sound_events_ids
+            else None,
+            tags=predicted_tags if predicted_tags else None,
+            features={
+                feature.name: feature.value
+                for feature in processed_clip.features
+            }
+            if processed_clip.features
+            else None,
+        )
+
+    def to_processed_clip(
+        self,
+        clips: Optional[Dict[int, data.Clip]] = None,
+        sound_events: Optional[Dict[int, data.PredictedSoundEvent]] = None,
+        tags: Optional[Dict[int, data.Tag]] = None,
+    ) -> data.ProcessedClip:
+        """Convert a processed clip object to a processed clip."""
+        if clips is None:
+            clips = {}
+
+        if sound_events is None:
+            sound_events = {}
+
+        if tags is None:
+            tags = {}
+
+        if self.clip not in clips:
+            raise ValueError(f"Clip with ID {self.clip} not found in clips.")
+
+        return data.ProcessedClip(
+            uuid=self.uuid,
+            clip=clips[self.clip],
+            sound_events=[
+                sound_events[sound_event]
+                for sound_event in (self.sound_events or [])
+                if sound_event in sound_events
+            ],
+            tags=[
+                data.PredictedTag(
+                    tag=tags[tag[0]],
+                    score=tag[1],
+                )
+                for tag in self.tags or []
+                if tag[0] in tags
+            ],
+            features=[
+                data.Feature(
+                    name=feature[0],
+                    value=feature[1],
+                )
+                for feature in (self.features or {}).items()
+            ],
+        )
+
+
+class ModelRunInfo(BaseModel):
+    uuid: UUID
+
+    model: str
+
+    description: Optional[str] = None
+
+    date_created: datetime.datetime
+
+    @classmethod
+    def from_model_run(
+        cls,
+        model_run: data.ModelRun,
+        date_created: Optional[datetime.datetime] = None,
+    ) -> Self:
+        """Convert a model run to a model run object."""
+        if date_created is None:
+            date_created = datetime.datetime.now()
+        return cls(
+            uuid=model_run.id,
+            model=model_run.model,
+            date_created=date_created,
+        )
+
+
+class ModelRunObject(BaseModel):
+    info: ModelRunInfo
+
+    tags: Optional[List[TagObject]] = None
+
+    recordings: Optional[List[RecordingObject]] = None
+
+    clips: Optional[List[ClipObject]] = None
+
+    processed_clips: Optional[List[ProcessedClipObject]] = None
+
+    sound_events: Optional[List[SoundEventObject]] = None
+
+    predicted_sound_events: Optional[List[PredictedSoundEventObject]] = None
+
+    @classmethod
+    def from_model_run(
+        cls,
+        model_run: data.ModelRun,
+        audio_dir: Path = Path("."),
+        date_created: Optional[datetime.datetime] = None,
+    ) -> Self:
+        """Convert a model run to a model run object."""
+        if date_created is None:
+            date_created = datetime.datetime.now()
+
+        processed_clips: Dict[data.ProcessedClip, ProcessedClipObject] = {}
+        recordings: Dict[data.Recording, RecordingObject] = {}
+        clips: Dict[data.Clip, ClipObject] = {}
+        tags: Dict[data.Tag, TagObject] = {}
+        sound_events: Dict[data.SoundEvent, SoundEventObject] = {}
+        predicted_sound_events: Dict[
+            data.PredictedSoundEvent, PredictedSoundEventObject
+        ] = {}
+
+        processed_clips_list = [
+            ProcessedClipObject.from_processed_clip(
+                processed_clip,
+                processed_clips=processed_clips,
+                recordings=recordings,
+                clips=clips,
+                tags=tags,
+                sound_events=sound_events,
+                predicted_sound_events=predicted_sound_events,
+                audio_dir=audio_dir,
+            )
+            for processed_clip in model_run.clips
+        ]
+
+        return cls(
+            info=ModelRunInfo.from_model_run(
+                model_run,
+                date_created=date_created,
+            ),
+            clips=list(clips.values()) if clips else None,
+            tags=list(tags.values()) if tags else None,
+            recordings=list(recordings.values()) if recordings else None,
+            sound_events=list(sound_events.values()) if sound_events else None,
+            predicted_sound_events=list(predicted_sound_events.values())
+            if predicted_sound_events
+            else None,
+            processed_clips=processed_clips_list,
+        )
+
+    def to_model_run(
+        self,
+        audio_dir: Path = Path("."),
+    ) -> data.ModelRun:
+        """Convert a model run object to a model run."""
+        tags: Dict[int, data.Tag] = {}
+        recordings: Dict[int, data.Recording] = {}
+        clips: Dict[int, data.Clip] = {}
+        sound_events: Dict[int, data.SoundEvent] = {}
+        predicted_sound_events: Dict[int, data.PredictedSoundEvent] = {}
+        processed_clips: Dict[int, data.ProcessedClip] = {}
+
+        for tag in self.tags or []:
+            tags[tag.id] = tag.to_tag()
+
+        for recording in self.recordings or []:
+            recordings[recording.id] = recording.to_recording(
+                tags=tags, audio_dir=audio_dir
+            )
+
+        for clip in self.clips or []:
+            clips[clip.id] = clip.to_clip(
+                tags=tags,
+                recordings=recordings,
+            )
+
+        for sound_event in self.sound_events or []:
+            sound_events[sound_event.id] = sound_event.to_sound_event(
+                recordings=recordings,
+                tags=tags,
+            )
+
+        for predicted_sound_event in self.predicted_sound_events or []:
+            predicted_sound_events[
+                predicted_sound_event.id
+            ] = predicted_sound_event.to_predicted_sound_event(
+                recordings=recordings,
+                sound_events=sound_events,
+                tags=tags,
+            )
+
+        for processed_clip in self.processed_clips or []:
+            processed_clips[
+                processed_clip.id
+            ] = processed_clip.to_processed_clip(
+                clips=clips,
+                sound_events=predicted_sound_events,
+                tags=tags,
+            )
+
+        return data.ModelRun(
+            id=self.info.uuid,
+            model=self.info.model,
+            created_on=self.info.date_created,
+            clips=list(processed_clips.values()),
         )
 
 
