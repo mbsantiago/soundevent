@@ -122,7 +122,7 @@ def load_annotation_project_in_aoef_format(
     """Load annotation project from path in AOEF format."""
     path = Path(path)
     audio_dir = Path(audio_dir).resolve()
-    annotation_project_object = AnnotationProjectObject.validate_json(
+    annotation_project_object = AnnotationProjectObject.model_validate_json(
         path.read_text()
     )
     return annotation_project_object.to_annotation_project(audio_dir=audio_dir)
