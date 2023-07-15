@@ -2,6 +2,7 @@
 from pathlib import Path
 
 import numpy as np
+from uuid import uuid4
 import pytest
 import xarray as xr
 from hypothesis import HealthCheck, given, settings
@@ -84,7 +85,7 @@ def test_read_clip(
     wav = np.random.random((samples, channels)).astype(np.float32)
 
     # Save the wav to a file
-    path = tmp_path / "test.wav"
+    path = tmp_path / f"{uuid4()}.wav"
 
     # Save the wav with the adjusted samplerate
     adjusted_samplerate = int(np.floor(samplerate / time_expansion))
