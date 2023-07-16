@@ -50,7 +50,7 @@ print(repr(dataset))
 # %%
 # The [`load_dataset`][soundevent.io.load_dataset] function allows you to
 # access and analyze the dataset, which contains recordings and related
-# objects, all structured in a standardized and manageable way. 
+# objects, all structured in a standardized and manageable way.
 
 recording = dataset.recordings[0]
 print(f"First recording: {recording!r}")
@@ -70,7 +70,7 @@ io.save_dataset(dataset, dataset_path)
 #
 # Similar to loading datasets, you can use the
 # [`load_annotation_project`][soundevent.io.load_annotation_project] function
-# to load annotations stored in the **AOEF** format. 
+# to load annotations stored in the **AOEF** format.
 #
 # Here we have transformed 10 random annotated recordings from the
 # [NIPS4BPlus](https://doi.org/10.7717%2Fpeerj-cs.223) dataset into the

@@ -558,7 +558,9 @@ def test_recording_paths_are_stored_as_relative_if_audio_dir_is_provided(
 
 def test_can_parse_nips4plus(tmp_path: Path):
     """Test that NIPS4BPlus annotations can be parsed."""
-    original_path = BASE_DIR / "docs" / "examples" / "nips4b_plus_aoef.json"
+    original_path = (
+        BASE_DIR / "docs" / "user_guide" / "nips4b_plus_sample.json"
+    )
     path = tmp_path / "test.json"
 
     # Act
