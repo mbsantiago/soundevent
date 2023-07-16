@@ -62,7 +62,7 @@ __all__ = [
 class Annotation(BaseModel):
     """Annotation."""
 
-    id: UUID = Field(default_factory=uuid4)
+    id: UUID = Field(default_factory=uuid4, repr=False)
     """A unique identifier for the annotation."""
 
     created_by: Optional[str] = None
@@ -71,14 +71,14 @@ class Annotation(BaseModel):
     sound_event: SoundEvent
     """The sound event being annotated."""
 
-    notes: List[Note] = Field(default_factory=list)
+    notes: List[Note] = Field(default_factory=list, repr=False)
     """Notes associated with the annotation."""
 
-    tags: List[Tag] = Field(default_factory=list)
+    tags: List[Tag] = Field(default_factory=list, repr=False)
     """User provided tags to the annotated sound event."""
 
     created_on: Optional[datetime.datetime] = Field(
-        default_factory=datetime.datetime.now
+        default_factory=datetime.datetime.now, repr=False
     )
     """The time at which the annotation was created.
 

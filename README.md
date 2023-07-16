@@ -9,9 +9,7 @@
 [![codecov](https://codecov.io/gh/mbsantiago/soundevent/branch/main/graph/badge.svg?token=42kVE87avA)](https://codecov.io/gh/mbsantiago/soundevent)
 
 > **Warning**
-> This package is under active development use with caution. 
-> However, most of the data definitions are not expected to change. 
-> Will be adding data loading/exporting and prediction evaluation functions soon. 
+> This package is under active development, use with caution.
 
 `soundevent` is an open-source Python package that aims to support the
 computational biocoustic community in developing well-tested, coherent, and
@@ -37,10 +35,12 @@ such as user annotations and model predictions.
 
 To promote standardized data formats for storing annotated datasets and other
 information about sounds in recordings, the `soundevent` package provides
-several functions for serialization, storage, and reading of the different data
-classes offered. These functions enable easy sharing of information about common
-objects in bioacoustic research. By employing a consistent data format,
-researchers can exchange data more efficiently and collaborate seamlessly.
+[several
+functions](https://mbsantiago.github.io/soundevent/generated/gallery/1_saving_and_loading/)
+for serialization, storage, and reading of the different data classes offered.
+These functions enable easy sharing of information about common objects in
+bioacoustic research. By employing a consistent data format, researchers can
+exchange data more efficiently and collaborate seamlessly.
 
 ### 3. Handling Functions for Sound Events
 

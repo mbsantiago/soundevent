@@ -4,7 +4,7 @@ site_url: https://mbsantiago.github.io/soundevent/
 nav:
   - Home: README.md
   - Data: data.md
-  - generated/gallery
+  - User Guide: generated/gallery
   - Reference: reference.md
   - Contributing: CONTRIBUTING.md
   - Code of Conduct: CODE_OF_CONDUCT.md
@@ -16,7 +16,7 @@ theme:
 
 plugins:
   - gallery:
-      examples_dirs: docs/examples # path to your example scripts
+      examples_dirs: docs/user_guide # path to your example scripts
       gallery_dirs: docs/generated/gallery # where to save generated gallery
       backreferences_dir: docs/generated/backreferences # where to generate the back references summary
       doc_module: ["mkdocs_gallery", "numpy"]

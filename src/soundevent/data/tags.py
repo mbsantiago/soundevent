@@ -65,3 +65,7 @@ class Tag(BaseModel):
     def __hash__(self):
         """Hash the Tag object."""
         return hash((self.key, self.value))
+
+    def __str__(self):
+        """Return the string representation of the Tag object."""
+        return f"{self.key}: {self.value}"

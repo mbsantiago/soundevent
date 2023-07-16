@@ -21,7 +21,7 @@ covers the following key topics:
   fragments of recordings, which serve as the source material for bioacoustic
   analysis.
 
-- [Sound Event](#sound-events): Clear definition and methods of locating sound
+- [Sound Event](#sound_events): Clear definition and methods of locating sound
 events within a recording, including different geometries and sequences of
 sound events.
 
@@ -29,7 +29,7 @@ sound events.
   annotation, including annotation tasks and human-labeled sound events
   (annotations).
 
-- [Automated Analysis](#automated-analysis): Objects that emerge from
+- [Automated Analysis](#automated_analysis): Objects that emerge from
   computational methods applied to audio, such as predicted tags, predicted
   sound events, and processed clips.
 

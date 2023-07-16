@@ -54,19 +54,19 @@ __all__ = [
 class SoundEvent(BaseModel):
     """Sound events."""
 
-    uuid: UUID = Field(default_factory=uuid4)
+    uuid: UUID = Field(default_factory=uuid4, repr=False)
     """The UUID of the sound event."""
 
-    recording: Recording
+    recording: Recording = Field(..., repr=False)
     """The recording containing the sound event."""
 
     geometry: Optional[Geometry]
     """The geometry locating the sound event within the recording."""
 
-    tags: List[Tag] = Field(default_factory=list)
+    tags: List[Tag] = Field(default_factory=list, repr=False)
     """The tags associated with the sound event."""
 
-    features: List[Feature] = Field(default_factory=list)
+    features: List[Feature] = Field(default_factory=list, repr=False)
     """The features associated with the sound event."""
 
     def __hash__(self):
