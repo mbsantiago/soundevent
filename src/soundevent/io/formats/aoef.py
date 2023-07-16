@@ -163,7 +163,7 @@ class RecordingObject(BaseModel):
 
     def to_recording(
         self,
-        tags: Optional[Dict[int, data.Tag]] = None,
+        tags: Dict[int, data.Tag],
         audio_dir: Optional[Path] = None,
     ) -> data.Recording:
         """Convert a recording object to a recording."""
@@ -171,9 +171,6 @@ class RecordingObject(BaseModel):
 
         if audio_dir is not None:
             path = audio_dir / path
-
-        if tags is None:
-            tags = {}
 
         return data.Recording(
             id=self.uuid or uuid4(),
@@ -187,9 +184,7 @@ class RecordingObject(BaseModel):
             time=self.time,
             latitude=self.latitude,
             longitude=self.longitude,
-            tags=[
-                tags[tag_id] for tag_id in (self.tags or []) if tag_id in tags
-            ],
+            tags=[tags[tag_id] for tag_id in (self.tags or [])],
             features=[
                 data.Feature(
                     name=name,
@@ -345,15 +340,9 @@ class ClipObject(BaseModel):
 
     def to_clip(
         self,
-        tags: Optional[Dict[int, data.Tag]] = None,
-        recordings: Optional[Dict[int, data.Recording]] = None,
+        tags: Dict[int, data.Tag],
+        recordings: Dict[int, data.Recording],
     ) -> data.Clip:
-        if tags is None:
-            tags = {}
-
-        if recordings is None:
-            recordings = {}
-
         if self.recording not in recordings:
             raise ValueError(f"Recording with ID {self.recording} not found.")
 
@@ -362,9 +351,7 @@ class ClipObject(BaseModel):
             recording=recordings[self.recording],
             start_time=self.start_time,
             end_time=self.end_time,
-            tags=[
-                tags[tag_id] for tag_id in (self.tags or []) if tag_id in tags
-            ],
+            tags=[tags[tag_id] for tag_id in (self.tags or [])],
             features=[
                 data.Feature(
                     name=name,
@@ -429,15 +416,9 @@ class SoundEventObject(BaseModel):
 
     def to_sound_event(
         self,
-        recordings: Optional[Dict[int, data.Recording]] = None,
-        tags: Optional[Dict[int, data.Tag]] = None,
+        recordings: Dict[int, data.Recording],
+        tags: Dict[int, data.Tag],
     ) -> data.SoundEvent:
-        if recordings is None:
-            recordings = {}
-
-        if tags is None:
-            tags = {}
-
         if self.recording not in recordings:
             raise ValueError(f"Recording with ID {self.recording} not found.")
 
@@ -445,9 +426,7 @@ class SoundEventObject(BaseModel):
             uuid=self.uuid or uuid4(),
             recording=recordings[self.recording],
             geometry=self.geometry,
-            tags=[
-                tags[tag_id] for tag_id in (self.tags or []) if tag_id in tags
-            ],
+            tags=[tags[tag_id] for tag_id in (self.tags or [])],
             features=[
                 data.Feature(
                     name=name,
@@ -511,15 +490,9 @@ class AnnotationObject(BaseModel):
 
     def to_annotation(
         self,
-        sound_events: Optional[Dict[int, data.SoundEvent]] = None,
-        tags: Optional[Dict[int, data.Tag]] = None,
+        sound_events: Dict[int, data.SoundEvent],
+        tags: Dict[int, data.Tag],
     ) -> data.Annotation:
-        if sound_events is None:
-            sound_events = {}
-
-        if tags is None:
-            tags = {}
-
         if self.sound_event not in sound_events:
             raise ValueError(
                 f"Sound event with ID {self.sound_event} not found."
@@ -529,9 +502,7 @@ class AnnotationObject(BaseModel):
             id=self.uuid or uuid4(),
             sound_event=sound_events[self.sound_event],
             notes=self.notes if self.notes else [],
-            tags=[
-                tags[tag_id] for tag_id in (self.tags or []) if tag_id in tags
-            ],
+            tags=[tags[tag_id] for tag_id in (self.tags or [])],
             created_by=self.created_by,
             created_on=self.created_on,
         )
@@ -610,19 +581,10 @@ class AnnotationTaskObject(BaseModel):
 
     def to_annotation_task(
         self,
-        clips: Optional[Dict[int, data.Clip]] = None,
-        annotations: Optional[Dict[int, data.Annotation]] = None,
-        tags: Optional[Dict[int, data.Tag]] = None,
+        clips: Dict[int, data.Clip],
+        annotations: Dict[int, data.Annotation],
+        tags: Dict[int, data.Tag],
     ) -> data.AnnotationTask:
-        if clips is None:
-            clips = {}
-
-        if annotations is None:
-            annotations = {}
-
-        if tags is None:
-            tags = {}
-
         if self.clip not in clips:
             raise ValueError(f"Clip with ID {self.clip} not found.")
 
@@ -632,15 +594,12 @@ class AnnotationTaskObject(BaseModel):
             annotations=[
                 annotations[annotation_id]
                 for annotation_id in (self.annotations or [])
-                if annotation_id in annotations
             ],
             completed_by=self.completed_by,
             completed_on=self.completed_on,
             completed=self.completed,
             notes=self.notes if self.notes else [],
-            tags=[
-                tags[tag_id] for tag_id in (self.tags or []) if tag_id in tags
-            ],
+            tags=[tags[tag_id] for tag_id in (self.tags or [])],
         )
 
 
@@ -851,20 +810,10 @@ class PredictedSoundEventObject(BaseModel):
 
     def to_predicted_sound_event(
         self,
-        recordings: Optional[Dict[int, data.Recording]] = None,
-        sound_events: Optional[Dict[int, data.SoundEvent]] = None,
-        tags: Optional[Dict[int, data.Tag]] = None,
+        sound_events: Dict[int, data.SoundEvent],
+        tags: Dict[int, data.Tag],
     ) -> data.PredictedSoundEvent:
         """Convert a predicted sound event object to a predicted sound event."""
-        if recordings is None:
-            recordings = {}
-
-        if sound_events is None:
-            sound_events = {}
-
-        if tags is None:
-            tags = {}
-
         if self.sound_event not in sound_events:
             raise ValueError(
                 f"Sound event with ID {self.sound_event} not found "
@@ -881,7 +830,6 @@ class PredictedSoundEventObject(BaseModel):
                     score=tag[1],
                 )
                 for tag in self.tags or []
-                if tag[0] in tags
             ],
             features=[
                 data.Feature(
@@ -965,22 +913,11 @@ class ProcessedClipObject(BaseModel):
 
     def to_processed_clip(
         self,
-        clips: Optional[Dict[int, data.Clip]] = None,
-        predicted_sound_events: Optional[
-            Dict[int, data.PredictedSoundEvent]
-        ] = None,
-        tags: Optional[Dict[int, data.Tag]] = None,
+        clips: Dict[int, data.Clip],
+        predicted_sound_events: Dict[int, data.PredictedSoundEvent],
+        tags: Dict[int, data.Tag],
     ) -> data.ProcessedClip:
         """Convert a processed clip object to a processed clip."""
-        if clips is None:
-            clips = {}
-
-        if predicted_sound_events is None:
-            predicted_sound_events = {}
-
-        if tags is None:
-            tags = {}
-
         if self.clip not in clips:
             raise ValueError(f"Clip with ID {self.clip} not found in clips.")
 
@@ -1136,7 +1073,6 @@ class ModelRunObject(BaseModel):
             predicted_sound_events[
                 predicted_sound_event.id
             ] = predicted_sound_event.to_predicted_sound_event(
-                recordings=recordings,
                 sound_events=sound_events,
                 tags=tags,
             )
