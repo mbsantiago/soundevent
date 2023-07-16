@@ -28,7 +28,7 @@ jobs:
 
       - name: Run Tests
         run: |
-          pytest tests -v --cov-config .coveragerc --cov=src/soundevent/ -l --tb=sort --maxfail=1 tests/
+          pytest tests -v --cov-config .coveragerc --cov=src/soundevent/ -l --tb=short --maxfail=1 tests/
           coverage xml
           coverage html
 
