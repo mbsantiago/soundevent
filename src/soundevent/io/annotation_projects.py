@@ -1,6 +1,6 @@
 """Save and loading functions for annotation projects."""
 from pathlib import Path
-from typing import Dict
+from typing import Dict, Optional
 
 from soundevent import data
 from soundevent.io.formats import aoef, infer_format
@@ -12,7 +12,7 @@ LOAD_FORMATS: Dict[str, Loader[data.AnnotationProject]] = {}
 
 def load_annotation_project(
     path: PathLike,
-    audio_dir: PathLike = ".",
+    audio_dir: Optional[PathLike] = None,
 ) -> data.AnnotationProject:
     """Load annotation project from path.
 
@@ -22,9 +22,9 @@ def load_annotation_project(
         Path to the file with the annotation project.
 
     audio_dir: PathLike, optional
-        Path to the directory containing the audio files, by default ".". The
+        Path to the directory containing the audio files. If provided, the
         audio file paths in the annotation project will be relative to this
-        directory.
+        directory. By default None.
 
     Returns
     -------
@@ -56,7 +56,7 @@ def load_annotation_project(
 def save_annotation_project(
     project: data.AnnotationProject,
     path: PathLike,
-    audio_dir: PathLike = ".",
+    audio_dir: Optional[PathLike] = None,
     format: str = "aoef",
 ) -> None:
     """Save annotation project to path.
@@ -70,9 +70,9 @@ def save_annotation_project(
         Path to save annotation project to.
 
     audio_dir: PathLike, optional
-        Path to the directory containing the audio files, by default ".". The
+        Path to the directory containing the audio files. If provided, the
         audio file paths in the annotation project will be relative to this
-        directory.
+        directory. By default None.
 
     format: str, optional
         Format to save the annotation project in, by default "aoef".
@@ -96,11 +96,14 @@ def save_annotation_project(
 def save_annotation_project_in_aoef_format(
     obj: data.AnnotationProject,
     path: PathLike,
-    audio_dir: PathLike = ".",
+    audio_dir: Optional[PathLike] = None,
 ) -> None:
     """Save annotation project to path in AOEF format."""
     path = Path(path)
-    audio_dir = Path(audio_dir).resolve()
+
+    if audio_dir is not None:
+        audio_dir = Path(audio_dir).resolve()
+
     annotation_project_object = (
         aoef.AnnotationProjectObject.from_annotation_project(
             obj,
@@ -117,11 +120,14 @@ def save_annotation_project_in_aoef_format(
 
 def load_annotation_project_in_aoef_format(
     path: PathLike,
-    audio_dir: PathLike = ".",
+    audio_dir: Optional[PathLike] = None,
 ) -> data.AnnotationProject:
     """Load annotation project from path in AOEF format."""
     path = Path(path)
-    audio_dir = Path(audio_dir).resolve()
+
+    if audio_dir is not None:
+        audio_dir = Path(audio_dir).resolve()
+
     annotation_project_object = (
         aoef.AnnotationProjectObject.model_validate_json(path.read_text())
     )

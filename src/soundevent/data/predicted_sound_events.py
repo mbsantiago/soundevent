@@ -69,3 +69,7 @@ class PredictedSoundEvent(BaseModel):
 
     features: List[Feature] = Field(default_factory=list)
     """List of features associated with the prediction."""
+
+    def __hash__(self) -> int:
+        """Return hash value of the predicted sound event."""
+        return hash(self.id)

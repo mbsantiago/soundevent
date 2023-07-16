@@ -742,7 +742,7 @@ class AnnotationProjectObject(BaseModel):
 
     def to_annotation_project(
         self,
-        audio_dir: Path = Path("."),
+        audio_dir: Optional[Path] = None,
     ) -> data.AnnotationProject:
         """Convert an annotation project object to an annotation project."""
         tags: Dict[int, data.Tag] = {}
@@ -816,7 +816,7 @@ class PredictedSoundEventObject(BaseModel):
         recordings: Dict[data.Recording, RecordingObject],
         sound_events: Dict[data.SoundEvent, SoundEventObject],
         tags: Dict[data.Tag, TagObject],
-        audio_dir: Path = Path("."),
+        audio_dir: Optional[Path] = None,
     ) -> Self:
         """Convert a predicted sound event to a predicted sound event object."""
         if predicted_sound_event in predicted_sound_events:
@@ -827,7 +827,7 @@ class PredictedSoundEventObject(BaseModel):
             for tag in predicted_sound_event.tags
         ]
 
-        return cls(
+        predicted_sound_events[predicted_sound_event] = cls(
             id=len(predicted_sound_events),
             uuid=predicted_sound_event.id,
             sound_event=SoundEventObject.from_sound_event(
@@ -846,6 +846,8 @@ class PredictedSoundEventObject(BaseModel):
             if predicted_sound_event.features
             else None,
         )
+
+        return predicted_sound_events[predicted_sound_event]
 
     def to_predicted_sound_event(
         self,
@@ -916,7 +918,7 @@ class ProcessedClipObject(BaseModel):
         predicted_sound_events: Dict[
             data.PredictedSoundEvent, PredictedSoundEventObject
         ],
-        audio_dir: Path = Path("."),
+        audio_dir: Optional[Path] = None,
     ) -> Self:
         """Convert a processed clip to a processed clip object."""
         if processed_clip in processed_clips:
@@ -964,15 +966,17 @@ class ProcessedClipObject(BaseModel):
     def to_processed_clip(
         self,
         clips: Optional[Dict[int, data.Clip]] = None,
-        sound_events: Optional[Dict[int, data.PredictedSoundEvent]] = None,
+        predicted_sound_events: Optional[
+            Dict[int, data.PredictedSoundEvent]
+        ] = None,
         tags: Optional[Dict[int, data.Tag]] = None,
     ) -> data.ProcessedClip:
         """Convert a processed clip object to a processed clip."""
         if clips is None:
             clips = {}
 
-        if sound_events is None:
-            sound_events = {}
+        if predicted_sound_events is None:
+            predicted_sound_events = {}
 
         if tags is None:
             tags = {}
@@ -984,9 +988,8 @@ class ProcessedClipObject(BaseModel):
             uuid=self.uuid,
             clip=clips[self.clip],
             sound_events=[
-                sound_events[sound_event]
+                predicted_sound_events[sound_event]
                 for sound_event in (self.sound_events or [])
-                if sound_event in sound_events
             ],
             tags=[
                 data.PredictedTag(
@@ -994,7 +997,6 @@ class ProcessedClipObject(BaseModel):
                     score=tag[1],
                 )
                 for tag in self.tags or []
-                if tag[0] in tags
             ],
             features=[
                 data.Feature(
@@ -1013,6 +1015,8 @@ class ModelRunInfo(BaseModel):
 
     description: Optional[str] = None
 
+    run_date: datetime.datetime
+
     date_created: datetime.datetime
 
     @classmethod
@@ -1027,6 +1031,7 @@ class ModelRunInfo(BaseModel):
         return cls(
             uuid=model_run.id,
             model=model_run.model,
+            run_date=model_run.created_on,
             date_created=date_created,
         )
 
@@ -1050,7 +1055,7 @@ class ModelRunObject(BaseModel):
     def from_model_run(
         cls,
         model_run: data.ModelRun,
-        audio_dir: Path = Path("."),
+        audio_dir: Optional[Path] = None,
         date_created: Optional[datetime.datetime] = None,
     ) -> Self:
         """Convert a model run to a model run object."""
@@ -1097,7 +1102,7 @@ class ModelRunObject(BaseModel):
 
     def to_model_run(
         self,
-        audio_dir: Path = Path("."),
+        audio_dir: Optional[Path] = None,
     ) -> data.ModelRun:
         """Convert a model run object to a model run."""
         tags: Dict[int, data.Tag] = {}
@@ -1141,14 +1146,14 @@ class ModelRunObject(BaseModel):
                 processed_clip.id
             ] = processed_clip.to_processed_clip(
                 clips=clips,
-                sound_events=predicted_sound_events,
+                predicted_sound_events=predicted_sound_events,
                 tags=tags,
             )
 
         return data.ModelRun(
             id=self.info.uuid,
             model=self.info.model,
-            created_on=self.info.date_created,
+            created_on=self.info.run_date,
             clips=list(processed_clips.values()),
         )
 

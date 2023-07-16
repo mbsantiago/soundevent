@@ -4,7 +4,7 @@ Here you can find the classes and functions for reading and writing model runs.
 """
 
 from pathlib import Path
-from typing import Dict
+from typing import Dict, Optional
 
 from soundevent import data
 from soundevent.io.formats import aoef, infer_format
@@ -20,7 +20,9 @@ SAVE_FORMATS: Dict[str, Saver[data.ModelRun]] = {}
 LOAD_FORMATS: Dict[str, Loader[data.ModelRun]] = {}
 
 
-def load_model_run(path: PathLike, audio_dir: PathLike = ".") -> data.ModelRun:
+def load_model_run(
+    path: PathLike, audio_dir: Optional[PathLike] = None
+) -> data.ModelRun:
     """Load a ModelRun from a file.
 
     Parameters
@@ -29,8 +31,8 @@ def load_model_run(path: PathLike, audio_dir: PathLike = ".") -> data.ModelRun:
         Path to the file to load.
 
     audio_dir : PathLike, optional
-        Path to the directory containing the audio files, by default ".".
-        The audio file paths in the dataset will be relative to this directory.
+        Path to the directory containing the audio files. If provided, the
+        audio file paths in the model run will be relative to this directory.
 
     Returns
     -------
@@ -60,7 +62,7 @@ def load_model_run(path: PathLike, audio_dir: PathLike = ".") -> data.ModelRun:
 def save_model_run(
     model_run: data.ModelRun,
     path: PathLike,
-    audio_dir: PathLike = ".",
+    audio_dir: Optional[PathLike] = None,
     format: str = "aoef",
 ) -> None:
     """Save a ModelRun to a file.
@@ -69,10 +71,15 @@ def save_model_run(
     ----------
     model_run : ModelRun
         The model run to save.
+
     path : Path
         Path to the file to save the dataset to.
+
     audio_dir : Path, optional
-        Path to the directory containing the audio files, by default ".".
+        Path to the directory containing the audio files. If provided, the
+        audio file paths in the model run will be relative to this directory.
+        Defaults to None.
+
     format : DatasetFormat, optional
         The format to save the dataset in, by default "aoef".
 
@@ -92,7 +99,7 @@ def save_model_run(
 
 def load_model_run_aoef_format(
     path: PathLike,
-    audio_dir: PathLike = ".",
+    audio_dir: Optional[PathLike] = None,
 ) -> data.ModelRun:
     """Load a ModelRun from a JSON file in AOEF format.
 
@@ -102,15 +109,17 @@ def load_model_run_aoef_format(
         Path to the file to load.
 
     audio_dir : Path, optional
-        Path to the directory containing the audio files, by default ".".
-        The audio file paths in the dataset will be relative to this directory.
+        Path to the directory containing the audio files. If provided, the
+        audio file paths in the model run will be relative to this directory.
+        Defaults to None.
 
     Returns
     -------
     model_run : ModelRun
         The loaded model run.
     """
-    audio_dir = Path(audio_dir).resolve()
+    if audio_dir is not None:
+        audio_dir = Path(audio_dir).resolve()
 
     with open(path, "r") as f:
         dataset = aoef.ModelRunObject.model_validate_json(f.read())
@@ -121,7 +130,7 @@ def load_model_run_aoef_format(
 def save_model_run_aoef_format(
     obj: data.ModelRun,
     path: PathLike,
-    audio_dir: PathLike = ".",
+    audio_dir: Optional[PathLike] = None,
 ) -> None:
     """Save a ModelRun to a JSON file in AOEF format.
 
@@ -129,14 +138,18 @@ def save_model_run_aoef_format(
     ----------
     obj : ModelRun
         The model run to save.
+
     path : PathLike
         Path to the file to save the dataset to.
+
     audio_dir : PathLike, optional
-        Path to the directory containing the audio files, by default ".".
-        The audio file paths in the dataset will be relative to this directory.
+        Path to the directory containing the audio files. If provided, the
+        audio file paths in the model run will be relative to this directory.
+        Defaults to None.
 
     """
-    audio_dir = Path(audio_dir).resolve()
+    if audio_dir is not None:
+        audio_dir = Path(audio_dir).resolve()
 
     dataset_object = aoef.ModelRunObject.from_model_run(
         obj,

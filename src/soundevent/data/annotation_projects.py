@@ -54,7 +54,7 @@ class AnnotationProject(BaseModel):
     name: str
     """Name of the annotation project."""
 
-    description: Optional[str] = Field(None, repr=False)
+    description: Optional[str] = Field(default=None, repr=False)
     """Description of the annotation collection."""
 
     tasks: List[AnnotationTask] = Field(default_factory=list, repr=False)

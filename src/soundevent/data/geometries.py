@@ -57,7 +57,7 @@ from typing import List, Tuple, Union
 
 from pydantic import BaseModel, Field, PrivateAttr, field_validator
 from shapely import geometry
-from shapely.geometry.base import BaseGeometry
+import shapely.geometry.base as shapely
 
 if sys.version_info >= (3, 8):
     from typing import Literal
@@ -103,7 +103,7 @@ MAX_FREQUENCY = 5_000_000
 """The absolute maximum frequency that can be used in a geometry."""
 
 
-class Geometry(BaseModel, ABC):
+class BaseGeometry(BaseModel, ABC):
     """Base class for geometries.
 
     Notes
@@ -124,7 +124,7 @@ class Geometry(BaseModel, ABC):
         include=True,
     )
 
-    _geom: BaseGeometry = PrivateAttr()
+    _geom: shapely.BaseGeometry = PrivateAttr()
     """The Shapely geometry object representing the geometry."""
 
     @classmethod
@@ -140,7 +140,7 @@ class Geometry(BaseModel, ABC):
         return type_field.default
 
     @property
-    def geom(self) -> BaseGeometry:
+    def geom(self) -> shapely.BaseGeometry:
         """Get the Shapely geometry object representing the geometry.
 
         Returns
@@ -166,7 +166,7 @@ class Geometry(BaseModel, ABC):
         self._geom = self._get_shapely_geometry()
 
     @abstractmethod
-    def _get_shapely_geometry(self) -> BaseGeometry:
+    def _get_shapely_geometry(self) -> shapely.BaseGeometry:
         """Get the Shapely geometry object representing the geometry.
 
         Returns
@@ -176,7 +176,7 @@ class Geometry(BaseModel, ABC):
         raise NotImplementedError
 
 
-class TimeStamp(Geometry):
+class TimeStamp(BaseGeometry):
     """TimeStamp geometry type.
 
     This geometry type is used to locate a sound event with a single time stamp.
@@ -195,7 +195,7 @@ class TimeStamp(Geometry):
     The time stamp is relative to the start of the recording.
     """
 
-    def _get_shapely_geometry(self) -> BaseGeometry:
+    def _get_shapely_geometry(self) -> shapely.BaseGeometry:
         """Get the Shapely geometry object representing the geometry.
 
         Returns
@@ -210,7 +210,7 @@ class TimeStamp(Geometry):
         )
 
 
-class TimeInterval(Geometry):
+class TimeInterval(BaseGeometry):
     """TimeInterval geometry type.
 
     This geometry type is used to locate a sound event with a time interval.
@@ -250,7 +250,7 @@ class TimeInterval(Geometry):
             raise ValueError("The start time must be before the end time.")
         return v
 
-    def _get_shapely_geometry(self) -> BaseGeometry:
+    def _get_shapely_geometry(self) -> shapely.BaseGeometry:
         """Get the Shapely geometry object representing the sound event.
 
         Returns
@@ -261,7 +261,7 @@ class TimeInterval(Geometry):
         return geometry.box(start_time, 0, end_time, MAX_FREQUENCY)
 
 
-class Point(Geometry):
+class Point(BaseGeometry):
     """Point geometry type.
 
     This geometry type is used to locate a sound event with a single point in
@@ -280,7 +280,7 @@ class Point(Geometry):
 
     """
 
-    def _get_shapely_geometry(self) -> BaseGeometry:
+    def _get_shapely_geometry(self) -> shapely.BaseGeometry:
         """Get the Shapely geometry object representing the geometry.
 
         Returns
@@ -290,7 +290,7 @@ class Point(Geometry):
         return geometry.Point(self.coordinates)
 
 
-class LineString(Geometry):
+class LineString(BaseGeometry):
     """LineString geometry type.
 
     This geometry type is used to locate a sound event with a line in time and
@@ -310,7 +310,7 @@ class LineString(Geometry):
 
     All times are relative to the start of the recording."""
 
-    def _get_shapely_geometry(self) -> BaseGeometry:
+    def _get_shapely_geometry(self) -> shapely.BaseGeometry:
         """Get the Shapely geometry object representing the geometry.
 
         Returns
@@ -338,7 +338,7 @@ class LineString(Geometry):
         return v
 
 
-class Polygon(Geometry):
+class Polygon(BaseGeometry):
     """Polygon geometry type.
 
     This geometry type is used to locate a sound event with a polygon in time
@@ -365,7 +365,7 @@ class Polygon(Geometry):
             raise ValueError("The polygon must have at least one ring.")
         return v
 
-    def _get_shapely_geometry(self) -> BaseGeometry:
+    def _get_shapely_geometry(self) -> shapely.BaseGeometry:
         """Get the Shapely geometry object representing the geometry.
 
         Returns
@@ -377,7 +377,7 @@ class Polygon(Geometry):
         return geometry.Polygon(shell, holes)
 
 
-class BoundingBox(Geometry):
+class BoundingBox(BaseGeometry):
     """BoundingBox geometry type.
 
     This geometry type is used to locate a sound event with a bounding box in
@@ -413,7 +413,7 @@ class BoundingBox(Geometry):
 
         return v
 
-    def _get_shapely_geometry(self) -> BaseGeometry:
+    def _get_shapely_geometry(self) -> shapely.BaseGeometry:
         """Get the Shapely geometry object representing the geometry."""
         start_time, start_frequency, end_time, end_frequency = self.coordinates
         return geometry.box(
@@ -424,7 +424,7 @@ class BoundingBox(Geometry):
         )
 
 
-class MultiPoint(Geometry):
+class MultiPoint(BaseGeometry):
     """MultiPoint geometry type.
 
     This geometry type is used to locate a sound event with multiple points in
@@ -442,7 +442,7 @@ class MultiPoint(Geometry):
 
     All times are relative to the start of the recording."""
 
-    def _get_shapely_geometry(self) -> BaseGeometry:
+    def _get_shapely_geometry(self) -> shapely.BaseGeometry:
         """Get the Shapely geometry object representing the geometry.
 
         Returns
@@ -452,7 +452,7 @@ class MultiPoint(Geometry):
         return geometry.MultiPoint(self.coordinates)
 
 
-class MultiLineString(Geometry):
+class MultiLineString(BaseGeometry):
     """MultiLineString geometry type.
 
     This geometry type is used to locate a sound event with multiple lines in
@@ -471,7 +471,7 @@ class MultiLineString(Geometry):
 
     All times are relative to the start of the recording."""
 
-    def _get_shapely_geometry(self) -> BaseGeometry:
+    def _get_shapely_geometry(self) -> shapely.BaseGeometry:
         """Get the Shapely geometry object representing the geometry.
 
         Returns
@@ -511,7 +511,7 @@ class MultiLineString(Geometry):
         return v
 
 
-class MultiPolygon(Geometry):
+class MultiPolygon(BaseGeometry):
     """MultiPolygon geometry type.
 
     This geometry type is used to locate a sound event with multiple polygons in
@@ -552,7 +552,7 @@ class MultiPolygon(Geometry):
                 raise ValueError("Each polygon must have at least one ring.")
         return v
 
-    def _get_shapely_geometry(self) -> BaseGeometry:
+    def _get_shapely_geometry(self) -> shapely.BaseGeometry:
         """Get the Shapely geometry object representing the geometry.
 
         Returns
@@ -566,3 +566,16 @@ class MultiPolygon(Geometry):
             polygon = geometry.Polygon(shell, holes)
             polgons.append(polygon)
         return geometry.MultiPolygon(polgons)
+
+
+Geometry = Union[
+    TimeStamp,
+    TimeInterval,
+    Point,
+    LineString,
+    Polygon,
+    BoundingBox,
+    MultiPoint,
+    MultiLineString,
+    MultiPolygon,
+]

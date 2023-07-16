@@ -5,7 +5,7 @@ Datasets of recordings.
 """
 
 from pathlib import Path
-from typing import Dict
+from typing import Dict, Optional
 
 from soundevent import data
 from soundevent.io.formats import aoef, infer_format
@@ -21,7 +21,10 @@ SAVE_FORMATS: Dict[str, Saver[data.Dataset]] = {}
 LOAD_FORMATS: Dict[str, Loader[data.Dataset]] = {}
 
 
-def load_dataset(path: PathLike, audio_dir: PathLike = ".") -> data.Dataset:
+def load_dataset(
+    path: PathLike,
+    audio_dir: Optional[PathLike] = None,
+) -> data.Dataset:
     """Load a Dataset from a file.
 
     Parameters
@@ -30,8 +33,9 @@ def load_dataset(path: PathLike, audio_dir: PathLike = ".") -> data.Dataset:
         Path to the file to load.
 
     audio_dir : PathLike, optional
-        Path to the directory containing the audio files, by default ".".
-        The audio file paths in the dataset will be relative to this directory.
+        Path to the directory containing the audio files. If provided, the
+        audio file paths in the dataset will be relative to this directory.
+        By default None.
 
     Returns
     -------
@@ -61,7 +65,7 @@ def load_dataset(path: PathLike, audio_dir: PathLike = ".") -> data.Dataset:
 def save_dataset(
     dataset: data.Dataset,
     path: PathLike,
-    audio_dir: PathLike = ".",
+    audio_dir: Optional[PathLike] = None,
     format: str = "aoef",
 ) -> None:
     """Save a Dataset to a file.
@@ -70,10 +74,15 @@ def save_dataset(
     ----------
     dataset : Dataset
         The dataset to save.
+
     path : Path
         Path to the file to save the dataset to.
+
     audio_dir : Path, optional
-        Path to the directory containing the audio files, by default ".".
+        Path to the directory containing the audio files. If provided, the
+        audio file paths in the dataset will be relative to this directory.
+        By default None.
+
     format : DatasetFormat, optional
         The format to save the dataset in, by default "aoef".
 
@@ -93,7 +102,7 @@ def save_dataset(
 
 def load_dataset_aoef_format(
     path: PathLike,
-    audio_dir: PathLike = ".",
+    audio_dir: Optional[PathLike] = None,
 ) -> data.Dataset:
     """Load a Dataset from a JSON file.
 
@@ -103,15 +112,17 @@ def load_dataset_aoef_format(
         Path to the file to load.
 
     audio_dir : Path, optional
-        Path to the directory containing the audio files, by default ".".
-        The audio file paths in the dataset will be relative to this directory.
+        Path to the directory containing the audio files. If provided, the
+        audio file paths in the dataset will be relative to this directory.
+        By default None.
 
     Returns
     -------
     dataset : Dataset
         The loaded dataset.
     """
-    audio_dir = Path(audio_dir).resolve()
+    if audio_dir is not None:
+        audio_dir = Path(audio_dir).resolve()
 
     with open(path, "r") as f:
         dataset = aoef.DatasetObject.model_validate_json(f.read())
@@ -122,7 +133,7 @@ def load_dataset_aoef_format(
 def save_dataset_aoef_format(
     obj: data.Dataset,
     path: PathLike,
-    audio_dir: PathLike = ".",
+    audio_dir: Optional[PathLike] = None,
 ) -> None:
     """Save a Dataset to a JSON file in AOEF format.
 
@@ -133,11 +144,13 @@ def save_dataset_aoef_format(
     path : PathLike
         Path to the file to save the dataset to.
     audio_dir : PathLike, optional
-        Path to the directory containing the audio files, by default ".".
-        The audio file paths in the dataset will be relative to this directory.
+        Path to the directory containing the audio files. If provided, the
+        audio file paths in the dataset will be relative to this directory.
+        By default None.
 
     """
-    audio_dir = Path(audio_dir).resolve()
+    if audio_dir is not None:
+        audio_dir = Path(audio_dir).resolve()
 
     dataset_object = aoef.DatasetObject.from_dataset(
         obj,
