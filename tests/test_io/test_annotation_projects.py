@@ -35,7 +35,7 @@ def clip(recording: data.Recording) -> data.Clip:
 @pytest.fixture
 def bounding_box() -> data.BoundingBox:
     """Return a bounding box."""
-    return data.BoundingBox(coordinates=(0.0, 0.0, 1.0, 1.0))
+    return data.BoundingBox(coordinates=[0.0, 0.0, 1.0, 1.0])
 
 
 @pytest.fixture

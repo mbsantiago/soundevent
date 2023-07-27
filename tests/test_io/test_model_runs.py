@@ -33,7 +33,7 @@ def clip(recording: data.Recording) -> data.Clip:
 @pytest.fixture
 def bounding_box() -> data.BoundingBox:
     """Return a bounding box."""
-    return data.BoundingBox(coordinates=(0.0, 0.0, 1.0, 1.0))
+    return data.BoundingBox(coordinates=[0.0, 0.0, 1.0, 1.0])
 
 
 @pytest.fixture
@@ -50,8 +50,6 @@ def sound_event(
 
 def test_saved_model_run_is_saved_to_json_file(
     tmp_path: Path,
-    clip: data.Clip,
-    sound_event: data.SoundEvent,
 ) -> None:
     """Test that a saved model run is saved to a JSON file."""
     # Arrange

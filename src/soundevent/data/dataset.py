@@ -51,12 +51,16 @@ facilitating efficient research workflows and promoting robust
 scientific practices.
 """
 
-from typing import List, Optional
+import os
+from pathlib import Path
+from typing import List, Optional, Union
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
 
 from soundevent.data.recordings import Recording
+
+PathLike = Union[str, os.PathLike]
 
 
 class Dataset(BaseModel):
@@ -73,3 +77,56 @@ class Dataset(BaseModel):
 
     recordings: List[Recording] = Field(default_factory=list, repr=False)
     """List of recordings associated with the dataset."""
+
+    @classmethod
+    def from_directory(
+        cls,
+        path: PathLike,
+        name: Optional[str] = None,
+        description: Optional[str] = None,
+        recursive: bool = True,
+        compute_hash: bool = True,
+    ) -> "Dataset":
+        """Return a dataset from the directory.
+
+        Reads the audio files in the directory and returns a dataset
+        containing the recordings.
+
+        Parameters
+        ----------
+        path : PathLike
+            Path to the directory.
+
+        recursive : bool, optional
+            Whether to search the directory recursively, by default True
+
+        compute_hash : bool, optional
+            Whether to compute the hash of the audio files, by default
+
+        Returns
+        -------
+        Dataset
+            The dataset.
+
+        Raises
+        ------
+        ValueError
+            If the path is not a directory.
+        """
+        path = Path(path)
+
+        if not path.is_dir():
+            raise ValueError(f"Path is not a directory: {path}")
+
+        glob_pattern = "**/*.wav" if recursive else "*.wav"
+
+        recordings = [
+            Recording.from_file(file, compute_hash=compute_hash)
+            for file in path.glob(glob_pattern)
+        ]
+
+        return cls(
+            name=name or path.name,
+            recordings=recordings,
+            description=description,
+        )

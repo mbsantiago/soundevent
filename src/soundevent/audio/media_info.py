@@ -1,13 +1,19 @@
 """Functions for getting media information from WAV files."""
+import hashlib
 import os
 from dataclasses import dataclass
+from typing import Union
 
 from soundevent.audio.chunks import parse_into_chunks
 
 __all__ = [
     "MediaInfo",
     "get_media_info",
+    "compute_md5_checksum",
 ]
+
+
+PathLike = Union[os.PathLike, str]
 
 
 @dataclass
@@ -33,7 +39,7 @@ class MediaInfo:
     """Number of channels."""
 
 
-def get_media_info(path: os.PathLike) -> MediaInfo:
+def get_media_info(path: PathLike) -> MediaInfo:
     """Return the media information from the WAV file.
 
     The information extracted from the WAV file is the audio format,
@@ -43,7 +49,7 @@ def get_media_info(path: os.PathLike) -> MediaInfo:
 
     Parameters
     ----------
-    path : os.PathLike
+    path : PathLike
         Path to the WAV file.
 
     Returns
@@ -90,3 +96,28 @@ def get_media_info(path: os.PathLike) -> MediaInfo:
         samples=samples,
         duration_s=duration,
     )
+
+
+BUFFER_SIZE = 65536
+
+
+def compute_md5_checksum(path: PathLike) -> str:
+    """Compute the MD5 checksum of a file.
+
+    Parameters
+    ----------
+    path : PathLike
+        Path to the file.
+
+    Returns
+    -------
+    str
+        MD5 checksum of the file.
+    """
+    md5 = hashlib.md5()
+    with open(path, "rb") as fp:
+        buffer = fp.read(BUFFER_SIZE)
+        while len(buffer) > 0:
+            md5.update(buffer)
+            buffer = fp.read(BUFFER_SIZE)
+    return md5.hexdigest()

@@ -55,9 +55,10 @@ import sys
 from abc import ABC, abstractmethod
 from typing import List, Tuple, Union
 
+import shapely
 from pydantic import BaseModel, Field, PrivateAttr, field_validator
 from shapely import geometry
-import shapely.geometry.base as shapely
+from shapely.geometry.base import BaseGeometry as ShapelyBaseGeometry
 
 if sys.version_info >= (3, 8):
     from typing import Literal
@@ -118,13 +119,13 @@ class BaseGeometry(BaseModel, ABC):
         include=True,
     )
 
-    coordinates: Union[float, List, Tuple] = Field(
+    coordinates: Union[float, List] = Field(
         description="the coordinates of the geometry.",
         frozen=True,
         include=True,
     )
 
-    _geom: shapely.BaseGeometry = PrivateAttr()
+    _geom: ShapelyBaseGeometry = PrivateAttr()
     """The Shapely geometry object representing the geometry."""
 
     @classmethod
@@ -140,7 +141,7 @@ class BaseGeometry(BaseModel, ABC):
         return type_field.default
 
     @property
-    def geom(self) -> shapely.BaseGeometry:
+    def geom(self) -> ShapelyBaseGeometry:
         """Get the Shapely geometry object representing the geometry.
 
         Returns
@@ -166,7 +167,7 @@ class BaseGeometry(BaseModel, ABC):
         self._geom = self._get_shapely_geometry()
 
     @abstractmethod
-    def _get_shapely_geometry(self) -> shapely.BaseGeometry:
+    def _get_shapely_geometry(self) -> ShapelyBaseGeometry:
         """Get the Shapely geometry object representing the geometry.
 
         Returns
@@ -174,6 +175,80 @@ class BaseGeometry(BaseModel, ABC):
             The Shapely geometry object representing the geometry.
         """
         raise NotImplementedError
+
+    def _repr_html_(self) -> str:
+        """Represent the geometry as HTML.
+
+        Returns
+        -------
+        str
+            The HTML representation of the geometry.
+        """
+        start_time, low_freq, end_time, high_freq = self.bounds
+
+        duration = end_time - start_time
+        bandwidth = high_freq - low_freq
+
+        factor = [
+            1 / duration if duration > 0 else 1,
+            1 / bandwidth if bandwidth > 0 else 1,
+        ]
+
+        transformed = shapely.transform(
+            self.geom,
+            lambda x: x * factor,
+        )._repr_svg_()
+
+        style = (
+            "display: inline-block; "
+            "position: relative;"
+            "width: 100px; "
+            "height: 100px; "
+        )
+
+        def axis_label(
+            label: float,
+            top: bool = False,
+            left: bool = True,
+            axis: str = "time",
+        ) -> str:
+            outer_style = "; ".join(
+                [
+                    "position: absolute",
+                    "top: 0; " if top else "bottom: 0",
+                    "left: 0; " if left else "right: 0",
+                    "transform: translate(-105%, 0)"
+                    if axis == "freq"
+                    else "transform: translate(0, 100%)",
+                ]
+            )
+
+            inner_style = "; ".join(
+                [
+                    "display: inline",
+                    "vertical-align: top"
+                    if axis == "time"
+                    else "vertical-align: bottom",
+                ]
+            )
+
+            label_str = f"{label:.2f}" if axis == "time" else f"{label:.0f}"
+
+            return (
+                f'<div style="{outer_style}">'
+                f'<small style="{inner_style}">{label_str}</small>'
+                "</div>"
+            )
+
+        return (
+            f'<div style="{style}">'
+            f'{axis_label(start_time, left=True, axis="time")}'
+            f'{axis_label(end_time, left=False, axis="time")}'
+            f'{axis_label(low_freq, top=False, axis="freq")}'
+            f'{axis_label(high_freq, top=True, axis="freq")}'
+            f"{transformed}"
+            "</div>"
+        )
 
 
 class TimeStamp(BaseGeometry):
@@ -195,7 +270,7 @@ class TimeStamp(BaseGeometry):
     The time stamp is relative to the start of the recording.
     """
 
-    def _get_shapely_geometry(self) -> shapely.BaseGeometry:
+    def _get_shapely_geometry(self) -> ShapelyBaseGeometry:
         """Get the Shapely geometry object representing the geometry.
 
         Returns
@@ -209,6 +284,51 @@ class TimeStamp(BaseGeometry):
             MAX_FREQUENCY,
         )
 
+    def _repr_html_(self) -> str:
+        """Represent the geometry as HTML.
+
+        Returns
+        -------
+        str
+            The HTML representation of the geometry.
+        """
+        time = self.coordinates
+
+        label_style = "; ".join(
+            [
+                "position: absolute",
+                "bottom: 0",
+                "transform: translate(0, 100%)",
+            ]
+        )
+
+        inner_style = "; ".join(
+            [
+                "display: inline",
+                "vertical-align: bottom",
+            ]
+        )
+
+        style = "; ".join(
+            [
+                "display: inline-block",
+                "position: relative",
+                "width: 100px",
+                "height: 100px",
+            ]
+        )
+
+        geom_svg = self.geom._repr_svg_()
+
+        return (
+            f'<div style="{style}">'
+            f'<div style="{label_style}">'
+            f'<small style="{inner_style}">{time}</small>'
+            "</div>"
+            f"{geom_svg}"
+            "</div>"
+        )
+
 
 class TimeInterval(BaseGeometry):
     """TimeInterval geometry type.
@@ -220,7 +340,7 @@ class TimeInterval(BaseGeometry):
 
     type: str = "TimeInterval"
 
-    coordinates: Tuple[Time, Time] = Field(
+    coordinates: List[Time] = Field(
         description="The time interval of the sound event.",
     )
     """The time interval of the sound event.
@@ -229,12 +349,12 @@ class TimeInterval(BaseGeometry):
     """
 
     @field_validator("coordinates")
-    def validate_time_interval(cls, v: Tuple[Time, Time]) -> Tuple[Time, Time]:
+    def validate_time_interval(cls, v: List[Time]) -> List[Time]:
         """Validate that the time interval is valid.
 
         Parameters
         ----------
-        v : Tuple[Time, Time]
+        v : List[Time]
             The time interval to validate.
 
         Returns
@@ -246,11 +366,16 @@ class TimeInterval(BaseGeometry):
             ValueError: If the time interval is invalid (i.e. the start time is
                 after the end time).
         """
+        if len(v) != 2:
+            raise ValueError(
+                "The time interval must have exactly two time stamps."
+            )
+
         if v[0] > v[1]:
             raise ValueError("The start time must be before the end time.")
         return v
 
-    def _get_shapely_geometry(self) -> shapely.BaseGeometry:
+    def _get_shapely_geometry(self) -> ShapelyBaseGeometry:
         """Get the Shapely geometry object representing the sound event.
 
         Returns
@@ -270,7 +395,7 @@ class Point(BaseGeometry):
 
     type: str = "Point"
 
-    coordinates: Tuple[Time, Frequency] = Field(
+    coordinates: List[float] = Field(
         ...,
         description="The points of the sound event.",
     )
@@ -280,7 +405,40 @@ class Point(BaseGeometry):
 
     """
 
-    def _get_shapely_geometry(self) -> shapely.BaseGeometry:
+    @field_validator("coordinates")
+    def validate_coordinates(cls, v: List[float]) -> List[float]:
+        """Validate that the coordinates are valid.
+
+        Parameters
+        ----------
+        v : List[float]
+            The coordinates to validate.
+
+        Returns
+        -------
+            The validated coordinates.
+
+        Raises
+        ------
+            ValueError: If the coordinates are invalid (i.e. the time is
+                negative or the frequency is outside the valid range).
+        """
+        if len(v) != 2:
+            raise ValueError("The coordinates must have exactly two values.")
+
+        time, frequency = v
+
+        if time < 0:
+            raise ValueError("The time must be positive.")
+
+        if frequency < 0 or frequency > MAX_FREQUENCY:
+            raise ValueError(
+                f"The frequency must be between 0 and {MAX_FREQUENCY}."
+            )
+
+        return v
+
+    def _get_shapely_geometry(self) -> ShapelyBaseGeometry:
         """Get the Shapely geometry object representing the geometry.
 
         Returns
@@ -300,7 +458,7 @@ class LineString(BaseGeometry):
 
     type: str = "LineString"
 
-    coordinates: List[Tuple[Time, Frequency]] = Field(
+    coordinates: List[List[float]] = Field(
         ...,
         description="The line of the sound event.",
     )
@@ -310,7 +468,7 @@ class LineString(BaseGeometry):
 
     All times are relative to the start of the recording."""
 
-    def _get_shapely_geometry(self) -> shapely.BaseGeometry:
+    def _get_shapely_geometry(self) -> ShapelyBaseGeometry:
         """Get the Shapely geometry object representing the geometry.
 
         Returns
@@ -320,18 +478,39 @@ class LineString(BaseGeometry):
         return geometry.LineString(self.coordinates)
 
     @field_validator("coordinates")
-    def has_at_least_two_points(
-        cls, v: List[Tuple[Time, Frequency]]
-    ) -> List[Tuple[Time, Frequency]]:
-        """Validate that the line has at least two points."""
+    def validate_coordinates(cls, v: List[List[float]]) -> List[List[float]]:
+        """Validate that the coordinates are valid.
+
+        Parameters
+        ----------
+        v : List[List[float]]
+            The coordinates to validate.
+
+        Returns
+        -------
+            The validated coordinates.
+
+        Raises
+        ------
+            ValueError: If the coordinates are invalid (i.e. the time is
+                negative or the frequency is outside the valid range).
+        """
         if len(v) < 2:
             raise ValueError("The line must have at least two points.")
+
+        for time, frequency in v:
+            if time < 0:
+                raise ValueError("The time must be positive.")
+
+            if frequency < 0 or frequency > MAX_FREQUENCY:
+                raise ValueError(
+                    f"The frequency must be between 0 and {MAX_FREQUENCY}."
+                )
+
         return v
 
     @field_validator("coordinates")
-    def is_ordered_by_time(
-        cls, v: List[Tuple[Time, Frequency]]
-    ) -> List[Tuple[Time, Frequency]]:
+    def is_ordered_by_time(cls, v: List[List[float]]) -> List[List[float]]:
         """Validate that the line is ordered by time."""
         if not all(v[i][0] <= v[i + 1][0] for i in range(len(v) - 1)):
             raise ValueError("The line must be ordered by time.")
@@ -348,7 +527,7 @@ class Polygon(BaseGeometry):
 
     type: str = "Polygon"
 
-    coordinates: List[List[Tuple[Time, Frequency]]] = Field(
+    coordinates: List[List[List[float]]] = Field(
         ...,
         description="The polygon of the sound event.",
     )
@@ -357,15 +536,45 @@ class Polygon(BaseGeometry):
     All times are relative to the start of the recording."""
 
     @field_validator("coordinates")
-    def has_at_least_one_ring(
-        cls, v: List[List[Tuple[Time, Frequency]]]
-    ) -> List[List[Tuple[Time, Frequency]]]:
-        """Validate that the polygon has at least one ring."""
-        if len(v) == 0:
+    def validate_coordinates(
+        cls, v: List[List[List[float]]]
+    ) -> List[List[List[float]]]:
+        """Validate that the coordinates are valid.
+
+        Parameters
+        ----------
+        v : List[List[List[float]]]
+            The coordinates to validate.
+
+        Returns
+        -------
+            The validated coordinates.
+
+        Raises
+        ------
+            ValueError: If the coordinates are invalid (i.e. the time is
+                negative or the frequency is outside the valid range).
+        """
+        if len(v) < 1:
             raise ValueError("The polygon must have at least one ring.")
+
+        for ring in v:
+            if len(ring) < 3:
+                raise ValueError("The ring must have at least three points.")
+
+            for time, frequency in ring:
+                if time < 0:
+                    raise ValueError("The time must be positive.")
+
+                if frequency < 0 or frequency > MAX_FREQUENCY:
+                    raise ValueError(
+                        f"The frequency must be between 0 and "
+                        f"{MAX_FREQUENCY}."
+                    )
+
         return v
 
-    def _get_shapely_geometry(self) -> shapely.BaseGeometry:
+    def _get_shapely_geometry(self) -> ShapelyBaseGeometry:
         """Get the Shapely geometry object representing the geometry.
 
         Returns
@@ -387,7 +596,7 @@ class BoundingBox(BaseGeometry):
 
     type: str = "BoundingBox"
 
-    coordinates: Tuple[Time, Frequency, Time, Frequency] = Field(
+    coordinates: List[float] = Field(
         ...,
         description="The bounding box of the sound event.",
     )
@@ -398,22 +607,57 @@ class BoundingBox(BaseGeometry):
     """
 
     @field_validator("coordinates")
-    def validate_bounding_box(
-        cls,
-        v: Tuple[Time, Frequency, Time, Frequency],
-    ) -> Tuple[Time, Frequency, Time, Frequency]:
-        """Validate that the bounding box is valid."""
-        if v[0] > v[2]:
+    def validate_coordinates(cls, v: List[float]) -> List[float]:
+        """Validate that the coordinates are valid.
+
+        Parameters
+        ----------
+        v : List[float]
+            The coordinates to validate.
+
+        Returns
+        -------
+            The validated coordinates.
+
+        Raises
+        ------
+            ValueError: If the coordinates are invalid (i.e. the time is
+                negative or the frequency is outside the valid range).
+        """
+        if len(v) != 4:
+            raise ValueError(
+                "The bounding box must have exactly four coordinates."
+            )
+
+        start_time, low_freq, end_time, high_freq = v
+
+        if start_time < 0:
+            raise ValueError("The start time must be positive.")
+
+        if low_freq < 0 or low_freq > MAX_FREQUENCY:
+            raise ValueError(
+                f"The start frequency must be between 0 and {MAX_FREQUENCY}."
+            )
+
+        if end_time < 0:
+            raise ValueError("The end time must be positive.")
+
+        if high_freq < 0 or high_freq > MAX_FREQUENCY:
+            raise ValueError(
+                f"The end frequency must be between 0 and {MAX_FREQUENCY}."
+            )
+
+        if start_time > end_time:
             raise ValueError("The start time must be before the end time.")
 
-        if v[1] > v[3]:
+        if low_freq > high_freq:
             raise ValueError(
                 "The start frequency must be before the end frequency."
             )
 
         return v
 
-    def _get_shapely_geometry(self) -> shapely.BaseGeometry:
+    def _get_shapely_geometry(self) -> ShapelyBaseGeometry:
         """Get the Shapely geometry object representing the geometry."""
         start_time, start_frequency, end_time, end_frequency = self.coordinates
         return geometry.box(
@@ -434,7 +678,7 @@ class MultiPoint(BaseGeometry):
 
     type: str = "MultiPoint"
 
-    coordinates: List[Tuple[Time, Frequency]] = Field(
+    coordinates: List[List[float]] = Field(
         ...,
         description="The points of the sound event.",
     )
@@ -442,7 +686,39 @@ class MultiPoint(BaseGeometry):
 
     All times are relative to the start of the recording."""
 
-    def _get_shapely_geometry(self) -> shapely.BaseGeometry:
+    @field_validator("coordinates")
+    def validate_coordinates(cls, v: List[List[float]]) -> List[List[float]]:
+        """Validate that the coordinates are valid.
+
+        Parameters
+        ----------
+        v : List[List[float]]
+            The coordinates to validate.
+
+        Returns
+        -------
+            The validated coordinates.
+
+        Raises
+        ------
+            ValueError: If the coordinates are invalid (i.e. the time is
+                negative or the frequency is outside the valid range).
+        """
+        if len(v) < 1:
+            raise ValueError("The multipoint must have at least one point.")
+
+        for time, frequency in v:
+            if time < 0:
+                raise ValueError("The time must be positive.")
+
+            if frequency < 0 or frequency > MAX_FREQUENCY:
+                raise ValueError(
+                    f"The frequency must be between 0 and {MAX_FREQUENCY}."
+                )
+
+        return v
+
+    def _get_shapely_geometry(self) -> ShapelyBaseGeometry:
         """Get the Shapely geometry object representing the geometry.
 
         Returns
@@ -463,7 +739,7 @@ class MultiLineString(BaseGeometry):
 
     type: str = "MultiLineString"
 
-    coordinates: List[List[Tuple[Time, Frequency]]] = Field(
+    coordinates: List[List[List[float]]] = Field(
         ...,
         description="The lines of the sound event.",
     )
@@ -471,7 +747,7 @@ class MultiLineString(BaseGeometry):
 
     All times are relative to the start of the recording."""
 
-    def _get_shapely_geometry(self) -> shapely.BaseGeometry:
+    def _get_shapely_geometry(self) -> ShapelyBaseGeometry:
         """Get the Shapely geometry object representing the geometry.
 
         Returns
@@ -481,27 +757,47 @@ class MultiLineString(BaseGeometry):
         return geometry.MultiLineString(self.coordinates)
 
     @field_validator("coordinates")
-    def has_at_least_one_line(
-        cls, v: List[List[Tuple[Time, Frequency]]]
-    ) -> List[List[Tuple[Time, Frequency]]]:
-        """Validate that the multiline has at least one line."""
-        if len(v) == 0:
-            raise ValueError("The multiline must have at least one line.")
-        return v
+    def validate_coordinates(
+        cls, v: List[List[List[float]]]
+    ) -> List[List[List[float]]]:
+        """Validate that the coordinates are valid.
 
-    @field_validator("coordinates")
-    def each_line_has_at_least_two_points(
-        cls, v: List[List[Tuple[Time, Frequency]]]
-    ) -> List[List[Tuple[Time, Frequency]]]:
-        """Validate that each line has at least two points."""
-        if not all(len(line) >= 2 for line in v):
-            raise ValueError("Each line must have at least two points.")
+        Parameters
+        ----------
+        v : List[List[List[float]]]
+            The coordinates to validate.
+
+        Returns
+        -------
+            The validated coordinates.
+
+        Raises
+        ------
+            ValueError: If the coordinates are invalid (i.e. the time is
+                negative or the frequency is outside the valid range).
+        """
+        if len(v) < 1:
+            raise ValueError("The multiline must have at least one line.")
+
+        for line in v:
+            if len(line) < 2:
+                raise ValueError("Each line must have at least two points.")
+
+            for time, frequency in line:
+                if time < 0:
+                    raise ValueError("The time must be positive.")
+
+                if frequency < 0 or frequency > MAX_FREQUENCY:
+                    raise ValueError(
+                        f"The frequency must be between 0 and {MAX_FREQUENCY}."
+                    )
+
         return v
 
     @field_validator("coordinates")
     def each_line_is_ordered_by_time(
-        cls, v: List[List[Tuple[Time, Frequency]]]
-    ) -> List[List[Tuple[Time, Frequency]]]:
+        cls, v: List[List[List[float]]]
+    ) -> List[List[List[float]]]:
         """Validate that each line is ordered by time."""
         for line in v:
             if not all(
@@ -523,7 +819,7 @@ class MultiPolygon(BaseGeometry):
 
     type: str = "MultiPolygon"
 
-    coordinates: List[List[List[Tuple[Time, Frequency]]]] = Field(
+    coordinates: List[List[List[List[float]]]] = Field(
         ...,
         description="The polygons of the sound event.",
     )
@@ -532,27 +828,53 @@ class MultiPolygon(BaseGeometry):
     All times are relative to the start of the recording."""
 
     @field_validator("coordinates")
-    def has_at_least_one_polygon(
-        cls, v: List[List[List[Tuple[Time, Frequency]]]]
-    ) -> List[List[List[Tuple[Time, Frequency]]]]:
-        """Validate that the multipolygon has at least one polygon."""
-        if len(v) == 0:
+    def validate_coordinates(
+        cls, v: List[List[List[List[float]]]]
+    ) -> List[List[List[List[float]]]]:
+        """Validate that the coordinates are valid.
+
+        Parameters
+        ----------
+        v : List[List[List[List[float]]]]
+            The coordinates to validate.
+
+        Returns
+        -------
+            The validated coordinates.
+
+        Raises
+        ------
+            ValueError: If the coordinates are invalid (i.e. the time is
+                negative or the frequency is outside the valid range).
+        """
+        if len(v) < 1:
             raise ValueError(
                 "The multipolygon must have at least one polygon."
             )
-        return v
 
-    @field_validator("coordinates")
-    def each_polygon_has_at_least_one_ring(
-        cls, v: List[List[List[Tuple[Time, Frequency]]]]
-    ) -> List[List[List[Tuple[Time, Frequency]]]]:
-        """Validate that each polygon has at least one ring."""
         for polygon in v:
-            if len(polygon) == 0:
+            if len(polygon) < 1:
                 raise ValueError("Each polygon must have at least one ring.")
+
+            for ring in polygon:
+                if len(ring) < 3:
+                    raise ValueError(
+                        "Each ring must have at least three points."
+                    )
+
+                for time, frequency in ring:
+                    if time < 0:
+                        raise ValueError("The time must be positive.")
+
+                    if frequency < 0 or frequency > MAX_FREQUENCY:
+                        raise ValueError(
+                            f"The frequency must be between 0 and "
+                            f"{MAX_FREQUENCY}."
+                        )
+
         return v
 
-    def _get_shapely_geometry(self) -> shapely.BaseGeometry:
+    def _get_shapely_geometry(self) -> ShapelyBaseGeometry:
         """Get the Shapely geometry object representing the geometry.
 
         Returns

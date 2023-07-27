@@ -32,7 +32,8 @@ def random_wav(tmp_path: Path):
         channels: int = 1,
     ) -> Path:
         """Return a random wav file."""
-        path = tmp_path / f"{uuid4()}.wav"
+        if path is None:
+            path = tmp_path / f"{uuid4()}.wav"
         write_random_wav(path, samplerate, duration, channels)
         return path
 

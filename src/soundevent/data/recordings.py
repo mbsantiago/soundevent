@@ -52,7 +52,7 @@ related fields.
 import datetime
 import os
 from pathlib import Path
-from typing import List, Optional
+from typing import List, Optional, Union
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
@@ -64,6 +64,9 @@ from soundevent.data.tags import Tag
 __all__ = [
     "Recording",
 ]
+
+
+PathLike = Union[os.PathLike, str]
 
 
 class Recording(BaseModel):
@@ -130,8 +133,9 @@ class Recording(BaseModel):
     @classmethod
     def from_file(
         cls,
-        path: os.PathLike,
+        path: PathLike,
         time_expansion: float = 1,
+        compute_hash: bool = True,
         **kwargs,
     ) -> "Recording":
         """Create a recording object from a file.
@@ -142,7 +146,17 @@ class Recording(BaseModel):
 
         Parameters
         ----------
-        path : Path
+        path : PathLike
+            The path to the audio file.
+
+        time_expansion : float, optional
+            The time expansion factor of the audio file, by default 1.
+
+        compute_hash : bool, optional
+            Whether to compute the md5 hash of the audio file, by default True.
+            If you are loading a large number of recordings, you might want
+            to set this to False to speed up the loading process.
+
         **kwargs
             Additional keyword arguments to pass to the constructor.
 
@@ -151,11 +165,20 @@ class Recording(BaseModel):
         Recording
             The recording object.
         """
-        from soundevent.audio.media_info import get_media_info
+        from soundevent.audio.media_info import (
+            compute_md5_checksum,
+            get_media_info,
+        )
 
         media_info = get_media_info(path)
+
+        hash = None
+        if compute_hash:
+            hash = compute_md5_checksum(path)
+
         return cls(
             path=Path(path),
+            hash=hash,
             duration=media_info.duration_s / time_expansion,
             channels=media_info.channels,
             samplerate=int(media_info.samplerate_hz * time_expansion),
