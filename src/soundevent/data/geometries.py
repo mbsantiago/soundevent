@@ -20,15 +20,15 @@ and interact with geometry objects based on convenient assumptions.
 The soundevent package supports the following geometry types, each
 serving a specific purpose in describing the location of sound events:
 
-* Onset: Represents a single point in time.
+* TimeStamp: Represents a single point in time.
 
-* Interval: Describes a time interval, indicating a range of time
+* TimeInterval: Describes a time interval, indicating a range of time
 within which the sound event occurs.
 
 * Point: Represents a specific point in time and frequency,
 pinpointing the exact location of the sound event.
 
-* Line: Represents a sequence of points in time and frequency,
+* LineString: Represents a sequence of points in time and frequency,
 allowing for the description of continuous sound events.
 
 * Polygon: Defines a closed shape in time and frequency, enabling the
@@ -53,7 +53,7 @@ location and extent of sound events within a recording.
 """
 import sys
 from abc import ABC, abstractmethod
-from typing import List, Tuple, Union
+from typing import Dict, List, Tuple, Type, Union
 
 import shapely
 from pydantic import BaseModel, Field, PrivateAttr, field_validator
@@ -82,16 +82,26 @@ __all__ = [
     "MultiPolygon",
 ]
 
-GeometryType = Literal[
-    "TimeStamp",
-    "TimeInterval",
-    "BoundingBox",
-    "Point",
-    "LineString",
-    "Polygon",
-    "MultiPoint",
-    "MultiLineString",
-    "MultiPolygon",
+TimeStampName = Literal["TimeStamp"]
+TimeIntervalName = Literal["TimeInterval"]
+BoundingBoxName = Literal["BoundingBox"]
+PointName = Literal["Point"]
+LineStringName = Literal["LineString"]
+PolygonName = Literal["Polygon"]
+MultiPointName = Literal["MultiPoint"]
+MultiLineStringName = Literal["MultiLineString"]
+MultiPolygonName = Literal["MultiPolygon"]
+
+GeometryType = Union[
+    TimeStampName,
+    TimeIntervalName,
+    BoundingBoxName,
+    PointName,
+    LineStringName,
+    PolygonName,
+    MultiPointName,
+    MultiLineStringName,
+    MultiPolygonName,
 ]
 
 Time = float
@@ -113,7 +123,7 @@ class BaseGeometry(BaseModel, ABC):
     geometry object is always in sync with the Shapely geometry object.
     """
 
-    type: str = Field(
+    type: GeometryType = Field(
         description="the type of geometry used to locate the sound event.",
         frozen=True,
         include=True,
@@ -129,7 +139,7 @@ class BaseGeometry(BaseModel, ABC):
     """The Shapely geometry object representing the geometry."""
 
     @classmethod
-    def geom_type(cls) -> str:
+    def geom_type(cls) -> GeometryType:
         """Get the geometry type.
 
         Returns
@@ -259,7 +269,7 @@ class TimeStamp(BaseGeometry):
     time interval.
     """
 
-    type: str = "TimeStamp"
+    type: TimeStampName = "TimeStamp"
 
     coordinates: Time = Field(
         ...,
@@ -338,7 +348,7 @@ class TimeInterval(BaseGeometry):
     not have a clear frequency range.
     """
 
-    type: str = "TimeInterval"
+    type: TimeIntervalName = "TimeInterval"
 
     coordinates: List[Time] = Field(
         description="The time interval of the sound event.",
@@ -393,7 +403,7 @@ class Point(BaseGeometry):
     time and frequency.
     """
 
-    type: str = "Point"
+    type: PointName = "Point"
 
     coordinates: List[float] = Field(
         ...,
@@ -456,7 +466,7 @@ class LineString(BaseGeometry):
     trajectory.
     """
 
-    type: str = "LineString"
+    type: LineStringName = "LineString"
 
     coordinates: List[List[float]] = Field(
         ...,
@@ -525,7 +535,7 @@ class Polygon(BaseGeometry):
     frequency trajectory and that are bounded by a clear start and end time.
     """
 
-    type: str = "Polygon"
+    type: PolygonName = "Polygon"
 
     coordinates: List[List[List[float]]] = Field(
         ...,
@@ -594,7 +604,7 @@ class BoundingBox(BaseGeometry):
     range and start and stop times.
     """
 
-    type: str = "BoundingBox"
+    type: BoundingBoxName = "BoundingBox"
 
     coordinates: List[float] = Field(
         ...,
@@ -676,7 +686,7 @@ class MultiPoint(BaseGeometry):
     together form a sound event.
     """
 
-    type: str = "MultiPoint"
+    type: MultiPointName = "MultiPoint"
 
     coordinates: List[List[float]] = Field(
         ...,
@@ -737,7 +747,7 @@ class MultiLineString(BaseGeometry):
     harmonics.
     """
 
-    type: str = "MultiLineString"
+    type: MultiLineStringName = "MultiLineString"
 
     coordinates: List[List[List[float]]] = Field(
         ...,
@@ -817,7 +827,7 @@ class MultiPolygon(BaseGeometry):
     polygons.
     """
 
-    type: str = "MultiPolygon"
+    type: MultiPolygonName = "MultiPolygon"
 
     coordinates: List[List[List[List[float]]]] = Field(
         ...,
@@ -901,3 +911,21 @@ Geometry = Union[
     MultiLineString,
     MultiPolygon,
 ]
+
+
+ALL_GEOMETRY_TYPES: List[Type[Geometry]] = [
+    TimeStamp,
+    TimeInterval,
+    Point,
+    LineString,
+    Polygon,
+    BoundingBox,
+    MultiPoint,
+    MultiLineString,
+    MultiPolygon,
+]
+
+
+GEOMETRY_MAPPING: Dict[GeometryType, Type[Geometry]] = {
+    geom.geom_type(): geom for geom in ALL_GEOMETRY_TYPES
+}
