@@ -6,9 +6,15 @@ from typing import Generic
 from soundevent import data
 
 if sys.version_info >= (3, 8):
-    from typing import ParamSpec, Protocol
+    from typing import Protocol
 else:
-    from typing_extensions import ParamSpec, Protocol
+    from typing_extensions import Protocol
+
+if sys.version_info >= (3, 10):
+    from typing import ParamSpec
+else:
+    from typing_extensions import ParamSpec
+
 
 P = ParamSpec("P")
 
