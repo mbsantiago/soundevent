@@ -34,7 +34,7 @@ To compute the features of a bounding box:
     Feature(name='high_freq', value=1000),
     Feature(name='bandwidth', value=1000)]
 """
-from typing import Callable, Dict, Any
+from typing import Callable, Dict, Any, List
 
 from soundevent.data import Feature, geometries
 
@@ -52,20 +52,20 @@ NUM_SEGMENTS = "num_segments"
 
 def _compute_time_stamp_features(
     _: geometries.TimeStamp,
-) -> list[Feature]:
+) -> List[Feature]:
     return [Feature(name=DURATION, value=0)]
 
 
 def _compute_time_interval_features(
     geometry: geometries.TimeInterval,
-) -> list[Feature]:
+) -> List[Feature]:
     start, end = geometry.coordinates
     return [Feature(name=DURATION, value=end - start)]
 
 
 def _compute_bounding_box_features(
     geometry: geometries.BoundingBox,
-) -> list[Feature]:
+) -> List[Feature]:
     start_time, low_freq, end_time, high_freq = geometry.coordinates
     return [
         Feature(name=DURATION, value=end_time - start_time),
@@ -77,7 +77,7 @@ def _compute_bounding_box_features(
 
 def _compute_point_features(
     geometry: geometries.Point,
-) -> list[Feature]:
+) -> List[Feature]:
     _, low_freq, _, high_freq = geometry.bounds
 
     return [
@@ -90,7 +90,7 @@ def _compute_point_features(
 
 def _compute_line_string_features(
     geometry: geometries.LineString,
-) -> list[Feature]:
+) -> List[Feature]:
     start_time, low_freq, end_time, high_freq = geometry.bounds
 
     return [
@@ -103,7 +103,7 @@ def _compute_line_string_features(
 
 def _compute_polygon_features(
     geometry: geometries.Polygon,
-) -> list[Feature]:
+) -> List[Feature]:
     start_time, low_freq, end_time, high_freq = geometry.bounds
 
     return [
@@ -116,7 +116,7 @@ def _compute_polygon_features(
 
 def _compute_multi_point_features(
     geometry: geometries.MultiPoint,
-) -> list[Feature]:
+) -> List[Feature]:
     start_time, low_freq, end_time, high_freq = geometry.bounds
 
     return [
@@ -130,7 +130,7 @@ def _compute_multi_point_features(
 
 def _compute_multi_linestring_features(
     geometry: geometries.MultiLineString,
-) -> list[Feature]:
+) -> List[Feature]:
     start_time, low_freq, end_time, high_freq = geometry.bounds
 
     return [
@@ -144,7 +144,7 @@ def _compute_multi_linestring_features(
 
 def _compute_multi_polygon_features(
     geometry: geometries.MultiPolygon,
-) -> list[Feature]:
+) -> List[Feature]:
     start_time, low_freq, end_time, high_freq = geometry.bounds
 
     return [
@@ -157,7 +157,7 @@ def _compute_multi_polygon_features(
 
 
 _COMPUTE_FEATURES: Dict[
-    geometries.GeometryType, Callable[[Any], list[Feature]]
+    geometries.GeometryType, Callable[[Any], List[Feature]]
 ] = {
     geometries.TimeStamp.geom_type(): _compute_time_stamp_features,
     geometries.TimeInterval.geom_type(): _compute_time_interval_features,
@@ -173,7 +173,7 @@ _COMPUTE_FEATURES: Dict[
 
 def compute_geometric_features(
     geometry: geometries.Geometry,
-) -> list[Feature]:
+) -> List[Feature]:
     """Compute features from a geometry.
 
     Some basic acoustic features can be computed from a geometry. This function
@@ -197,7 +197,7 @@ def compute_geometric_features(
 
     Returns
     -------
-    list[Feature]
+    List[Feature]
         The computed features.
 
     Raises
