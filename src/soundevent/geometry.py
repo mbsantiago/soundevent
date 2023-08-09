@@ -1,9 +1,17 @@
 """Functions that handle SoundEvent geometries."""
 
-import shapely
 import json
 
+import shapely
+from pydantic import ValidationError
+
 from soundevent import data
+from soundevent.data.geometries import GEOMETRY_MAPPING
+
+__all__ = [
+    "buffer_geometry",
+    "geometry_validate",
+]
 
 
 def buffer_geometry(
@@ -56,3 +64,75 @@ def buffer_geometry(
     )
     json_data = json.loads(shapely.to_geojson(buffered))
     return data.Polygon(coordinates=json_data["coordinates"])
+
+
+def geometry_validate(
+    obj: object,
+    mode: str = "json",
+) -> data.Geometry:
+    """Convert an object to a SoundEvent geometry.
+
+    This function is particularly useful when loading a geometry from a
+    different format, such as JSON or a dictionary. This function will
+    convert the object to a SoundEvent geometry, and validate it.
+
+    Parameters
+    ----------
+    obj : object
+        The object to convert to a geometry.
+
+    mode : str, optional
+        Mode to use to convert the object to a geometry. Valid values are
+        "json", "dict" and "attributes". If "json", the object is assumed
+        to be a JSON string. If "dict", the object is assumed to be a
+        dictionary. If "attributes", the object is assumed to be an object
+        with attributes. Defaults to "json".
+
+    Returns
+    -------
+    geometry : data.Geometry
+        The geometry.
+
+    Raises
+    ------
+    ValueError
+        If the object is not a valid geometry.
+    """
+    if mode == "json":
+        if not isinstance(obj, str):
+            raise ValueError("Object must be a JSON string.")
+
+        try:
+            obj = json.loads(obj)
+        except json.JSONDecodeError as error:
+            raise ValueError("Object must be a valid JSON string.") from error
+        mode = "dict"
+
+    if mode == "dict":
+        if not isinstance(obj, dict):
+            raise ValueError("Object must be a dictionary.")
+
+        if "type" not in obj:
+            raise ValueError("Object must have a type key.")
+
+        geom_type = obj["type"]
+    else:
+        if not hasattr(obj, "type"):
+            raise ValueError(f"Object {obj} does not have a type attribute.")
+
+        geom_type = getattr(obj, "type")
+
+    if geom_type not in GEOMETRY_MAPPING:
+        raise ValueError(f"Object {obj} does not have a geometry valid type.")
+
+    geom_class = GEOMETRY_MAPPING[geom_type]
+
+    try:
+        return geom_class.model_validate(
+            obj,
+            from_attributes=mode == "attributes",
+        )
+    except ValidationError as error:
+        raise ValueError(
+            f"Object {obj} is not a valid {geom_type}."
+        ) from error
