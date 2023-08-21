@@ -70,11 +70,15 @@ def _get_subchunks(riff: BinaryIO, size: int) -> List[Chunk]:
     subchunks = []
     while riff.tell() < start_position + size - 1:
         subchunk = _read_chunk(riff)
+
+        if subchunk is None:
+            break
+
         subchunks.append(subchunk)
     return subchunks
 
 
-def _read_chunk(riff: BinaryIO) -> Chunk:
+def _read_chunk(riff: BinaryIO) -> Chunk | None:
     """Read a chunk from a RIFF file at current pointer position.
 
     We assume the file pointer is at the beginning of the chunk.
@@ -90,6 +94,10 @@ def _read_chunk(riff: BinaryIO) -> Chunk:
     position = riff.tell()
     chunk_id = riff.read(4).decode("ascii")
     size = int.from_bytes(riff.read(4), "little")
+
+    if size == 0:
+        # Make sure we don't get stuck in an infinite loop.
+        return None
 
     identifier = None
     if chunk_id in CHUNKS_WITH_SUBCHUNKS:
@@ -124,6 +132,16 @@ def parse_into_chunks(riff: BinaryIO) -> Chunk:
     Returns
     -------
     Chunk
+
+    Raises
+    ------
+    ValueError
+        If the RIFF file is empty.
     """
     riff.seek(0)
-    return _read_chunk(riff)
+    chunk = _read_chunk(riff)
+
+    if chunk is None:
+        raise ValueError("RIFF file is empty")
+
+    return chunk
