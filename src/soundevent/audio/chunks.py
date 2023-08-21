@@ -78,7 +78,7 @@ def _get_subchunks(riff: BinaryIO, size: int) -> List[Chunk]:
     return subchunks
 
 
-def _read_chunk(riff: BinaryIO) -> Chunk | None:
+def _read_chunk(riff: BinaryIO) -> Optional[Chunk]:
     """Read a chunk from a RIFF file at current pointer position.
 
     We assume the file pointer is at the beginning of the chunk.
