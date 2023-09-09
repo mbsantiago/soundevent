@@ -34,7 +34,7 @@ To compute the features of a bounding box:
     Feature(name='high_freq', value=1000),
     Feature(name='bandwidth', value=1000)]
 """
-from typing import Callable, Dict, Any, List
+from typing import Any, Callable, Dict, List
 
 from soundevent.data import Feature, geometries
 
