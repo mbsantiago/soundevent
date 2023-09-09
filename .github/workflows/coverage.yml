@@ -22,6 +22,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          sudo apt-get install libsndfile1
           python -m pip install --upgrade pip
           python -m pip install pytest hypothesis coverage pytest-coverage
           python -m pip install .

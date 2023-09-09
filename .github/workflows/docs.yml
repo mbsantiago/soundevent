@@ -19,6 +19,7 @@ jobs:
       - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
       - name: Install soundevent
         run: |
+          sudo apt-get install libsndfile1
           python -m pip install --upgrade pip
           python -m pip install .
       - uses: actions/cache@v3
