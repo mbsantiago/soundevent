@@ -96,6 +96,7 @@ def load_recording(recording: Recording) -> xr.DataArray:
             "channel": range(data.shape[1]),
         },
         attrs={
+            "recording_id": recording.id,
             "time_units": "seconds",
             "time_expansion": recording.time_expansion,
             "samplerate": recording.samplerate,
@@ -114,8 +115,9 @@ def load_clip(clip: Clip) -> xr.DataArray:
     Returns
     -------
     xr.DataArray
-        The loaded clip.
-
+        The loaded clip. The returned clip stores the samplerate
+        and time expansion of the recording from which it was
+        extracted.
     """
     recording = clip.recording
     samplerate = recording.samplerate
@@ -151,6 +153,7 @@ def load_clip(clip: Clip) -> xr.DataArray:
             "channel": range(data.shape[1]),
         },
         attrs={
+            "recording_id": recording.id,
             "time_units": "seconds",
             "time_expansion": recording.time_expansion,
             "samplerate": recording.samplerate,
