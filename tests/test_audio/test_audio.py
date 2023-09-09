@@ -1,8 +1,8 @@
 """Test suite for audio loading functions."""
 from pathlib import Path
+from uuid import uuid4
 
 import numpy as np
-from uuid import uuid4
 import pytest
 import xarray as xr
 from hypothesis import HealthCheck, given, settings
@@ -148,3 +148,24 @@ def test_read_clip(
         clip_wav.data,
         rec_xr.sel(time=clip_wav.time, method="nearest").data,
     )
+
+
+def test_can_load_clip_from_24_bit_depth_wav():
+    """Test loading a 24 bit depth wav file."""
+    # Arrange
+    path = Path(__file__).parent / "24bitdepth.wav"
+
+    recording = data.Recording.from_file(path)
+    start_time = 0.5
+    end_time = 1
+    duration = end_time - start_time
+    clip = data.Clip(
+        recording=recording,
+        start_time=start_time,
+        end_time=end_time,
+    )
+
+    # Act
+    wav = load_clip(clip)
+
+    assert wav.shape == (recording.samplerate * duration, recording.channels)

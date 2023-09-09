@@ -4,12 +4,15 @@ Currently only supports reading and writing of .wav files.
 """
 
 import os
-from typing import Optional, Tuple
+from typing import Dict, Optional, Tuple
 
 import numpy as np
+import soundfile as sf
 import xarray as xr
-from scipy.io import wavfile
 
+from soundevent.audio.chunks import parse_into_chunks
+from soundevent.audio.media_info import extract_media_info_from_chunks
+from soundevent.audio.raw import RawData
 from soundevent.data.clips import Clip
 from soundevent.data.recordings import Recording
 
@@ -17,6 +20,17 @@ __all__ = [
     "load_audio",
     "load_recording",
 ]
+
+PCM_SUBFORMATS_MAPPING: Dict[Tuple[int, int], str] = {
+    (1, 16): "PCM_16",
+    (1, 24): "PCM_24",
+    (1, 32): "PCM_32",
+    (1, 8): "PCM_U8",
+    (3, 32): "FLOAT",
+    (3, 64): "DOUBLE",
+    (6, 8): "ALAW",
+    (7, 8): "ULAW",
+}
 
 
 def load_audio(
@@ -42,30 +56,46 @@ def load_audio(
     samplerate : int
         The sample rate of the audio file in Hz.
 
+
     """
-    if offset == 0 and samples is None:
-        samplerate, data = wavfile.read(path, mmap=False)
-    else:
-        samplerate, mmap = wavfile.read(path, mmap=True)
+    if samples is None:
+        samples = -1
 
-        if samples is None:
-            end_index = None
-        else:
-            end_index = offset + samples
+    with open(path, "rb") as fp:
+        chunks = parse_into_chunks(fp)
 
-        data = mmap[offset:end_index]
+        # Extract the media information from the fmt chunk.
+        fmt = chunks.subchunks["fmt "]
+        media_info = extract_media_info_from_chunks(fp, fmt)
 
-    # Add channel dimension if necessary
-    if data.ndim == 1:
-        data = data[:, None]
+        # Get the subformat for the soundfile library to
+        # read the audio data.
+        subformat = PCM_SUBFORMATS_MAPPING.get(
+            (media_info.audio_format, media_info.bit_depth)
+        )
+        if subformat is None:
+            raise ValueError(
+                f"Unsupported audio format: {media_info.audio_format} "
+                f"with bit depth {media_info.bit_depth}."
+                "Valid formats are: "
+                f"{PCM_SUBFORMATS_MAPPING.keys()}."
+            )
 
-    # Convert to float if necessary
-    if data.dtype == "int16":
-        data = data.astype("float32") / np.iinfo("int16").max
-    if data.dtype == "int32":
-        data = data.astype("float32") / np.iinfo("int32").max
+        # Position the file pointer at the start of the data chunk.
+        data = chunks.subchunks["data"]
+        raw = RawData(fp, data)
 
-    return data, samplerate
+        return sf.read(
+            raw,
+            start=offset,
+            frames=samples,
+            dtype="float32",
+            always_2d=True,
+            format="RAW",
+            subtype=subformat,
+            samplerate=media_info.samplerate,
+            channels=media_info.channels,
+        )
 
 
 def load_recording(recording: Recording) -> xr.DataArray:
