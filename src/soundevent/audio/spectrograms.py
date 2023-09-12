@@ -49,6 +49,7 @@ def compute_spectrogram(
         nperseg=nperseg,
         noverlap=noverlap,
         axis=0,
+        mode="magnitude"
     )
 
     # Convert to xarray
