@@ -169,3 +169,26 @@ def test_can_load_clip_from_24_bit_depth_wav():
     wav = load_clip(clip)
 
     assert wav.shape == (recording.samplerate * duration, recording.channels)
+
+
+def test_loading_clip_after_end_time_will_pad_with_zeros(
+    random_wav,
+):
+    """Test loading a clip that is out of bounds."""
+    # Arrange
+    path = random_wav(
+        samplerate=16_000,
+        duration=1,
+        channels=1,
+    )
+
+    recording = data.Recording.from_file(path)
+    clip = data.Clip(
+        recording=recording,
+        start_time=0.5,
+        end_time=1.5,
+    )
+
+    # Act
+    wav = load_clip(clip)
+    assert wav.shape == (recording.samplerate * 1, recording.channels)

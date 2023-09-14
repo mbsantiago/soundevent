@@ -95,6 +95,7 @@ def load_audio(
             subtype=subformat,
             samplerate=media_info.samplerate,
             channels=media_info.channels,
+            fill_value=0,
         )
 
 
