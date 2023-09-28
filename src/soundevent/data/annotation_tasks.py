@@ -48,6 +48,7 @@ research projects.
 
 """
 import datetime
+from enum import Enum
 from typing import List, Optional
 from uuid import UUID, uuid4
 
@@ -57,6 +58,37 @@ from soundevent.data.annotations import Annotation
 from soundevent.data.clips import Clip
 from soundevent.data.notes import Note
 from soundevent.data.tags import Tag
+
+
+class TaskState(Enum):
+    """Task state."""
+
+    assigned = "assigned"
+    """Task has been assigned to an annotator."""
+
+    completed = "completed"
+    """Task has been completed by an annotator."""
+
+    verified = "verified"
+    """Task has been verified by a reviewer."""
+
+    rejected = "rejected"
+    """Task has been rejected by a reviewer."""
+
+
+class StatusBadge(BaseModel):
+    """Annotation Status Badge."""
+
+    state: TaskState
+    """State of the annotation task."""
+
+    user: Optional[str] = None
+    """User who is responsible for this status badge."""
+
+    created_at: datetime.datetime = Field(
+        default_factory=datetime.datetime.now
+    )
+    """Date and time when the status badge was created."""
 
 
 class AnnotationTask(BaseModel):
@@ -71,20 +103,14 @@ class AnnotationTask(BaseModel):
     annotations: List[Annotation] = Field(default_factory=list)
     """List of annotations in the created during the annotation task."""
 
-    completed_by: Optional[str] = None
-    """The user who completed the annotation task."""
-
-    completed_on: Optional[datetime.datetime] = None
-    """The date and time when the annotation task was completed."""
-
     notes: List[Note] = Field(default_factory=list)
     """Notes associated with the annotation task."""
 
     tags: List[Tag] = Field(default_factory=list)
     """User provided tags to the annotated clip."""
 
-    completed: bool = False
-    """Whether the annotation task has been completed."""
+    status_badges: List[StatusBadge] = Field(default_factory=list)
+    """Status badges for the annotation task."""
 
     def __hash__(self):
         """Compute the hash value for the annotation task."""

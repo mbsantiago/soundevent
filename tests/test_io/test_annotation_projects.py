@@ -173,29 +173,14 @@ def test_can_recover_task_status(
     # Arrange
     annotation_project = data.AnnotationProject(
         name="test_project",
-        tasks=[data.AnnotationTask(clip=clip, completed=True)],
-    )
-    path = tmp_path / "test_project.json"
-
-    # Act
-    io.save_annotation_project(annotation_project, path)
-    recovered = io.load_annotation_project(path)
-
-    # Assert
-    assert recovered == annotation_project
-    assert recovered.tasks[0].completed
-
-
-def test_can_recover_user_that_completed_task(tmp_path: Path, clip: data.Clip):
-    """Test that the user that completed a task can be recovered."""
-    # Arrange
-    annotation_project = data.AnnotationProject(
-        name="test_project",
         tasks=[
             data.AnnotationTask(
                 clip=clip,
-                completed=True,
-                completed_by="test_user",
+                status_badges=[
+                    data.StatusBadge(
+                        state=data.TaskState.completed,
+                    )
+                ],
             )
         ],
     )
@@ -207,7 +192,39 @@ def test_can_recover_user_that_completed_task(tmp_path: Path, clip: data.Clip):
 
     # Assert
     assert recovered == annotation_project
-    assert recovered.tasks[0].completed_by == "test_user"
+    assert (
+        recovered.tasks[0].status_badges[0].state == data.TaskState.completed
+    )
+
+
+def test_can_recover_user_that_completed_task(tmp_path: Path, clip: data.Clip):
+    """Test that the user that completed a task can be recovered."""
+    # Arrange
+    annotation_project = data.AnnotationProject(
+        name="test_project",
+        tasks=[
+            data.AnnotationTask(
+                clip=clip,
+                status_badges=[
+                    data.StatusBadge(
+                        state=data.TaskState.completed,
+                        user="test_user",
+                    )
+                ],
+            )
+        ],
+    )
+    path = tmp_path / "test_project.json"
+
+    # Act
+    io.save_annotation_project(annotation_project, path)
+    recovered = io.load_annotation_project(path)
+
+    # Assert
+    assert recovered == annotation_project
+    badge = recovered.tasks[0].status_badges[0]
+    assert badge.state == data.TaskState.completed
+    assert badge.user == "test_user"
 
 
 def test_can_recover_task_notes(tmp_path: Path, clip: data.Clip):
@@ -241,7 +258,15 @@ def test_can_recover_task_completion_date(tmp_path: Path, clip: data.Clip):
     annotation_project = data.AnnotationProject(
         name="test_project",
         tasks=[
-            data.AnnotationTask(clip=clip, completed=True, completed_on=date)
+            data.AnnotationTask(
+                clip=clip,
+                status_badges=[
+                    data.StatusBadge(
+                        state=data.TaskState.completed,
+                        created_at=date,
+                    )
+                ],
+            )
         ],
     )
     path = tmp_path / "test_project.json"
@@ -252,7 +277,9 @@ def test_can_recover_task_completion_date(tmp_path: Path, clip: data.Clip):
 
     # Assert
     assert recovered == annotation_project
-    assert recovered.tasks[0].completed_on == date
+    badge = recovered.tasks[0].status_badges[0]
+    assert badge.state == data.TaskState.completed
+    assert badge.created_at == date
 
 
 def test_can_recover_task_simple_annotation(

@@ -519,11 +519,7 @@ class AnnotationTaskObject(BaseModel):
 
     annotations: Optional[List[int]] = None
 
-    completed_by: Optional[str] = None
-
-    completed_on: Optional[datetime.datetime] = None
-
-    completed: bool
+    status_badges: Optional[List[data.StatusBadge]] = None
 
     notes: Optional[List[data.Note]] = None
 
@@ -570,11 +566,9 @@ class AnnotationTaskObject(BaseModel):
                 audio_dir=audio_dir,
             ).id,
             annotations=annotation_ids if annotation_ids else None,
-            completed_by=task.completed_by,
-            completed_on=task.completed_on,
-            completed=task.completed,
             notes=task.notes if task.notes else None,
             tags=tag_ids if tag_ids else None,
+            status_badges=task.status_badges if task.status_badges else None,
         )
 
         return tasks[task]
@@ -595,9 +589,7 @@ class AnnotationTaskObject(BaseModel):
                 annotations[annotation_id]
                 for annotation_id in (self.annotations or [])
             ],
-            completed_by=self.completed_by,
-            completed_on=self.completed_on,
-            completed=self.completed,
+            status_badges=self.status_badges if self.status_badges else [],
             notes=self.notes if self.notes else [],
             tags=[tags[tag_id] for tag_id in (self.tags or [])],
         )

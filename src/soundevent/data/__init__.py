@@ -31,7 +31,11 @@ endeavors.
 """
 
 from soundevent.data.annotation_projects import AnnotationProject
-from soundevent.data.annotation_tasks import AnnotationTask
+from soundevent.data.annotation_tasks import (
+    AnnotationTask,
+    StatusBadge,
+    TaskState,
+)
 from soundevent.data.annotations import Annotation
 from soundevent.data.clips import Clip
 from soundevent.data.dataset import Dataset
@@ -90,7 +94,9 @@ __all__ = [
     "Recording",
     "Sequence",
     "SoundEvent",
+    "StatusBadge",
     "Tag",
+    "TaskState",
     "Time",
     "TimeInterval",
     "TimeStamp",

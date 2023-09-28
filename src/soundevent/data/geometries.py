@@ -126,13 +126,13 @@ class BaseGeometry(BaseModel, ABC):
     type: GeometryType = Field(
         description="the type of geometry used to locate the sound event.",
         frozen=True,
-        include=True,
+        exclude=False,
     )
 
     coordinates: Union[float, List] = Field(
         description="the coordinates of the geometry.",
         frozen=True,
-        include=True,
+        exclude=False,
     )
 
     _geom: ShapelyBaseGeometry = PrivateAttr()
