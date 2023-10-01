@@ -49,13 +49,32 @@ __all__ = [
 
 
 class Feature(BaseModel):
-    """Feature."""
+    """Feature Class.
+
+    Features are numerical values associated with sound events, clips, and recordings,
+    providing additional information and metadata that enrich the objects they are
+    attached to. These numerical descriptors play a crucial role in searching,
+    organizing, and analyzing bioacoustic data, enabling detailed insights into
+    characteristics of the audio data.
+
+    Attributes
+    ----------
+    name : str
+        The name of the feature, describing the specific characteristic it represents.
+        Features can encompass various aspects, such as duration, bandwidth, or
+        specific properties extracted using advanced machine learning models. The
+        name provides a clear identifier for the feature, aiding in its interpretation
+        and application.
+    value : float
+        The numeric value quantifying the feature. This value represents the
+        characteristic described by the feature's name. For instance, a feature
+        describing signal-to-noise ratio would have a corresponding numeric value
+        indicating the ratio. Numeric values allow for precise comparison,
+        classification, and analysis of the associated characteristics.
+    """
 
     name: str
-    """The name of the feature."""
-
     value: float
-    """The numeric value of the feature."""
 
     def __hash__(self):
         """Hash the Feature object."""

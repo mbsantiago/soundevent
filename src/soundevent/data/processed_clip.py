@@ -46,22 +46,41 @@ from soundevent.data.predicted_tags import PredictedTag
 
 
 class ProcessedClip(BaseModel):
-    """Processed clip."""
+    """Processed Clip Class.
+
+    Processed clips encapsulate the outcomes of various processing steps
+    applied to recording clips in bioacoustic research. These processing steps
+    can include sound event detection, tag generation, and acoustic feature
+    extraction.
+
+    Attributes
+    ----------
+    uuid
+        A unique identifier for the processed clip.
+    clip
+        The original clip that was processed, serving as the basis for the
+        analysis.
+    sound_events
+        A list of predicted sound events detected within the clip. Each
+        predicted sound event contains information about its characteristics,
+        including temporal and frequency properties.
+    tags
+        A list of predicted tags generated at the clip level. These tags
+        provide high-level semantic information about the clip's content,
+        aiding in organization and categorization.
+    features
+        A list of acoustic features extracted from the clip. These features
+        offer numerical representations describing properties such as
+        signal-to-noise ratio, spectral centroid, or other acoustic
+        characteristics. They enhance the understanding of the clip's acoustic
+        content.
+    """
 
     uuid: UUID = Field(default_factory=uuid4, repr=False)
-    """Unique identifier for the processed clip."""
-
     clip: Clip
-    """The clip that was processed."""
-
     sound_events: List[PredictedSoundEvent] = Field(default_factory=list)
-    """List of predicted sound events."""
-
     tags: List[PredictedTag] = Field(default_factory=list)
-    """List of predicted tags at the clip level."""
-
     features: List[Feature] = Field(default_factory=list)
-    """List of features associated with the clip."""
 
     def __hash__(self):
         """Hash function for the processed clip."""

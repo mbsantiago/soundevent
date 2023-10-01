@@ -6,11 +6,11 @@ import xarray as xr
 from scipy import signal
 
 __all__ = [
-    "resample",
+    "resample_audio",
 ]
 
 
-def resample(
+def resample_audio(
     audio: xr.DataArray,
     target_samplerate: int,
     window: Optional[str] = None,
@@ -22,14 +22,12 @@ def resample(
 
     Parameters
     ----------
-    audio : xr.DataArray
+    audio
         The audio data to resample. Should have a "samplerate" attribute,
         and a dimension named "time".
-
-    target_samplerate : int
+    target_samplerate
         The target sample rate of the audio data in Hz.
-
-    window : str, optional
+    window
         The window to use for resampling. See scipy.signal.resample for
         details.
 

@@ -5,3 +5,7 @@
 ::: soundevent.io
 
 ::: soundevent.audio
+
+::: soundevent.geometry
+
+::: soundevent.evaluation

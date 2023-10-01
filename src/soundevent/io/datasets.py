@@ -29,17 +29,16 @@ def load_dataset(
 
     Parameters
     ----------
-    path : PathLike
+    path
         Path to the file to load.
-
-    audio_dir : PathLike, optional
+    audio_dir
         Path to the directory containing the audio files. If provided, the
         audio file paths in the dataset will be relative to this directory.
         By default None.
 
     Returns
     -------
-    dataset : Dataset
+    dataset: data.Dataset
         The loaded dataset.
 
     Raises
@@ -72,18 +71,15 @@ def save_dataset(
 
     Parameters
     ----------
-    dataset : Dataset
+    dataset
         The dataset to save.
-
-    path : Path
+    path
         Path to the file to save the dataset to.
-
-    audio_dir : Path, optional
+    audio_dir
         Path to the directory containing the audio files. If provided, the
         audio file paths in the dataset will be relative to this directory.
         By default None.
-
-    format : DatasetFormat, optional
+    format
         The format to save the dataset in, by default "aoef".
 
     Raises
@@ -108,17 +104,16 @@ def load_dataset_aoef_format(
 
     Parameters
     ----------
-    path : Path
+    path
         Path to the file to load.
-
-    audio_dir : Path, optional
+    audio_dir
         Path to the directory containing the audio files. If provided, the
         audio file paths in the dataset will be relative to this directory.
         By default None.
 
     Returns
     -------
-    dataset : Dataset
+    dataset: data.Dataset
         The loaded dataset.
     """
     if audio_dir is not None:

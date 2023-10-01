@@ -20,7 +20,7 @@ def is_audio_file(path: PathLike) -> bool:
 
     Parameters
     ----------
-    path : PathLike
+    path
         Path to the file.
 
     Returns

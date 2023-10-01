@@ -42,11 +42,11 @@ def load_audio(
 
     Parameters
     ----------
-    path : Path
+    path
         The path to the audio file.
-    offset : int, optional
+    offset
         The offset in samples from the start of the audio file.
-    samples : int, optional
+    samples
         The number of samples to load. If None, load the entire file.
 
     Returns
@@ -55,8 +55,6 @@ def load_audio(
         The audio data.
     samplerate : int
         The sample rate of the audio file in Hz.
-
-
     """
     if samples is None:
         samples = -1
@@ -104,14 +102,13 @@ def load_recording(recording: Recording) -> xr.DataArray:
 
     Parameters
     ----------
-    recording : data.Recording
+    recording
         The recording to load.
 
     Returns
     -------
-    xr.DataArray
+    audio : xr.DataArray
         The loaded recording.
-
     """
     data, _ = load_audio(recording.path)
     return xr.DataArray(
@@ -140,12 +137,12 @@ def load_clip(clip: Clip) -> xr.DataArray:
 
     Parameters
     ----------
-    clip : data.Clip
+    clip
         The clip to load.
 
     Returns
     -------
-    xr.DataArray
+    audio : xr.DataArray
         The loaded clip. The returned clip stores the samplerate
         and time expansion of the recording from which it was
         extracted.

@@ -37,7 +37,6 @@ By utilizing clips as the unit of analysis and annotation, researchers
 and practitioners can effectively manage and analyze audio data,
 enabling consistent and granular examination of specific segments
 within a recording.
-
 """
 
 from typing import List
@@ -55,25 +54,56 @@ __all__ = [
 
 
 class Clip(BaseModel):
-    """Clip model."""
+    """Clip Class.
+
+    The `Clip` class represents a specific segment of an audio recording within
+    the context of bioacoustic research. Clips provide isolated and manageable
+    portions of audio data, essential for analysis, annotation, and machine
+    learning tasks.
+
+    Attributes
+    ----------
+    uuid : UUID, optional
+        The unique identifier of the clip, automatically generated upon
+        creation. This identifier distinguishes the clip from others and is
+        crucial for referencing and management purposes.
+    recording : Recording
+        An instance of the `Recording` class representing the larger audio
+        recording that the clip belongs to. Clips are extracted from recordings
+        and serve as individual units for analysis. The recording provides
+        essential context for understanding the origin and source of the audio
+        data.
+    start_time : float
+        The start time of the clip in seconds, indicating the beginning point
+        of the segment within the recording's timeline. Start time is essential
+        for accurate temporal positioning and alignment of the clip within the
+        context of the original recording.
+    end_time : float
+        The end time of the clip in seconds, representing the conclusion of the
+        segment within the recording's timeline. End time provides clear
+        boundaries for the duration of the clip, aiding in precise temporal
+        delineation and analysis of the audio content.
+    tags: List[Tag], optional
+        A list of `Tag` instances representing categories associated with the
+        clip. Tags provide additional semantic context to the clip, enabling
+        detailed classification and facilitating targeted analysis. These tags
+        define specific characteristics or events within the clip, contributing
+        to comprehensive annotation and analysis efforts.
+    features : List[Feature], optional
+        A list of `Feature` instances representing computed features or
+        descriptors associated with the clip. Features provide quantitative and
+        qualitative insights into the audio content, allowing for advanced
+        analysis and machine learning applications. These features serve as
+        valuable inputs for algorithms and models, enhancing the depth of
+        analysis and interpretation.
+    """
 
     uuid: UUID = Field(default_factory=uuid4)
-    """The unique identifier of the clip."""
-
     recording: Recording
-    """The recording that the clip belongs to."""
-
     start_time: float
-    """The start time of the clip in seconds."""
-
     end_time: float
-    """The end time of the clip in seconds."""
-
     tags: List[Tag] = Field(default_factory=list)
-    """List of tags associated with the clip."""
-
     features: List[Feature] = Field(default_factory=list)
-    """List of features associated with the clip."""
 
     @model_validator(mode="before")
     def validate_times(cls, values):

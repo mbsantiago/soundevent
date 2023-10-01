@@ -64,19 +64,49 @@ PathLike = Union[str, os.PathLike]
 
 
 class Dataset(BaseModel):
-    """Datasets."""
+    """Dataset Class.
+
+    The `Dataset` class represents a curated collection of audio recordings
+    within the context of bioacoustic research. Datasets provide a structured
+    and organized repository of audio data, enabling researchers to conduct
+    experiments, develop models, and gain insights into acoustic phenomena.
+
+    Each dataset represents a specific deployment or
+    field study, ensuring the contextual integrity of the audio data. By
+    associating recordings with a particular dataset, researchers maintain
+    a clear understanding of the relationship between the recordings and
+    their source.
+
+    Attributes
+    ----------
+    id : UUID, optional
+        The unique identifier of the dataset, automatically generated upon
+        creation. This identifier distinguishes the dataset from others and is
+        crucial for referencing and management purposes within research
+        projects.
+    name : str
+        The name of the dataset, providing a distinctive label for the
+        collection of audio recordings. The dataset name serves as a reference
+        point for researchers, facilitating easy identification and
+        communication about the specific dataset being utilized.
+    description : str, optional
+        A detailed description outlining the characteristics, objectives, and
+        context of the dataset. This description offers valuable insights into
+        the content of the dataset, providing researchers with context about
+        the source, purpose, and potential applications of the audio
+        recordings.
+    recordings : List[Recording], optional
+        A list of `Recording` instances representing individual audio
+        recordings associated with the dataset. Recordings encapsulate audio
+        data and essential metadata, providing information about the source,
+        duration, and other attributes of each recording. These recordings
+        serve as the primary data units within the dataset.
+    """
 
     id: UUID = Field(default_factory=uuid4, repr=False)
-    """The unique identifier of the dataset."""
-
     name: str
-    """The name of the dataset."""
-
     description: Optional[str] = None
-    """A description of the dataset."""
-
     recordings: List[Recording] = Field(default_factory=list, repr=False)
-    """List of recordings associated with the dataset."""
 
     @classmethod
     def from_directory(
@@ -96,10 +126,8 @@ class Dataset(BaseModel):
         ----------
         path : PathLike
             Path to the directory.
-
         recursive : bool, optional
             Whether to search the directory recursively, by default True
-
         compute_hash : bool, optional
             Whether to compute the hash of the audio files, by default
 

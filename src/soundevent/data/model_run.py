@@ -44,18 +44,37 @@ from soundevent.data.processed_clip import ProcessedClip
 
 
 class ModelRun(BaseModel):
-    """Model run."""
+    """ModelRun Class.
+
+    The `ModelRun` class represents a collection of processed audio clips
+    generated during a single run using the same processing method. In
+    bioacoustic research, applying consistent processing pipelines to sets of
+    audio clips is essential for maintaining comparability and ensuring the
+    reliability of research results.
+
+    Attributes
+    ----------
+    id
+        The unique identifier of the model run, automatically generated upon
+        creation.
+    model
+        The identifier of the machine learning model or processing method used
+        for the run. This attribute allows researchers to clearly identify the
+        specific technique applied during the processing of the clips.
+    clips
+        A list of `ProcessedClip` instances representing the audio clips
+        processed during the run. These clips share a common processing history
+        and are grouped within the same `ModelRun` for consistency and
+        comparability.
+    created_on
+        The date and time when the `ModelRun` object was created. This
+        timestamp provides information about the moment the processing run was
+        initiated.
+    """
 
     id: UUID = Field(default_factory=uuid4)
-    """The unique identifier of the model run."""
-
     model: str
-    """The identifier of the model used for the run."""
-
     clips: List[ProcessedClip] = Field(default_factory=list)
-    """List of processed clips in the run."""
-
     created_on: datetime.datetime = Field(
         default_factory=datetime.datetime.now
     )
-    """The date and time when the model run was created."""

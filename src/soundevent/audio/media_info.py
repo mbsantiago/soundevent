@@ -48,25 +48,37 @@ class FormatInfo:
 
 @dataclass
 class MediaInfo:
-    """Media information."""
+    """MediaInfo Class.
+
+    MediaInfo encapsulates essential information about audio data, providing
+    key details necessary for processing and analysis. It includes format code,
+    bit depth, sample rate, duration, number of samples, and channel
+    information. The MediaInfo attributes can be automatically extracted from
+    the audio file itself.
+
+    Attributes
+    ----------
+    audio_format
+        Format code representing the waveform audio data format.
+    bit_depth
+        Bit depth, indicating the number of bits per sample.
+    samplerate_hz
+        Sample rate in Hertz (Hz), denoting the number of samples per second.
+    duration_s
+        Duration of the audio data in seconds.
+    samples
+        Total number of samples in the audio data.
+    channels
+        Number of audio channels, indicating whether the audio is mono, stereo,
+        or multichannel.
+    """
 
     audio_format: int
-    """Format code for the waveform audio data."""
-
     bit_depth: int
-    """Bit depth."""
-
     samplerate_hz: int
-    """Sample rate in Hz."""
-
     duration_s: float
-    """Duration in seconds."""
-
     samples: int
-    """Number of samples."""
-
     channels: int
-    """Number of channels."""
 
 
 def extract_media_info_from_chunks(
@@ -79,7 +91,6 @@ def extract_media_info_from_chunks(
     ----------
     fp : BytesIO
         File pointer to the WAV file.
-
     chunk : Chunk
         The fmt chunk.
 
@@ -118,17 +129,16 @@ def get_media_info(path: PathLike) -> MediaInfo:
 
     The information extracted from the WAV file is the audio format,
     the bit depth, the sample rate, the duration, the number of
-    samples, and the number of channels. See the documentation of
-    [`MediaInfo`][soundevent.audio.MediaInfo] for more information.
+    samples, and the number of channels.
 
     Parameters
     ----------
-    path : PathLike
+    path
         Path to the WAV file.
 
     Returns
     -------
-    [MediaInfo][soundevent.audio.MediaInfo]
+    media_info: MediaInfo
         Information about the WAV file.
 
     Raises
@@ -170,7 +180,7 @@ def compute_md5_checksum(path: PathLike) -> str:
 
     Parameters
     ----------
-    path : PathLike
+    path
         Path to the file.
 
     Returns

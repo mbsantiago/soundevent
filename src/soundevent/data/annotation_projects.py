@@ -11,13 +11,14 @@ manner and with specific objectives in mind.
 
 ## Annotation Projects and Tasks
 
-An annotation project serves as the unifying theme for grouping
-annotations. It encompasses the underlying material to be annotated
-and provides instructions to annotators. Within an annotation
-project, there are typically multiple annotation tasks. Each
-annotation task corresponds to a single clip that requires full
-annotation. By "full annotation," we mean that the annotators have
-executed the annotation instructions completely on the given clip.
+An `AnnotationProject` acts as a cohesive container, guiding annotators through
+the standardized annotation process. It provides detailed instructions,
+ensuring that annotations are generated consistently and with precise
+objectives in mind. Within each annotation project, multiple annotation tasks
+exist. Each task corresponds to a specific audio clip that necessitates full
+annotation. Complete annotation implies that annotators have diligently
+followed the provided instructions, resulting in comprehensive annotations for
+the clip.
 
 ## Tags and Sound Event Annotations
 
@@ -43,22 +44,65 @@ from uuid import UUID, uuid4
 from pydantic import BaseModel, Field
 
 from soundevent.data.annotation_tasks import AnnotationTask
+from soundevent.data.tags import Tag
 
 
 class AnnotationProject(BaseModel):
-    """Annotation collection."""
+    """Annotation Project Class.
+
+    Represents a comprehensive collection of human-provided annotations within
+    a unified annotation project. An `AnnotationProject` comprises multiple
+    annotation tasks, each corresponding to a specific audio clip, and provides
+    clear instructions to annotators. It allows researchers to organize,
+    manage, and analyze annotations in bioacoustic research projects.
+
+    Attributes
+    ----------
+    id : UUID, optional
+        A unique identifier automatically generated for the annotation project.
+        This identifier distinguishes the project from others, enabling
+        seamless referencing and management. It is a crucial component for
+        ensuring data integrity and traceability in the annotation process.
+    name : str
+        The name of the annotation project, providing a distinctive and
+        informative label for the project. The project name acts as a reference
+        point for researchers and annotators, facilitating easy identification
+        and communication.
+    description : str , optional
+        A detailed description outlining the objectives, scope, and specific
+        characteristics of the annotation project. This description offers
+        context to researchers, annotators, and other stakeholders involved in
+        the project, providing a clear understanding of the project's goals and
+        objectives.
+    tasks : List[AnnotationTask], optional
+        A list of `AnnotationTask` instances representing individual annotation
+        tasks within the project. Each task corresponds to a specific audio
+        clip and contains detailed annotations. Annotation tasks are the
+        fundamental units of annotation within the project, providing a
+        structured approach to organizing annotation efforts and ensuring
+        completeness in the annotation process.
+    instructions:  str, optional
+        Clear and precise instructions provided to annotators, guiding them
+        through the annotation process. These instructions ensure uniformity in
+        annotations and assist annotators in understanding the project's
+        objectives and requirements. Well-defined instructions are essential
+        for consistency and accuracy in the annotations, fostering reliable and
+        high-quality annotated data.
+    tags : List[Tag]
+        A list of `Tag` instances representing categories associated with
+        annotations within the annotation project. These tags serve as the
+        ontology of the annotation project, defining specific entities or
+        events that annotators are tasked with identifying and classifying.
+        Tags provide additional semantic context to annotations, enabling
+        detailed classification and in-depth analysis of the acoustic content.
+        The specified tags establish a standardized vocabulary used throughout
+        the annotation project, ensuring consistency and precision in the
+        annotation process.
+    """
 
     id: UUID = Field(default_factory=uuid4, repr=False)
-    """Unique identifier for the annotation collection."""
-
     name: str
-    """Name of the annotation project."""
-
     description: Optional[str] = Field(default=None, repr=False)
-    """Description of the annotation collection."""
-
     tasks: List[AnnotationTask] = Field(default_factory=list, repr=False)
-    """List of annotation tasks in the project."""
-
     instructions: Optional[str] = Field(default=None, repr=False)
-    """Instructions for annotators."""
+    tags: List[Tag] = Field(default_factory=list)

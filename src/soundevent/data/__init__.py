@@ -31,14 +31,14 @@ endeavors.
 """
 
 from soundevent.data.annotation_projects import AnnotationProject
-from soundevent.data.annotation_tasks import (
-    AnnotationTask,
-    StatusBadge,
-    TaskState,
-)
+from soundevent.data.annotation_tasks import AnnotationTask, StatusBadge, TaskState
 from soundevent.data.annotations import Annotation
 from soundevent.data.clips import Clip
 from soundevent.data.dataset import Dataset
+from soundevent.data.evaluated_example import EvaluatedExample
+from soundevent.data.evaluation import Evaluation
+from soundevent.data.evaluation_example import EvaluationExample
+from soundevent.data.evaluation_set import EvaluationSet, EvaluationTask
 from soundevent.data.features import Feature
 from soundevent.data.geometries import (
     MAX_FREQUENCY,
@@ -55,6 +55,7 @@ from soundevent.data.geometries import (
     Time,
     TimeInterval,
     TimeStamp,
+    geometry_validate,
 )
 from soundevent.data.matches import Match
 from soundevent.data.model_run import ModelRun
@@ -74,6 +75,11 @@ __all__ = [
     "BoundingBox",
     "Clip",
     "Dataset",
+    "EvaluatedExample",
+    "Evaluation",
+    "EvaluationExample",
+    "EvaluationSet",
+    "EvaluationTask",
     "Feature",
     "Frequency",
     "Geometry",
@@ -100,4 +106,5 @@ __all__ = [
     "Time",
     "TimeInterval",
     "TimeStamp",
+    "geometry_validate",
 ]

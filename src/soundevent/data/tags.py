@@ -45,7 +45,6 @@ and vocalization classification.
 By utilizing tags, users can enrich their data with relevant information,
 enabling advanced search, filtering, and analysis of audio recordings and
 associated objects within the soundevent package.
-
 """
 
 from pydantic import BaseModel
@@ -54,18 +53,29 @@ __all__ = ["Tag"]
 
 
 class Tag(BaseModel):
-    """Tag."""
+    """Tag Class.
+
+    Tags are essential elements in annotating and categorizing various components
+    within bioacoustic research. Each tag consists of a key-value pair, where the
+    key serves as a unique identifier for grouping tags into meaningful categories.
+    Tags play a crucial role in organizing, filtering, and interpreting data within
+    the application.
+
+    Attributes
+    ----------
+    key
+        The key of the tag, serving as a label or category identifier. It helps in
+        organizing tags into coherent groups, enhancing the manageability of
+        annotations.
+    value
+        The value associated with the tag, providing specific information or
+        characteristics related to the key. Users have the flexibility to assign
+        values based on project requirements.
+    """
 
     key: str
-    """The key of the tag."""
-
     value: str
-    """The value of the tag."""
 
     def __hash__(self):
         """Hash the Tag object."""
         return hash((self.key, self.value))
-
-    def __str__(self):
-        """Return the string representation of the Tag object."""
-        return f"{self.key}: {self.value}"

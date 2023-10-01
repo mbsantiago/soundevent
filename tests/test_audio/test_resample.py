@@ -11,14 +11,14 @@ def test_resample_audio_fails_if_no_samplerate():
     """Test that resample_audio fails if samplerate is missing."""
     data = xr.DataArray(np.random.randn(100), dims=["time"])
     with pytest.raises(ValueError):
-        audio.resample(data, 16000)
+        audio.resample_audio(data, 16000)
 
 
 def test_resample_audio_fails_if_not_an_xarray():
     """Test that resample_audio fails if not an xarray.DataArray."""
     data = np.random.randn(100)
     with pytest.raises(ValueError):
-        audio.resample(data, 16000)  # type: ignore
+        audio.resample_audio(data, 16000)  # type: ignore
 
 
 def test_resample_audio_fails_if_no_time_axis():
@@ -30,7 +30,7 @@ def test_resample_audio_fails_if_no_time_axis():
         attrs={"samplerate": 16000},
     )
     with pytest.raises(ValueError):
-        audio.resample(data, 16000)
+        audio.resample_audio(data, 16000)
 
 
 def test_resample_audio_returns_an_xarray():
@@ -41,7 +41,7 @@ def test_resample_audio_returns_an_xarray():
         coords={"time": np.linspace(0, 1, 1000, endpoint=False)},
         attrs={"samplerate": 16000},
     )
-    resampled = audio.resample(data, 8000)
+    resampled = audio.resample_audio(data, 8000)
     assert isinstance(resampled, xr.DataArray)
 
 
@@ -53,7 +53,7 @@ def test_resample_audio_returns_correct_samplerate():
         coords={"time": np.linspace(0, 1, 1000, endpoint=False)},
         attrs={"samplerate": 16000},
     )
-    resampled = audio.resample(data, 8000)
+    resampled = audio.resample_audio(data, 8000)
     assert resampled.attrs["samplerate"] == 8000
 
 
@@ -65,7 +65,7 @@ def test_resample_audio_preserves_attrs():
         coords={"time": np.linspace(0, 1, 1000, endpoint=False)},
         attrs={"samplerate": 16000, "other": "value"},
     )
-    resampled = audio.resample(data, 8000)
+    resampled = audio.resample_audio(data, 8000)
     assert resampled.attrs["other"] == "value"
 
 
@@ -77,7 +77,7 @@ def test_resampled_audio_has_the_correct_time_coordinates():
         coords={"time": np.linspace(1, 2, 16000, endpoint=False)},
         attrs={"samplerate": 16000},
     )
-    resampled = audio.resample(data, 8000)
+    resampled = audio.resample_audio(data, 8000)
     assert np.allclose(
         resampled.coords["time"].values,
         np.linspace(1, 2, 8000, endpoint=False),
@@ -96,7 +96,7 @@ def test_resample_audio_preserves_dims():
         },
         attrs={"samplerate": 16000},
     )
-    resampled = audio.resample(data, 8000)
+    resampled = audio.resample_audio(data, 8000)
     assert resampled.dims == data.dims
 
 
@@ -112,5 +112,5 @@ def test_resampling_is_done_in_the_time_axis():
         },
         attrs={"samplerate": 16000},
     )
-    resampled = audio.resample(data, 8000)
+    resampled = audio.resample_audio(data, 8000)
     assert resampled.shape == (2, 8000, 3)

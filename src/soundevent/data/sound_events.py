@@ -52,22 +52,37 @@ __all__ = [
 
 
 class SoundEvent(BaseModel):
-    """Sound events."""
+    """Sound Event Class.
+
+    Represents a specific sound event detected within a recording. Each sound
+    event is characterized by a unique identifier, the recording in which it
+    occurs, its spatial geometry (if available), associated tags, and features.
+    Sound events are fundamental entities used for studying and categorizing
+    various acoustic phenomena within audio recordings.
+
+    Attributes
+    ----------
+    uuid
+        A unique identifier (UUID) for the sound event.
+    recording
+        The recording containing the sound event. Provides context about the source
+        of the sound event.
+    geometry
+        The spatial geometry locating the sound event within the recording. Can include
+        information about the event's position, duration, and frequency range.
+    tags
+        A list of tags associated with the sound event, providing descriptive labels
+        or categories.
+    features
+        A list of features associated with the sound event, offering quantitative
+        information about its acoustic properties.
+    """
 
     uuid: UUID = Field(default_factory=uuid4, repr=False)
-    """The UUID of the sound event."""
-
     recording: Recording = Field(..., repr=False)
-    """The recording containing the sound event."""
-
     geometry: Optional[Geometry]
-    """The geometry locating the sound event within the recording."""
-
     tags: List[Tag] = Field(default_factory=list, repr=False)
-    """The tags associated with the sound event."""
-
     features: List[Feature] = Field(default_factory=list, repr=False)
-    """The features associated with the sound event."""
 
     def __hash__(self):
         """Compute the hash of the sound event."""

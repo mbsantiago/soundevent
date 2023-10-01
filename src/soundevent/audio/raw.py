@@ -1,21 +1,17 @@
 """Raw Audio module.
 
-This module contains the RawData class which is a
-file-like object that wraps the data buffer of a
-WAV file and is meant to replicate the structure
-of a RAW audio file.
+This module contains the RawData class which is a file-like object that
+wraps the data buffer of a WAV file and is meant to replicate the
+structure of a RAW audio file.
 
-A RAW audio file is a file that contains only the
-contents of the data chunk of a WAV file without
-any of the other chunks.
+A RAW audio file is a file that contains only the contents of the data
+chunk of a WAV file without any of the other chunks.
 
-Handling RAW audio files is useful as WAV files
-can come with various chunks that are not standard,
-such as the Guano metadata chunk. This unexpected
-chunks can sometimes cause problems when reading
-the WAV file with other libraries and so it is
-useful to be able to read only the data chunk of
-a WAV file.
+Handling RAW audio files is useful as WAV files can come with various
+chunks that are not standard, such as the Guano metadata chunk. This
+unexpected chunks can sometimes cause problems when reading the WAV file
+with other libraries and so it is useful to be able to read only the
+data chunk of a WAV file.
 """
 
 import os
@@ -28,8 +24,8 @@ from soundevent.audio.chunks import Chunk
 class RawData(RawIOBase):
     """A file-like object that wraps a the data buffer of a WAV file.
 
-    This file-like object only contains the data buffer of a WAV without any
-    of the other chunks.
+    This file-like object only contains the data buffer of a WAV without
+    any of the other chunks.
     """
 
     chunk: Chunk

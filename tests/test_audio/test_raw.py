@@ -1,11 +1,6 @@
 """Test suite for the RawData class."""
 
-from pathlib import Path
-
-import pytest
 import soundfile as sf
-from hypothesis import HealthCheck, given, settings
-from hypothesis import strategies as st
 
 from soundevent.audio.chunks import parse_into_chunks
 from soundevent.audio.raw import RawData

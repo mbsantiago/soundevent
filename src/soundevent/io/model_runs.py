@@ -1,6 +1,7 @@
 """Model Runs IO module of the soundevent package.
 
-Here you can find the classes and functions for reading and writing model runs.
+Here you can find the classes and functions for reading and writing
+model runs.
 """
 
 from pathlib import Path
@@ -27,10 +28,9 @@ def load_model_run(
 
     Parameters
     ----------
-    path : PathLike
+    path
         Path to the file to load.
-
-    audio_dir : PathLike, optional
+    audio_dir
         Path to the directory containing the audio files. If provided, the
         audio file paths in the model run will be relative to this directory.
 
@@ -43,7 +43,6 @@ def load_model_run(
     ------
     NotImplementedError
         If the format of the file is not supported.
-
     """
     path = Path(path)
 
@@ -69,25 +68,21 @@ def save_model_run(
 
     Parameters
     ----------
-    model_run : ModelRun
+    model_run
         The model run to save.
-
-    path : Path
+    path
         Path to the file to save the dataset to.
-
-    audio_dir : Path, optional
+    audio_dir
         Path to the directory containing the audio files. If provided, the
         audio file paths in the model run will be relative to this directory.
         Defaults to None.
-
-    format : DatasetFormat, optional
+    format
         The format to save the dataset in, by default "aoef".
 
     Raises
     ------
     NotImplementedError
         If the format of the file is not supported.
-
     """
     try:
         saver = SAVE_FORMATS[format]
@@ -105,10 +100,9 @@ def load_model_run_aoef_format(
 
     Parameters
     ----------
-    path : Path
+    path
         Path to the file to load.
-
-    audio_dir : Path, optional
+    audio_dir
         Path to the directory containing the audio files. If provided, the
         audio file paths in the model run will be relative to this directory.
         Defaults to None.
@@ -136,17 +130,14 @@ def save_model_run_aoef_format(
 
     Parameters
     ----------
-    obj : ModelRun
+    obj
         The model run to save.
-
-    path : PathLike
+    path
         Path to the file to save the dataset to.
-
-    audio_dir : PathLike, optional
+    audio_dir
         Path to the directory containing the audio files. If provided, the
         audio file paths in the model run will be relative to this directory.
         Defaults to None.
-
     """
     if audio_dir is not None:
         audio_dir = Path(audio_dir).resolve()

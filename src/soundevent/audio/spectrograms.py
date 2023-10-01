@@ -4,30 +4,40 @@ import numpy as np
 import xarray as xr
 from scipy import signal
 
+__all__ = [
+    "compute_spectrogram",
+]
+
 
 def compute_spectrogram(
     audio: xr.DataArray,
     window_size: float,
     hop_size: float,
-    window_type="hann",
+    window_type: str = "hann",
 ) -> xr.DataArray:
     """Compute the spectrogram of a signal.
 
     Parameters
     ----------
-    audio : xr.DataArray
+    audio
         The audio signal. We are assuming that this has two dimensions: time
         and channel. The time dimension should be the first dimension. Also,
         the data array should have a sample rate attribute. This is
         automatically True if the audio signal is loaded using
         [`audio.load_recording`][soundevent.audio.load_recording].
-    window_duration : float
+    window_size
         The duration of the STFT window in seconds.
-    hop_duration : float
+    hop_size
         The duration of the STFT hop in seconds.
-    window_type : str, optional
+    window_type
         The type of window to use. This should be one of the window types
         supported by [`scipy.signal.get_window`][scipy.signal.get_window].
+
+    Returns
+    -------
+    spectrogram : xr.DataArray
+        The spectrogram of the audio signal. This is a three-dimensional
+        xarray data array with the dimensions frequency, time, and channel.
     """
     # Get the sample rate
     sample_rate = audio.attrs["samplerate"]

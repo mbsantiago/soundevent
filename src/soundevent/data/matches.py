@@ -36,20 +36,44 @@ comparative studies and insights in bioacoustic research.
 """
 
 from typing import Optional
+from uuid import UUID
 
-from pydantic import BaseModel, Field
-
-from soundevent.data.sound_events import SoundEvent
+from pydantic import BaseModel, Field, model_validator
 
 
 class Match(BaseModel):
-    """Match."""
+    """Match Class.
 
-    source: Optional[SoundEvent]
-    """Source sound event."""
+    The `Match` class represents the outcome of the matching process in
+    bioacoustic research. During this process, sound events from a source and a
+    target are compared based on a similarity metric. The matched sound events
+    are paired, and the Match object captures these pairs along with their
+    affinity scores, indicating the level of similarity between the matched
+    events.
 
-    target: Optional[SoundEvent]
-    """Target sound event."""
+    Attributes
+    ----------
+    source
+        The unique identifier of the source sound event that has been matched.
+        If no match is found for a target event, this attribute remains null.
+    target
+        The unique identifier of the target sound event that has been matched
+        with the source event. If no match is found for a source event, this
+        attribute remains null.
+    affinity
+        The affinity score quantifying the degree of similarity between the
+        matched source and target sound events. Affinity scores range from 0.0
+        (no similarity) to 1.0 (perfect match). Researchers can use this score
+        to evaluate the strength and quality of the match.
+    """
 
+    source: Optional[UUID] = None
+    target: Optional[UUID] = None
     affinity: float = Field(default=0.0, ge=0.0, le=1.0)
-    """Affinity between the source and target sound events."""
+
+    @model_validator(mode="before")
+    def validate_match(cls, values):
+        """Validate the match."""
+        if values["source"] is None and values["target"] is None:
+            raise ValueError("Match cannot be between two null objects.")
+        return values

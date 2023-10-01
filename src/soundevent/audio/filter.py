@@ -7,7 +7,7 @@ import xarray as xr
 from scipy import signal
 
 __all__ = [
-    "filter",
+    "filter_audio",
 ]
 
 
@@ -55,7 +55,7 @@ def _get_filter(
     )
 
 
-def filter(
+def filter_audio(
     audio: xr.DataArray,
     low_freq: Optional[float] = None,
     high_freq: Optional[float] = None,
@@ -95,7 +95,6 @@ def filter(
     ValueError
         If neither low_freq nor high_freq is specified, or if both
         are specified and low_freq > high_freq.
-
     """
     if not isinstance(audio, xr.DataArray):
         raise ValueError("Audio must be an xarray.DataArray")

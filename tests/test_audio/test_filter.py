@@ -14,14 +14,14 @@ def test_filter_audio_fails_if_no_samplerate():
     """Test that filter_audio fails if samplerate is missing."""
     data = xr.DataArray(np.random.randn(100), dims=["time"])
     with pytest.raises(ValueError):
-        audio.filter(data, 16000)
+        audio.filter_audio(data, 16000)
 
 
 def test_filter_audio_fails_if_not_an_xarray():
     """Test that filter_audio fails if not an xarray.DataArray."""
     data = np.random.randn(100)
     with pytest.raises(ValueError):
-        audio.filter(data, 16000)  # type: ignore
+        audio.filter_audio(data, 16000)  # type: ignore
 
 
 def test_filter_audio_fails_if_no_time_axis():
@@ -33,7 +33,7 @@ def test_filter_audio_fails_if_no_time_axis():
         attrs={"samplerate": 16000},
     )
     with pytest.raises(ValueError):
-        audio.filter(data, 16000)
+        audio.filter_audio(data, 16000)
 
 
 def test_filter_audio_returns_an_xarray():
@@ -44,7 +44,7 @@ def test_filter_audio_returns_an_xarray():
         coords={"time": np.linspace(0, 1, 1000, endpoint=False)},
         attrs={"samplerate": 16000},
     )
-    filtered = audio.filter(data, 1000)
+    filtered = audio.filter_audio(data, 1000)
     assert isinstance(filtered, xr.DataArray)
 
 
@@ -56,7 +56,7 @@ def test_filter_audio_preserves_attrs():
         coords={"time": np.linspace(0, 1, 1000, endpoint=False)},
         attrs={"samplerate": 16000, "other": "value"},
     )
-    filtered = audio.filter(data, 1000)
+    filtered = audio.filter_audio(data, 1000)
     assert filtered.attrs == data.attrs
 
 
@@ -69,7 +69,7 @@ def test_filter_audio_fails_if_no_low_or_high_freq_provided():
         attrs={"samplerate": 16000, "other": "value"},
     )
     with pytest.raises(ValueError):
-        audio.filter(data)
+        audio.filter_audio(data)
 
 
 def test_filter_audio_applies_a_lowpass_filter():
@@ -83,7 +83,7 @@ def test_filter_audio_applies_a_lowpass_filter():
 
     mock_butter = mock.Mock(side_effect=signal.butter)
     with mock.patch.object(signal, "butter", mock_butter):
-        audio.filter(data, high_freq=6000)
+        audio.filter_audio(data, high_freq=6000)
         mock_butter.assert_called_once_with(
             5,
             6000,
@@ -104,7 +104,7 @@ def test_filter_audio_applies_a_highpass_filter():
 
     mock_butter = mock.Mock(side_effect=signal.butter)
     with mock.patch.object(signal, "butter", mock_butter):
-        audio.filter(data, low_freq=6000)
+        audio.filter_audio(data, low_freq=6000)
         mock_butter.assert_called_once_with(
             5,
             6000,
@@ -125,7 +125,7 @@ def test_filter_audio_applies_a_bandpass_filter():
 
     mock_butter = mock.Mock(side_effect=signal.butter)
     with mock.patch.object(signal, "butter", mock_butter):
-        audio.filter(data, low_freq=1000, high_freq=6000)
+        audio.filter_audio(data, low_freq=1000, high_freq=6000)
         mock_butter.assert_called_once_with(
             5,
             [1000, 6000],

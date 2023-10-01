@@ -11,7 +11,6 @@ size is odd.
 The RIFF file format is used for storing audio and video data. The RIFF file
 format is also used for storing other types of data, such as text, images,
 and metadata.
-
 """
 import os
 from dataclasses import dataclass, field
@@ -31,13 +30,13 @@ class Chunk:
 
     Parameters
     ----------
-    chunk_id : str
+    chunk_id
         The chunk ID.
-    position: int
+    position
         The position of the chunk in the file.
-    chunk_size : int
+    chunk_size
         The chunk size.
-    subchunks : Dict[Chunk]
+    subchunks
         A dictionary holding the subchunks of the chunk.
     """
 
@@ -55,15 +54,14 @@ def _get_subchunks(riff: BinaryIO, size: int) -> List[Chunk]:
 
     Parameters
     ----------
-    riff : BinaryIO
-
-    size : int
+    riff
+        The open RIFF file.
+    size
         The size of the chunk.
 
     Returns
     -------
-    list
-
+    subchunks:  List[Chunk]
     """
     start_position = riff.tell()
 

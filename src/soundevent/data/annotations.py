@@ -60,30 +60,53 @@ __all__ = [
 
 
 class Annotation(BaseModel):
-    """Annotation."""
+    """Annotation Class.
+
+    The `Annotation` class encapsulates essential information about a specific
+    annotation created within a bioacoustic research project. Annotations
+    provide detailed labeling for individual sound events, enhancing the
+    interpretability and utility of audio data.
+
+    Attributes
+    ----------
+    id: UUID, optional
+        A unique identifier for the annotation, automatically generated upon creation.
+        This identifier distinguishes the annotation from others and is crucial for
+        referencing and management purposes.
+    created_by : str, optional
+        The user who created the annotation, providing insights into the annotator's
+        identity. This information is valuable for tracking and accountability within
+        annotation projects.
+    sound_event : SoundEvent
+        An instance of the `SoundEvent` class representing the specific sound event
+        being annotated. Sound events define distinct audio occurrences, such as bird
+        calls or animal vocalizations, and are essential for categorizing the content
+        of the audio data.
+    notes : List[Note], optional
+        A list of `Note` instances representing additional contextual information or
+        remarks associated with the annotation. Notes can provide insights into specific
+        characteristics of the sound event, aiding in the comprehensive understanding
+        of the annotated data.
+    tags : List[Tag], optional
+        A list of `Tag` instances representing user-provided tags associated with the
+        annotated sound event. These tags offer additional semantic context to the
+        annotation, enabling detailed classification and facilitating targeted analysis
+        of the acoustic content.
+    created_on : datetime.datetime, optional
+        The timestamp indicating the time at which the annotation was created. This
+        information is essential for tracking the progress of an annotation task and
+        understanding the chronological order of annotations within a project.
+    """
 
     id: UUID = Field(default_factory=uuid4, repr=False)
-    """A unique identifier for the annotation."""
-
     created_by: Optional[str] = None
-    """The user who created the annotation."""
-
     sound_event: SoundEvent
-    """The sound event being annotated."""
-
     notes: List[Note] = Field(default_factory=list, repr=False)
-    """Notes associated with the annotation."""
-
     tags: List[Tag] = Field(default_factory=list, repr=False)
-    """User provided tags to the annotated sound event."""
-
     created_on: Optional[datetime.datetime] = Field(
-        default_factory=datetime.datetime.now, repr=False
+        default_factory=datetime.datetime.now,
+        repr=False,
     )
-    """The time at which the annotation was created.
-
-    Important for tracking the progress of an annotation task.
-    """
 
     def __hash__(self):
         """Compute the hash of the annotation."""

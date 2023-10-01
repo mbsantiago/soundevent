@@ -52,24 +52,50 @@ __all__ = ["Note"]
 
 
 class Note(BaseModel):
-    """Schema for Note objects returned to the user."""
+    """Note Class.
+
+    Notes play a pivotal role in the annotation process, providing essential
+    textual context and enabling effective communication among users. Attached
+    to recordings, clips, or sound events, notes serve various purposes, from
+    offering contextual information and explanations to flagging issues and
+    initiating discussions. This collaborative tool enhances the accuracy and
+    depth of annotations while promoting a richer understanding of the audio
+    data.
+
+    Attributes
+    ----------
+    uuid
+        A unique identifier for the note, automatically generated upon
+        creation. This ID distinguishes each note, ensuring a clear reference
+        for annotators and researchers.
+    message
+        The content of the note, which can include contextual information,
+        explanations, issues, alternative interpretations, or any other
+        relevant details. The message provides valuable insights and
+        explanations related to the annotated material.
+    created_by
+        The identifier of the user who created the note. While optional,
+        including this information enables users to understand the source of
+        the note, fostering transparency and accountability within the
+        annotation process.
+    is_issue
+        A flag indicating whether the note highlights an issue or concern. When
+        set to True, the note signals incomplete or incorrect annotations,
+        guiding annotators' attention to specific areas that require further
+        review and refinement.
+    created_at
+        The date and time when the note was created. This timestamp provides a
+        historical record of the note's origin, allowing users to track the
+        timeline of annotations and discussions.
+    """
 
     uuid: UUID = Field(default_factory=uuid4)
-    """The id of the note."""
-
     message: str
-    """The message of the note."""
-
     created_by: Optional[str] = None
-    """The id of the user who created the note."""
-
     is_issue: bool = False
-    """Whether the note is an issue."""
-
     created_at: datetime.datetime = Field(
         default_factory=datetime.datetime.now
     )
-    """The time at which the note was created."""
 
     def __hash__(self):
         """Hash the Note object."""

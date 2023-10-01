@@ -50,22 +50,36 @@ from soundevent.data.tags import Tag
 
 
 class Sequence(BaseModel):
-    """Sequences."""
+    """Sequence Class.
 
-    id: UUID = Field(default_factory=uuid4)
-    """The unique identifier of the sequence."""
+    Represents a sequence of sound events in bioacoustic research. A sequence is a
+    ordered collection of sound events, each characterized by its unique identifier,
+    associated tags, features, and notes. Sequences can be hierarchical, allowing
+    the organization of sub-sequences under parent sequences.
 
+    Attributes
+    ----------
+    id
+        A unique identifier for the sequence.
+    sound_event
+        A list of sound events within the sequence.
+    tags
+        A list of tags describing the sequence, providing additional context or
+        categorization.
+    features
+        A list of features associated with the sequence, offering quantitative
+        information about the sequence's acoustic characteristics.
+    notes: List[Note]
+        A list of notes about the sequence, serving as textual annotations to
+        provide additional context or details.
+    parent
+        If the sequence is a subsequence, this attribute refers to the parent
+        sequence under which the current sequence is organized.
+    """
+
+    uuid: UUID = Field(default_factory=uuid4)
     sound_event: List[SoundEvent] = Field(default_factory=list)
-    """The sound events in the sequence."""
-
     tags: List[Tag] = Field(default_factory=list)
-    """The tags describing the sequence."""
-
     features: List[Feature] = Field(default_factory=list)
-    """Features associated with the sequence."""
-
     notes: List[Note] = Field(default_factory=list)
-    """Notes about the sequence."""
-
     parent: Optional["Sequence"] = None
-    """If the sequence is a subsequence, this is the parent sequence."""

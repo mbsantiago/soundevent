@@ -18,10 +18,9 @@ def load_annotation_project(
 
     Parameters
     ----------
-    path: PathLike
+    path
         Path to the file with the annotation project.
-
-    audio_dir: PathLike, optional
+    audio_dir
         Path to the directory containing the audio files. If provided, the
         audio file paths in the annotation project will be relative to this
         directory. By default None.
@@ -35,7 +34,6 @@ def load_annotation_project(
     ------
     FileNotFoundError
         If the path does not exist.
-
     NotImplementedError
         If the format of the file is not supported.
     """
@@ -63,25 +61,21 @@ def save_annotation_project(
 
     Parameters
     ----------
-    project: data.AnnotationProject
+    project
         Annotation project to save.
-
-    path: PathLike
+    path
         Path to save annotation project to.
-
-    audio_dir: PathLike, optional
+    audio_dir
         Path to the directory containing the audio files. If provided, the
         audio file paths in the annotation project will be relative to this
         directory. By default None.
-
-    format: str, optional
+    format
         Format to save the annotation project in, by default "aoef".
 
     Raises
     ------
     NotImplementedError
         If the format is not supported.
-
     """
     path = Path(path)
 
