@@ -51,16 +51,13 @@ facilitating efficient research workflows and promoting robust
 scientific practices.
 """
 
-import os
 from pathlib import Path
-from typing import List, Optional, Union
+from typing import List, Optional
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
 
-from soundevent.data.recordings import Recording
-
-PathLike = Union[str, os.PathLike]
+from soundevent.data.recordings import PathLike, Recording
 
 
 class Dataset(BaseModel):

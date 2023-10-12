@@ -167,6 +167,14 @@ class BaseGeometry(BaseModel, ABC):
         type_field = cls.model_fields["type"]
         return type_field.default
 
+    def _repr_html_(self) -> str:
+        try:
+            from soundevent.geometry import geometry_to_html
+
+            return geometry_to_html(self)  # type: ignore
+        except ImportError:
+            return repr(self)
+
 
 class TimeStamp(BaseGeometry):
     """TimeStamp Geometry Class.

@@ -47,25 +47,27 @@ enabling advanced search, filtering, and analysis of audio recordings and
 associated objects within the soundevent package.
 """
 
+from typing import Optional, Sequence
+
 from pydantic import BaseModel
 
-__all__ = ["Tag"]
+__all__ = ["Tag", "find_tag"]
 
 
 class Tag(BaseModel):
     """Tag Class.
 
-    Tags are essential elements in annotating and categorizing various components
-    within bioacoustic research. Each tag consists of a key-value pair, where the
-    key serves as a unique identifier for grouping tags into meaningful categories.
-    Tags play a crucial role in organizing, filtering, and interpreting data within
-    the application.
+    Tags are essential elements in annotating and categorizing various
+    components within bioacoustic research. Each tag consists of a key-value
+    pair, where the key serves as a unique identifier for grouping tags into
+    meaningful categories. Tags play a crucial role in organizing, filtering,
+    and interpreting data within the application.
 
     Attributes
     ----------
     key
-        The key of the tag, serving as a label or category identifier. It helps in
-        organizing tags into coherent groups, enhancing the manageability of
+        The key of the tag, serving as a label or category identifier. It helps
+        in organizing tags into coherent groups, enhancing the manageability of
         annotations.
     value
         The value associated with the tag, providing specific information or
@@ -79,3 +81,42 @@ class Tag(BaseModel):
     def __hash__(self):
         """Hash the Tag object."""
         return hash((self.key, self.value))
+
+
+def find_tag(
+    tags: Sequence[Tag],
+    key: str,
+    default: Optional[Tag] = None,
+) -> Optional[Tag]:
+    """Find a tag by its key.
+
+    This function searches for a tag with the given key within the provided
+    sequence of tags. If the tag is found, its corresponding Tag object is
+    returned. If not found, and a default Tag object is provided, the default
+    tag is returned. If neither the tag is found nor a default tag is provided,
+    None is returned.
+
+    Parameters
+    ----------
+    tags
+        The sequence of Tag objects to search within.
+    key
+        The key of the tag to search for.
+    default
+        The default Tag object to return if the tag is not found. Defaults to
+        None.
+
+    Returns
+    -------
+    tag : Optional[Tag]
+        The Tag object if found, or the default Tag object if provided. Returns
+        None if the tag is not found and no default is provided.
+
+    Notes
+    -----
+    If there are multiple tags with the same key, the first one is returned.
+    """
+    return next(
+        (f for f in tags if f.key == key),
+        default,
+    )

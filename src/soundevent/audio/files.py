@@ -3,16 +3,13 @@
 For now only WAV files are supported.
 """
 
-
-import os
 from pathlib import Path
-from typing import Union
+
+from soundevent.data.recordings import PathLike
 
 __all__ = [
     "is_audio_file",
 ]
-
-PathLike = Union[os.PathLike, str]
 
 
 def is_audio_file(path: PathLike) -> bool:

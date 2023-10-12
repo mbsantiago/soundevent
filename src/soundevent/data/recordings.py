@@ -63,10 +63,12 @@ from soundevent.data.tags import Tag
 
 __all__ = [
     "Recording",
+    "PathLike",
 ]
 
 
 PathLike = Union[os.PathLike, str]
+"""PathLike: A type alias for a path-like object."""
 
 
 class Recording(BaseModel):
@@ -82,7 +84,7 @@ class Recording(BaseModel):
 
     Attributes
     ----------
-    id
+    uuid
         A unique identifier for the recording.
     path
         The file path to the audio recording.
@@ -120,7 +122,7 @@ class Recording(BaseModel):
         list.
     """
 
-    id: UUID = Field(default_factory=uuid4, repr=False)
+    uuid: UUID = Field(default_factory=uuid4, repr=False)
     path: Path
     duration: float
     channels: int
@@ -137,7 +139,7 @@ class Recording(BaseModel):
 
     def __hash__(self):
         """Hash function."""
-        return hash(self.id)
+        return hash(self.uuid)
 
     @classmethod
     def from_file(
@@ -171,7 +173,10 @@ class Recording(BaseModel):
         Recording
             The recording object.
         """
-        from soundevent.audio.media_info import compute_md5_checksum, get_media_info
+        from soundevent.audio.media_info import (
+            compute_md5_checksum,
+            get_media_info,
+        )
 
         media_info = get_media_info(path)
 

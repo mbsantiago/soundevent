@@ -47,7 +47,26 @@ __all__ = [
 
 
 class GeometricFeature(str, Enum):
-    """Geometric features computed from geometries."""
+    """Geometric features computed from geometries.
+
+    This enumeration defines various geometric features computed from sound
+    event geometries. These features provide essential insights into the
+    temporal and frequency properties of the events.
+
+    Attributes
+    ----------
+    DURATION : str
+        The duration of the geometry in seconds. Applicable to all geometries.
+    LOW_FREQ : str
+        The lowest frequency of the geometry in Hz.
+    HIGH_FREQ : str
+        The highest frequency of the geometry in Hz.
+    BANDWIDTH : str
+        The bandwidth of the geometry in Hz.
+    NUM_SEGMENTS : str
+        The number of segments of the geometry. Only applicable to
+        ``MultiPoint``, ``MultiLineString``, and ``MultiPolygon`` geometries.
+    """
 
     DURATION = "duration"
     LOW_FREQ = "low_freq"

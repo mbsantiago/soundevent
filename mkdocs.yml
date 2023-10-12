@@ -4,7 +4,12 @@ nav:
   - Home: README.md
   - Data: data.md
   - User Guide: generated/gallery
-  - Reference: reference.md
+  - Reference:
+      - data: reference/data.md
+      - io: reference/io.md
+      - audio: reference/audio.md
+      - geometry: reference/geometry.md
+      - evaluation: reference/evaluation.md
   - Contributing: CONTRIBUTING.md
   - Code of Conduct: CODE_OF_CONDUCT.md
 theme:
@@ -42,11 +47,14 @@ plugins:
         python:
           paths: ["src"]
           import:
+            - https://docs.python.org/3.11/objects.inv
+            - https://docs.pydantic.dev/latest/objects.inv
             - https://docs.xarray.dev/en/stable/objects.inv
             - https://numpy.org/doc/stable/objects.inv
             - https://docs.scipy.org/doc/scipy/objects.inv
+            - https://shapely.readthedocs.io/en/stable/objects.inv
           options:
-            show_source: true
+            show_source: false
             show_root_toc_entry: true
             show_symbol_type_toc: true
             show_root_heading: true
@@ -92,3 +100,4 @@ extra_javascript:
   - javascripts/json-viewer.js
 extra_css:
   - stylesheets/jquery.json-viewer.css
+  - css/mkdocstrings.css

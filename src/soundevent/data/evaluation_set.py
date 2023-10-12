@@ -19,7 +19,7 @@ separately.
 """
 
 from enum import Enum
-from typing import List
+from typing import Sequence
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
@@ -38,39 +38,32 @@ class EvaluationTask(str, Enum):
 
     Enumeration representing different evaluation tasks for assessing
     the performance of models in bioacoustic analysis.
+
+    Attributes
+    ----------
+    SOUND_EVENT_CLASSIFICATION : str
+        Evaluation task focusing on assigning correct tags to individual sound
+        events. The model is evaluated based on its ability to accurately
+        assign a single tag to sound events (e.g., classifying a dog bark as
+                                             "dog_bark").
+    SOUND_EVENT_DETECTION : str
+        Evaluation task assessing the model's ability to detect and classify
+        sound events within a given clip. The model must identify the bounds of
+        sound events and assign appropriate tags to them.
+    CLIP_MULTILABEL_CLASSIFICATION : str
+        Evaluation task evaluating the model's ability to assign multiple
+        correct tags to a clip. For example, classifying a clip containing both
+        a dog bark and a car horn as "dog_bark" and "car_horn" respectively.
+    CLIP_CLASSIFICATION : str
+        Evaluation task focusing on assigning a single correct tag to a clip.
+        The model is evaluated on its ability to assign the correct tag to a
+        clip (e.g., labeling a clip with a dog bark as "dog_bark").
     """
 
     SOUND_EVENT_CLASSIFICATION = "sound_event_classification"
-    """Evaluation task focusing on assigning correct tags to individual sound
-    events.
-
-    The model is evaluated based on its ability to accurately assign a
-    single tag to sound events (e.g., classifying a dog bark as
-    "dog_bark").
-    """
-
     SOUND_EVENT_DETECTION = "sound_event_detection"
-    """Evaluation task assessing the model's ability to detect and classify
-    sound events within a given clip.
-
-    The model must identify the bounds of sound events and assign
-    appropriate tags to them.
-    """
-
     CLIP_MULTILABEL_CLASSIFICATION = "clip_multilabel_classification"
-    """Evaluation task evaluating the model's ability to assign multiple
-    correct tags to a clip.
-
-    For example, classifying a clip containing both a dog bark and a car
-    horn as "dog_bark" and "car_horn" respectively.
-    """
-
     CLIP_CLASSIFICATION = "clip_classification"
-    """Evaluation task focusing on assigning a single correct tag to a clip.
-
-    The model is evaluated on its ability to assign the correct tag to a
-    clip (e.g., labeling a clip with a dog bark as "dog_bark").
-    """
 
 
 class EvaluationSet(BaseModel):
@@ -126,5 +119,5 @@ class EvaluationSet(BaseModel):
     name: str
     description: str
     task: EvaluationTask
-    tags: List[Tag]
-    examples: List[EvaluationExample]
+    tags: Sequence[Tag] = Field(default_factory=list)
+    examples: Sequence[EvaluationExample] = Field(default_factory=list)

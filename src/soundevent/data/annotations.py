@@ -69,36 +69,36 @@ class Annotation(BaseModel):
 
     Attributes
     ----------
-    id: UUID, optional
+    uuid
         A unique identifier for the annotation, automatically generated upon creation.
         This identifier distinguishes the annotation from others and is crucial for
         referencing and management purposes.
-    created_by : str, optional
+    created_by
         The user who created the annotation, providing insights into the annotator's
         identity. This information is valuable for tracking and accountability within
         annotation projects.
-    sound_event : SoundEvent
+    sound_event
         An instance of the `SoundEvent` class representing the specific sound event
         being annotated. Sound events define distinct audio occurrences, such as bird
         calls or animal vocalizations, and are essential for categorizing the content
         of the audio data.
-    notes : List[Note], optional
+    notes: List[Note]
         A list of `Note` instances representing additional contextual information or
         remarks associated with the annotation. Notes can provide insights into specific
         characteristics of the sound event, aiding in the comprehensive understanding
         of the annotated data.
-    tags : List[Tag], optional
+    tags
         A list of `Tag` instances representing user-provided tags associated with the
         annotated sound event. These tags offer additional semantic context to the
         annotation, enabling detailed classification and facilitating targeted analysis
         of the acoustic content.
-    created_on : datetime.datetime, optional
+    created_on
         The timestamp indicating the time at which the annotation was created. This
         information is essential for tracking the progress of an annotation task and
         understanding the chronological order of annotations within a project.
     """
 
-    id: UUID = Field(default_factory=uuid4, repr=False)
+    uuid: UUID = Field(default_factory=uuid4, repr=False)
     created_by: Optional[str] = None
     sound_event: SoundEvent
     notes: List[Note] = Field(default_factory=list, repr=False)
@@ -110,4 +110,4 @@ class Annotation(BaseModel):
 
     def __hash__(self):
         """Compute the hash of the annotation."""
-        return hash(self.id)
+        return hash(self.uuid)

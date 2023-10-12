@@ -1,19 +1,16 @@
 """Functions for getting media information from WAV files."""
 import hashlib
-import os
 from dataclasses import dataclass
-from typing import IO, Union
+from typing import IO
 
 from soundevent.audio.chunks import Chunk, parse_into_chunks
+from soundevent.data.recordings import PathLike
 
 __all__ = [
     "MediaInfo",
     "get_media_info",
     "compute_md5_checksum",
 ]
-
-
-PathLike = Union[os.PathLike, str]
 
 
 @dataclass

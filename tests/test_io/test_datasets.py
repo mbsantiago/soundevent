@@ -101,7 +101,7 @@ def test_save_dataset_with_one_simple_recording(tmp_path: Path):
     assert len(content["recordings"]) == 1
 
     # Check that the recording object contains all the required fields.
-    assert content["recordings"][0]["uuid"] == str(dataset.recordings[0].id)
+    assert content["recordings"][0]["uuid"] == str(dataset.recordings[0].uuid)
     assert content["recordings"][0]["path"] == "audio.wav"
     assert content["recordings"][0]["duration"] == 10.0
     assert content["recordings"][0]["channels"] == 1
@@ -155,7 +155,7 @@ def test_save_dataset_with_one_recording_with_full_metadata(
     assert content["info"]["description"] == "A test dataset."
     assert content["info"]["uuid"] == str(dataset.id)
     assert len(content["recordings"]) == 1
-    assert content["recordings"][0]["uuid"] == str(dataset.recordings[0].id)
+    assert content["recordings"][0]["uuid"] == str(dataset.recordings[0].uuid)
     assert content["recordings"][0]["path"] == "audio.wav"
     assert content["recordings"][0]["duration"] == 10.0
     assert content["recordings"][0]["channels"] == 1

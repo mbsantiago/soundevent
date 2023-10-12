@@ -58,37 +58,37 @@ class AnnotationProject(BaseModel):
 
     Attributes
     ----------
-    id : UUID, optional
+    uuid
         A unique identifier automatically generated for the annotation project.
         This identifier distinguishes the project from others, enabling
         seamless referencing and management. It is a crucial component for
         ensuring data integrity and traceability in the annotation process.
-    name : str
+    name
         The name of the annotation project, providing a distinctive and
         informative label for the project. The project name acts as a reference
         point for researchers and annotators, facilitating easy identification
         and communication.
-    description : str , optional
+    description
         A detailed description outlining the objectives, scope, and specific
         characteristics of the annotation project. This description offers
         context to researchers, annotators, and other stakeholders involved in
         the project, providing a clear understanding of the project's goals and
         objectives.
-    tasks : List[AnnotationTask], optional
+    tasks
         A list of `AnnotationTask` instances representing individual annotation
         tasks within the project. Each task corresponds to a specific audio
         clip and contains detailed annotations. Annotation tasks are the
         fundamental units of annotation within the project, providing a
         structured approach to organizing annotation efforts and ensuring
         completeness in the annotation process.
-    instructions:  str, optional
+    instructions
         Clear and precise instructions provided to annotators, guiding them
         through the annotation process. These instructions ensure uniformity in
         annotations and assist annotators in understanding the project's
         objectives and requirements. Well-defined instructions are essential
         for consistency and accuracy in the annotations, fostering reliable and
         high-quality annotated data.
-    tags : List[Tag]
+    tags
         A list of `Tag` instances representing categories associated with
         annotations within the annotation project. These tags serve as the
         ontology of the annotation project, defining specific entities or
@@ -100,7 +100,7 @@ class AnnotationProject(BaseModel):
         annotation process.
     """
 
-    id: UUID = Field(default_factory=uuid4, repr=False)
+    uuid: UUID = Field(default_factory=uuid4, repr=False)
     name: str
     description: Optional[str] = Field(default=None, repr=False)
     tasks: List[AnnotationTask] = Field(default_factory=list, repr=False)

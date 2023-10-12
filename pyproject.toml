@@ -3,7 +3,7 @@ name = "soundevent"
 version = "0.7.0"
 description = "soundevent is an open-source Python package for the computational biocoustic community, providing standardized tools for sound event analysis and data management."
 authors = [
-  { name = "Santiago Martinez", email = "santiago.balvanera.20@ucl.ac.uk" },
+    { name = "Santiago Martinez", email = "santiago.balvanera.20@ucl.ac.uk" },
 ]
 dependencies = ["pydantic>=2.0"]
 requires-python = ">=3.8"
@@ -13,16 +13,45 @@ license = { text = "MIT" }
 [project.optional-dependencies]
 plot = ["matplotlib>=3.7.3"]
 audio = [
-  "scipy>=1.6.1",
-  "xarray>=0.20.2",
-  "cython>=0.29.36",
-  "pysoundfile>=0.9.0.post1",
+    "scipy>=1.6.1",
+    "xarray>=0.20.2",
+    "cython>=0.29.36",
+    "pysoundfile>=0.9.0.post1",
 ]
+evaluation = ["scikit-learn>=1.3.1"]
 geometry = ["shapely>=2.0.1"]
 
 [build-system]
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
+
+
+[tool.pdm]
+[tool.pdm.dev-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "coverage[toml]>=7.3.2",
+    "black>=23.3.0",
+    "mypy>=1.4.1",
+    "pytest-coverage>=0.0",
+    "mkdocs>=1.2.4",
+    "importlib-metadata>=4.3",
+    "ruff>=0.0.276",
+    "mkdocs-material>=9.1.18",
+    "isort>=5.11.5",
+    "mkdocstrings[python]>=0.22.0",
+    "tox>=4.6.3",
+    "hypothesis>=6.79.4",
+    "mkdocs-gallery>=0.7.8",
+    "memory-profiler>=0.61.0",
+    "pytest-watch>=4.2.0",
+    "pytest-testmon>=2.0.12",
+]
+
+[tool.docformatter]
+style = "numpy"
+wrap-summaries = 79
+wrap-descriptions = 79
 
 [tool.black]
 line-length = 79
@@ -35,6 +64,8 @@ verboseOutput = true
 
 [tool.pydocstyle]
 convention = "numpy"
+match = "(?!test_).*\\.py"
+match_dir = "(?!tests).*"
 
 [tool.isort]
 profile = "black"
@@ -42,27 +73,7 @@ profile = "black"
 [tool.mypy]
 ignore_missing_imports = true
 
-[tool.pdm]
-[tool.pdm.dev-dependencies]
-dev = [
-  "pytest>=7.4.0",
-  "coverage>=7.2.7",
-  "black>=23.3.0",
-  "mypy>=1.4.1",
-  "pytest-coverage>=0.0",
-  "mkdocs>=1.2.4",
-  "importlib-metadata>=4.3",
-  "ruff>=0.0.276",
-  "mkdocs-material>=9.1.18",
-  "isort>=5.11.5",
-  "mkdocstrings[python]>=0.22.0",
-  "tox>=4.6.3",
-  "hypothesis>=6.79.4",
-  "mkdocs-gallery>=0.7.8",
-  "memory-profiler>=0.61.0",
-]
-
-[tool.docformatter]
-style = "numpy"
-wrap-summaries = 79
-wrap-descriptions = 79
+[tool.coverage.run]
+branch = true
+source = ["src/soundevent"]
+command_line = "-m pytest"

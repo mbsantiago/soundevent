@@ -124,7 +124,7 @@ def load_recording(recording: Recording) -> xr.DataArray:
             "channel": range(data.shape[1]),
         },
         attrs={
-            "recording_id": recording.id,
+            "recording_id": recording.uuid,
             "time_units": "seconds",
             "time_expansion": recording.time_expansion,
             "samplerate": recording.samplerate,
@@ -181,7 +181,7 @@ def load_clip(clip: Clip) -> xr.DataArray:
             "channel": range(data.shape[1]),
         },
         attrs={
-            "recording_id": recording.id,
+            "recording_id": recording.uuid,
             "time_units": "seconds",
             "time_expansion": recording.time_expansion,
             "samplerate": recording.samplerate,

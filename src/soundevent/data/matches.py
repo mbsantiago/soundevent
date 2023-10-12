@@ -35,10 +35,13 @@ relationships between sound events from different sources, allowing for
 comparative studies and insights in bioacoustic research.
 """
 
-from typing import Optional
-from uuid import UUID
+from typing import Optional, Sequence
 
 from pydantic import BaseModel, Field, model_validator
+
+from soundevent.data.annotations import Annotation
+from soundevent.data.predicted_sound_events import PredictedSoundEvent
+from soundevent.data.features import Feature
 
 
 class Match(BaseModel):
@@ -54,26 +57,36 @@ class Match(BaseModel):
     Attributes
     ----------
     source
-        The unique identifier of the source sound event that has been matched.
-        If no match is found for a target event, this attribute remains null.
+        The predicted sound event that was matched from the source
+        model run.
     target
-        The unique identifier of the target sound event that has been matched
-        with the source event. If no match is found for a source event, this
-        attribute remains null.
+        The annotation that was matched from the target evaluation set.
     affinity
-        The affinity score quantifying the degree of similarity between the
-        matched source and target sound events. Affinity scores range from 0.0
-        (no similarity) to 1.0 (perfect match). Researchers can use this score
-        to evaluate the strength and quality of the match.
+        The affinity score quantifying the degree of geometric similarity
+        between the matched source and target sound events. Affinity
+        scores range from 0.0 (no similarity) to 1.0 (perfect match).
+        Researchers can use this score to evaluate the strength and
+        quality of the match.
+    score
+        The score of the matched sound event. This score is typically used to
+        evaluate the quality of the matched sound event. For example, the score
+        could represent the probability of the sound event, or the confidence
+        of the model in predicting the sound event.
+    metrics
+        A list of metrics that were computed for the matched sound event. These
+        metrics can be used to evaluate the quality of the matched sound event,
+        in addition to the affinity and score.
     """
 
-    source: Optional[UUID] = None
-    target: Optional[UUID] = None
+    source: Optional[PredictedSoundEvent] = None
+    target: Optional[Annotation] = None
     affinity: float = Field(default=0.0, ge=0.0, le=1.0)
+    score: Optional[float] = Field(default=None, ge=0.0, le=1.0)
+    metrics: Sequence[Feature] = Field(default_factory=list)
 
     @model_validator(mode="before")
-    def validate_match(cls, values):
+    def _validate_match(cls, values):
         """Validate the match."""
-        if values["source"] is None and values["target"] is None:
+        if values.get("source") is None and values.get("target") is None:
             raise ValueError("Match cannot be between two null objects.")
         return values

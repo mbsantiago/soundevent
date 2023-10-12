@@ -1,37 +1,11 @@
-"""Data classes for working with sound events.
-
-The `soundevent.data` module contains a collection of data classes specifically
-designed for working with sound events in the field of bioacoustic research.
-These data classes are built using pydantic, a library that offers robust
-validation and typing support.
-
-## Purpose and Functionality
-
-The primary objective of the `soundevent.data` module is to provide clearly
-defined and standardized objects that facilitate the handling and manipulation
-of sound events. These objects are designed to be reusable and serve as
-building blocks for constructing complex analysis pipelines and workflows
-within the bioacoustic software community.
-
-## Key Features
-
-* Validation: The data classes in this module enforce data validation, ensuring
-that the input adheres to the defined structure and constraints. This helps
-maintain data integrity and reliability throughout the analysis process.
-
-* Typing Support: The data classes incorporate type annotations, enabling
-developers to leverage the benefits of static typing. Clear and consistent
-typing promotes code clarity, readability, and facilitates integration with
-other libraries and tools.
-
-By utilizing the data classes provided in the `soundevent.data` module,
-researchers and developers can work with well-defined and validated objects,
-fostering reproducibility and efficient collaboration in bioacoustic research
-endeavors.
-"""
+"""Data Module."""
 
 from soundevent.data.annotation_projects import AnnotationProject
-from soundevent.data.annotation_tasks import AnnotationTask, StatusBadge, TaskState
+from soundevent.data.annotation_tasks import (
+    AnnotationTask,
+    StatusBadge,
+    TaskState,
+)
 from soundevent.data.annotations import Annotation
 from soundevent.data.clips import Clip
 from soundevent.data.dataset import Dataset
@@ -39,7 +13,7 @@ from soundevent.data.evaluated_example import EvaluatedExample
 from soundevent.data.evaluation import Evaluation
 from soundevent.data.evaluation_example import EvaluationExample
 from soundevent.data.evaluation_set import EvaluationSet, EvaluationTask
-from soundevent.data.features import Feature
+from soundevent.data.features import Feature, find_feature
 from soundevent.data.geometries import (
     MAX_FREQUENCY,
     BoundingBox,
@@ -63,10 +37,10 @@ from soundevent.data.notes import Note
 from soundevent.data.predicted_sound_events import PredictedSoundEvent
 from soundevent.data.predicted_tags import PredictedTag
 from soundevent.data.processed_clip import ProcessedClip
-from soundevent.data.recordings import Recording
+from soundevent.data.recordings import PathLike, Recording
 from soundevent.data.sequences import Sequence
 from soundevent.data.sound_events import SoundEvent
-from soundevent.data.tags import Tag
+from soundevent.data.tags import Tag, find_tag
 
 __all__ = [
     "Annotation",
@@ -106,5 +80,8 @@ __all__ = [
     "Time",
     "TimeInterval",
     "TimeStamp",
+    "find_feature",
+    "find_tag",
     "geometry_validate",
+    "PathLike",
 ]

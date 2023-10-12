@@ -34,7 +34,7 @@ enriched with tags and/or features associated with each predicted sound event.
 These annotations and additional information provide more detailed insights
 into the predicted events and aid in subsequent analysis and interpretation.
 """
-from typing import List
+from typing import Sequence
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
@@ -78,9 +78,9 @@ class ProcessedClip(BaseModel):
 
     uuid: UUID = Field(default_factory=uuid4, repr=False)
     clip: Clip
-    sound_events: List[PredictedSoundEvent] = Field(default_factory=list)
-    tags: List[PredictedTag] = Field(default_factory=list)
-    features: List[Feature] = Field(default_factory=list)
+    sound_events: Sequence[PredictedSoundEvent] = Field(default_factory=list)
+    tags: Sequence[PredictedTag] = Field(default_factory=list)
+    features: Sequence[Feature] = Field(default_factory=list)
 
     def __hash__(self):
         """Hash function for the processed clip."""

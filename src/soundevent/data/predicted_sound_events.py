@@ -61,7 +61,7 @@ class PredictedSoundEvent(BaseModel):
 
     Attributes
     ----------
-    id
+    uuid
         A unique identifier for the prediction, automatically generated upon
         creation. This identifier distinguishes each prediction, facilitating
         reference and management.
@@ -88,7 +88,7 @@ class PredictedSoundEvent(BaseModel):
         understanding and analysis of the event's acoustic content.
     """
 
-    id: UUID = Field(default_factory=uuid4)
+    uuid: UUID = Field(default_factory=uuid4)
     sound_event: SoundEvent
     score: float = Field(default=1, ge=0, le=1)
     tags: List[PredictedTag] = Field(default_factory=list)
@@ -96,4 +96,4 @@ class PredictedSoundEvent(BaseModel):
 
     def __hash__(self) -> int:
         """Return hash value of the predicted sound event."""
-        return hash(self.id)
+        return hash(self.uuid)

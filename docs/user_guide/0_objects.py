@@ -19,7 +19,8 @@ from soundevent import data
 # within `soundevent`.
 #
 # !!! warning
-#   All the geometry coordinates should be provided in seconds and Hz.
+#
+#     All the geometry coordinates should be provided in seconds and Hz.
 
 # %%
 # ### TimeStamp
@@ -29,7 +30,7 @@ from soundevent import data
 time_stamp = data.TimeStamp(
     coordinates=0.1,
 )
-time_stamp
+print(time_stamp.model_dump_json(indent=2))
 
 # %%
 # ### TimeInterval
@@ -39,7 +40,7 @@ time_stamp
 time_interval = data.TimeInterval(
     coordinates=[0.1, 0.2],
 )
-time_interval
+print(time_interval.model_dump_json(indent=2))
 
 # %%
 # ### Point
@@ -48,7 +49,7 @@ time_interval
 point = data.Point(
     coordinates=[0.1, 2000],
 )
-point
+print(point.model_dump_json(indent=2))
 
 # %%
 # ### BoundingBox
@@ -56,7 +57,7 @@ point
 box = data.BoundingBox(
     coordinates=[0.1, 2000, 0.2, 3000],
 )
-box
+print(box.model_dump_json(indent=2))
 
 # %%
 # A `LineString` is a sequence of points that are connected by a line.
@@ -64,7 +65,7 @@ box
 line = data.LineString(
     coordinates=[[0.1, 2000], [0.2, 4000]],
 )
-line
+print(line.model_dump_json(indent=2))
 
 # %%
 # A `Polygon`
@@ -86,19 +87,4 @@ polygon = data.Polygon(
         ],
     ],
 )
-polygon
-
-
-# %%
-# ## Geometry functions
-#
-# You can buffer geometries in time and frequency.
-
-from soundevent import geometry
-
-buffer = geometry.buffer_geometry(
-    polygon,
-    time_buffer=0.01,
-    freq_buffer=100,
-)
-buffer
+print(polygon.model_dump_json(indent=2))

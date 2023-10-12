@@ -17,6 +17,6 @@ Let's start with the basics, where we will cover essential topics such as:
 * [Loading audio data](2_loading_audio.md) from WAV files using the tools provided by `soundevent`.
 * [Computing spectrograms](3_computing_spectrograms.md) to gain insights into the acoustic characteristics of your data.
 
-!!! note
+???+ info
 
-Stay tuned for future releases of the soundevent package, where we will continue to expand the examples and demonstrate additional bioacoustic analysis techniques. We are committed to providing you with the tools and resources you need for successful bioacoustic research. Enjoy exploring the user guide and happy analyzing!
+    Stay tuned for future releases of the soundevent package, where we will continue to expand the examples and demonstrate additional bioacoustic analysis techniques. We are committed to providing you with the tools and resources you need for successful bioacoustic research. Enjoy exploring the user guide and happy analyzing!

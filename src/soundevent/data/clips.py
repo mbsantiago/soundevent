@@ -106,7 +106,7 @@ class Clip(BaseModel):
     features: List[Feature] = Field(default_factory=list)
 
     @model_validator(mode="before")
-    def validate_times(cls, values):
+    def _validate_times(cls, values):
         """Validate that start_time < end_time."""
         if values["start_time"] > values["end_time"]:
             raise ValueError("start_time must be less than end_time")

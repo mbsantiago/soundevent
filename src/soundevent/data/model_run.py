@@ -38,7 +38,7 @@ import datetime
 from typing import List
 from uuid import UUID, uuid4
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from soundevent.data.processed_clip import ProcessedClip
 
@@ -78,3 +78,5 @@ class ModelRun(BaseModel):
     created_on: datetime.datetime = Field(
         default_factory=datetime.datetime.now
     )
+
+    model_config = ConfigDict(protected_namespaces=())

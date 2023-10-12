@@ -41,36 +41,40 @@ characteristics across a collection of sound events, and
 conducting statistical analyses on the annotated dataset.
 """
 
+from typing import Optional, Sequence
+
 from pydantic import BaseModel
 
 __all__ = [
     "Feature",
+    "find_feature",
 ]
 
 
 class Feature(BaseModel):
     """Feature Class.
 
-    Features are numerical values associated with sound events, clips, and recordings,
-    providing additional information and metadata that enrich the objects they are
-    attached to. These numerical descriptors play a crucial role in searching,
-    organizing, and analyzing bioacoustic data, enabling detailed insights into
-    characteristics of the audio data.
+    Features are numerical values associated with sound events, clips, and
+    recordings, providing additional information and metadata that enrich the
+    objects they are attached to. These numerical descriptors play a crucial
+    role in searching, organizing, and analyzing bioacoustic data, enabling
+    detailed insights into characteristics of the audio data.
 
     Attributes
     ----------
     name : str
-        The name of the feature, describing the specific characteristic it represents.
-        Features can encompass various aspects, such as duration, bandwidth, or
-        specific properties extracted using advanced machine learning models. The
-        name provides a clear identifier for the feature, aiding in its interpretation
-        and application.
+        The name of the feature, describing the specific characteristic it
+        represents. Features can encompass various aspects, such as duration,
+        bandwidth, or specific properties extracted using advanced machine
+        learning models. The name provides a clear identifier for the feature,
+        aiding in its interpretation and application.
     value : float
         The numeric value quantifying the feature. This value represents the
         characteristic described by the feature's name. For instance, a feature
-        describing signal-to-noise ratio would have a corresponding numeric value
-        indicating the ratio. Numeric values allow for precise comparison,
-        classification, and analysis of the associated characteristics.
+        describing signal-to-noise ratio would have a corresponding numeric
+        value indicating the ratio. Numeric values allow for precise
+        comparison, classification, and analysis of the associated
+        characteristics.
     """
 
     name: str
@@ -79,3 +83,43 @@ class Feature(BaseModel):
     def __hash__(self):
         """Hash the Feature object."""
         return hash((self.name, self.value))
+
+
+def find_feature(
+    features: Sequence[Feature],
+    name: str,
+    default: Optional[Feature] = None,
+) -> Optional[Feature]:
+    """Find a feature by its name.
+
+    This function searches for a feature with the given name within the
+    provided sequence of features. If the feature is found, its corresponding
+    Feature object is returned. If not found, and a default Feature object is
+    provided, the default feature is returned. If neither the feature is found
+    nor a default feature is provided, None is returned.
+
+    Parameters
+    ----------
+    features
+        The sequence of Feature objects to search within.
+    name
+        The name of the feature to search for.
+    default
+        The default Feature object to return if the feature is not found.
+        Defaults to None.
+
+    Returns
+    -------
+    feature: Optional[Feature]
+        The Feature object if found, or the default Feature object if provided.
+        Returns None if the feature is not found and no default is provided.
+
+    Notes
+    -----
+    If there are multiple features with the same name, the first one is
+    returned.
+    """
+    return next(
+        (f for f in features if f.name == name),
+        default,
+    )

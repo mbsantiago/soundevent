@@ -45,7 +45,6 @@ completed annotations. Utilizing the `AnnotationTask` class facilitates
 effective management and processing of annotation tasks, ultimately
 enabling comprehensive analysis of audio recordings in bioacoustic
 research projects.
-
 """
 import datetime
 from enum import Enum
@@ -59,59 +58,106 @@ from soundevent.data.clips import Clip
 from soundevent.data.notes import Note
 from soundevent.data.tags import Tag
 
+__all__ = [
+    "AnnotationTask",
+    "TaskState",
+    "StatusBadge",
+]
 
-class TaskState(Enum):
-    """Task state."""
+
+class TaskState(str, Enum):
+    """Task State Enumeration.
+
+    The TaskState enum represents the different states an annotation task can
+    be in during its lifecycle. These states provide clear insights into the
+    progress of the annotation process, helping users understand the current
+    stage of the task.
+
+    Attributes
+    ----------
+    assigned
+        The task has been assigned to an annotator for completion.
+    completed
+        The task has been successfully completed by the annotator.
+    verified
+        The completed task has been reviewed and verified by a designated
+        reviewer.
+    rejected
+        The task has been reviewed and rejected by the reviewer, indicating
+        issues that need to be addressed.
+    """
 
     assigned = "assigned"
-    """Task has been assigned to an annotator."""
-
     completed = "completed"
-    """Task has been completed by an annotator."""
-
     verified = "verified"
-    """Task has been verified by a reviewer."""
-
     rejected = "rejected"
-    """Task has been rejected by a reviewer."""
 
 
 class StatusBadge(BaseModel):
-    """Annotation Status Badge."""
+    """Annotation Status Badge Class.
+
+    The StatusBadge class represents an indicator of the current state of an
+    annotation task. It includes information such as the task state, the
+    responsible user, and the creation timestamp.
+
+    Attributes
+    ----------
+    state
+        The TaskState enum indicating the current state of the annotation task.
+    user
+        Optional field specifying the user responsible for this status badge.
+    created_at
+        The date and time when the status badge was created, providing a
+        historical record of the badge's creation time.
+    """
 
     state: TaskState
-    """State of the annotation task."""
-
     user: Optional[str] = None
-    """User who is responsible for this status badge."""
-
     created_at: datetime.datetime = Field(
         default_factory=datetime.datetime.now
     )
-    """Date and time when the status badge was created."""
 
 
 class AnnotationTask(BaseModel):
-    """Annotation task."""
+    """Annotation Task Class.
 
-    id: UUID = Field(default_factory=uuid4)
-    """Unique identifier for the annotation task."""
+    The AnnotationTask class encapsulates the essential components of an
+    annotation task in the context of bioacoustic research. Annotation tasks
+    are fundamental to the process of analyzing audio clips, as they involve
+    annotators marking sound events, adding notes, and attaching tags for
+    further interpretation.
 
+    Attributes
+    ----------
+    uuid
+        A unique identifier for the annotation task, ensuring traceability and
+        uniqueness.
+    clip
+        The audio clip being annotated, providing the context for the
+        annotations.
+    annotations
+        A list of Annotation objects, representing the marked sound events
+        within the annotated clip. These annotations serve as the primary
+        output of the annotation task.
+    notes : List[Note]
+        A list of Note objects, containing additional textual information and
+        context provided by annotators during the annotation process.
+    tags
+        A list of Tag objects, reflecting user-provided labels or categories
+        associated with the annotated clip. Tags offer a high-level overview of
+        the content.
+    status_badges
+        A list of StatusBadge objects, indicating the current status or
+        progress of the annotation task, such as completion or pending review.
+    """
+
+    uuid: UUID = Field(default_factory=uuid4)
     clip: Clip
-    """The annotated clip."""
-
     annotations: List[Annotation] = Field(default_factory=list)
-    """List of annotations in the created during the annotation task."""
-
     notes: List[Note] = Field(default_factory=list)
-    """Notes associated with the annotation task."""
-
     tags: List[Tag] = Field(default_factory=list)
-    """User provided tags to the annotated clip."""
-
     status_badges: List[StatusBadge] = Field(default_factory=list)
-    """Status badges for the annotation task."""
 
     def __hash__(self):
         """Compute the hash value for the annotation task."""
-        return hash(self.id)
+        return hash(self.uuid)

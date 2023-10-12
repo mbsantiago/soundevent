@@ -90,7 +90,7 @@ def test_saved_annotation_project_has_correct_info(
 
     # Assert
     recovered = json.loads(path.read_text("utf-8"))
-    assert recovered["info"]["uuid"] == str(annotation_project.id)
+    assert recovered["info"]["uuid"] == str(annotation_project.uuid)
     assert recovered["info"]["name"] == "test_project"
     assert recovered["info"]["description"] == "test_description"
     assert recovered["info"]["instructions"] == "test_instructions"

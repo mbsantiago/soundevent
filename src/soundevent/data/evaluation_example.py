@@ -7,7 +7,7 @@ evaluation purposes. These examples serve as the fundamental units for
 evaluating machine learning models in bioacoustic analysis.
 """
 
-from typing import List
+from typing import Sequence
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
@@ -57,5 +57,5 @@ class EvaluationExample(BaseModel):
 
     uuid: UUID = Field(default_factory=uuid4)
     clip: Clip
-    tags: List[Tag] = Field(default_factory=list)
-    annotations: List[Annotation] = Field(default_factory=list)
+    tags: Sequence[Tag] = Field(default_factory=list)
+    annotations: Sequence[Annotation] = Field(default_factory=list)

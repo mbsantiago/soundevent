@@ -1,10 +1,11 @@
 """Submodule of io module containing type definitions."""
-import os
 import sys
-from typing import Generic, Optional, TypeVar, Union
+from typing import Generic, Optional, TypeVar
+
+from soundevent.data.recordings import PathLike
 
 if sys.version_info < (3, 8):
-    from typing_extensions import Protocol
+    from typing_extensions import Protocol  # pragma: no cover
 else:
     from typing import Protocol
 
@@ -13,8 +14,6 @@ __all__ = [
     "Saver",
     "Loader",
 ]
-
-PathLike = Union[str, os.PathLike]
 
 
 D = TypeVar("D", contravariant=True)
@@ -31,7 +30,7 @@ class Saver(Protocol, Generic[D]):
         audio_dir: Optional[PathLike] = None,
     ) -> None:
         """Save object to path."""
-        ...
+        ...  # pragma: no cover
 
 
 class Loader(Protocol, Generic[T]):
@@ -43,4 +42,4 @@ class Loader(Protocol, Generic[T]):
         audio_dir: Optional[PathLike] = None,
     ) -> T:
         """Load object from path."""
-        ...
+        ...  # pragma: no cover

@@ -25,10 +25,9 @@ risk of errors and inconsistencies.
 
 """
 import datetime
-import os
 import sys
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Dict, List, Optional, Tuple
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
@@ -141,7 +140,7 @@ class RecordingObject(BaseModel):
 
         recordings[recording] = cls(
             id=len(recordings),
-            uuid=recording.id,
+            uuid=recording.uuid,
             path=path,
             duration=recording.duration,
             channels=recording.channels,
@@ -173,7 +172,7 @@ class RecordingObject(BaseModel):
             path = audio_dir / path
 
         return data.Recording(
-            id=self.uuid or uuid4(),
+            uuid=self.uuid or uuid4(),
             path=path,
             duration=self.duration,
             channels=self.channels,
@@ -481,7 +480,7 @@ class AnnotationObject(BaseModel):
             ).id,
             notes=annotation.notes if annotation.notes else None,
             tags=tag_ids if tag_ids else None,
-            uuid=annotation.id,
+            uuid=annotation.uuid,
             created_by=annotation.created_by,
             created_on=annotation.created_on,
         )
@@ -499,7 +498,7 @@ class AnnotationObject(BaseModel):
             )
 
         return data.Annotation(
-            id=self.uuid or uuid4(),
+            uuid=self.uuid or uuid4(),
             sound_event=sound_events[self.sound_event],
             notes=self.notes if self.notes else [],
             tags=[tags[tag_id] for tag_id in (self.tags or [])],
@@ -557,7 +556,7 @@ class AnnotationTaskObject(BaseModel):
 
         tasks[task] = cls(
             id=len(tasks),
-            uuid=task.id,
+            uuid=task.uuid,
             clip=ClipObject.from_clip(
                 task.clip,
                 clips=clips,
@@ -583,7 +582,7 @@ class AnnotationTaskObject(BaseModel):
             raise ValueError(f"Clip with ID {self.clip} not found.")
 
         return data.AnnotationTask(
-            id=self.uuid or uuid4(),
+            uuid=self.uuid or uuid4(),
             clip=clips[self.clip],
             annotations=[
                 annotations[annotation_id]
@@ -596,7 +595,8 @@ class AnnotationTaskObject(BaseModel):
 
 
 class AnnotationProjectInfo(BaseModel):
-    """Schema definition for an annotation project info object in AOEF format."""
+    """Schema definition for an annotation project info object in AOEF
+    format."""
 
     uuid: UUID
 
@@ -614,12 +614,13 @@ class AnnotationProjectInfo(BaseModel):
         project: data.AnnotationProject,
         date_created: Optional[datetime.datetime] = None,
     ) -> Self:
-        """Convert an annotation project to an annotation project info object."""
+        """Convert an annotation project to an annotation project info
+        object."""
         if date_created is None:
             date_created = datetime.datetime.now()
 
         return cls(
-            uuid=project.id,
+            uuid=project.uuid,
             name=project.name,
             description=project.description,
             date_created=date_created,
@@ -738,7 +739,7 @@ class AnnotationProjectObject(BaseModel):
             )
 
         return data.AnnotationProject(
-            id=self.info.uuid,
+            uuid=self.info.uuid,
             name=self.info.name,
             description=self.info.description,
             instructions=self.info.instructions,
@@ -769,7 +770,8 @@ class PredictedSoundEventObject(BaseModel):
         tags: Dict[data.Tag, TagObject],
         audio_dir: Optional[Path] = None,
     ) -> Self:
-        """Convert a predicted sound event to a predicted sound event object."""
+        """Convert a predicted sound event to a predicted sound event
+        object."""
         if predicted_sound_event in predicted_sound_events:
             return predicted_sound_events[predicted_sound_event]
 
@@ -780,7 +782,7 @@ class PredictedSoundEventObject(BaseModel):
 
         predicted_sound_events[predicted_sound_event] = cls(
             id=len(predicted_sound_events),
-            uuid=predicted_sound_event.id,
+            uuid=predicted_sound_event.uuid,
             sound_event=SoundEventObject.from_sound_event(
                 predicted_sound_event.sound_event,
                 sound_events=sound_events,
@@ -805,7 +807,8 @@ class PredictedSoundEventObject(BaseModel):
         sound_events: Dict[int, data.SoundEvent],
         tags: Dict[int, data.Tag],
     ) -> data.PredictedSoundEvent:
-        """Convert a predicted sound event object to a predicted sound event."""
+        """Convert a predicted sound event object to a predicted sound
+        event."""
         if self.sound_event not in sound_events:
             raise ValueError(
                 f"Sound event with ID {self.sound_event} not found "
@@ -813,7 +816,7 @@ class PredictedSoundEventObject(BaseModel):
             )
 
         return data.PredictedSoundEvent(
-            id=self.uuid,
+            uuid=self.uuid,
             sound_event=sound_events[self.sound_event],
             score=self.score,
             tags=[
@@ -1086,7 +1089,7 @@ class ModelRunObject(BaseModel):
         )
 
 
-def is_json(path: Union[str, os.PathLike]) -> bool:
+def is_json(path: data.PathLike) -> bool:
     """Check if a file is a JSON file."""
     path = Path(path)
     return path.suffix == ".json"
