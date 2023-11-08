@@ -55,8 +55,8 @@ def test_raises_validation_error_if_repeated_target_match(
             ),
             prediction=data.ProcessedClip(clip=clip),
             matches=[
-                data.Match(target=annotation.uuid),
-                data.Match(target=annotation.uuid),
+                data.Match(target=annotation),
+                data.Match(target=annotation),
             ],
         )
 
@@ -90,8 +90,8 @@ def test_raises_validation_error_if_repeated_source_match(
                 sound_events=[predicted_sound_event],
             ),
             matches=[
-                data.Match(source=predicted_sound_event.uuid),
-                data.Match(source=predicted_sound_event.uuid),
+                data.Match(source=predicted_sound_event),
+                data.Match(source=predicted_sound_event),
             ],
         )
 
@@ -114,7 +114,7 @@ def test_raises_validation_error_if_missing_source_annotation(
 
 def test_raises_validation_error_if_unexpected_match_object(
     clip: data.Clip,
-    annotation: data.Annotation,
+    predicted_sound_event: data.PredictedSoundEvent,
 ):
     """Test that we raise an error if the target is missing."""
     with pytest.raises(ValidationError):
@@ -122,7 +122,7 @@ def test_raises_validation_error_if_unexpected_match_object(
             example=data.EvaluationExample(clip=clip),
             prediction=data.ProcessedClip(clip=clip),
             matches=[
-                data.Match(source=annotation.uuid),
+                data.Match(source=predicted_sound_event),
             ],
         )
 
@@ -144,7 +144,8 @@ def test_can_create_evaluated_example_with_matches(
         ),
         matches=[
             data.Match(
-                source=predicted_sound_event.uuid, target=annotation.uuid
+                source=predicted_sound_event,
+                target=annotation,
             ),
         ],
     )

@@ -17,11 +17,13 @@ __all__ = [
     "sound_event_classification",
 ]
 
-SOUNDEVENT_METRICS = (metrics.true_class_probability,)
+SOUNDEVENT_METRICS: Sequence[metrics.Metric] = (
+    metrics.true_class_probability,
+)
 
-EXAMPLE_METRICS = ()
+EXAMPLE_METRICS: Sequence[metrics.Metric] = ()
 
-RUN_METRICS = (
+RUN_METRICS: Sequence[metrics.Metric] = (
     metrics.balanced_accuracy,
     metrics.accuracy,
     metrics.top_3_accuracy,
@@ -99,7 +101,8 @@ def _compute_run_metrics(true_classes, predicted_classes_scores):
         data.Feature(
             name=metric.__name__,
             value=metric(
-                y_true=true_classes, y_score=predicted_classes_scores
+                true_classes,
+                predicted_classes_scores,
             ),
         )
         for metric in RUN_METRICS
@@ -138,6 +141,10 @@ def _evaluate_example(
         predicted_classes_scores.append(predicted_classes)
         matches.append(match)
 
+    score = np.mean(
+        [match.score for match in matches if match.score is not None]
+    )
+
     return (
         true_classes,
         predicted_classes_scores,
@@ -154,7 +161,7 @@ def _evaluate_example(
                 )
                 for metric in EXAMPLE_METRICS
             ],
-            score=np.mean([match.score for match in matches if match.score]),
+            score=score,  # type: ignore
             matches=matches,
         ),
     )

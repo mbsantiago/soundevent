@@ -16,12 +16,12 @@ __all__ = [
     "clip_multilabel_classification",
 ]
 
-EXAMPLE_METRICS = (
+EXAMPLE_METRICS: Sequence[metrics.Metric] = (
     metrics.jaccard,
     metrics.average_precision,
 )
 
-RUN_METRICS = (metrics.mean_average_precision,)
+RUN_METRICS: Sequence[metrics.Metric] = (metrics.mean_average_precision,)
 
 
 def clip_multilabel_classification(
@@ -121,7 +121,8 @@ def _compute_run_metrics(
         data.Feature(
             name=metric.__name__,
             value=metric(
-                y_true=true_classes, y_score=predicted_classes_scores
+                true_classes,
+                predicted_classes_scores,
             ),
         )
         for metric in RUN_METRICS
