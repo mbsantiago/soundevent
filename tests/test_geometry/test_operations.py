@@ -1,6 +1,6 @@
 """Test Suite for geometric operations."""
-from typing import List
 import math
+from typing import List
 
 import pytest
 
@@ -71,7 +71,7 @@ def test_buffer_geometry_fails_with_unexpected_geometry():
 
     class UnexpectedGeometry(BaseGeometry):
         coordinates: List[float]
-        type: str = "unexpected"
+        type: str = "unexpected"  # type: ignore
 
     geom = UnexpectedGeometry(coordinates=[0, 1])
 

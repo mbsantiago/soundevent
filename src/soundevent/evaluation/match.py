@@ -53,13 +53,13 @@ def match_geometries(
     # Select the matches that maximize the total affinity.
     matches = _select_matches(cost_matrix)
 
-    for index1, index2 in matches:
-        affinity = 0
-        if index1 is not None or index2 is not None:
-            # If the source or target index is None, the affinity is 0.
-            affinity = float(cost_matrix[index1, index2])
+    for match1, match2 in matches:
+        affinity = 0.0
+        if match1 is not None or match2 is not None:
+            # If the source or target match is None, the affinity is 0.
+            affinity = float(cost_matrix[match1, match2])
 
-        yield index1, index2, affinity
+        yield match1, match2, affinity
 
 
 def _select_matches(

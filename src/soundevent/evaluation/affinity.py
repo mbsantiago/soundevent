@@ -2,7 +2,11 @@
 
 
 from soundevent import data
-from soundevent.geometry import buffer_geometry, compute_bounds, geometry_to_shapely
+from soundevent.geometry import (
+    buffer_geometry,
+    compute_bounds,
+    geometry_to_shapely,
+)
 
 __all__ = [
     "compute_affinity",
@@ -10,17 +14,17 @@ __all__ = [
 
 
 TIME_GEOMETRY_TYPES = {
-    data.TimeStamp.type,
-    data.TimeInterval.type,
+    data.TimeStamp.geom_type(),
+    data.TimeInterval.geom_type(),
 }
 
 
 BUFFER_GEOMETRY_TYPES = {
-    data.TimeStamp.type,
-    data.Point.type,
-    data.MultiPoint.type,
-    data.LineString.type,
-    data.MultiLineString.type,
+    data.TimeStamp.geom_type(),
+    data.Point.geom_type(),
+    data.MultiPoint.geom_type(),
+    data.LineString.geom_type(),
+    data.MultiLineString.geom_type(),
 }
 
 
@@ -78,7 +82,7 @@ def compute_affinity(
     ...     time_buffer=0.02,
     ...     freq_buffer=150,
     ... )
-    >>> print(affinity)
+    >>> affinity
     0.75
     """
 
