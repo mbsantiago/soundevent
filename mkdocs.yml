@@ -5,6 +5,7 @@ nav:
   - Data: data.md
   - User Guide: generated/gallery
   - Reference:
+      - introduction: reference/introduction.md
       - data: reference/data.md
       - io: reference/io.md
       - audio: reference/audio.md
