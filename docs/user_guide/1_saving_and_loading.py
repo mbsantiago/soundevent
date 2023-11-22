@@ -44,7 +44,7 @@ print(json.dumps(dataset_contents, indent=2))
 
 from soundevent import io
 
-dataset = io.load_dataset(dataset_path)
+dataset = io.load(dataset_path)
 print(repr(dataset))
 
 # %%
@@ -63,7 +63,7 @@ print(f"Recording tags: {recording.tags}")
 # the dataset in **AOEF** format, ensuring compatibility and easy sharing with
 # other researchers.
 
-io.save_dataset(dataset, dataset_path)
+io.save(dataset, dataset_path)
 
 # %%
 # ## Annotation Projects
@@ -89,14 +89,14 @@ print(json.dumps(annotation_contents, indent=2))
 # function can be used to load the annotations into Python and obtain an
 # [`AnnotationProject`](../../data.md#annotation_projects) object directly.
 
-nips4b_sample = io.load_annotation_project(annotation_path)
+nips4b_sample = io.load(annotation_path, type="annotation_set")
 print(repr(nips4b_sample))
 
 # %%
 # This object allows you to access and analyze the annotations, along with
 # their associated objects.
 
-for task in nips4b_sample.tasks:
+for task in nips4b_sample.annotated_clips:
     clip = task.clip
     recording = clip.recording
     print(
@@ -117,7 +117,7 @@ for task in nips4b_sample.tasks:
 # Saving the annotation project is just as straightforward using the
 # [`save_annotation_project`][soundevent.io.save_annotation_project] function:
 
-io.save_annotation_project(nips4b_sample, "nips4b_plus_sample.json")
+io.save(nips4b_sample, "nips4b_plus_sample.json")
 
 # %%
 # ## Model Runs
