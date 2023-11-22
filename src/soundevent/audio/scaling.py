@@ -4,6 +4,12 @@ import librosa
 import numpy as np
 import xarray as xr
 
+__all__ = [
+    "clamp_amplitude",
+    "scale_amplitude",
+    "pcen",
+]
+
 
 def clamp_amplitude(
     spec: xr.DataArray,
@@ -29,7 +35,7 @@ def clamp_amplitude(
     DataArray
         Clamped spectrogram image.
     """
-    scale = spec.attrs.get("scale", "amplitue")
+    scale = spec.attrs.get("scale", "amplitude")
 
     if scale == "amplitude":
         min_dB = librosa.db_to_amplitude(min_dB)  # type: ignore
@@ -53,7 +59,7 @@ def clamp_amplitude(
     )
 
 
-def scale_spectrogram(
+def scale_amplitude(
     spec: xr.DataArray,
     scale: str,
 ) -> xr.DataArray:

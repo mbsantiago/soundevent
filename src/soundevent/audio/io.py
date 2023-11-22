@@ -138,6 +138,7 @@ def load_recording(
         },
         attrs={
             "recording_id": recording.uuid,
+            "path": recording.path,
             "time_units": "seconds",
             "time_expansion": recording.time_expansion,
             "samplerate": recording.samplerate,
@@ -206,6 +207,8 @@ def load_clip(
         },
         attrs={
             "recording_id": recording.uuid,
+            "clip_id": clip.uuid,
+            "path": recording.path,
             "time_units": "seconds",
             "time_expansion": recording.time_expansion,
             "samplerate": recording.samplerate,

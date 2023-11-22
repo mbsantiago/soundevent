@@ -5,6 +5,7 @@ from .filter import filter_audio
 from .io import load_clip, load_recording
 from .media_info import MediaInfo, compute_md5_checksum, get_media_info
 from .resample import resample_audio
+from .scaling import clamp_amplitude, pcen, scale_amplitude
 from .spectrograms import compute_spectrogram
 
 __all__ = [
@@ -17,4 +18,7 @@ __all__ = [
     "is_audio_file",
     "resample_audio",
     "filter_audio",
+    "scale_amplitude",
+    "clamp_amplitude",
+    "pcen",
 ]
