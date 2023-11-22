@@ -2,11 +2,10 @@
 # It is not intended for manual editing.
 
 [metadata]
-groups = ["default", "dev", "plot", "audio", "evaluation", "geometry"]
-cross_platform = true
-static_urls = false
-lock_version = "4.3"
-content_hash = "sha256:ab12f13654d08957630f407c8f1f9d771f9947380702051098b66f2541b1f707"
+groups = ["default", "dev", "plot", "audio", "evaluation", "geometry", "docs"]
+strategy = ["cross_platform"]
+lock_version = "4.4"
+content_hash = "sha256:a3d5b8a4b8c9710e789de1c100ccf433751bb09a7cb2652ea1ea39d9b8b05793"
 
 [[package]]
 name = "annotated-types"
@@ -553,11 +552,35 @@ files = [
 ]
 
 [[package]]
+name = "dnspython"
+version = "2.4.2"
+requires_python = ">=3.8,<4.0"
+summary = "DNS toolkit"
+files = [
+    {file = "dnspython-2.4.2-py3-none-any.whl", hash = "sha256:57c6fbaaeaaf39c891292012060beb141791735dbb4004798328fc2c467402d8"},
+    {file = "dnspython-2.4.2.tar.gz", hash = "sha256:8dcfae8c7460a2f84b4072e26f1c9f4101ca20c071649cb7c34e8b6a93d58984"},
+]
+
+[[package]]
 name = "docopt"
 version = "0.6.2"
 summary = "Pythonic argument parser, that will make you smile"
 files = [
     {file = "docopt-0.6.2.tar.gz", hash = "sha256:49b3a825280bd66b3aa83585ef59c4a8c82f2c8a522dbe754a8bc8d08c85c491"},
+]
+
+[[package]]
+name = "email-validator"
+version = "2.1.0.post1"
+requires_python = ">=3.8"
+summary = "A robust email address syntax and deliverability validation library."
+dependencies = [
+    "dnspython>=2.0.0",
+    "idna>=2.0.0",
+]
+files = [
+    {file = "email_validator-2.1.0.post1-py3-none-any.whl", hash = "sha256:c973053efbeddfef924dc0bd93f6e77a1ea7ee0fce935aea7103c7a3d6d2d637"},
+    {file = "email_validator-2.1.0.post1.tar.gz", hash = "sha256:a4b0bd1cf55f073b924258d19321b1f3aa74b4b5a71a42c305575dba920e1a44"},
 ]
 
 [[package]]

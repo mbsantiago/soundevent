@@ -5,7 +5,10 @@ description = "soundevent is an open-source Python package for the computational
 authors = [
   { name = "Santiago Martinez", email = "santiago.balvanera.20@ucl.ac.uk" },
 ]
-dependencies = ["pydantic>=2.0"]
+dependencies = [
+    "pydantic>=2.0",
+    "email-validator>=2.1.0.post1",
+]
 requires-python = ">=3.8"
 readme = "README.md"
 license = { text = "MIT" }
@@ -26,6 +29,8 @@ all = [
     "soundevent[audio]",
     "soundevent[evaluation]",
     "soundevent[geometry]",
+]
+docs = [
 ]
 
 
@@ -63,6 +68,9 @@ wrap-descriptions = 79
 
 [tool.black]
 line-length = 79
+
+[tool.pytest.ini_options]
+addopts = "-vv"
 
 [tool.pyright]
 venvPath = "."
