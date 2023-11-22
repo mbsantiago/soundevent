@@ -10,7 +10,7 @@ from soundevent.evaluation.encoding import (
     multilabel_encoding,
     prediction_encoding,
 )
-from soundevent.evaluation.tasks.common import iterate_over_valid_examples
+from soundevent.evaluation.tasks.common import iterate_over_valid_clips
 
 __all__ = [
     "clip_multilabel_classification",
@@ -25,95 +25,75 @@ RUN_METRICS: Sequence[metrics.Metric] = (metrics.mean_average_precision,)
 
 
 def clip_multilabel_classification(
-    model_run: data.ModelRun,
-    evaluation_set: data.EvaluationSet,
+    prediction_set: data.PredictionSet,
+    annotation_set: data.AnnotationSet,
+    tags: Sequence[data.Tag],
 ) -> data.Evaluation:
-    """Evaluate clip multilabel classification.
+    # TODO: Add docstring
 
-    Parameters
-    ----------
-    model_run : data.ModelRun
-        The model run to be evaluated.
-    evaluation_set : data.EvaluationSet
-        The evaluation set containing clips and associated tags.
-
-    Returns
-    -------
-    data.Evaluation
-        An object containing evaluation results, including evaluated examples
-        and computed metrics.
-    """
-    _validate_evaluation_task(evaluation_set.task)
-
-    encoder = create_tag_encoder(evaluation_set.tags)
+    encoder = create_tag_encoder(tags)
 
     (
-        evaluated_examples,
+        evaluated_clips,
         true_classes,
         predicted_classes_scores,
-    ) = _evaluate_all_examples(model_run, evaluation_set, encoder)
+    ) = _evaluate_clips(prediction_set, annotation_set, encoder)
 
-    evaluation_metrics = _compute_run_metrics(
+    evaluation_metrics = _compute_overall_metrics(
         true_classes,
         predicted_classes_scores,
     )
 
-    score = _compute_run_score(evaluated_examples)
+    score = _compute_overall_score(evaluated_clips)
 
     return data.Evaluation(
-        model_run=model_run,
-        evaluation_set=evaluation_set,
-        evaluated_examples=evaluated_examples,
+        prediction_set=prediction_set,
+        annotation_set=annotation_set,
+        evaluation_task="clip_multilabel_classification",
+        evaluated_clips=evaluated_clips,
         metrics=evaluation_metrics,
         score=score,
     )
 
 
-def _validate_evaluation_task(task: data.EvaluationTask):
-    """Validate if the evaluation task is for clip classification."""
-    if task != data.EvaluationTask.CLIP_MULTILABEL_CLASSIFICATION:
-        raise ValueError(
-            f"Invalid evaluation task {task} for clip multilabel "
-            "classification evaluation"
-        )
-
-
-def _evaluate_all_examples(
-    model_run: data.ModelRun,
-    evaluation_set: data.EvaluationSet,
+def _evaluate_clips(
+    prediction_set: data.PredictionSet,
+    annotation_set: data.AnnotationSet,
     encoder: Encoder,
-) -> Tuple[List[data.EvaluatedExample], np.ndarray, np.ndarray,]:
+) -> Tuple[List[data.ClipEvaluation], np.ndarray, np.ndarray,]:
     """Evaluate all examples in the given model run and evaluation set."""
-    evaluated_examples = []
+    evaluated_clips = []
     true_classes = []
     predicted_classes_scores = []
 
-    for example, processed_clip in iterate_over_valid_examples(
-        model_run=model_run, evaluation_set=evaluation_set
+    for clip_annotations, clip_predictions in iterate_over_valid_clips(
+        prediction_set=prediction_set,
+        annotation_set=annotation_set,
     ):
         (
             true_class,
             predicted_class_scores,
-            evaluated_example,
-        ) = _evaluate_example(
-            example=example,
-            processed_clip=processed_clip,
+            evaluated_clip,
+        ) = _evaluate_clip(
+            clip_annotations=clip_annotations,
+            clip_predictions=clip_predictions,
             encoder=encoder,
         )
 
-        evaluated_examples.append(evaluated_example)
+        evaluated_clips.append(evaluated_clip)
         true_classes.append(true_class)
         predicted_classes_scores.append(predicted_class_scores)
 
     return (
-        evaluated_examples,
+        evaluated_clips,
         np.array(true_classes),
         np.array(predicted_classes_scores),
     )
 
 
-def _compute_run_metrics(
-    true_classes, predicted_classes_scores
+def _compute_overall_metrics(
+    true_classes,
+    predicted_classes_scores,
 ) -> List[data.Feature]:
     """Compute evaluation metrics based on true classes and predicted
     scores."""
@@ -129,20 +109,19 @@ def _compute_run_metrics(
     ]
 
 
-def _evaluate_example(
-    example: data.EvaluationExample,
-    processed_clip: data.ProcessedClip,
+def _evaluate_clip(
+    clip_annotations: data.ClipAnnotations,
+    clip_predictions: data.ClipPredictions,
     encoder: Encoder,
-):
-    """Evaluate a single example.
+) -> Tuple[np.ndarray, np.ndarray, data.ClipEvaluation]:
+    """Evaluate a single clip.
 
     Parameters
     ----------
-    example
-        The evaluation example to evaluate.
-    processed_clip
-        The clip that was processed by the model and contains the predictions
-        for the evaluation example.
+    clip_annotations
+        The annotations of the clip to evaluate.
+    clip_predictions
+        The predictions of the clip to evaluate.
     encoder
         The encoder used to encode the tags into integer encoded classes.
 
@@ -152,20 +131,20 @@ def _evaluate_example(
         The true class of the example.
     predicted_class_scores
         The predicted class scores of the example.
-    evaluated
+    evaluated_clip
         The evaluated example.
     """
     true_class = multilabel_encoding(
-        tags=example.tags,
+        tags=clip_annotations.tags,
         encoder=encoder,
     )
     predicted_class_scores = prediction_encoding(
-        tags=processed_clip.tags,
+        tags=clip_predictions.tags,
         encoder=encoder,
     )
-    evaluated = data.EvaluatedExample(
-        example=example,
-        prediction=processed_clip,
+    evaluated_clip = data.ClipEvaluation(
+        annotations=clip_annotations,
+        predictions=clip_predictions,
         metrics=[
             data.Feature(
                 name=metric.__name__,
@@ -178,11 +157,11 @@ def _evaluate_example(
             predicted_class_scores,
         ),
     )
-    return true_class, predicted_class_scores, evaluated
+    return true_class, predicted_class_scores, evaluated_clip
 
 
-def _compute_run_score(
-    evaluated_examples: Sequence[data.EvaluatedExample],
+def _compute_overall_score(
+    evaluated_examples: Sequence[data.ClipEvaluation],
 ) -> float:
     valid_scores = [
         example.score

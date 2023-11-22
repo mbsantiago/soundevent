@@ -11,7 +11,7 @@ from soundevent.evaluation.encoding import (
     create_tag_encoder,
     prediction_encoding,
 )
-from soundevent.evaluation.tasks.common import iterate_over_valid_examples
+from soundevent.evaluation.tasks.common import iterate_over_valid_clips
 
 __all__ = [
     "sound_event_classification",
@@ -31,70 +31,64 @@ RUN_METRICS: Sequence[metrics.Metric] = (
 
 
 def sound_event_classification(
-    model_run: data.ModelRun,
-    evaluation_set: data.EvaluationSet,
+    prediction_set: data.PredictionSet,
+    annotation_set: data.AnnotationSet,
+    tags: Sequence[data.Tag],
 ) -> data.Evaluation:
-    _validate_evaluation_task(evaluation_set.task)
-
-    encoder = create_tag_encoder(evaluation_set.tags)
+    # TODO: Add docstring
+    encoder = create_tag_encoder(tags)
 
     (
-        evaluated_examples,
+        evaluated_clips,
         true_classes,
         predicted_classes_scores,
-    ) = _evaluate_all_examples(model_run, evaluation_set, encoder)
+    ) = _evaluate_clips(prediction_set, annotation_set, encoder)
 
-    evaluation_metrics = _compute_run_metrics(
+    evaluation_metrics = _compute_overall_metrics(
         true_classes,
         predicted_classes_scores,
     )
 
-    score = _compute_run_score(evaluated_examples)
+    score = _compute_overall_score(evaluated_clips)
 
     return data.Evaluation(
-        model_run=model_run,
-        evaluation_set=evaluation_set,
-        evaluated_examples=evaluated_examples,
+        prediction_set=prediction_set,
+        annotation_set=annotation_set,
+        evaluation_task="sound_event_classification",
+        evaluated_clips=evaluated_clips,
         metrics=evaluation_metrics,
         score=score,
     )
 
 
-def _validate_evaluation_task(task: data.EvaluationTask):
-    if task != data.EvaluationTask.SOUND_EVENT_CLASSIFICATION:
-        raise ValueError(
-            f"Invalid evaluation task {task} for sound event "
-            "classification evaluation"
-        )
-
-
-def _evaluate_all_examples(
-    model_run: data.ModelRun,
-    evaluation_set: data.EvaluationSet,
+def _evaluate_clips(
+    prediction_set: data.PredictionSet,
+    annotation_set: data.AnnotationSet,
     encoder: Encoder,
 ):
     """Evaluate all examples in the given model run and evaluation set."""
-    evaluated_examples = []
+    evaluated_clips = []
     true_classes = []
     predicted_classes_scores = []
 
-    for example, processed_clip in iterate_over_valid_examples(
-        model_run=model_run, evaluation_set=evaluation_set
+    for clip_annotations, clip_predictions in iterate_over_valid_clips(
+        prediction_set=prediction_set,
+        annotation_set=annotation_set,
     ):
-        true_class, predicted_classes, evaluated_example = _evaluate_example(
-            example=example,
-            processed_clip=processed_clip,
+        true_class, predicted_classes, evaluated_clip = _evaluate_clip(
+            clip_annotations=clip_annotations,
+            clip_predictions=clip_predictions,
             encoder=encoder,
         )
 
         true_classes.extend(true_class)
         predicted_classes_scores.extend(predicted_classes)
-        evaluated_examples.append(evaluated_example)
+        evaluated_clips.append(evaluated_clip)
 
-    return evaluated_examples, true_classes, np.array(predicted_classes_scores)
+    return evaluated_clips, true_classes, np.array(predicted_classes_scores)
 
 
-def _compute_run_metrics(true_classes, predicted_classes_scores):
+def _compute_overall_metrics(true_classes, predicted_classes_scores):
     """Compute evaluation metrics based on true classes and predicted
     scores."""
     evaluation_metrics = [
@@ -110,30 +104,30 @@ def _compute_run_metrics(true_classes, predicted_classes_scores):
     return evaluation_metrics
 
 
-def _evaluate_example(
-    example: data.EvaluationExample,
-    processed_clip: data.ProcessedClip,
+def _evaluate_clip(
+    clip_annotations: data.ClipAnnotations,
+    clip_predictions: data.ClipPredictions,
     encoder: Encoder,
-) -> Tuple[List[Optional[int]], List[np.ndarray], data.EvaluatedExample]:
+) -> Tuple[List[Optional[int]], List[np.ndarray], data.ClipEvaluation]:
     true_classes: List[Optional[int]] = []
     predicted_classes_scores: List[np.ndarray] = []
     matches: List[data.Match] = []
 
     _valid_sound_events = {
         annotation.sound_event.uuid: annotation
-        for annotation in example.annotations
+        for annotation in clip_annotations.annotations
     }
 
-    for predicted_sound_event in processed_clip.sound_events:
-        if predicted_sound_event.sound_event.uuid not in _valid_sound_events:
+    for sound_event_prediction in clip_predictions.sound_events:
+        if sound_event_prediction.sound_event.uuid not in _valid_sound_events:
             continue
 
         annotation = _valid_sound_events[
-            predicted_sound_event.sound_event.uuid
+            sound_event_prediction.sound_event.uuid
         ]
         true_class, predicted_classes, match = _evaluate_sound_event(
-            predicted_sound_event=predicted_sound_event,
-            annotation=annotation,
+            sound_event_prediction=sound_event_prediction,
+            sound_event_annotation=annotation,
             encoder=encoder,
         )
 
@@ -148,9 +142,9 @@ def _evaluate_example(
     return (
         true_classes,
         predicted_classes_scores,
-        data.EvaluatedExample(
-            example=example,
-            prediction=processed_clip,
+        data.ClipEvaluation(
+            annotations=clip_annotations,
+            predictions=clip_predictions,
             metrics=[
                 data.Feature(
                     name=metric.__name__,
@@ -168,21 +162,21 @@ def _evaluate_example(
 
 
 def _evaluate_sound_event(
-    predicted_sound_event: data.PredictedSoundEvent,
-    annotation: data.Annotation,
+    sound_event_prediction: data.SoundEventPrediction,
+    sound_event_annotation: data.SoundEventAnnotation,
     encoder: Encoder,
 ) -> Tuple[Optional[int], np.ndarray, data.Match]:
     true_class = classification_encoding(
-        tags=annotation.tags,
+        tags=sound_event_annotation.tags,
         encoder=encoder,
     )
     predicted_class_scores = prediction_encoding(
-        tags=predicted_sound_event.tags,
+        tags=sound_event_prediction.tags,
         encoder=encoder,
     )
     match = data.Match(
-        source=predicted_sound_event,
-        target=annotation,
+        source=sound_event_prediction,
+        target=sound_event_annotation,
         affinity=1,
         score=metrics.classification_score(true_class, predicted_class_scores),
         metrics=[
@@ -196,12 +190,12 @@ def _evaluate_sound_event(
     return true_class, predicted_class_scores, match
 
 
-def _compute_run_score(
-    evaluated_examples: Sequence[data.EvaluatedExample],
+def _compute_overall_score(
+    evaluated_clip: Sequence[data.ClipEvaluation],
 ) -> float:
     non_none_scores = [
         example.score
-        for example in evaluated_examples
+        for example in evaluated_clip
         if example.score is not None
     ]
     return float(np.mean(non_none_scores)) if non_none_scores else 0.0
