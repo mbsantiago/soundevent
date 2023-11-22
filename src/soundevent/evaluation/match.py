@@ -1,5 +1,6 @@
 """Algorithms for matching geometries."""
 
+from itertools import product
 from typing import Iterable, Optional, Sequence, Tuple
 
 import numpy as np
@@ -16,6 +17,8 @@ __all__ = [
 def match_geometries(
     source: Sequence[Geometry],
     target: Sequence[Geometry],
+    time_buffer: float = 0.01,
+    freq_buffer: float = 100,
 ) -> Iterable[Tuple[Optional[int], Optional[int], float]]:
     """Match geometries.
 
@@ -44,18 +47,22 @@ def match_geometries(
 
     # Compute the affinity between all pairs of geometries.
     cost_matrix = np.zeros(shape=(len(source), len(target)))
-    for index1, geometry1 in enumerate(source):
-        for index2, geometry2 in enumerate(target):
-            cost_matrix[index1, index2] = compute_affinity(
-                geometry1, geometry2
-            )
+    for (index1, geometry1), (index2, geometry2) in product(
+        enumerate(source), enumerate(target)
+    ):
+        cost_matrix[index1, index2] = compute_affinity(
+            geometry1,
+            geometry2,
+            time_buffer=time_buffer,
+            freq_buffer=freq_buffer,
+        )
 
     # Select the matches that maximize the total affinity.
     matches = _select_matches(cost_matrix)
 
     for match1, match2 in matches:
         affinity = 0.0
-        if match1 is not None or match2 is not None:
+        if match1 is not None and match2 is not None:
             # If the source or target match is None, the affinity is 0.
             affinity = float(cost_matrix[match1, match2])
 

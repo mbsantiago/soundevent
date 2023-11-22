@@ -82,6 +82,16 @@ def load(
     ...
 
 
+@overload
+def load(
+    path: data.PathLike,
+    audio_dir: Optional[data.PathLike] = None,
+    format: Optional[str] = "aoef",
+    type: Literal["recording_set"] = "recording_set",
+) -> data.RecordingSet:
+    ...
+
+
 def load(
     path: data.PathLike,
     audio_dir: Optional[data.PathLike] = None,

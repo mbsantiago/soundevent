@@ -1,5 +1,6 @@
 """Functions for manipulating the amplitude scale of spectrograms."""
 
+from typing import Literal
 import librosa
 import numpy as np
 import xarray as xr
@@ -9,6 +10,9 @@ __all__ = [
     "scale_amplitude",
     "pcen",
 ]
+
+
+AMPLITUDE_SCALES = Literal["amplitude", "power", "dB"]
 
 
 def clamp_amplitude(
@@ -61,7 +65,7 @@ def clamp_amplitude(
 
 def scale_amplitude(
     spec: xr.DataArray,
-    scale: str,
+    scale: AMPLITUDE_SCALES,
 ) -> xr.DataArray:
     """Scale spectrogram amplitude values.
 
@@ -83,8 +87,11 @@ def scale_amplitude(
     if scale == "dB":
         data = librosa.amplitude_to_db(data, amin=1e-10)  # type: ignore
 
-    if scale == "power":
+    elif scale == "power":
         data = data**2
+
+    elif scale != "amplitude":
+        raise ValueError(f"Invalid scale: {scale}")
 
     return xr.DataArray(
         data,

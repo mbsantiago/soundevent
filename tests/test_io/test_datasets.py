@@ -7,6 +7,22 @@ from pathlib import Path
 from soundevent import data, io
 
 
+def test_dataset_is_recovered(
+    dataset: data.Dataset,
+    audio_dir: Path,
+):
+    """Test that the dataset is recovered."""
+    # Arrange
+    path = audio_dir / "dataset.json"
+
+    # Act
+    io.save(dataset, path, audio_dir=audio_dir)
+    recovered = io.load(path, audio_dir=audio_dir)
+
+    # Assert
+    assert recovered == dataset
+
+
 def test_save_empty_dataset_to_aoef_format(tmp_path: Path):
     """Test saving a dataset to the AOEF format."""
     # Arrange

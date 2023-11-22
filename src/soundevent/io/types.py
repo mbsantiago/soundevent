@@ -26,6 +26,7 @@ DataType = Literal[
     "model_run",
     "evaluation_set",
     "evaluation",
+    "recording_set",
 ]
 
 DataObject = Union[
@@ -36,6 +37,7 @@ DataObject = Union[
     data.ModelRun,
     data.EvaluationSet,
     data.Evaluation,
+    data.RecordingSet,
 ]
 
 D = TypeVar("D", contravariant=True, bound=DataObject)

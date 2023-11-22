@@ -7,6 +7,22 @@ from pathlib import Path
 from soundevent import data, io
 
 
+def test_model_run_is_recovered(
+    model_run: data.ModelRun,
+    audio_dir: Path,
+) -> None:
+    """Test that the model run is recovered."""
+    # Arrange
+    path = audio_dir / "model_run.json"
+
+    # Act
+    io.save(model_run, path, audio_dir=audio_dir)
+    recovered = io.load(path, audio_dir=audio_dir)
+
+    # Assert
+    assert recovered == model_run
+
+
 def test_saved_model_run_is_saved_to_json_file(
     tmp_path: Path,
 ) -> None:

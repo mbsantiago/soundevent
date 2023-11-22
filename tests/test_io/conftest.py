@@ -1,0 +1,291 @@
+import datetime
+from pathlib import Path
+from typing import Callable, List
+
+import pytest
+
+from soundevent import data
+
+
+@pytest.fixture
+def tag(random_tags: Callable[[int], List[data.Tag]]) -> data.Tag:
+    return random_tags(1)[0]
+
+
+@pytest.fixture
+def tags(random_tags: Callable[[int], List[data.Tag]]) -> List[data.Tag]:
+    return random_tags(3)
+
+
+@pytest.fixture
+def recording(
+    random_wav: Callable[[], Path],
+    user: data.User,
+    tags: List[data.Tag],
+    note: data.Note,
+) -> data.Recording:
+    path = random_wav()
+    return data.Recording.from_file(
+        path,
+        date=datetime.date(2020, 1, 1),
+        time=datetime.time(12, 0, 0),
+        latitude=1.0,
+        longitude=2.0,
+        owners=[user],
+        rights="CC BY 4.0",
+        tags=tags,
+        notes=[note],
+        features=[
+            data.Feature(name="MaxAmp", value=23.3),
+        ],
+    )
+
+
+@pytest.fixture
+def recording_set(recording: data.Recording) -> data.RecordingSet:
+    return data.RecordingSet(recordings=[recording])
+
+
+@pytest.fixture
+def dataset(
+    recording: data.Recording,
+) -> data.Dataset:
+    return data.Dataset(
+        name="Test Dataset",
+        description="Test Dataset Description",
+        recordings=[recording],
+    )
+
+
+@pytest.fixture
+def clip(
+    recording: data.Recording,
+) -> data.Clip:
+    return data.Clip(
+        recording=recording,
+        start_time=0.0,
+        end_time=1.0,
+        features=[
+            data.Feature(name="MaxAmp", value=23.3),
+            data.Feature(name="SNR", value=8),
+        ],
+    )
+
+
+@pytest.fixture
+def sound_event_annotation(
+    tags: List[data.Tag],
+    sound_event: data.SoundEvent,
+    note: data.Note,
+    user: data.User,
+):
+    return data.SoundEventAnnotation(
+        sound_event=sound_event,
+        notes=[note],
+        created_by=user,
+        tags=tags,
+    )
+
+
+@pytest.fixture
+def clip_annotations(
+    tags: List[data.Tag],
+    clip: data.Clip,
+    note: data.Note,
+    sound_event_annotation: data.SoundEventAnnotation,
+):
+    return data.ClipAnnotations(
+        clip=clip,
+        notes=[note],
+        tags=tags[:2],
+        annotations=[sound_event_annotation],
+    )
+
+
+@pytest.fixture
+def annotation_task(
+    clip: data.Clip,
+    user: data.User,
+):
+    return data.AnnotationTask(
+        clip=clip,
+        status_badges=[
+            data.StatusBadge(
+                state=data.AnnotationState.completed,
+                owner=user,
+            )
+        ],
+    )
+
+
+@pytest.fixture
+def annotation_set(clip_annotations: data.ClipAnnotations):
+    return data.AnnotationSet(clip_annotations=[clip_annotations])
+
+
+@pytest.fixture
+def annotation_project(
+    annotation_task: data.AnnotationTask,
+    clip_annotations: data.ClipAnnotations,
+    tags: List[data.Tag],
+):
+    return data.AnnotationProject(
+        name="Test Project",
+        description="Test Project Description",
+        annotation_tags=tags,
+        clip_annotations=[clip_annotations],
+        tasks=[annotation_task],
+    )
+
+
+@pytest.fixture
+def evaluation_set(
+    clip_annotations: data.ClipAnnotations,
+    tags: List[data.Tag],
+):
+    return data.EvaluationSet(
+        clip_annotations=[clip_annotations],
+        name="Test Evaluation Set",
+        description="Test Evaluation Set Description",
+        evaluation_tags=tags,
+    )
+
+
+@pytest.fixture
+def predicted_tags(tags: List[data.Tag]) -> List[data.PredictedTag]:
+    return [
+        data.PredictedTag(
+            tag=tags[0],
+            score=0.5,
+        ),
+        data.PredictedTag(
+            tag=tags[1],
+            score=0.3,
+        ),
+        data.PredictedTag(
+            tag=tags[2],
+            score=0.7,
+        ),
+    ]
+
+
+@pytest.fixture
+def sound_event_prediction(
+    sound_event: data.SoundEvent,
+    predicted_tags: List[data.PredictedTag],
+):
+    return data.SoundEventPrediction(
+        sound_event=sound_event,
+        score=0.7,
+        tags=predicted_tags,
+    )
+
+
+@pytest.fixture
+def clip_predictions(
+    clip: data.Clip,
+    sound_event_prediction: data.SoundEventPrediction,
+    predicted_tags: List[data.PredictedTag],
+):
+    return data.ClipPredictions(
+        clip=clip,
+        sound_events=[sound_event_prediction],
+        tags=predicted_tags[1:],
+        features=[
+            data.Feature(name="VGGish1", value=23.3),
+            data.Feature(name="VGGish2", value=-32.7),
+        ],
+    )
+
+
+@pytest.fixture
+def prediction_set(
+    clip_predictions: data.ClipPredictions,
+):
+    return data.PredictionSet(
+        clip_predictions=[clip_predictions],
+    )
+
+
+@pytest.fixture
+def model_run(
+    clip_predictions: data.ClipPredictions,
+) -> data.ModelRun:
+    return data.ModelRun(
+        name="Test Model Run",
+        description="Test Model Run Description",
+        clip_predictions=[clip_predictions],
+        version="1.0.0",
+    )
+
+
+@pytest.fixture
+def match(
+    sound_event_annotation: data.SoundEventAnnotation,
+    sound_event_prediction: data.SoundEventPrediction,
+):
+    return data.Match(
+        target=sound_event_annotation,
+        source=sound_event_prediction,
+        affinity=0.7,
+        score=0.4,
+        metrics=[
+            data.Feature(
+                name="cross_entropy",
+                value=0.5,
+            ),
+        ],
+    )
+
+
+@pytest.fixture
+def clip_evaluation(
+    clip_annotations: data.ClipAnnotations,
+    clip_predictions: data.ClipPredictions,
+    match: data.Match,
+    note: data.Note,
+) -> data.ClipEvaluation:
+    return data.ClipEvaluation(
+        annotations=clip_annotations,
+        predictions=clip_predictions,
+        matches=[match],
+        metrics=[
+            data.Feature(
+                name="Accuracy",
+                value=0.5,
+            ),
+            data.Feature(
+                name="F1",
+                value=0.5,
+            ),
+        ],
+        score=0.5,
+        notes=[note],
+    )
+
+
+@pytest.fixture
+def evaluation(
+    annotation_set: data.AnnotationSet,
+    prediction_set: data.PredictionSet,
+    clip_evaluation: data.ClipEvaluation,
+) -> data.Evaluation:
+    return data.Evaluation(
+        evaluation_task="Classification",
+        annotation_set=annotation_set,
+        prediction_set=prediction_set,
+        metrics=[
+            data.Feature(
+                name="Accuracy",
+                value=0.5,
+            ),
+            data.Feature(
+                name="F1",
+                value=0.5,
+            ),
+        ],
+        evaluated_clips=[
+            clip_evaluation,
+        ],
+        score=0.5,
+    )

@@ -1,6 +1,6 @@
 import datetime
 from typing import Dict, List, Literal, Optional
-from uuid import UUID
+from uuid import UUID, uuid4
 
 from pydantic import BaseModel
 
@@ -10,7 +10,7 @@ from .clip import ClipAdapter, ClipObject
 from .clip_annotations import ClipAnnotationsAdapter, ClipAnnotationsObject
 from .clip_evaluation import ClipEvaluationAdapter, ClipEvaluationObject
 from .clip_predictions import ClipPredictionsAdapter, ClipPredictionsObject
-from .match import MatchAdapter
+from .match import MatchAdapter, MatchObject
 from .note import NoteAdapter
 from .recording import RecordingAdapter, RecordingObject
 from .sound_event import SoundEventAdapter, SoundEventObject
@@ -43,12 +43,17 @@ class EvaluationObject(BaseModel):
     clip_evaluations: Optional[List[ClipEvaluationObject]] = None
     metrics: Optional[Dict[str, float]] = None
     score: Optional[float] = None
+    annotation_set_uuid: Optional[UUID] = None
+    annotation_set_created_on: Optional[datetime.datetime] = None
+    prediction_set_uuid: Optional[UUID] = None
+    prediction_set_created_on: Optional[datetime.datetime] = None
+    matches: Optional[List[MatchObject]] = None
 
 
 class EvaluationAdapter:
     def __init__(
         self,
-        audio_dir: Optional[str] = None,
+        audio_dir: Optional[data.PathLike] = None,
         user_adapter: Optional[UserAdapter] = None,
         tag_adapter: Optional[TagAdapter] = None,
         note_adapter: Optional[NoteAdapter] = None,
@@ -157,6 +162,11 @@ class EvaluationAdapter:
             if obj.metrics
             else None,
             score=obj.score,
+            annotation_set_uuid=obj.annotation_set.uuid,
+            annotation_set_created_on=obj.annotation_set.created_on,
+            prediction_set_uuid=obj.prediction_set.uuid,
+            prediction_set_created_on=obj.prediction_set.created_on,
+            matches=self.match_adapter.values(),
         )
 
     def to_soundevent(
@@ -201,6 +211,9 @@ class EvaluationAdapter:
             for evaluated_clip in obj.clip_predictions or []
         ]
 
+        for match in obj.matches or []:
+            self.match_adapter.to_soundevent(match)
+
         evaluated_clips = [
             self.clip_evaluation_adapter.to_soundevent(clip_evaluation)
             for clip_evaluation in obj.clip_evaluations or []
@@ -212,12 +225,14 @@ class EvaluationAdapter:
             created_on=created_on,
             evaluation_task=obj.evaluation_task,
             annotation_set=data.AnnotationSet(
+                uuid=obj.annotation_set_uuid or uuid4(),
                 clip_annotations=clip_annotations,
-                created_on=created_on,
+                created_on=obj.annotation_set_created_on or created_on,
             ),
             prediction_set=data.PredictionSet(
+                uuid=obj.prediction_set_uuid or uuid4(),
                 clip_predictions=clip_predictions,
-                created_on=created_on,
+                created_on=obj.prediction_set_created_on or created_on,
             ),
             evaluated_clips=evaluated_clips,
             score=obj.score,

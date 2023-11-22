@@ -258,3 +258,72 @@ def test_geometry_validate_fails_with_invalid_geometry():
     obj = {"type": "Point", "coordinates": [0, 1, 2]}
     with pytest.raises(ValueError):
         data.geometry_validate(obj, mode="dict")
+
+
+def test_invalid_time_stamp_fails():
+    """Test that an invalid time stamp fails."""
+    # No negative time
+    with pytest.raises(ValueError):
+        data.TimeStamp(coordinates=-1)
+
+
+def test_invalid_time_interval_fails():
+    """Test that an invalid time interval fails."""
+    # No negative time
+    with pytest.raises(ValueError):
+        data.TimeInterval(coordinates=[-1, 0])
+
+    # No unsorted time
+    with pytest.raises(ValueError):
+        data.TimeInterval(coordinates=[2, 1])
+
+
+def test_invalid_bounding_box_fails():
+    """Test that an invalid bounds fails."""
+
+    # No negative time
+    with pytest.raises(ValueError):
+        data.BoundingBox(coordinates=[-1, 0, 0, 1])
+
+    # No negative frequencies
+    with pytest.raises(ValueError):
+        data.BoundingBox(coordinates=[0, -200, 0, 1])
+
+    with pytest.raises(ValueError):
+        data.BoundingBox(coordinates=[1, 0, 0, 1])
+
+    with pytest.raises(ValueError):
+        data.BoundingBox(coordinates=[0, 1, 1, 0])
+
+    with pytest.raises(ValueError):
+        data.BoundingBox(coordinates=[1, 1, 0, 0])
+
+
+def test_invalid_point():
+    """Test that an invalid point fails."""
+    # No negative time
+    with pytest.raises(ValueError):
+        data.Point(coordinates=[-1, 0])
+
+    # No negative frequencies
+    with pytest.raises(ValueError):
+        data.Point(coordinates=[2, -200])
+
+
+def test_invalid_linestring():
+    """Test that an invalid linestring fails."""
+    # Has to have at least two points
+    with pytest.raises(ValueError):
+        data.LineString(coordinates=[[0, 1]])
+
+    # No negative time
+    with pytest.raises(ValueError):
+        data.LineString(coordinates=[[-1, 0], [0, 1]])
+
+    # No negative frequencies
+    with pytest.raises(ValueError):
+        data.LineString(coordinates=[[0, 1], [2, -200]])
+
+    # Time is not sorted
+    with pytest.raises(ValueError):
+        data.LineString(coordinates=[[0, 1], [2, 1], [1, 1]])

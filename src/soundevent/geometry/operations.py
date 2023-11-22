@@ -222,4 +222,6 @@ def buffer_shapely_geometry(
         data.MAX_FREQUENCY,
     )
     json_data = json.loads(shapely.to_geojson(buffered))
-    return data.Polygon(coordinates=json_data["coordinates"])
+    if json_data["type"] == "Polygon":
+        return data.Polygon(coordinates=json_data["coordinates"])
+    return data.MultiPolygon(coordinates=json_data["coordinates"])

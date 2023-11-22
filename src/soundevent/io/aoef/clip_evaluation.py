@@ -83,15 +83,17 @@ class ClipEvaluationAdapter(
                 f"Clip predictions with ID {obj.predictions} not found."
             )
 
+        matches = [
+            match
+            for match_id in obj.matches or []
+            if (match := self.match_adapter.from_id(match_id)) is not None
+        ]
+
         return data.ClipEvaluation(
             uuid=obj.uuid or uuid4(),
             annotations=annotations,
             predictions=predictions,
-            matches=[
-                match
-                for match_id in obj.matches or []
-                if (match := self.match_adapter.from_id(match_id)) is not None
-            ],
+            matches=matches,
             metrics=[
                 data.Feature(name=name, value=value)
                 for name, value in (obj.metrics or {}).items()
@@ -102,3 +104,6 @@ class ClipEvaluationAdapter(
                 for note in obj.notes or []
             ],
         )
+
+    def to_soundevent(self, obj: ClipEvaluationObject) -> data.ClipEvaluation:
+        return super().to_soundevent(obj)

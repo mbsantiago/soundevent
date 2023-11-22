@@ -9,6 +9,22 @@ from soundevent import data, io
 BASE_DIR = Path(__file__).parent.parent.parent
 
 
+def test_annotation_project_is_recovered(
+    annotation_project: data.AnnotationProject,
+    audio_dir: Path,
+):
+    """Test that the annotation project is recovered."""
+    # Arrange
+    path = audio_dir / "test_project.json"
+
+    # Act
+    io.save(annotation_project, path, audio_dir=audio_dir)
+    recovered = io.load(path, audio_dir=audio_dir)
+
+    # Assert
+    assert recovered == annotation_project
+
+
 def test_saved_annotation_project_is_saved_to_json_file(
     tmp_path: Path,
 ):

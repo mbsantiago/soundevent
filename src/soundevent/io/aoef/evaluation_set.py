@@ -18,7 +18,15 @@ class EvaluationSetAdapter(AnnotationSetAdapter):
     def to_aoef(self, obj: data.EvaluationSet) -> EvaluationSetObject:
         annotation_set = super().to_aoef(obj)
         return EvaluationSetObject(
-            **dict(annotation_set),
+            uuid=annotation_set.uuid,
+            users=self.user_adapter.values(),
+            tags=self.tag_adapter.values(),
+            recordings=self.recording_adapter.values(),
+            clips=self.clip_adapter.values(),
+            sound_events=self.sound_event_adapter.values(),
+            sound_event_annotations=self.sound_event_annotations_adapter.values(),
+            clip_annotations=annotation_set.clip_annotations,
+            created_on=obj.created_on,
             name=obj.name,
             description=obj.description,
             evaluation_tags=[
@@ -31,7 +39,11 @@ class EvaluationSetAdapter(AnnotationSetAdapter):
     def to_soundevent(self, obj: EvaluationSetObject) -> data.EvaluationSet:
         annotation_set = super().to_soundevent(obj)
         return data.EvaluationSet(
-            **dict(annotation_set),
+            **{
+                field: value
+                for field, value in annotation_set
+                if value is not None
+            },
             name=obj.name,
             description=obj.description,
             evaluation_tags=[

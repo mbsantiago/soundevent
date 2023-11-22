@@ -206,6 +206,13 @@ class TimeStamp(BaseGeometry):
         description="The time stamp of the sound event.",
     )
 
+    @field_validator("coordinates")
+    def _positive_times(cls, v: Time) -> Time:
+        """Validate that the time is positive."""
+        if v < 0:
+            raise ValueError("The time must be positive.")
+        return v
+
 
 class TimeInterval(BaseGeometry):
     """TimeInterval Geometry Class.
@@ -261,6 +268,13 @@ class TimeInterval(BaseGeometry):
 
         if v[0] > v[1]:
             raise ValueError("The start time must be before the end time.")
+        return v
+
+    @field_validator("coordinates")
+    def _positive_times(cls, v: List[Time]) -> List[Time]:
+        """Validate that the times are positive."""
+        if any(time < 0 for time in v):
+            raise ValueError("The times must be positive.")
         return v
 
 
