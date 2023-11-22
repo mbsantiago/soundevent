@@ -14,11 +14,12 @@ from soundevent.audio.chunks import parse_into_chunks
 from soundevent.audio.media_info import extract_media_info_from_chunks
 from soundevent.audio.raw import RawData
 from soundevent.data.clips import Clip
-from soundevent.data.recordings import Recording
+from soundevent.data.recordings import PathLike, Recording
 
 __all__ = [
     "load_audio",
     "load_recording",
+    "load_clip",
 ]
 
 PCM_SUBFORMATS_MAPPING: Dict[Tuple[int, int], str] = {
@@ -34,7 +35,7 @@ PCM_SUBFORMATS_MAPPING: Dict[Tuple[int, int], str] = {
 
 
 def load_audio(
-    path: os.PathLike,
+    path: PathLike,
     offset: int = 0,
     samples: Optional[int] = None,
 ) -> Tuple[np.ndarray, int]:
@@ -97,20 +98,32 @@ def load_audio(
         )
 
 
-def load_recording(recording: Recording) -> xr.DataArray:
+def load_recording(
+    recording: Recording,
+    audio_dir: Optional[PathLike] = None,
+) -> xr.DataArray:
     """Load a recording from a file.
 
     Parameters
     ----------
     recording
         The recording to load.
+    audio_dir
+        The directory containing the audio file. If None, the
+        recording path is assumed to be relative to the current
+        working directory or an absolute path.
 
     Returns
     -------
     audio : xr.DataArray
         The loaded recording.
     """
-    data, _ = load_audio(recording.path)
+    path = recording.path
+
+    if audio_dir is not None:
+        path = os.path.join(audio_dir, path)
+
+    data, _ = load_audio(path)
     return xr.DataArray(
         data=data,
         dims=("time", "channel"),
@@ -132,13 +145,20 @@ def load_recording(recording: Recording) -> xr.DataArray:
     )
 
 
-def load_clip(clip: Clip) -> xr.DataArray:
+def load_clip(
+    clip: Clip,
+    audio_dir: Optional[PathLike] = None,
+) -> xr.DataArray:
     """Load a clip from a file.
 
     Parameters
     ----------
     clip
         The clip to load.
+    audio_dir
+        The directory containing the audio file. If None, the
+        recording path is assumed to be relative to the current
+        working directory or an absolute path.
 
     Returns
     -------
@@ -154,8 +174,12 @@ def load_clip(clip: Clip) -> xr.DataArray:
     duration = clip.end_time - clip.start_time
     samples = int(np.ceil(duration * samplerate))
 
+    path = recording.path
+    if audio_dir is not None:
+        path = os.path.join(audio_dir, path)
+
     data, _ = load_audio(
-        recording.path,
+        path,
         offset=offset,
         samples=samples,
     )

@@ -60,6 +60,7 @@ from pydantic import BaseModel, Field
 from soundevent.data.features import Feature
 from soundevent.data.notes import Note
 from soundevent.data.tags import Tag
+from soundevent.data.users import User
 
 __all__ = [
     "Recording",
@@ -136,10 +137,8 @@ class Recording(BaseModel):
     tags: List[Tag] = Field(default_factory=list, repr=False)
     features: List[Feature] = Field(default_factory=list, repr=False)
     notes: List[Note] = Field(default_factory=list, repr=False)
-
-    def __hash__(self):
-        """Hash function."""
-        return hash(self.uuid)
+    owners: List[User] = Field(default_factory=list, repr=False)
+    rights: Optional[str] = None
 
     @classmethod
     def from_file(

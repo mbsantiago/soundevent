@@ -1,23 +1,44 @@
 """Submodule of io module containing type definitions."""
 import sys
-from typing import Generic, Optional, TypeVar
+from typing import Generic, Optional, TypeVar, Union
 
-from soundevent.data.recordings import PathLike
+from soundevent import data
 
 if sys.version_info < (3, 8):
-    from typing_extensions import Protocol  # pragma: no cover
+    from typing_extensions import Literal, Protocol  # pragma: no cover
 else:
-    from typing import Protocol
+    from typing import Literal, Protocol
 
 __all__ = [
-    "PathLike",
     "Saver",
     "Loader",
 ]
 
 
-D = TypeVar("D", contravariant=True)
 T = TypeVar("T", covariant=True)
+
+
+DataType = Literal[
+    "dataset",
+    "annotation_set",
+    "annotation_project",
+    "prediction_set",
+    "model_run",
+    "evaluation_set",
+    "evaluation",
+]
+
+DataObject = Union[
+    data.Dataset,
+    data.AnnotationSet,
+    data.AnnotationProject,
+    data.PredictionSet,
+    data.ModelRun,
+    data.EvaluationSet,
+    data.Evaluation,
+]
+
+D = TypeVar("D", contravariant=True, bound=DataObject)
 
 
 class Saver(Protocol, Generic[D]):
@@ -26,8 +47,8 @@ class Saver(Protocol, Generic[D]):
     def __call__(
         self,
         obj: D,
-        path: PathLike,
-        audio_dir: Optional[PathLike] = None,
+        path: data.PathLike,
+        audio_dir: Optional[data.PathLike] = None,
     ) -> None:
         """Save object to path."""
         ...  # pragma: no cover
@@ -38,8 +59,9 @@ class Loader(Protocol, Generic[T]):
 
     def __call__(
         self,
-        path: PathLike,
-        audio_dir: Optional[PathLike] = None,
+        path: data.PathLike,
+        audio_dir: Optional[data.PathLike] = None,
+        type: Optional[DataType] = None,
     ) -> T:
         """Load object from path."""
         ...  # pragma: no cover

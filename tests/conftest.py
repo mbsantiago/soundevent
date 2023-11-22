@@ -32,7 +32,33 @@ def write_random_wav(
 
 
 @pytest.fixture
-def random_wav(tmp_path: Path):
+def user() -> data.User:
+    """Return a user."""
+    return data.User(
+        name="test_user",
+    )
+
+
+@pytest.fixture
+def note(user: data.User) -> data.Note:
+    """Return a note."""
+    return data.Note(
+        message="test_note",
+        created_by=user,
+    )
+
+
+@pytest.fixture
+def audio_dir(tmp_path: Path) -> Path:
+    """Return a temporary directory for audio files."""
+    audio_dir = tmp_path / "audio"
+    if not audio_dir.exists():
+        audio_dir.mkdir()
+    return audio_dir
+
+
+@pytest.fixture
+def random_wav(audio_dir: Path):
     """Return a factory for random wav files."""
 
     def _random_wav(
@@ -43,7 +69,7 @@ def random_wav(tmp_path: Path):
     ) -> Path:
         """Return a random wav file."""
         if path is None:
-            path = tmp_path / f"{uuid4()}.wav"
+            path = audio_dir / f"{uuid4()}.wav"
         write_random_wav(path, samplerate, duration, channels)
         return path
 
@@ -68,28 +94,35 @@ def clip(recording: data.Recording) -> data.Clip:
 
 
 @pytest.fixture
-def sound_event(recording: data.Recording) -> data.SoundEvent:
-    """Return a random sound event."""
-    return data.SoundEvent(
-        recording=recording,
-        geometry=data.BoundingBox(coordinates=[0.02, 2000, 0.08, 4000]),
-    )
+def bounding_box() -> data.BoundingBox:
+    """Return a bounding box."""
+    return data.BoundingBox(coordinates=[0.0, 0.0, 1.0, 1.0])
 
 
 @pytest.fixture
-def annotation(sound_event: data.SoundEvent) -> data.Annotation:
+def sound_event(
+    bounding_box: data.BoundingBox,
+) -> data.SoundEvent:
+    """Return a sound event."""
+    return data.SoundEvent(geometry=bounding_box)
+
+
+@pytest.fixture
+def sound_event_annotation(
+    sound_event: data.SoundEvent,
+) -> data.SoundEventAnnotation:
     """Return a random annotation."""
-    return data.Annotation(
+    return data.SoundEventAnnotation(
         sound_event=sound_event,
     )
 
 
 @pytest.fixture
-def predicted_sound_event(
+def sound_event_prediction(
     sound_event: data.SoundEvent,
-) -> data.PredictedSoundEvent:
+) -> data.SoundEventPrediction:
     """Return a random predicted sound event."""
-    return data.PredictedSoundEvent(
+    return data.SoundEventPrediction(
         sound_event=sound_event,
         score=0.5,
     )

@@ -1,18 +1,19 @@
 """Data Module."""
 
 from soundevent.data.annotation_projects import AnnotationProject
+from soundevent.data.annotation_sets import AnnotationSet
 from soundevent.data.annotation_tasks import (
+    AnnotationState,
     AnnotationTask,
     StatusBadge,
-    TaskState,
 )
-from soundevent.data.annotations import Annotation
+from soundevent.data.clip_annotations import ClipAnnotations
+from soundevent.data.clip_evaluations import ClipEvaluation
+from soundevent.data.clip_predictions import ClipPredictions
 from soundevent.data.clips import Clip
-from soundevent.data.dataset import Dataset
-from soundevent.data.evaluated_example import EvaluatedExample
-from soundevent.data.evaluation import Evaluation
-from soundevent.data.evaluation_example import EvaluationExample
-from soundevent.data.evaluation_set import EvaluationSet, EvaluationTask
+from soundevent.data.datasets import Dataset
+from soundevent.data.evaluation_sets import EvaluationSet
+from soundevent.data.evaluations import Evaluation
 from soundevent.data.features import Feature, find_feature
 from soundevent.data.geometries import (
     MAX_FREQUENCY,
@@ -32,28 +33,33 @@ from soundevent.data.geometries import (
     geometry_validate,
 )
 from soundevent.data.matches import Match
-from soundevent.data.model_run import ModelRun
+from soundevent.data.model_runs import ModelRun
 from soundevent.data.notes import Note
-from soundevent.data.predicted_sound_events import PredictedSoundEvent
 from soundevent.data.predicted_tags import PredictedTag
-from soundevent.data.processed_clip import ProcessedClip
+from soundevent.data.prediction_sets import PredictionSet
+from soundevent.data.recording_sets import RecordingSet
 from soundevent.data.recordings import PathLike, Recording
 from soundevent.data.sequences import Sequence
+from soundevent.data.sound_event_annotations import SoundEventAnnotation
+from soundevent.data.sound_event_predictions import SoundEventPrediction
 from soundevent.data.sound_events import SoundEvent
 from soundevent.data.tags import Tag, find_tag
+from soundevent.data.users import User
 
 __all__ = [
-    "Annotation",
     "AnnotationProject",
+    "AnnotationSet",
+    "AnnotationState",
     "AnnotationTask",
     "BoundingBox",
     "Clip",
+    "ClipAnnotations",
+    "ClipEvaluation",
+    "ClipEvaluation",
+    "ClipPredictions",
     "Dataset",
-    "EvaluatedExample",
     "Evaluation",
-    "EvaluationExample",
     "EvaluationSet",
-    "EvaluationTask",
     "Feature",
     "Frequency",
     "Geometry",
@@ -66,22 +72,24 @@ __all__ = [
     "MultiPoint",
     "MultiPolygon",
     "Note",
+    "PathLike",
     "Point",
     "Polygon",
-    "PredictedSoundEvent",
     "PredictedTag",
-    "ProcessedClip",
+    "PredictionSet",
     "Recording",
+    "RecordingSet",
     "Sequence",
     "SoundEvent",
+    "SoundEventAnnotation",
+    "SoundEventPrediction",
     "StatusBadge",
     "Tag",
-    "TaskState",
     "Time",
     "TimeInterval",
     "TimeStamp",
+    "User",
     "find_feature",
     "find_tag",
     "geometry_validate",
-    "PathLike",
 ]

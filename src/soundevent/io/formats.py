@@ -1,12 +1,14 @@
 """Storage formats for soundevent objects."""
-from soundevent.io.formats.aoef import is_json
-from soundevent.io.types import PathLike
+from typing import Callable, Dict
+
+from soundevent.data import PathLike
+from soundevent.io.aoef import is_json
 
 __all__ = [
     "infer_format",
 ]
 
-FORMATS = {
+FORMATS: Dict[str, Callable[[PathLike], bool]] = {
     "aoef": is_json,
 }
 
@@ -28,7 +30,6 @@ def infer_format(path: PathLike) -> str:
     ------
     ValueError
         If the format of the file cannot be inferred.
-
     """
     for format_, inferrer in FORMATS.items():
         if inferrer(path):

@@ -36,7 +36,6 @@ flexible and expressive framework to explore and study the intricacies of
 animal communication. The Sequence object, along with its associated tags,
 features, and hierarchical capabilities, provides a powerful tool for
 understanding the rich complexity of vocalization sequences.
-
 """
 from typing import List, Optional
 from uuid import UUID, uuid4
@@ -47,6 +46,8 @@ from soundevent.data.features import Feature
 from soundevent.data.notes import Note
 from soundevent.data.sound_events import SoundEvent
 from soundevent.data.tags import Tag
+
+__all__ = ["Sequence"]
 
 
 class Sequence(BaseModel):
@@ -78,7 +79,7 @@ class Sequence(BaseModel):
     """
 
     uuid: UUID = Field(default_factory=uuid4)
-    sound_event: List[SoundEvent] = Field(default_factory=list)
+    sound_events: List[SoundEvent] = Field(default_factory=list)
     tags: List[Tag] = Field(default_factory=list)
     features: List[Feature] = Field(default_factory=list)
     notes: List[Note] = Field(default_factory=list)

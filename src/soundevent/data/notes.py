@@ -48,6 +48,8 @@ from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
 
+from soundevent.data.users import User
+
 __all__ = ["Note"]
 
 
@@ -83,7 +85,7 @@ class Note(BaseModel):
         set to True, the note signals incomplete or incorrect annotations,
         guiding annotators' attention to specific areas that require further
         review and refinement.
-    created_at
+    created_on
         The date and time when the note was created. This timestamp provides a
         historical record of the note's origin, allowing users to track the
         timeline of annotations and discussions.
@@ -91,9 +93,9 @@ class Note(BaseModel):
 
     uuid: UUID = Field(default_factory=uuid4)
     message: str
-    created_by: Optional[str] = None
+    created_by: Optional[User] = None
     is_issue: bool = False
-    created_at: datetime.datetime = Field(
+    created_on: datetime.datetime = Field(
         default_factory=datetime.datetime.now
     )
 

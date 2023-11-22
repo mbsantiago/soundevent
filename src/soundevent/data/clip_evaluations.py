@@ -7,30 +7,30 @@ the evaluation process, including the original `EvaluationExample`, the model's
 predictions (`ProcessedClip`), matches between predicted and ground truth
 annotations (`Match` instances), and computed evaluation metrics.
 """
-from typing import Optional, Sequence
+from typing import List, Optional, Sequence
+from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field, model_validator
 
-from soundevent.data.evaluation_example import EvaluationExample
+from soundevent.data.clip_annotations import ClipAnnotations
+from soundevent.data.clip_predictions import ClipPredictions
 from soundevent.data.features import Feature
 from soundevent.data.matches import Match
-from soundevent.data.processed_clip import ProcessedClip
+from soundevent.data.notes import Note
 
-__all__ = [
-    "EvaluatedExample",
-]
+__all__ = ["ClipEvaluation"]
 
 
-class EvaluatedExample(BaseModel):
+class ClipEvaluation(BaseModel):
     """Evaluated example model.
 
     Attributes
     ----------
-    example
-        An instance of the `EvaluationExample` class representing the original
-        example used for evaluation. This object contains the audio clip,
-        ground truth annotations, and other relevant information necessary for
-        evaluation.
+    annotations
+        An instance of the `ClipAnnotations` class representing the original
+        annotations for the evaluated example. This object contains the audio
+        clip, ground truth annotations, and other relevant information
+        necessary for evaluation.
     prediction
         An instance of the `ProcessedClip` class representing the model's
         predictions for the given example. This processed clip encapsulates the
@@ -55,21 +55,19 @@ class EvaluatedExample(BaseModel):
         overall score
     """
 
-    example: EvaluationExample
-
-    prediction: ProcessedClip
-
+    uuid: UUID = Field(default_factory=uuid4, repr=False)
+    annotations: ClipAnnotations
+    predictions: ClipPredictions
     matches: Sequence[Match] = Field(default_factory=list)
-
     metrics: Sequence[Feature] = Field(default_factory=list)
-
     score: Optional[float] = Field(default=None, ge=0.0, le=1.0)
+    notes: List[Note] = Field(default_factory=list, repr=False)
 
     @model_validator(mode="after")  # type: ignore
     def _check_clips_match(self):
         """Check that the example and prediction clips are the same."""
-        example = self.example
-        prediction = self.prediction
+        example = self.annotations
+        prediction = self.predictions
         if example.clip.uuid != prediction.clip.uuid:
             raise ValueError("The example and prediction clips do not match.")
         return self
@@ -90,11 +88,11 @@ class EvaluatedExample(BaseModel):
         sound event. This validation is handled by the Match model.
         """
         annotation_sound_events = {
-            annotation.uuid for annotation in self.example.annotations
+            annotation.uuid for annotation in self.annotations.annotations
         }
 
         predicted_sound_events = {
-            prediction.uuid for prediction in self.prediction.sound_events
+            prediction.uuid for prediction in self.predictions.sound_events
         }
 
         match_targets = [

@@ -4,50 +4,9 @@ import datetime
 import json
 from pathlib import Path
 
-import pytest
-
 from soundevent import data, io
 
 BASE_DIR = Path(__file__).parent.parent.parent
-
-
-@pytest.fixture
-def recording(tmp_path: Path) -> data.Recording:
-    """Return a recording."""
-    return data.Recording(
-        path=tmp_path / "test.wav",
-        duration=10.0,
-        samplerate=44100,
-        channels=1,
-    )
-
-
-@pytest.fixture
-def clip(recording: data.Recording) -> data.Clip:
-    """Return a clip."""
-    return data.Clip(
-        recording=recording,
-        start_time=0.0,
-        end_time=10.0,
-    )
-
-
-@pytest.fixture
-def bounding_box() -> data.BoundingBox:
-    """Return a bounding box."""
-    return data.BoundingBox(coordinates=[0.0, 0.0, 1.0, 1.0])
-
-
-@pytest.fixture
-def sound_event(
-    recording: data.Recording,
-    bounding_box: data.BoundingBox,
-) -> data.SoundEvent:
-    """Return a sound event."""
-    return data.SoundEvent(
-        recording=recording,
-        geometry=bounding_box,
-    )
 
 
 def test_saved_annotation_project_is_saved_to_json_file(
@@ -59,7 +18,7 @@ def test_saved_annotation_project_is_saved_to_json_file(
     path = tmp_path / "test_project.json"
 
     # Act
-    io.save_annotation_project(annotation_project, path)
+    io.save(annotation_project, path)
 
     # Assert
     assert path.exists()
@@ -86,15 +45,17 @@ def test_saved_annotation_project_has_correct_info(
     path = tmp_path / "test_project.json"
 
     # Act
-    io.save_annotation_project(annotation_project, path)
+    io.save(annotation_project, path)
 
     # Assert
-    recovered = json.loads(path.read_text("utf-8"))
-    assert recovered["info"]["uuid"] == str(annotation_project.uuid)
-    assert recovered["info"]["name"] == "test_project"
-    assert recovered["info"]["description"] == "test_description"
-    assert recovered["info"]["instructions"] == "test_instructions"
-    assert recovered["info"]["date_created"] == "2023-07-16T00:00:00"
+    doc = json.loads(path.read_text("utf-8"))
+    assert doc["created_on"] == "2023-07-16T00:00:00"
+
+    recovered = doc["data"]
+    assert recovered["uuid"] == str(annotation_project.uuid)
+    assert recovered["name"] == "test_project"
+    assert recovered["description"] == "test_description"
+    assert recovered["instructions"] == "test_instructions"
 
 
 def test_can_recover_empty_project(
@@ -106,8 +67,8 @@ def test_can_recover_empty_project(
     path = tmp_path / "test_project.json"
 
     # Act
-    io.save_annotation_project(annotation_project, path)
-    recovered = io.load_annotation_project(path)
+    io.save(annotation_project, path)
+    recovered = io.load(path)
 
     # Assert
     assert recovered == annotation_project
@@ -121,13 +82,14 @@ def test_can_recover_project_with_empty_task(
     # Arrange
     annotation_project = data.AnnotationProject(
         name="test_project",
+        clip_annotations=[data.ClipAnnotations(clip=clip)],
         tasks=[data.AnnotationTask(clip=clip)],
     )
     path = tmp_path / "test_project.json"
 
     # Act
-    io.save_annotation_project(annotation_project, path)
-    recovered = io.load_annotation_project(path)
+    io.save(annotation_project, path, audio_dir=tmp_path)
+    recovered = io.load(path, audio_dir=tmp_path)
 
     # Assert
     assert recovered == annotation_project
@@ -141,8 +103,8 @@ def test_can_recover_tasks_with_predicted_tags(
     # Arrange
     annotation_project = data.AnnotationProject(
         name="test_project",
-        tasks=[
-            data.AnnotationTask(
+        clip_annotations=[
+            data.ClipAnnotations(
                 clip=clip,
                 tags=[
                     data.Tag(
@@ -152,17 +114,22 @@ def test_can_recover_tasks_with_predicted_tags(
                 ],
             )
         ],
+        tasks=[
+            data.AnnotationTask(
+                clip=clip,
+            )
+        ],
     )
     path = tmp_path / "test_project.json"
 
     # Act
-    io.save_annotation_project(annotation_project, path)
-    recovered = io.load_annotation_project(path)
+    io.save(annotation_project, path)
+    recovered = io.load(path, type="annotation_project")
 
     # Assert
-    assert recovered == annotation_project
-    assert recovered.tasks[0].tags[0].key == "species"
-    assert recovered.tasks[0].tags[0].value == "Myotis lucifugus"
+    assert recovered.model_dump() == annotation_project.model_dump()
+    assert recovered.clip_annotations[0].tags[0].key == "species"
+    assert recovered.clip_annotations[0].tags[0].value == "Myotis lucifugus"
 
 
 def test_can_recover_task_status(
@@ -178,7 +145,7 @@ def test_can_recover_task_status(
                 clip=clip,
                 status_badges=[
                     data.StatusBadge(
-                        state=data.TaskState.completed,
+                        state=data.AnnotationState.completed,
                     )
                 ],
             )
@@ -187,17 +154,20 @@ def test_can_recover_task_status(
     path = tmp_path / "test_project.json"
 
     # Act
-    io.save_annotation_project(annotation_project, path)
-    recovered = io.load_annotation_project(path)
+    io.save(annotation_project, path)
+    recovered = io.load(path, type="annotation_project")
 
     # Assert
     assert recovered == annotation_project
     assert (
-        recovered.tasks[0].status_badges[0].state == data.TaskState.completed
+        recovered.tasks[0].status_badges[0].state
+        == data.AnnotationState.completed
     )
 
 
-def test_can_recover_user_that_completed_task(tmp_path: Path, clip: data.Clip):
+def test_can_recover_user_that_completed_task(
+    tmp_path: Path, clip: data.Clip, user: data.User
+):
     """Test that the user that completed a task can be recovered."""
     # Arrange
     annotation_project = data.AnnotationProject(
@@ -207,8 +177,8 @@ def test_can_recover_user_that_completed_task(tmp_path: Path, clip: data.Clip):
                 clip=clip,
                 status_badges=[
                     data.StatusBadge(
-                        state=data.TaskState.completed,
-                        user="test_user",
+                        state=data.AnnotationState.completed,
+                        owner=user,
                     )
                 ],
             )
@@ -217,38 +187,43 @@ def test_can_recover_user_that_completed_task(tmp_path: Path, clip: data.Clip):
     path = tmp_path / "test_project.json"
 
     # Act
-    io.save_annotation_project(annotation_project, path)
-    recovered = io.load_annotation_project(path)
+    io.save(annotation_project, path)
+    recovered = io.load(path, type="annotation_project")
 
     # Assert
-    assert recovered == annotation_project
+    assert recovered.model_dump() == annotation_project.model_dump()
     badge = recovered.tasks[0].status_badges[0]
-    assert badge.state == data.TaskState.completed
-    assert badge.user == "test_user"
+    assert badge.state == data.AnnotationState.completed
+    assert badge.owner == user
 
 
-def test_can_recover_task_notes(tmp_path: Path, clip: data.Clip):
+def test_can_recover_task_notes(
+    tmp_path: Path,
+    clip: data.Clip,
+    user: data.User,
+):
     """Test that task notes can be recovered."""
     # Arrange
     annotation_project = data.AnnotationProject(
         name="test_project",
-        tasks=[
-            data.AnnotationTask(
+        clip_annotations=[
+            data.ClipAnnotations(
                 clip=clip,
-                notes=[data.Note(message="test note", created_by="test_user")],
+                notes=[data.Note(message="test note", created_by=user)],
             )
         ],
+        tasks=[data.AnnotationTask(clip=clip)],
     )
     path = tmp_path / "test_project.json"
 
     # Act
-    io.save_annotation_project(annotation_project, path)
-    recovered = io.load_annotation_project(path)
+    io.save(annotation_project, path)
+    recovered = io.load(path, type="annotation_project")
 
     # Assert
     assert recovered == annotation_project
-    assert recovered.tasks[0].notes[0].message == "test note"
-    assert recovered.tasks[0].notes[0].created_by == "test_user"
+    assert recovered.clip_annotations[0].notes[0].message == "test note"
+    assert recovered.clip_annotations[0].notes[0].created_by == user
 
 
 def test_can_recover_task_completion_date(tmp_path: Path, clip: data.Clip):
@@ -262,8 +237,8 @@ def test_can_recover_task_completion_date(tmp_path: Path, clip: data.Clip):
                 clip=clip,
                 status_badges=[
                     data.StatusBadge(
-                        state=data.TaskState.completed,
-                        created_at=date,
+                        state=data.AnnotationState.completed,
+                        created_on=date,
                     )
                 ],
             )
@@ -272,50 +247,56 @@ def test_can_recover_task_completion_date(tmp_path: Path, clip: data.Clip):
     path = tmp_path / "test_project.json"
 
     # Act
-    io.save_annotation_project(annotation_project, path)
-    recovered = io.load_annotation_project(path)
+    io.save(annotation_project, path)
+    recovered = io.load(path, type="annotation_project")
 
     # Assert
     assert recovered == annotation_project
     badge = recovered.tasks[0].status_badges[0]
-    assert badge.state == data.TaskState.completed
-    assert badge.created_at == date
+    assert badge.state == data.AnnotationState.completed
+    assert badge.created_on == date
 
 
 def test_can_recover_task_simple_annotation(
     tmp_path: Path,
     clip: data.Clip,
     sound_event: data.SoundEvent,
-    recording: data.Recording,
 ):
     """Test that simple annotations can be recovered."""
     # Arrange
     annotation_project = data.AnnotationProject(
         name="test_project",
-        tasks=[
-            data.AnnotationTask(
+        clip_annotations=[
+            data.ClipAnnotations(
                 clip=clip,
-                annotations=[data.Annotation(sound_event=sound_event)],
+                annotations=[
+                    data.SoundEventAnnotation(sound_event=sound_event)
+                ],
             )
         ],
+        tasks=[data.AnnotationTask(clip=clip)],
     )
     path = tmp_path / "test_project.json"
 
     # Act
-    io.save_annotation_project(annotation_project, path)
-    recovered = io.load_annotation_project(path)
+    io.save(annotation_project, path)
+    recovered = io.load(path, type="annotation_project")
 
     # Assert
     assert recovered == annotation_project
-    assert recovered.tasks[0].annotations[0].sound_event.recording == recording
-    assert recovered.tasks[0].annotations[0].sound_event.geometry is not None
+    assert (
+        recovered.clip_annotations[0].annotations[0].sound_event.geometry
+        is not None
+    )
     assert sound_event.geometry is not None
     assert (
-        recovered.tasks[0].annotations[0].sound_event.geometry.type
+        recovered.clip_annotations[0].annotations[0].sound_event.geometry.type
         == sound_event.geometry.type
     )
     assert (
-        recovered.tasks[0].annotations[0].sound_event.geometry.coordinates
+        recovered.clip_annotations[0]
+        .annotations[0]
+        .sound_event.geometry.coordinates
         == sound_event.geometry.coordinates
     )
 
@@ -329,11 +310,11 @@ def test_can_recover_task_annotation_with_tags(
     # Arrange
     annotation_project = data.AnnotationProject(
         name="test_project",
-        tasks=[
-            data.AnnotationTask(
+        clip_annotations=[
+            data.ClipAnnotations(
                 clip=clip,
                 annotations=[
-                    data.Annotation(
+                    data.SoundEventAnnotation(
                         sound_event=sound_event,
                         tags=[
                             data.Tag(
@@ -345,48 +326,57 @@ def test_can_recover_task_annotation_with_tags(
                 ],
             )
         ],
+        tasks=[data.AnnotationTask(clip=clip)],
     )
     path = tmp_path / "test_project.json"
 
     # Act
-    io.save_annotation_project(annotation_project, path)
-    recovered = io.load_annotation_project(path)
+    io.save(annotation_project, path)
+    recovered = io.load(path, type="annotation_project")
 
     # Assert
     assert recovered == annotation_project
-    assert recovered.tasks[0].annotations[0].tags[0].key == "species"
-    assert recovered.tasks[0].annotations[0].tags[0].value == "test_species"
+    assert (
+        recovered.clip_annotations[0].annotations[0].tags[0].key == "species"
+    )
+    assert (
+        recovered.clip_annotations[0].annotations[0].tags[0].value
+        == "test_species"
+    )
 
 
 def test_can_recover_annotation_creator(
     tmp_path: Path,
     clip: data.Clip,
     sound_event: data.SoundEvent,
+    user: data.User,
 ):
     """Test that annotation creator can be recovered."""
     # Arrange
     annotation_project = data.AnnotationProject(
         name="test_project",
-        tasks=[
-            data.AnnotationTask(
+        clip_annotations=[
+            data.ClipAnnotations(
                 clip=clip,
                 annotations=[
-                    data.Annotation(
-                        sound_event=sound_event, created_by="test_user"
+                    data.SoundEventAnnotation(
+                        sound_event=sound_event,
+                        created_by=user,
                     )
                 ],
             )
         ],
+        tasks=[data.AnnotationTask(clip=clip)],
     )
     path = tmp_path / "test_project.json"
 
     # Act
-    io.save_annotation_project(annotation_project, path)
-    recovered = io.load_annotation_project(path)
+    io.save(annotation_project, path)
+    recovered = io.load(path, type="annotation_project")
 
     # Assert
     assert recovered == annotation_project
-    assert recovered.tasks[0].annotations[0].created_by == "test_user"
+    assert recovered.clip_annotations[0].annotations[0].created_by == user
 
 
 def test_can_recover_annotation_creation_date(
@@ -399,107 +389,72 @@ def test_can_recover_annotation_creation_date(
     date = datetime.datetime(2021, 1, 1, 0, 0, 0)
     annotation_project = data.AnnotationProject(
         name="test_project",
-        tasks=[
-            data.AnnotationTask(
+        clip_annotations=[
+            data.ClipAnnotations(
                 clip=clip,
                 annotations=[
-                    data.Annotation(sound_event=sound_event, created_on=date)
+                    data.SoundEventAnnotation(
+                        sound_event=sound_event, created_on=date
+                    )
                 ],
-            )
+            ),
         ],
+        tasks=[data.AnnotationTask(clip=clip)],
     )
     path = tmp_path / "test_project.json"
 
     # Act
-    io.save_annotation_project(annotation_project, path)
-    recovered = io.load_annotation_project(path)
+    io.save(annotation_project, path)
+    recovered = io.load(path, type="annotation_project")
 
     # Assert
     assert recovered == annotation_project
-    assert recovered.tasks[0].annotations[0].created_on == date
+    assert recovered.clip_annotations[0].annotations[0].created_on == date
 
 
 def test_can_recover_annotation_notes(
     tmp_path: Path,
     clip: data.Clip,
     sound_event: data.SoundEvent,
+    user: data.User,
 ):
     """Test that annotation notes can be recovered."""
     # Arrange
     annotation_project = data.AnnotationProject(
         name="test_project",
-        tasks=[
-            data.AnnotationTask(
+        clip_annotations=[
+            data.ClipAnnotations(
                 clip=clip,
                 annotations=[
-                    data.Annotation(
+                    data.SoundEventAnnotation(
                         sound_event=sound_event,
                         notes=[
                             data.Note(
-                                message="test_note", created_by="test_user"
+                                message="test_note",
+                                created_by=user,
                             )
                         ],
                     )
                 ],
             )
         ],
+        tasks=[data.AnnotationTask(clip=clip)],
     )
     path = tmp_path / "test_project.json"
 
     # Act
-    io.save_annotation_project(annotation_project, path)
-    recovered = io.load_annotation_project(path)
-
-    # Assert
-    assert recovered == annotation_project
-    assert recovered.tasks[0].annotations[0].notes[0].message == "test_note"
-    assert recovered.tasks[0].annotations[0].notes[0].created_by == "test_user"
-
-
-def test_can_recover_sound_event_tags(
-    tmp_path: Path,
-    clip: data.Clip,
-    bounding_box: data.BoundingBox,
-    recording: data.Recording,
-):
-    """Test that sound event tags can be recovered."""
-    # Arrange
-    annotation_project = data.AnnotationProject(
-        name="test_project",
-        tasks=[
-            data.AnnotationTask(
-                clip=clip,
-                annotations=[
-                    data.Annotation(
-                        sound_event=data.SoundEvent(
-                            recording=recording,
-                            geometry=bounding_box,
-                            tags=[
-                                data.Tag(
-                                    key="species",
-                                    value="test_species",
-                                ),
-                            ],
-                        )
-                    )
-                ],
-            )
-        ],
-    )
-    path = tmp_path / "test_project.json"
-
-    # Act
-    io.save_annotation_project(annotation_project, path)
-    recovered = io.load_annotation_project(path)
+    io.save(annotation_project, path)
+    recovered = io.load(path, type="annotation_project")
 
     # Assert
     assert recovered == annotation_project
     assert (
-        recovered.tasks[0].annotations[0].sound_event.tags[0].key == "species"
+        recovered.clip_annotations[0].annotations[0].notes[0].message
+        == "test_note"
     )
     assert (
-        recovered.tasks[0].annotations[0].sound_event.tags[0].value
-        == "test_species"
+        recovered.clip_annotations[0].annotations[0].notes[0].created_by
+        == user
     )
 
 
@@ -507,19 +462,17 @@ def test_can_recover_sound_event_features(
     tmp_path: Path,
     clip: data.Clip,
     bounding_box: data.BoundingBox,
-    recording: data.Recording,
 ):
     """Test that sound event features can be recovered."""
     # Arrange
     annotation_project = data.AnnotationProject(
         name="test_project",
-        tasks=[
-            data.AnnotationTask(
+        clip_annotations=[
+            data.ClipAnnotations(
                 clip=clip,
                 annotations=[
-                    data.Annotation(
+                    data.SoundEventAnnotation(
                         sound_event=data.SoundEvent(
-                            recording=recording,
                             geometry=bounding_box,
                             features=[
                                 data.Feature(
@@ -532,21 +485,29 @@ def test_can_recover_sound_event_features(
                 ],
             )
         ],
+        tasks=[data.AnnotationTask(clip=clip)],
     )
     path = tmp_path / "test_project.json"
 
     # Act
-    io.save_annotation_project(annotation_project, path)
-    recovered = io.load_annotation_project(path)
+    io.save(annotation_project, path)
+    recovered = io.load(path, type="annotation_project")
 
     # Assert
     assert recovered == annotation_project
     assert (
-        recovered.tasks[0].annotations[0].sound_event.features[0].name
+        recovered.clip_annotations[0]
+        .annotations[0]
+        .sound_event.features[0]
+        .name
         == "duration"
     )
     assert (
-        recovered.tasks[0].annotations[0].sound_event.features[0].value == 1.0
+        recovered.clip_annotations[0]
+        .annotations[0]
+        .sound_event.features[0]
+        .value
+        == 1.0
     )
 
 
@@ -570,15 +531,16 @@ def test_recording_paths_are_stored_as_relative_if_audio_dir_is_provided(
     )
     annotation_project = data.AnnotationProject(
         name="test_project",
+        clip_annotations=[data.ClipAnnotations(clip=clip)],
         tasks=[data.AnnotationTask(clip=clip)],
     )
     path = tmp_path / "test_project.json"
 
     # Act
-    io.save_annotation_project(annotation_project, path, audio_dir=audio_dir)
+    io.save(annotation_project, path, audio_dir=audio_dir)
 
     # Assert
-    recovered = json.loads(path.read_text("utf-8"))
+    recovered = json.loads(path.read_text("utf-8"))["data"]
 
     assert recovered["recordings"][0]["path"] == "test.wav"
 
@@ -591,9 +553,9 @@ def test_can_parse_nips4plus(tmp_path: Path):
     path = tmp_path / "test.json"
 
     # Act
-    annotation_project = io.load_annotation_project(original_path)
-    io.save_annotation_project(annotation_project, tmp_path / "test.json")
-    recovered = io.load_annotation_project(path)
+    annotation_project = io.load(original_path)
+    io.save(annotation_project, tmp_path / "test.json")
+    recovered = io.load(path)
 
     # Assert
     assert recovered == annotation_project

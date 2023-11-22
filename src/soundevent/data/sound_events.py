@@ -15,16 +15,6 @@ can be employed to specify the location, such as indicating the
 event's onset timestamp, start and end times, or providing detailed
 information about the associated time and frequency regions.
 
-## Tags and Semantic Information
-
-To provide meaningful context, sound events can be enriched with tags,
-which are labels attached to the events. These tags offer semantic
-information about the sound events, including the species responsible
-for the sound, the behavior exhibited by the sound emitter, or even
-the specific syllable within a vocalization. Tags aid in organizing
-and categorizing sound events, enabling more efficient analysis and
-interpretation.
-
 ## Features and Numerical Descriptors
 
 In addition to tags, sound events can be characterized by features,
@@ -43,8 +33,6 @@ from pydantic import BaseModel, Field
 
 from soundevent.data.features import Feature
 from soundevent.data.geometries import Geometry
-from soundevent.data.recordings import Recording
-from soundevent.data.tags import Tag
 
 __all__ = [
     "SoundEvent",
@@ -64,24 +52,17 @@ class SoundEvent(BaseModel):
     ----------
     uuid
         A unique identifier (UUID) for the sound event.
-    recording
-        The recording containing the sound event. Provides context about the source
-        of the sound event.
     geometry
-        The spatial geometry locating the sound event within the recording. Can include
-        information about the event's position, duration, and frequency range.
-    tags
-        A list of tags associated with the sound event, providing descriptive labels
-        or categories.
+        The spatial geometry locating the sound event within the recording. Can
+        include information about the event's position, duration, and frequency
+        range.
     features
-        A list of features associated with the sound event, offering quantitative
-        information about its acoustic properties.
+        A list of features associated with the sound event, offering
+        quantitative information about its acoustic properties.
     """
 
     uuid: UUID = Field(default_factory=uuid4, repr=False)
-    recording: Recording = Field(..., repr=False)
     geometry: Optional[Geometry]
-    tags: List[Tag] = Field(default_factory=list, repr=False)
     features: List[Feature] = Field(default_factory=list, repr=False)
 
     def __hash__(self):

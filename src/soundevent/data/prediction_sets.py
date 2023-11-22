@@ -1,4 +1,4 @@
-"""Model Runs.
+"""Prediction Set.
 
 In bioacoustic research, it is common to apply the same processing pipeline to
 a set of audio clips, such as all the clips in a dataset or a test set. To
@@ -38,12 +38,14 @@ import datetime
 from typing import List
 from uuid import UUID, uuid4
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, Field
 
-from soundevent.data.processed_clip import ProcessedClip
+from soundevent.data.clip_predictions import ClipPredictions
+
+__all__ = ["PredictionSet"]
 
 
-class ModelRun(BaseModel):
+class PredictionSet(BaseModel):
     """ModelRun Class.
 
     The `ModelRun` class represents a collection of processed audio clips
@@ -57,10 +59,6 @@ class ModelRun(BaseModel):
     id
         The unique identifier of the model run, automatically generated upon
         creation.
-    model
-        The identifier of the machine learning model or processing method used
-        for the run. This attribute allows researchers to clearly identify the
-        specific technique applied during the processing of the clips.
     clips
         A list of `ProcessedClip` instances representing the audio clips
         processed during the run. These clips share a common processing history
@@ -72,11 +70,8 @@ class ModelRun(BaseModel):
         initiated.
     """
 
-    id: UUID = Field(default_factory=uuid4)
-    model: str
-    clips: List[ProcessedClip] = Field(default_factory=list)
+    uuid: UUID = Field(default_factory=uuid4)
+    clip_predictions: List[ClipPredictions] = Field(default_factory=list)
     created_on: datetime.datetime = Field(
         default_factory=datetime.datetime.now
     )
-
-    model_config = ConfigDict(protected_namespaces=())

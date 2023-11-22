@@ -41,14 +41,16 @@ from pydantic import BaseModel, Field
 
 from soundevent.data.clips import Clip
 from soundevent.data.features import Feature
-from soundevent.data.predicted_sound_events import PredictedSoundEvent
 from soundevent.data.predicted_tags import PredictedTag
+from soundevent.data.sound_event_predictions import SoundEventPrediction
+
+__all__ = ["ClipPredictions"]
 
 
-class ProcessedClip(BaseModel):
-    """Processed Clip Class.
+class ClipPredictions(BaseModel):
+    """Clip Predictions.
 
-    Processed clips encapsulate the outcomes of various processing steps
+    Clip predictions encapsulate the outcomes of various processing steps
     applied to recording clips in bioacoustic research. These processing steps
     can include sound event detection, tag generation, and acoustic feature
     extraction.
@@ -78,7 +80,7 @@ class ProcessedClip(BaseModel):
 
     uuid: UUID = Field(default_factory=uuid4, repr=False)
     clip: Clip
-    sound_events: Sequence[PredictedSoundEvent] = Field(default_factory=list)
+    sound_events: Sequence[SoundEventPrediction] = Field(default_factory=list)
     tags: Sequence[PredictedTag] = Field(default_factory=list)
     features: Sequence[Feature] = Field(default_factory=list)
 

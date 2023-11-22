@@ -1,0 +1,76 @@
+from typing import List, Optional, Tuple
+from uuid import UUID, uuid4
+
+from pydantic import BaseModel
+
+from soundevent import data
+
+from .adapters import DataAdapter
+from .sound_event import SoundEventAdapter
+from .tag import TagAdapter
+
+
+class SoundEventPredictionObject(BaseModel):
+    id: int
+    sound_event: int
+    uuid: Optional[UUID] = None
+    score: float
+    tags: Optional[List[Tuple[int, float]]] = None
+
+
+class SoundEventPredictionAdapter(
+    DataAdapter[data.SoundEventPrediction, SoundEventPredictionObject]
+):
+    def __init__(
+        self,
+        sound_event_adapter: SoundEventAdapter,
+        tag_adapter: TagAdapter,
+    ):
+        super().__init__()
+        self.sound_event_adapter = sound_event_adapter
+        self.tag_adapter = tag_adapter
+
+    def assemble_aoef(
+        self,
+        obj: data.SoundEventPrediction,
+        obj_id: int,
+    ) -> SoundEventPredictionObject:
+        return SoundEventPredictionObject(
+            id=obj_id,
+            sound_event=self.sound_event_adapter.to_aoef(obj.sound_event).id,
+            uuid=obj.uuid,
+            score=obj.score,
+            tags=[
+                (tag.id, predicted_tag.score)
+                for predicted_tag in obj.tags
+                if (tag := self.tag_adapter.to_aoef(predicted_tag.tag))
+                is not None
+            ]
+            if obj.tags
+            else None,
+        )
+
+    def assemble_soundevent(
+        self,
+        obj: SoundEventPredictionObject,
+    ) -> data.SoundEventPrediction:
+        sound_event = self.sound_event_adapter.from_id(obj.sound_event)
+
+        if sound_event is None:
+            raise ValueError(
+                f"Sound event with ID {obj.sound_event} not found."
+            )
+
+        return data.SoundEventPrediction(
+            uuid=obj.uuid or uuid4(),
+            sound_event=sound_event,
+            score=obj.score,
+            tags=[
+                data.PredictedTag(
+                    tag=tag,
+                    score=score,
+                )
+                for tag_id, score in obj.tags or []
+                if (tag := self.tag_adapter.from_id(tag_id)) is not None
+            ],
+        )

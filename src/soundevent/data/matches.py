@@ -39,9 +39,11 @@ from typing import Optional, Sequence
 
 from pydantic import BaseModel, Field, model_validator
 
-from soundevent.data.annotations import Annotation
-from soundevent.data.predicted_sound_events import PredictedSoundEvent
 from soundevent.data.features import Feature
+from soundevent.data.sound_event_annotations import SoundEventAnnotation
+from soundevent.data.sound_event_predictions import SoundEventPrediction
+
+__all__ = ["Match"]
 
 
 class Match(BaseModel):
@@ -78,8 +80,8 @@ class Match(BaseModel):
         in addition to the affinity and score.
     """
 
-    source: Optional[PredictedSoundEvent] = None
-    target: Optional[Annotation] = None
+    source: Optional[SoundEventPrediction] = None
+    target: Optional[SoundEventAnnotation] = None
     affinity: float = Field(default=0.0, ge=0.0, le=1.0)
     score: Optional[float] = Field(default=None, ge=0.0, le=1.0)
     metrics: Sequence[Feature] = Field(default_factory=list)

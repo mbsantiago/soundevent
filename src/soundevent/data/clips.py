@@ -22,16 +22,11 @@ learning models process audio files in clips, generating predictions
 or insights per clip, which further justifies the adoption of the clip
 structure.
 
-## Tags and Features
+## Features
 
-Clips can be annotated by human annotators or processed by machine
-learning models to extract valuable information. Annotations can
-include the identification of species present within the clip,
-descriptions of acoustic characteristics, or any other relevant
-categorical information captured by tags. Additionally, numeric
-attributes of the acoustic content contained in the clip, such as
-spectral features or temporal properties, can be represented as
-features attached to the clip.
+Numeric attributes of the acoustic content contained in the clip, such as
+spectral features or temporal properties, can be represented as features
+attached to the clip.
 
 By utilizing clips as the unit of analysis and annotation, researchers
 and practitioners can effectively manage and analyze audio data,
@@ -46,7 +41,6 @@ from pydantic import BaseModel, Field, model_validator
 
 from soundevent.data.features import Feature
 from soundevent.data.recordings import Recording
-from soundevent.data.tags import Tag
 
 __all__ = [
     "Clip",
@@ -83,12 +77,6 @@ class Clip(BaseModel):
         segment within the recording's timeline. End time provides clear
         boundaries for the duration of the clip, aiding in precise temporal
         delineation and analysis of the audio content.
-    tags: List[Tag], optional
-        A list of `Tag` instances representing categories associated with the
-        clip. Tags provide additional semantic context to the clip, enabling
-        detailed classification and facilitating targeted analysis. These tags
-        define specific characteristics or events within the clip, contributing
-        to comprehensive annotation and analysis efforts.
     features : List[Feature], optional
         A list of `Feature` instances representing computed features or
         descriptors associated with the clip. Features provide quantitative and
@@ -102,7 +90,6 @@ class Clip(BaseModel):
     recording: Recording
     start_time: float
     end_time: float
-    tags: List[Tag] = Field(default_factory=list)
     features: List[Feature] = Field(default_factory=list)
 
     @model_validator(mode="before")
@@ -111,7 +98,3 @@ class Clip(BaseModel):
         if values["start_time"] > values["end_time"]:
             raise ValueError("start_time must be less than end_time")
         return values
-
-    def __hash__(self):
-        """Hash clip object."""
-        return hash((self.recording, self.start_time, self.end_time))

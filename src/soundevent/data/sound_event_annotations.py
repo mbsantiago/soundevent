@@ -1,4 +1,4 @@
-"""Annotations.
+"""Annotated Sound Event Class.
 
 Annotations play a crucial role in the analysis and interpretation of
 audio data. They are user-created sound events that are attached to
@@ -53,13 +53,14 @@ from pydantic import BaseModel, Field
 from soundevent.data.notes import Note
 from soundevent.data.sound_events import SoundEvent
 from soundevent.data.tags import Tag
+from soundevent.data.users import User
 
 __all__ = [
-    "Annotation",
+    "SoundEventAnnotation",
 ]
 
 
-class Annotation(BaseModel):
+class SoundEventAnnotation(BaseModel):
     """Annotation Class.
 
     The `Annotation` class encapsulates essential information about a specific
@@ -82,7 +83,7 @@ class Annotation(BaseModel):
         being annotated. Sound events define distinct audio occurrences, such as bird
         calls or animal vocalizations, and are essential for categorizing the content
         of the audio data.
-    notes: List[Note]
+    notes
         A list of `Note` instances representing additional contextual information or
         remarks associated with the annotation. Notes can provide insights into specific
         characteristics of the sound event, aiding in the comprehensive understanding
@@ -99,10 +100,10 @@ class Annotation(BaseModel):
     """
 
     uuid: UUID = Field(default_factory=uuid4, repr=False)
-    created_by: Optional[str] = None
     sound_event: SoundEvent
     notes: List[Note] = Field(default_factory=list, repr=False)
     tags: List[Tag] = Field(default_factory=list, repr=False)
+    created_by: Optional[User] = None
     created_on: Optional[datetime.datetime] = Field(
         default_factory=datetime.datetime.now,
         repr=False,

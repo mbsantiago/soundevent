@@ -4,48 +4,7 @@ import datetime
 import json
 from pathlib import Path
 
-import pytest
-
 from soundevent import data, io
-
-
-@pytest.fixture
-def recording(tmp_path: Path) -> data.Recording:
-    """Return a recording."""
-    return data.Recording(
-        path=tmp_path / "test.wav",
-        duration=10.0,
-        samplerate=44100,
-        channels=1,
-    )
-
-
-@pytest.fixture
-def clip(recording: data.Recording) -> data.Clip:
-    """Return a clip."""
-    return data.Clip(
-        recording=recording,
-        start_time=0.0,
-        end_time=10.0,
-    )
-
-
-@pytest.fixture
-def bounding_box() -> data.BoundingBox:
-    """Return a bounding box."""
-    return data.BoundingBox(coordinates=[0.0, 0.0, 1.0, 1.0])
-
-
-@pytest.fixture
-def sound_event(
-    recording: data.Recording,
-    bounding_box: data.BoundingBox,
-) -> data.SoundEvent:
-    """Return a sound event."""
-    return data.SoundEvent(
-        recording=recording,
-        geometry=bounding_box,
-    )
 
 
 def test_saved_model_run_is_saved_to_json_file(
@@ -53,11 +12,11 @@ def test_saved_model_run_is_saved_to_json_file(
 ) -> None:
     """Test that a saved model run is saved to a JSON file."""
     # Arrange
-    model_run = data.ModelRun(model="test_model")
+    model_run = data.ModelRun(name="test_model")
     path = tmp_path / "test.json"
 
     # Act
-    io.save_model_run(model_run=model_run, path=path)
+    io.save(model_run, path=path)
 
     # Assert
     assert path.exists()
@@ -67,7 +26,7 @@ def test_saved_model_run_has_correct_info(monkeypatch, tmp_path: Path) -> None:
     """Test that a saved model run has the correct info."""
     # Arrange
     model_run = data.ModelRun(
-        model="test_model",
+        name="test_model",
     )
     now = datetime.datetime(2001, 7, 16, 0, 0, 0)
 
@@ -80,13 +39,14 @@ def test_saved_model_run_has_correct_info(monkeypatch, tmp_path: Path) -> None:
     path = tmp_path / "test_project.json"
 
     # Act
-    io.save_model_run(model_run, path)
+    io.save(model_run, path)
 
     # Assert
     recovered = json.loads(path.read_text("utf-8"))
-    assert recovered["info"]["uuid"] == str(model_run.id)
-    assert recovered["info"]["model"] == model_run.model
-    assert recovered["info"]["date_created"] == now.isoformat()
+    content = recovered["data"]
+    assert content["uuid"] == str(model_run.uuid)
+    assert content["name"] == model_run.name
+    assert recovered["created_on"] == now.isoformat()
 
 
 def test_can_recover_model_run_date(
@@ -96,14 +56,14 @@ def test_can_recover_model_run_date(
     # Arrange
     date = datetime.datetime(2001, 7, 16, 0, 0, 0)
     model_run = data.ModelRun(
-        model="test_model",
+        name="test_model",
         created_on=date,
     )
     path = tmp_path / "test_project.json"
-    io.save_model_run(model_run, path)
+    io.save(model_run, path)
 
     # Act
-    recovered = io.load_model_run(path)
+    recovered = io.load(path)
 
     # Assert
     assert model_run == recovered
@@ -117,14 +77,14 @@ def test_can_recover_simple_processed_clip(
     """Test that a saved model run can be recovered."""
     # Arrange
     model_run = data.ModelRun(
-        model="test_model",
-        clips=[data.ProcessedClip(clip=clip)],
+        name="test_model",
+        clip_predictions=[data.ClipPredictions(clip=clip)],
     )
     path = tmp_path / "test_project.json"
-    io.save_model_run(model_run, path)
+    io.save(model_run, path)
 
     # Act
-    recovered = io.load_model_run(path)
+    recovered = io.load(path)
 
     # Assert
     assert model_run == recovered
@@ -137,9 +97,9 @@ def test_can_recover_processed_clip_tags(
     """Test that a saved model run can be recovered."""
     # Arrange
     model_run = data.ModelRun(
-        model="test_model",
-        clips=[
-            data.ProcessedClip(
+        name="test_model",
+        clip_predictions=[
+            data.ClipPredictions(
                 clip=clip,
                 tags=[
                     data.PredictedTag(
@@ -154,16 +114,18 @@ def test_can_recover_processed_clip_tags(
         ],
     )
     path = tmp_path / "test_project.json"
-    io.save_model_run(model_run, path)
+    io.save(model_run, path)
 
     # Act
-    recovered = io.load_model_run(path)
+    recovered = io.load(path, type="model_run")
 
     # Assert
     assert model_run == recovered
-    assert recovered.clips[0].tags[0].tag.key == "species"
-    assert recovered.clips[0].tags[0].tag.value == "Myotis lucifugus"
-    assert recovered.clips[0].tags[0].score == 0.9
+    assert recovered.clip_predictions[0].tags[0].tag.key == "species"
+    assert (
+        recovered.clip_predictions[0].tags[0].tag.value == "Myotis lucifugus"
+    )
+    assert recovered.clip_predictions[0].tags[0].score == 0.9
 
 
 def test_can_recover_processed_clip_features(
@@ -173,9 +135,9 @@ def test_can_recover_processed_clip_features(
     """Test that a saved model run can be recovered."""
     # Arrange
     model_run = data.ModelRun(
-        model="test_model",
-        clips=[
-            data.ProcessedClip(
+        name="test_model",
+        clip_predictions=[
+            data.ClipPredictions(
                 clip=clip,
                 features=[
                     data.Feature(
@@ -187,15 +149,21 @@ def test_can_recover_processed_clip_features(
         ],
     )
     path = tmp_path / "test_project.json"
-    io.save_model_run(model_run, path)
+    io.save(model_run, path)
 
     # Act
-    recovered = io.load_model_run(path)
+    recovered = io.load(path, type="model_run")
 
     # Assert
-    assert model_run == recovered
-    assert recovered.clips[0].features[0].name == "SNR"
-    assert recovered.clips[0].features[0].value == 6
+    assert model_run.model_dump(
+        exclude_none=True,
+        exclude_defaults=True,
+    ) == recovered.model_dump(
+        exclude_none=True,
+        exclude_defaults=True,
+    )
+    assert recovered.clip_predictions[0].features[0].name == "SNR"
+    assert recovered.clip_predictions[0].features[0].value == 6
 
 
 def test_can_recover_simple_predicted_sound_event(
@@ -206,12 +174,12 @@ def test_can_recover_simple_predicted_sound_event(
     """Test that a saved model run can be recovered."""
     # Arrange
     model_run = data.ModelRun(
-        model="test_model",
-        clips=[
-            data.ProcessedClip(
+        name="test_model",
+        clip_predictions=[
+            data.ClipPredictions(
                 clip=clip,
                 sound_events=[
-                    data.PredictedSoundEvent(
+                    data.SoundEventPrediction(
                         sound_event=sound_event,
                         score=0.9,
                     )
@@ -220,14 +188,17 @@ def test_can_recover_simple_predicted_sound_event(
         ],
     )
     path = tmp_path / "test_project.json"
-    io.save_model_run(model_run, path)
+    io.save(model_run, path)
 
     # Act
-    recovered = io.load_model_run(path)
+    recovered = io.load(path, type="model_run")
 
     # Assert
-    assert recovered.clips[0].sound_events[0].score == 0.9
-    assert recovered.clips[0].sound_events[0].sound_event == sound_event
+    assert recovered.clip_predictions[0].sound_events[0].score == 0.9
+    assert (
+        recovered.clip_predictions[0].sound_events[0].sound_event
+        == sound_event
+    )
     assert model_run == recovered
 
 
@@ -239,12 +210,12 @@ def test_can_recover_predicted_sound_event_with_predicted_tags(
     """Test that a saved model run can be recovered."""
     # Arrange
     model_run = data.ModelRun(
-        model="test_model",
-        clips=[
-            data.ProcessedClip(
+        name="test_model",
+        clip_predictions=[
+            data.ClipPredictions(
                 clip=clip,
                 sound_events=[
-                    data.PredictedSoundEvent(
+                    data.SoundEventPrediction(
                         sound_event=sound_event,
                         tags=[
                             data.PredictedTag(
@@ -261,54 +232,19 @@ def test_can_recover_predicted_sound_event_with_predicted_tags(
         ],
     )
     path = tmp_path / "test_project.json"
-    io.save_model_run(model_run, path)
+    io.save(model_run, path)
 
     # Act
-    recovered = io.load_model_run(path)
+    recovered = io.load(path, type="model_run")
 
     # Assert
-    assert recovered.clips[0].sound_events[0].tags[0].tag.key == "species"
     assert (
-        recovered.clips[0].sound_events[0].tags[0].tag.value
+        recovered.clip_predictions[0].sound_events[0].tags[0].tag.key
+        == "species"
+    )
+    assert (
+        recovered.clip_predictions[0].sound_events[0].tags[0].tag.value
         == "Myotis lucifugus"
     )
-    assert recovered.clips[0].sound_events[0].tags[0].score == 0.9
-    assert model_run == recovered
-
-
-def test_can_recover_predicted_sound_event_with_predicted_features(
-    tmp_path: Path,
-    clip: data.Clip,
-    sound_event: data.SoundEvent,
-) -> None:
-    """Test that a saved model run can be recovered."""
-    # Arrange
-    model_run = data.ModelRun(
-        model="test_model",
-        clips=[
-            data.ProcessedClip(
-                clip=clip,
-                sound_events=[
-                    data.PredictedSoundEvent(
-                        sound_event=sound_event,
-                        features=[
-                            data.Feature(
-                                name="SNR",
-                                value=6,
-                            ),
-                        ],
-                    )
-                ],
-            ),
-        ],
-    )
-    path = tmp_path / "test_project.json"
-    io.save_model_run(model_run, path)
-
-    # Act
-    recovered = io.load_model_run(path)
-
-    # Assert
-    assert recovered.clips[0].sound_events[0].features[0].name == "SNR"
-    assert recovered.clips[0].sound_events[0].features[0].value == 6
+    assert recovered.clip_predictions[0].sound_events[0].tags[0].score == 0.9
     assert model_run == recovered

@@ -4,8 +4,7 @@ import datetime
 import json
 from pathlib import Path
 
-from soundevent import data
-from soundevent.io import load_dataset, save_dataset
+from soundevent import data, io
 
 
 def test_save_empty_dataset_to_aoef_format(tmp_path: Path):
@@ -19,15 +18,15 @@ def test_save_empty_dataset_to_aoef_format(tmp_path: Path):
     )
 
     # Act
-    save_dataset(dataset, path, audio_dir=tmp_path)
+    io.save(dataset, path, audio_dir=tmp_path)
 
     # Assert
     assert path.exists()
     assert path.is_file()
-    content = json.loads(path.read_text())
-    assert content["info"]["name"] == "test_dataset"
-    assert content["info"]["description"] == "A test dataset."
-    assert content["info"]["uuid"] == str(dataset.id)
+    content = json.loads(path.read_text())["data"]
+    assert content["name"] == "test_dataset"
+    assert content["description"] == "A test dataset."
+    assert content["uuid"] == str(dataset.uuid)
     assert content["recordings"] == []
     assert "tags" not in content
 
@@ -55,14 +54,14 @@ def test_save_dataset_contains_datetime_of_creation(
     monkeypatch.setattr(datetime, "datetime", MockDatetime)
 
     # Act
-    save_dataset(dataset, path, audio_dir=tmp_path)
+    io.save(dataset, path, audio_dir=tmp_path)
 
     # Assert
     assert path.exists()
     assert path.is_file()
     content = json.loads(path.read_text())
-    assert "date_created" in content["info"]
-    assert content["info"]["date_created"] == "2023-07-14T12:00:00"
+    assert "created_on" in content
+    assert content["created_on"] == "2023-07-14T12:00:00"
 
 
 def test_save_dataset_with_one_simple_recording(tmp_path: Path):
@@ -83,19 +82,19 @@ def test_save_dataset_with_one_simple_recording(tmp_path: Path):
     )
 
     # Act
-    save_dataset(dataset, path, audio_dir=tmp_path)
+    io.save(dataset, path, audio_dir=tmp_path)
 
     # Assert
     # Check that the file exists and is a file.
     assert path.exists()
     assert path.is_file()
 
-    content = json.loads(path.read_text())
+    content = json.loads(path.read_text())["data"]
 
     # Check that the dataset info is correct.
-    assert content["info"]["name"] == "test_dataset"
-    assert content["info"]["description"] == "A test dataset."
-    assert content["info"]["uuid"] == str(dataset.id)
+    assert content["name"] == "test_dataset"
+    assert content["description"] == "A test dataset."
+    assert content["uuid"] == str(dataset.uuid)
 
     # Check that the recording object is present.
     assert len(content["recordings"]) == 1
@@ -145,15 +144,15 @@ def test_save_dataset_with_one_recording_with_full_metadata(
     )
 
     # Act
-    save_dataset(dataset, path, audio_dir=tmp_path)
+    io.save(dataset, path, audio_dir=tmp_path)
 
     # Assert
     assert path.exists()
     assert path.is_file()
-    content = json.loads(path.read_text())
-    assert content["info"]["name"] == "test_dataset"
-    assert content["info"]["description"] == "A test dataset."
-    assert content["info"]["uuid"] == str(dataset.id)
+    content = json.loads(path.read_text())["data"]
+    assert content["name"] == "test_dataset"
+    assert content["description"] == "A test dataset."
+    assert content["uuid"] == str(dataset.uuid)
     assert len(content["recordings"]) == 1
     assert content["recordings"][0]["uuid"] == str(dataset.recordings[0].uuid)
     assert content["recordings"][0]["path"] == "audio.wav"
@@ -202,12 +201,12 @@ def test_save_dataset_with_one_recording_with_tags(
     )
 
     # Act
-    save_dataset(dataset, path, audio_dir=tmp_path)
+    io.save(dataset, path, audio_dir=tmp_path)
 
     # Assert
     assert path.exists()
     assert path.is_file()
-    content = json.loads(path.read_text())
+    content = json.loads(path.read_text())["data"]
 
     assert len(content["recordings"]) == 1
     assert content["recordings"][0]["tags"] == [0, 1, 2]
@@ -255,12 +254,12 @@ def test_save_dataset_with_one_recording_with_features(
     )
 
     # Act
-    save_dataset(dataset, path, audio_dir=tmp_path)
+    io.save(dataset, path, audio_dir=tmp_path)
 
     # Assert
     assert path.exists()
     assert path.is_file()
-    content = json.loads(path.read_text())
+    content = json.loads(path.read_text())["data"]
 
     assert len(content["recordings"]) == 1
     assert content["recordings"][0]["features"] == {
@@ -319,8 +318,8 @@ def test_save_and_load_dataset_recover_the_same_object(
                 notes=[
                     data.Note(
                         message="This is a note.",
-                        created_by="John Doe",
-                        created_at=datetime.datetime(2021, 1, 1, 12, 34, 56),
+                        created_by=data.User(name="John Doe"),
+                        created_on=datetime.datetime(2021, 1, 1, 12, 34, 56),
                     ),
                 ],
             )
@@ -328,8 +327,8 @@ def test_save_and_load_dataset_recover_the_same_object(
     )
 
     # Act
-    save_dataset(dataset, path, audio_dir=tmp_path)
-    loaded_dataset = load_dataset(path, audio_dir=tmp_path)
+    io.save(dataset, path, audio_dir=tmp_path)
+    loaded_dataset = io.load(path, audio_dir=tmp_path)
 
     # Assert
     assert loaded_dataset == dataset
