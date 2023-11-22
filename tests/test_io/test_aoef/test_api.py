@@ -77,7 +77,6 @@ def test_save_creates_parent_directories(
     # Arrange
     path = tmp_path / "parent" / "child" / "test.json"
 
-
     assert not path.parent.exists()
 
     # Act

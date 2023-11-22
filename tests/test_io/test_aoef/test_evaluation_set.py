@@ -1,7 +1,10 @@
 """Test suite for AOEF evaluation set adapter."""
 
 from soundevent import data
-from soundevent.io.aoef.evaluation_set import EvaluationSetAdapter, EvaluationSetObject
+from soundevent.io.aoef.evaluation_set import (
+    EvaluationSetAdapter,
+    EvaluationSetObject,
+)
 
 
 def test_evaluation_set_can_be_converted_to_aoef(

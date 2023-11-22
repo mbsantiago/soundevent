@@ -1,6 +1,7 @@
 """Functions for manipulating the amplitude scale of spectrograms."""
 
 from typing import Literal
+
 import librosa
 import numpy as np
 import xarray as xr

@@ -152,9 +152,11 @@ def save(
                 data=adapter.to_aoef(obj),
                 created_on=datetime.datetime.now(),
             )
-            path.write_text(aoef_object.model_dump_json(
-                exclude_none=True,
-            ))
+            path.write_text(
+                aoef_object.model_dump_json(
+                    exclude_none=True,
+                )
+            )
             return
 
     raise NotImplementedError(f"Unsupported data type: {type(obj)}")

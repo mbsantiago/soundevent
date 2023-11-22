@@ -108,9 +108,7 @@ def test_multi_polygon_is_supported():
 
 
 def test_best_affinity_is_selected_multiple_sources():
-    target = data.BoundingBox(
-        coordinates=[4, 4, 8, 8]
-    )
+    target = data.BoundingBox(coordinates=[4, 4, 8, 8])
     option1 = data.BoundingBox(coordinates=[3, 3, 5, 5])
     option2 = data.BoundingBox(coordinates=[5, 5, 9, 9])
     matches = list(match_geometries([option1, option2], [target]))
@@ -130,9 +128,7 @@ def test_best_affinity_is_selected_multiple_sources():
 
 
 def test_best_affinity_is_selected_multiple_targets():
-    target = data.BoundingBox(
-        coordinates=[4, 4, 8, 8]
-    )
+    target = data.BoundingBox(coordinates=[4, 4, 8, 8])
     option1 = data.BoundingBox(coordinates=[3, 3, 5, 5])
     option2 = data.BoundingBox(coordinates=[5, 5, 9, 9])
     matches = list(match_geometries([target], [option1, option2]))
@@ -149,4 +145,3 @@ def test_best_affinity_is_selected_multiple_targets():
     assert source_index is None
     assert target_index == 0
     assert affinity == 0
-

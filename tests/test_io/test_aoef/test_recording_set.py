@@ -1,7 +1,10 @@
 """Test suite for AOEF Recording Set Adapter."""
 
 from soundevent import data
-from soundevent.io.aoef.recording_set import RecordingSetAdapter, RecordingSetObject
+from soundevent.io.aoef.recording_set import (
+    RecordingSetAdapter,
+    RecordingSetObject,
+)
 
 
 def test_recording_set_can_be_converted_to_aoef(

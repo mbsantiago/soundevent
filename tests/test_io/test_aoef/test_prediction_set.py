@@ -1,7 +1,10 @@
 """Test suite for AOEF Prediction Set Adapter."""
 
 from soundevent import data
-from soundevent.io.aoef.prediction_set import PredictionSetAdapter, PredictionSetObject
+from soundevent.io.aoef.prediction_set import (
+    PredictionSetAdapter,
+    PredictionSetObject,
+)
 
 
 def test_prediction_set_can_be_converted_to_aoef(
