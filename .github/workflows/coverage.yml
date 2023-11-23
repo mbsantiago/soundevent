@@ -1,36 +1,27 @@
 name: Coverage
-
 on:
   push:
     branches: ["main"]
-
   pull_request:
     branches: ["main"]
-
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
-
       - name: Set up Python 3.11
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
-
+          python-version: "3.11"
       - name: Install dependencies
         run: |
           sudo apt-get update && sudo apt-get install libsndfile1
           python -m pip install --upgrade pip
-          python -m pip install pytest hypothesis coverage pytest-coverage
+          python -m pip install pytest hypothesis coverage pytest-coverage html5lib
           python -m pip install .
-
       - name: Run Tests
         run: |
           pytest --cov=soundevent --cov-report=xml tests
-
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         env:
