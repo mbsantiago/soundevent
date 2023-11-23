@@ -18,7 +18,7 @@ jobs:
           sudo apt-get update && sudo apt-get install libsndfile1
           python -m pip install --upgrade pip
           python -m pip install pytest hypothesis coverage pytest-coverage html5lib
-          python -m pip install .
+          python -m pip install ".[all]"
       - name: Run Tests
         run: |
           pytest --cov=soundevent --cov-report=xml tests
