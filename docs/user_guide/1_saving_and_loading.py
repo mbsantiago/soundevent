@@ -96,7 +96,7 @@ print(repr(nips4b_sample))
 # This object allows you to access and analyze the annotations, along with
 # their associated objects.
 
-for task in nips4b_sample.clip_annotations:
+for task in nips4b_sample.annotated_clips:
     clip = task.clip
     recording = clip.recording
     print(
