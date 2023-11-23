@@ -193,18 +193,15 @@ class EvaluationAdapter:
                 sound_event_annotation
             )
 
-        for clip_annotations in obj.clip_annotations or []:
-            self.clip_annotations_adapter.to_soundevent(clip_annotations)
+        clip_annotations = [
+            self.clip_annotations_adapter.to_soundevent(clip_predictions)
+            for clip_predictions in obj.clip_annotations or []
+        ]
 
         for sound_event_prediction in obj.sound_event_predictions or []:
             self.sound_event_prediction_adapter.to_soundevent(
                 sound_event_prediction
             )
-
-        clip_annotations = [
-            self.clip_annotations_adapter.to_soundevent(clip_predictions)
-            for clip_predictions in obj.clip_annotations or []
-        ]
 
         clip_predictions = [
             self.clip_predictions_adapter.to_soundevent(evaluated_clip)

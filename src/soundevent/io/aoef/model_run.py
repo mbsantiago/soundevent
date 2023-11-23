@@ -6,14 +6,14 @@ from .prediction_set import PredictionSetAdapter, PredictionSetObject
 
 
 class ModelRunObject(PredictionSetObject):
-    collection_type: Literal["model_run"] = "model_run"
+    collection_type: Literal["model_run"] = "model_run"  # type: ignore
     name: str
     version: Optional[str] = None
     description: Optional[str] = None
 
 
 class ModelRunAdapter(PredictionSetAdapter):
-    def to_aoef(self, obj: data.ModelRun) -> ModelRunObject:
+    def to_aoef(self, obj: data.ModelRun) -> ModelRunObject:  # type: ignore
         prediction_set = super().to_aoef(obj)
         return ModelRunObject(
             uuid=prediction_set.uuid,
@@ -30,7 +30,7 @@ class ModelRunAdapter(PredictionSetAdapter):
             description=obj.description,
         )
 
-    def to_soundevent(self, obj: ModelRunObject) -> data.ModelRun:
+    def to_soundevent(self, obj: ModelRunObject) -> data.ModelRun:  # type: ignore
         prediction_set = super().to_soundevent(obj)
         return data.ModelRun(
             **dict(prediction_set),

@@ -32,7 +32,7 @@ lint:             ## Run ruff, black, mypy linters.
 	$(ENV_PREFIX)ruff $(PROJECT_NAME)/
 	$(ENV_PREFIX)black --check $(PROJECT_NAME)/
 	$(ENV_PREFIX)black --check tests/
-	$(ENV_PREFIX)mypy $(PROJECT_NAME)/
+	$(ENV_PREFIX)mypy $(PROJECT_NAME)/ --config-file pyproject.toml
 
 .PHONY: test-watch
 test-watch:    ## Run tests and generate coverage report.

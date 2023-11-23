@@ -3,18 +3,17 @@
 Currently only supports reading and writing of .wav files.
 """
 
-import os
+from pathlib import Path
 from typing import Dict, Optional, Tuple
 
 import numpy as np
 import soundfile as sf
 import xarray as xr
 
+from soundevent import data
 from soundevent.audio.chunks import parse_into_chunks
 from soundevent.audio.media_info import extract_media_info_from_chunks
 from soundevent.audio.raw import RawData
-from soundevent.data.clips import Clip
-from soundevent.data.recordings import PathLike, Recording
 
 __all__ = [
     "load_audio",
@@ -35,7 +34,7 @@ PCM_SUBFORMATS_MAPPING: Dict[Tuple[int, int], str] = {
 
 
 def load_audio(
-    path: PathLike,
+    path: data.PathLike,
     offset: int = 0,
     samples: Optional[int] = None,
 ) -> Tuple[np.ndarray, int]:
@@ -99,8 +98,8 @@ def load_audio(
 
 
 def load_recording(
-    recording: Recording,
-    audio_dir: Optional[PathLike] = None,
+    recording: data.Recording,
+    audio_dir: Optional[data.PathLike] = None,
 ) -> xr.DataArray:
     """Load a recording from a file.
 
@@ -121,7 +120,7 @@ def load_recording(
     path = recording.path
 
     if audio_dir is not None:
-        path = os.path.join(audio_dir, path)
+        path = Path(audio_dir) / path
 
     data, _ = load_audio(path)
     return xr.DataArray(
@@ -147,8 +146,8 @@ def load_recording(
 
 
 def load_clip(
-    clip: Clip,
-    audio_dir: Optional[PathLike] = None,
+    clip: data.Clip,
+    audio_dir: Optional[data.PathLike] = None,
 ) -> xr.DataArray:
     """Load a clip from a file.
 
@@ -177,7 +176,7 @@ def load_clip(
 
     path = recording.path
     if audio_dir is not None:
-        path = os.path.join(audio_dir, path)
+        path = Path(audio_dir) / path
 
     data, _ = load_audio(
         path,

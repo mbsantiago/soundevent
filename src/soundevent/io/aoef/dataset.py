@@ -8,7 +8,7 @@ from .recording_set import RecordingSetAdapter, RecordingSetObject
 class DatasetObject(RecordingSetObject):
     """Schema definition for a dataset object in AOEF format."""
 
-    collection_type: Literal["dataset"] = "dataset"
+    collection_type: Literal["dataset"] = "dataset"  # type: ignore
     name: str
     description: Optional[str] = None
 
@@ -16,7 +16,7 @@ class DatasetObject(RecordingSetObject):
 class DatasetAdapter(RecordingSetAdapter):
     def to_aoef(
         self,
-        obj: data.Dataset,
+        obj: data.Dataset,  # type: ignore
     ) -> DatasetObject:
         recording_set = super().to_aoef(obj)
         return DatasetObject(
@@ -31,7 +31,7 @@ class DatasetAdapter(RecordingSetAdapter):
 
     def to_soundevent(
         self,
-        obj: DatasetObject,
+        obj: DatasetObject,  # type: ignore
     ) -> data.Dataset:
         recording_set = super().to_soundevent(obj)
         return data.Dataset(

@@ -3,12 +3,9 @@ name = "soundevent"
 version = "0.7.0"
 description = "soundevent is an open-source Python package for the computational biocoustic community, providing standardized tools for sound event analysis and data management."
 authors = [
-  { name = "Santiago Martinez", email = "santiago.balvanera.20@ucl.ac.uk" },
+    { name = "Santiago Martinez", email = "santiago.balvanera.20@ucl.ac.uk" },
 ]
-dependencies = [
-    "pydantic>=2.0",
-    "email-validator>=2.1.0.post1",
-]
+dependencies = ["pydantic>=2.0", "email-validator>=2.1.0.post1"]
 requires-python = ">=3.8"
 readme = "README.md"
 license = { text = "MIT" }
@@ -87,6 +84,9 @@ profile = "black"
 
 [tool.mypy]
 ignore_missing_imports = true
+show_error_codes = true
+show_error_code_links = true
+disable_error_code = ["call-overload", "misc"]
 
 [tool.coverage.run]
 branch = true

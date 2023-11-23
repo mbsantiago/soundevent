@@ -8,14 +8,17 @@ from .annotation_set import AnnotationSetAdapter, AnnotationSetObject
 class EvaluationSetObject(AnnotationSetObject):
     """Schema definition for an evaluation set object in AOEF format."""
 
-    collection_type: Literal["evaluation_set"] = "evaluation_set"
+    collection_type: Literal["evaluation_set"] = "evaluation_set"  # type: ignore
     name: str
     description: Optional[str] = None
     evaluation_tags: Optional[List[int]] = None
 
 
 class EvaluationSetAdapter(AnnotationSetAdapter):
-    def to_aoef(self, obj: data.EvaluationSet) -> EvaluationSetObject:
+    def to_aoef(
+        self,
+        obj: data.EvaluationSet,  # type: ignore
+    ) -> EvaluationSetObject:
         annotation_set = super().to_aoef(obj)
         return EvaluationSetObject(
             uuid=annotation_set.uuid,
@@ -36,7 +39,10 @@ class EvaluationSetAdapter(AnnotationSetAdapter):
             else None,
         )
 
-    def to_soundevent(self, obj: EvaluationSetObject) -> data.EvaluationSet:
+    def to_soundevent(
+        self,
+        obj: EvaluationSetObject,  # type: ignore
+    ) -> data.EvaluationSet:
         annotation_set = super().to_soundevent(obj)
         return data.EvaluationSet(
             **{

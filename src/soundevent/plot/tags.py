@@ -1,7 +1,7 @@
 """Functions for plotting tags."""
 
 from itertools import cycle
-from typing import Optional
+from typing import Dict, Optional, List
 
 import numpy as np
 from matplotlib.axes import Axes
@@ -26,7 +26,7 @@ class TagColorMapper:
         num_colors: int = 20,
     ):
         """Initialize color mapper."""
-        self._tags = {}
+        self._tags: Dict[data.Tag, str] = {}
 
         colormap = get_cmap(cmap)
         self._colors = cycle(
@@ -75,7 +75,7 @@ def add_tags_legend(
     for tag in color_mapper._tags:
         color = color_mapper.get_color(tag)
         handles.append(ax.scatter([], [], color=color))
-        labels.append(tag)
+        labels.append(str(tag))
 
     ax.legend(handles, labels, loc="upper right")
 

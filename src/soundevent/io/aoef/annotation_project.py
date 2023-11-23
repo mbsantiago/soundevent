@@ -9,7 +9,7 @@ from .annotation_task import AnnotationTaskAdapter, AnnotationTaskObject
 class AnnotationProjectObject(AnnotationSetObject):
     """Schema definition for an annotation project object in AOEF format."""
 
-    collection_type: Literal["annotation_project"] = "annotation_project"
+    collection_type: Literal["annotation_project"] = "annotation_project"  # type: ignore
     name: str
     description: Optional[str] = None
     instructions: Optional[str] = None
@@ -32,7 +32,10 @@ class AnnotationProjectAdapter(AnnotationSetAdapter):
             )
         )
 
-    def to_aoef(self, obj: data.AnnotationProject) -> AnnotationProjectObject:
+    def to_aoef(
+        self,
+        obj: data.AnnotationProject,  # type: ignore
+    ) -> AnnotationProjectObject:
         tasks = [
             self.annotation_task_adapter.to_aoef(task)
             for task in obj.tasks or []
@@ -63,7 +66,7 @@ class AnnotationProjectAdapter(AnnotationSetAdapter):
 
     def to_soundevent(
         self,
-        obj: AnnotationProjectObject,
+        obj: AnnotationProjectObject,  # type: ignore
     ) -> data.AnnotationProject:
         annotation_set = super().to_soundevent(obj)
 

@@ -9,7 +9,7 @@ from soundevent.io.types import DataObject, DataType, Loader
 if sys.version_info >= (3, 8):
     from typing import Literal
 else:
-    from typing_extensions import Literal
+    from typing_extensions import Literal  # pragma: no cover
 
 
 @overload
@@ -17,8 +17,8 @@ def load(
     path: data.PathLike,
     audio_dir: Optional[data.PathLike] = None,
     format: Optional[str] = "aoef",
-    type: Literal["dataset"] = "dataset",
-) -> data.Dataset:
+    type: Literal["recording_set"] = "recording_set",  # type: ignore
+) -> data.RecordingSet:  # type: ignore
     ...
 
 
@@ -27,8 +27,8 @@ def load(
     path: data.PathLike,
     audio_dir: Optional[data.PathLike] = None,
     format: Optional[str] = "aoef",
-    type: Literal["annotation_set"] = "annotation_set",
-) -> data.AnnotationSet:
+    type: Literal["dataset"] = "dataset",  # type: ignore
+) -> data.Dataset:  # type: ignore
     ...
 
 
@@ -37,8 +37,8 @@ def load(
     path: data.PathLike,
     audio_dir: Optional[data.PathLike] = None,
     format: Optional[str] = "aoef",
-    type: Literal["annotation_project"] = "annotation_project",
-) -> data.AnnotationProject:
+    type: Literal["annotation_set"] = "annotation_set",  # type: ignore
+) -> data.AnnotationSet:  # type: ignore
     ...
 
 
@@ -47,8 +47,8 @@ def load(
     path: data.PathLike,
     audio_dir: Optional[data.PathLike] = None,
     format: Optional[str] = "aoef",
-    type: Literal["prediction_set"] = "prediction_set",
-) -> data.PredictionSet:
+    type: Literal["annotation_project"] = "annotation_project",  # type: ignore
+) -> data.AnnotationProject:  # type: ignore
     ...
 
 
@@ -57,8 +57,8 @@ def load(
     path: data.PathLike,
     audio_dir: Optional[data.PathLike] = None,
     format: Optional[str] = "aoef",
-    type: Literal["model_run"] = "model_run",
-) -> data.ModelRun:
+    type: Literal["prediction_set"] = "prediction_set",  # type: ignore
+) -> data.PredictionSet:  # type: ignore
     ...
 
 
@@ -67,8 +67,8 @@ def load(
     path: data.PathLike,
     audio_dir: Optional[data.PathLike] = None,
     format: Optional[str] = "aoef",
-    type: Literal["evaluation_set"] = "evaluation_set",
-) -> data.EvaluationSet:
+    type: Literal["model_run"] = "model_run",  # type: ignore
+) -> data.ModelRun:  # type: ignore
     ...
 
 
@@ -77,8 +77,8 @@ def load(
     path: data.PathLike,
     audio_dir: Optional[data.PathLike] = None,
     format: Optional[str] = "aoef",
-    type: Literal["evaluation"] = "evaluation",
-) -> data.Evaluation:
+    type: Literal["evaluation_set"] = "evaluation_set",  # type: ignore
+) -> data.EvaluationSet:  # type: ignore
     ...
 
 
@@ -87,8 +87,8 @@ def load(
     path: data.PathLike,
     audio_dir: Optional[data.PathLike] = None,
     format: Optional[str] = "aoef",
-    type: Literal["recording_set"] = "recording_set",
-) -> data.RecordingSet:
+    type: Literal["evaluation"] = "evaluation",  # type: ignore
+) -> data.Evaluation:  # type: ignore
     ...
 
 
@@ -96,8 +96,8 @@ def load(
     path: data.PathLike,
     audio_dir: Optional[data.PathLike] = None,
     format: Optional[str] = "aoef",
-    type: Optional[DataType] = None,
-) -> DataObject:
+    type: Optional[DataType] = None,  # type: ignore
+) -> DataObject:  # type: ignore
     if format is None:
         format = infer_format(path)
 
