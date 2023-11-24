@@ -5,6 +5,8 @@ from pydantic import BaseModel, EmailStr, Field
 
 
 class User(BaseModel):
+    """Information about a user."""
+
     uuid: UUID = Field(default_factory=uuid4)
     username: Optional[str] = None
     email: Optional[EmailStr] = None

@@ -25,8 +25,8 @@ RUN_METRICS: Sequence[metrics.Metric] = (metrics.mean_average_precision,)
 
 
 def clip_multilabel_classification(
-    prediction_set: data.PredictionSet,
-    annotation_set: data.AnnotationSet,
+    clip_predictions: Sequence[data.ClipPredictions],
+    clip_annotations: Sequence[data.ClipAnnotations],
     tags: Sequence[data.Tag],
 ) -> data.Evaluation:
     # TODO: Add docstring
@@ -37,7 +37,7 @@ def clip_multilabel_classification(
         evaluated_clips,
         true_classes,
         predicted_classes_scores,
-    ) = _evaluate_clips(prediction_set, annotation_set, encoder)
+    ) = _evaluate_clips(clip_predictions, clip_annotations, encoder)
 
     evaluation_metrics = _compute_overall_metrics(
         true_classes,
@@ -47,18 +47,18 @@ def clip_multilabel_classification(
     score = _compute_overall_score(evaluated_clips)
 
     return data.Evaluation(
-        prediction_set=prediction_set,
-        annotation_set=annotation_set,
+        clip_predictions=clip_predictions,
+        clip_annotations=clip_annotations,
         evaluation_task="clip_multilabel_classification",
-        evaluated_clips=evaluated_clips,
+        clip_evaluations=evaluated_clips,
         metrics=evaluation_metrics,
         score=score,
     )
 
 
 def _evaluate_clips(
-    prediction_set: data.PredictionSet,
-    annotation_set: data.AnnotationSet,
+    clip_predictions: Sequence[data.ClipPredictions],
+    clip_annotations: Sequence[data.ClipAnnotations],
     encoder: Encoder,
 ) -> Tuple[List[data.ClipEvaluation], np.ndarray, np.ndarray,]:
     """Evaluate all examples in the given model run and evaluation set."""
@@ -66,17 +66,17 @@ def _evaluate_clips(
     true_classes = []
     predicted_classes_scores = []
 
-    for clip_annotations, clip_predictions in iterate_over_valid_clips(
-        prediction_set=prediction_set,
-        annotation_set=annotation_set,
+    for annotations, predictions in iterate_over_valid_clips(
+        clip_predictions=clip_predictions,
+        clip_annotations=clip_annotations,
     ):
         (
             true_class,
             predicted_class_scores,
             evaluated_clip,
         ) = _evaluate_clip(
-            clip_annotations=clip_annotations,
-            clip_predictions=clip_predictions,
+            clip_annotations=annotations,
+            clip_predictions=predictions,
             encoder=encoder,
         )
 

@@ -2,21 +2,34 @@ site_name: soundevent
 site_url: https://mbsantiago.github.io/soundevent/
 nav:
   - Home: README.md
-  - Data: data.md
+  - Introduction: introduction.md
+  - Data Schemas:
+      - data_schemas/index.md
+      - Descriptors: data_schemas/descriptors.md
+      - Audio Content: data_schemas/audio_content.md
+      - Acoustic Objects: data_schemas/acoustic_objects.md
+      - Annotation: data_schemas/annotation.md
+      - Prediction: data_schemas/prediction.md
+      - Evaluation: data_schemas/evaluation.md
   - User Guide: generated/gallery
   - Reference:
-      - introduction: reference/introduction.md
       - data: reference/data.md
       - io: reference/io.md
       - audio: reference/audio.md
       - geometry: reference/geometry.md
       - evaluation: reference/evaluation.md
+      - plot: reference/plot.md
   - Contributing: CONTRIBUTING.md
   - Code of Conduct: CODE_OF_CONDUCT.md
 theme:
   name: material
   features:
     - content.code.copy
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.tracking
+    - navigation.indexes
+    - navigation.top
 plugins:
   - search
   - gallery:
@@ -28,16 +41,6 @@ plugins:
       compress_images: ["images", "thumbnails"]
       within_subsection_order: FileNameSortKey
       filename_pattern: ""
-      # binder:
-      #   org: mbsantiago
-      #   repo: soundevent
-      #   branch: gh-pages
-      #   # binderhub_url: https://mybinder.org
-      #   dependencies: docs/binder_cfg/requirements.txt # binder configuration files
-      #   # see https://mybinder.readthedocs.io/en/latest/using/config_files.html#config-files
-      #   # these will be copied to the .binder/ directory of the site.
-      #   notebooks_dir: notebooks
-      #   use_jupyter_lab: True
       show_memory: True
       capture_repr: ["_repr_html_", "__repr__"]
       matplotlib_animations: True
@@ -84,7 +87,12 @@ markdown_extensions:
   - pymdownx.critic
   - pymdownx.keys
   - pymdownx.details
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      preserve_tabs: true
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.snippets
   - pymdownx.highlight:
       anchor_linenums: true
@@ -99,6 +107,9 @@ extra_javascript:
   - javascripts/jquery-3.3.1.min.js
   - javascripts/jquery.json-viewer.js
   - javascripts/json-viewer.js
+  - optionalConfig.js
+  - https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js
+  - extra-loader.js
 extra_css:
   - stylesheets/jquery.json-viewer.css
   - css/mkdocstrings.css

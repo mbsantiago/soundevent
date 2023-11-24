@@ -80,8 +80,8 @@ def test_evaluation_returns_an_evaluation_object(
 ):
     """Test that the evaluation returns an evaluation object."""
     evaluation = clip_classification(
-        prediction_set=prediction_set,
-        annotation_set=annotation_set,
+        clip_predictions=prediction_set.clip_predictions,
+        clip_annotations=annotation_set.clip_annotations,
         tags=evaluation_tags,
     )
 
@@ -95,12 +95,12 @@ def test_all_possible_clips_were_evaluated(
 ):
     """Test that all possible clips were evaluated."""
     evaluation = clip_classification(
-        prediction_set=prediction_set,
-        annotation_set=annotation_set,
+        clip_predictions=prediction_set.clip_predictions,
+        clip_annotations=annotation_set.clip_annotations,
         tags=evaluation_tags,
     )
 
-    assert len(evaluation.evaluated_clips) == 2
+    assert len(evaluation.clip_evaluations) == 2
 
 
 def test_evaluated_clips_contain_true_class_probability(
@@ -109,19 +109,19 @@ def test_evaluated_clips_contain_true_class_probability(
     evaluation_tags: List[data.Tag],
 ):
     evaluation = clip_classification(
-        prediction_set=prediction_set,
-        annotation_set=annotation_set,
+        clip_predictions=prediction_set.clip_predictions,
+        clip_annotations=annotation_set.clip_annotations,
         tags=evaluation_tags,
     )
 
     true_class_prob_0 = data.find_feature(
-        evaluation.evaluated_clips[0].metrics, name="true_class_probability"
+        evaluation.clip_evaluations[0].metrics, name="true_class_probability"
     )
     assert true_class_prob_0 is not None
     assert math.isclose(true_class_prob_0.value, 0.9, rel_tol=1e-6)
 
     true_class_prob_1 = data.find_feature(
-        evaluation.evaluated_clips[1].metrics, name="true_class_probability"
+        evaluation.clip_evaluations[1].metrics, name="true_class_probability"
     )
     assert true_class_prob_1 is not None
     assert math.isclose(true_class_prob_1.value, 0.1, rel_tol=1e-6)
@@ -134,8 +134,8 @@ def test_evaluation_has_accuracy(
 ):
     """Test that the evaluation has an accuracy."""
     evaluation = clip_classification(
-        prediction_set=prediction_set,
-        annotation_set=annotation_set,
+        clip_predictions=prediction_set.clip_predictions,
+        clip_annotations=annotation_set.clip_annotations,
         tags=evaluation_tags,
     )
 
@@ -151,8 +151,8 @@ def test_evaluation_has_balanced_accuracy(
 ):
     """Test that the evaluation has a balanced accuracy."""
     evaluation = clip_classification(
-        annotation_set=annotation_set,
-        prediction_set=prediction_set,
+        clip_annotations=annotation_set.clip_annotations,
+        clip_predictions=prediction_set.clip_predictions,
         tags=evaluation_tags,
     )
 
@@ -170,8 +170,8 @@ def test_evaluation_has_top_3_accuracy(
 ):
     """Test that the evaluation has a top 3 accuracy."""
     evaluation = clip_classification(
-        annotation_set=annotation_set,
-        prediction_set=prediction_set,
+        clip_annotations=annotation_set.clip_annotations,
+        clip_predictions=prediction_set.clip_predictions,
         tags=evaluation_tags,
     )
 
@@ -199,15 +199,15 @@ def test_evaluation_with_missing_class(
     )
 
     evaluation = clip_classification(
-        annotation_set=annotation_set,
-        prediction_set=prediction_set,
+        clip_annotations=annotation_set.clip_annotations,
+        clip_predictions=prediction_set.clip_predictions,
         tags=evaluation_tags,
     )
 
-    assert len(evaluation.evaluated_clips) == 2
+    assert len(evaluation.clip_evaluations) == 2
     assert len(evaluation.metrics) == 3
-    assert len(evaluation.evaluated_clips[0].metrics) == 1
-    assert len(evaluation.evaluated_clips[1].metrics) == 1
+    assert len(evaluation.clip_evaluations[0].metrics) == 1
+    assert len(evaluation.clip_evaluations[1].metrics) == 1
 
 
 def test_overall_score_is_the_mean_of_the_scores_of_all_evaluated_clips(
@@ -218,8 +218,8 @@ def test_overall_score_is_the_mean_of_the_scores_of_all_evaluated_clips(
     """Test that the overall score is the mean of the scores of all evaluated
     examples."""
     evaluation = clip_classification(
-        annotation_set=annotation_set,
-        prediction_set=prediction_set,
+        clip_annotations=annotation_set.clip_annotations,
+        clip_predictions=prediction_set.clip_predictions,
         tags=evaluation_tags,
     )
 
@@ -234,17 +234,17 @@ def test_each_example_score_is_the_probability_of_the_true_class(
 ):
     """Test that each example score is the probability of the true class."""
     evaluation = clip_classification(
-        annotation_set=annotation_set,
-        prediction_set=prediction_set,
+        clip_annotations=annotation_set.clip_annotations,
+        clip_predictions=prediction_set.clip_predictions,
         tags=evaluation_tags,
     )
 
-    assert len(evaluation.evaluated_clips) == 2
-    assert len(evaluation.evaluated_clips[0].metrics) == 1
-    assert len(evaluation.evaluated_clips[1].metrics) == 1
+    assert len(evaluation.clip_evaluations) == 2
+    assert len(evaluation.clip_evaluations[0].metrics) == 1
+    assert len(evaluation.clip_evaluations[1].metrics) == 1
 
-    assert evaluation.evaluated_clips[0].score is not None
-    assert math.isclose(evaluation.evaluated_clips[0].score, 0.9, rel_tol=1e-6)
+    assert evaluation.clip_evaluations[0].score is not None
+    assert math.isclose(evaluation.clip_evaluations[0].score, 0.9, rel_tol=1e-6)
 
-    assert evaluation.evaluated_clips[1].score is not None
-    assert math.isclose(evaluation.evaluated_clips[1].score, 0.1, rel_tol=1e-6)
+    assert evaluation.clip_evaluations[1].score is not None
+    assert math.isclose(evaluation.clip_evaluations[1].score, 0.1, rel_tol=1e-6)

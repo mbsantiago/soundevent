@@ -55,7 +55,6 @@ __all__ = [
     "Clip",
     "ClipAnnotations",
     "ClipEvaluation",
-    "ClipEvaluation",
     "ClipPredictions",
     "Dataset",
     "Evaluation",

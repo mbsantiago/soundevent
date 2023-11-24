@@ -12,10 +12,10 @@ from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field, model_validator
 
-from soundevent.data.annotation_sets import AnnotationSet
+from soundevent.data.clip_annotations import ClipAnnotations
 from soundevent.data.clip_evaluations import ClipEvaluation
+from soundevent.data.clip_predictions import ClipPredictions
 from soundevent.data.features import Feature
-from soundevent.data.prediction_sets import PredictionSet
 
 __all__ = [
     "Evaluation",
@@ -29,27 +29,32 @@ class Evaluation(BaseModel):
     created_on: datetime.datetime = Field(
         default_factory=datetime.datetime.now
     )
-
     evaluation_task: str
-
-    annotation_set: AnnotationSet
-    prediction_set: PredictionSet
-
+    clip_annotations: Sequence[ClipAnnotations]
+    clip_predictions: Sequence[ClipPredictions]
+    clip_evaluations: Sequence[ClipEvaluation] = Field(default_factory=list)
     metrics: Sequence[Feature] = Field(default_factory=list)
-    evaluated_clips: Sequence[ClipEvaluation] = Field(default_factory=list)
     score: Optional[float] = Field(default=None, alias="score")
 
-    @model_validator(mode="after")  # type: ignore
-    def _check_evaluated_samples_belong_to_set(self):
-        """Check that all evaluated examples belong to the evaluation set."""
-        evaluation_set_examples = {
-            example.uuid for example in self.annotation_set.clip_annotations
+    @model_validator(mode="after")
+    def _check_clip_evaluations(self) -> "Evaluation":
+        annotated_clips = {
+            annotations.uuid for annotations in self.clip_annotations
         }
-        if any(
-            evaluated.annotations.uuid not in evaluation_set_examples
-            for evaluated in self.evaluated_clips
-        ):
-            raise ValueError(
-                "Not all evaluated examples belong to the evaluation set."
-            )
+        predicted_clips = {
+            predictions.uuid for predictions in self.clip_predictions
+        }
+
+        for clip_evaluation in self.clip_evaluations:
+            if clip_evaluation.uuid not in annotated_clips:
+                raise ValueError(
+                    f"Clip {clip_evaluation.uuid} not found in "
+                    f"annotated clips."
+                )
+            if clip_evaluation.uuid not in predicted_clips:
+                raise ValueError(
+                    f"Clip {clip_evaluation.uuid} not found in "
+                    f"predicted clips."
+                )
+
         return self

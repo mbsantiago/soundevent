@@ -272,8 +272,8 @@ def evaluation(
 ) -> data.Evaluation:
     return data.Evaluation(
         evaluation_task="Classification",
-        annotation_set=annotation_set,
-        prediction_set=prediction_set,
+        clip_annotations=annotation_set.clip_annotations,
+        clip_predictions=prediction_set.clip_predictions,
         metrics=[
             data.Feature(
                 name="Accuracy",
@@ -284,7 +284,7 @@ def evaluation(
                 value=0.5,
             ),
         ],
-        evaluated_clips=[
+        clip_evaluations=[
             clip_evaluation,
         ],
         score=0.5,

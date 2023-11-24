@@ -1,18 +1,18 @@
-from typing import Iterable, Tuple
+from typing import Iterable, Tuple, Sequence
 
 from soundevent import data
 
 
 def iterate_over_valid_clips(
-    prediction_set: data.PredictionSet,
-    annotation_set: data.AnnotationSet,
+    clip_predictions: Sequence[data.ClipPredictions],
+    clip_annotations: Sequence[data.ClipAnnotations],
 ) -> Iterable[Tuple[data.ClipAnnotations, data.ClipPredictions]]:
-    annotation_set_clips = {
+    annotated_clips = {
         example.clip.uuid: example
-        for example in annotation_set.clip_annotations
+        for example in clip_annotations
     }
 
-    for clip_predictions in prediction_set.clip_predictions:
-        if clip_predictions.clip.uuid in annotation_set_clips:
-            clip_annotations = annotation_set_clips[clip_predictions.clip.uuid]
-            yield clip_annotations, clip_predictions
+    for predictions in clip_predictions:
+        if predictions.clip.uuid in annotated_clips:
+            annotations = annotated_clips[predictions.clip.uuid]
+            yield annotations, predictions

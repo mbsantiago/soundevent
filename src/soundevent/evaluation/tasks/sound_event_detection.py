@@ -32,8 +32,8 @@ RUN_METRICS: Sequence[metrics.Metric] = (
 
 
 def sound_event_detection(
-    prediction_set: data.PredictionSet,
-    annotation_set: data.AnnotationSet,
+    clip_predictions: Sequence[data.ClipPredictions],
+    clip_annotations: Sequence[data.ClipAnnotations],
     tags: Sequence[data.Tag],
 ) -> data.Evaluation:
     encoder = create_tag_encoder(tags)
@@ -42,7 +42,7 @@ def sound_event_detection(
         evaluated_clips,
         true_classes,
         predicted_classes_scores,
-    ) = _evaluate_clips(prediction_set, annotation_set, encoder)
+    ) = _evaluate_clips(clip_predictions, clip_annotations, encoder)
 
     evaluation_metrics = _compute_overall_metrics(
         true_classes,
@@ -52,18 +52,18 @@ def sound_event_detection(
     score = _compute_overall_score(evaluated_clips)
 
     return data.Evaluation(
-        prediction_set=prediction_set,
-        annotation_set=annotation_set,
+        clip_predictions=clip_predictions,
+        clip_annotations=clip_annotations,
         evaluation_task="sound_event_detection",
-        evaluated_clips=evaluated_clips,
+        clip_evaluations=evaluated_clips,
         metrics=evaluation_metrics,
         score=score,
     )
 
 
 def _evaluate_clips(
-    prediction_set: data.PredictionSet,
-    annotation_set: data.AnnotationSet,
+    clip_predictions: Sequence[data.ClipPredictions],
+    clip_annotations: Sequence[data.ClipAnnotations],
     encoder: Encoder,
 ):
     """Evaluate all examples in the given model run and evaluation set."""
@@ -71,12 +71,12 @@ def _evaluate_clips(
     true_classes = []
     predicted_classes_scores = []
 
-    for example, processed_clip in iterate_over_valid_clips(
-        prediction_set=prediction_set, annotation_set=annotation_set
+    for annotations, predictions in iterate_over_valid_clips(
+        clip_predictions=clip_predictions, clip_annotations=clip_annotations
     ):
         true_class, predicted_classes, evaluated_example = _evaluate_clip(
-            clip_annotations=example,
-            clip_predictions=processed_clip,
+            clip_annotations=annotations,
+            clip_predictions=predictions,
             encoder=encoder,
         )
 

@@ -1,5 +1,4 @@
-"""
-# Saving and Loading data
+"""# Saving and Loading data
 
 In `soundevent`, we use the **Acoustic Objects Exchange Format** (**AOEF**) for
 storing and exchanging audio objects. **AOEF** is a JSON-based format
@@ -15,9 +14,11 @@ researchers.
     is commonly used in web applications, making it an ideal choice for data
     exchange.
 
+We use AOEF to share common collections of audio objects, such as datasets,
+annotation projects, evaluation sets, model runs and performance evaluations.
+
 To demonstrate how to save and load data in **AOEF** format, we provide
 examples below:
-
 """
 
 
@@ -48,7 +49,7 @@ dataset = io.load(dataset_path)
 print(repr(dataset))
 
 # %%
-# The [`load_dataset`][soundevent.io.load_dataset] function allows you to
+# The [`load`][soundevent.io.load] function allows you to
 # access and analyze the dataset, which contains recordings and related
 # objects, all structured in a standardized and manageable way.
 
@@ -59,7 +60,7 @@ print(f"Recording tags: {recording.tags}")
 # %%
 # ### Saving Datasets
 # If you have your own dataset, you can save it to a file using the
-# [`save_dataset`][soundevent.io.save_dataset] function. This function stores
+# [`save`][soundevent.io.save] function. This function stores
 # the dataset in **AOEF** format, ensuring compatibility and easy sharing with
 # other researchers.
 
@@ -68,8 +69,8 @@ io.save(dataset, dataset_path)
 # %%
 # ## Annotation Projects
 #
-# Similar to loading datasets, you can use the
-# [`load_annotation_project`][soundevent.io.load_annotation_project] function
+# Similar to loading datasets, you can also use the
+# [`load`][soundevent.io.load] function
 # to load annotations stored in the **AOEF** format.
 #
 # Here we have transformed 10 random annotated recordings from the
@@ -85,7 +86,7 @@ print(json.dumps(annotation_contents, indent=2))
 
 # %%
 # ### Loading Annotation Projects
-# The [`load_annotation_project`][soundevent.io.load_annotation_project]
+# The [`load`][soundevent.io.load]
 # function can be used to load the annotations into Python and obtain an
 # [`AnnotationProject`](../../data.md#annotation_projects) object directly.
 
@@ -96,7 +97,7 @@ print(repr(nips4b_sample))
 # This object allows you to access and analyze the annotations, along with
 # their associated objects.
 
-for task in nips4b_sample.annotated_clips:
+for task in nips4b_sample.clip_annotations:
     clip = task.clip
     recording = clip.recording
     print(
@@ -115,7 +116,7 @@ for task in nips4b_sample.annotated_clips:
 # %%
 # ### Saving Annotation Projects
 # Saving the annotation project is just as straightforward using the
-# [`save_annotation_project`][soundevent.io.save_annotation_project] function:
+# [`save`][soundevent.io.save] function:
 
 io.save(nips4b_sample, "nips4b_plus_sample.json")
 
@@ -123,8 +124,8 @@ io.save(nips4b_sample, "nips4b_plus_sample.json")
 # ## Model Runs
 # Finally, the outputs of a model run can also be stored in the **AOEF**
 # format. You can save and load model runs using the
-# [`save_model_run`][soundevent.io.save_model_run] and
-# [`load_model_run`][soundevent.io.load_model_run] functions, respectively. The
+# [`save`][soundevent.io.save] and
+# [`load`][soundevent.io.load] functions, respectively. The
 # loading function reads the **AOEF** file and returns a
 # [`ModelRun`](../../data.md#model_run) object that can be used for further
 # analysis.

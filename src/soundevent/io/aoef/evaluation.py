@@ -1,6 +1,6 @@
 import datetime
 from typing import Dict, List, Literal, Optional
-from uuid import UUID, uuid4
+from uuid import UUID
 
 from pydantic import BaseModel
 
@@ -43,10 +43,6 @@ class EvaluationObject(BaseModel):
     clip_evaluations: Optional[List[ClipEvaluationObject]] = None
     metrics: Optional[Dict[str, float]] = None
     score: Optional[float] = None
-    annotation_set_uuid: Optional[UUID] = None
-    annotation_set_created_on: Optional[datetime.datetime] = None
-    prediction_set_uuid: Optional[UUID] = None
-    prediction_set_created_on: Optional[datetime.datetime] = None
     matches: Optional[List[MatchObject]] = None
 
 
@@ -131,13 +127,13 @@ class EvaluationAdapter:
         )
 
     def to_aoef(self, obj: data.Evaluation) -> EvaluationObject:
-        for clip_annotations in obj.annotation_set.clip_annotations:
+        for clip_annotations in obj.clip_annotations:
             self.clip_annotations_adapter.to_aoef(clip_annotations)
 
-        for clip_predictions in obj.prediction_set.clip_predictions:
+        for clip_predictions in obj.clip_predictions:
             self.clip_predictions_adapter.to_aoef(clip_predictions)
 
-        for evaluated_clip in obj.evaluated_clips:
+        for evaluated_clip in obj.clip_evaluations:
             self.clip_evaluation_adapter.to_aoef(evaluated_clip)
 
         return EvaluationObject(
@@ -162,10 +158,6 @@ class EvaluationAdapter:
             if obj.metrics
             else None,
             score=obj.score,
-            annotation_set_uuid=obj.annotation_set.uuid,
-            annotation_set_created_on=obj.annotation_set.created_on,
-            prediction_set_uuid=obj.prediction_set.uuid,
-            prediction_set_created_on=obj.prediction_set.created_on,
             matches=self.match_adapter.values(),
         )
 
@@ -221,17 +213,9 @@ class EvaluationAdapter:
             uuid=obj.uuid,
             created_on=created_on,
             evaluation_task=obj.evaluation_task,
-            annotation_set=data.AnnotationSet(
-                uuid=obj.annotation_set_uuid or uuid4(),
-                clip_annotations=clip_annotations,
-                created_on=obj.annotation_set_created_on or created_on,
-            ),
-            prediction_set=data.PredictionSet(
-                uuid=obj.prediction_set_uuid or uuid4(),
-                clip_predictions=clip_predictions,
-                created_on=obj.prediction_set_created_on or created_on,
-            ),
-            evaluated_clips=evaluated_clips,
+            clip_annotations=clip_annotations,
+            clip_predictions=clip_predictions,
+            clip_evaluations=evaluated_clips,
             score=obj.score,
             metrics=[
                 data.Feature(name=name, value=value)

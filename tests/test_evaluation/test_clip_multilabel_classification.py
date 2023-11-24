@@ -77,11 +77,11 @@ def test_evaluation_has_correct_prediction_set(
 ):
     """Test if the evaluation has the correct model run."""
     evaluation = clip_multilabel_classification(
-        prediction_set=prediction_set,
-        annotation_set=annotation_set,
+        clip_predictions=prediction_set.clip_predictions,
+        clip_annotations=annotation_set.clip_annotations,
         tags=evaluation_tags,
     )
-    assert evaluation.prediction_set == prediction_set
+    assert evaluation.clip_predictions == prediction_set.clip_predictions
 
 
 def test_evaluation_has_correct_annotation_set(
@@ -91,11 +91,11 @@ def test_evaluation_has_correct_annotation_set(
 ):
     """Test if the evaluation has the correct evaluation set."""
     evaluation = clip_multilabel_classification(
-        prediction_set=prediction_set,
-        annotation_set=annotation_set,
+        clip_predictions=prediction_set.clip_predictions,
+        clip_annotations=annotation_set.clip_annotations,
         tags=evaluation_tags,
     )
-    assert evaluation.annotation_set == annotation_set
+    assert evaluation.clip_annotations == annotation_set.clip_annotations
 
 
 def test_evaluation_has_all_possible_evaluated_examples(
@@ -105,11 +105,11 @@ def test_evaluation_has_all_possible_evaluated_examples(
 ):
     """Test if the evaluation has all possible evaluated examples."""
     evaluation = clip_multilabel_classification(
-        prediction_set=prediction_set,
-        annotation_set=annotation_set,
+        clip_predictions=prediction_set.clip_predictions,
+        clip_annotations=annotation_set.clip_annotations,
         tags=evaluation_tags,
     )
-    assert len(evaluation.evaluated_clips) == 2
+    assert len(evaluation.clip_evaluations) == 2
 
 
 def test_each_evaluated_example_has_a_score(
@@ -119,11 +119,11 @@ def test_each_evaluated_example_has_a_score(
 ):
     """Test if each evaluated example has a score."""
     evaluation = clip_multilabel_classification(
-        prediction_set=prediction_set,
-        annotation_set=annotation_set,
+        clip_predictions=prediction_set.clip_predictions,
+        clip_annotations=annotation_set.clip_annotations,
         tags=evaluation_tags,
     )
-    for example in evaluation.evaluated_clips:
+    for example in evaluation.clip_evaluations:
         assert example.score is not None
 
 
@@ -134,11 +134,11 @@ def test_each_evaluated_example_has_jaccard_metric(
 ):
     """Test if each evaluated example has a jaccard metric."""
     evaluation = clip_multilabel_classification(
-        prediction_set=prediction_set,
-        annotation_set=annotation_set,
+        clip_predictions=prediction_set.clip_predictions,
+        clip_annotations=annotation_set.clip_annotations,
         tags=evaluation_tags,
     )
-    for example in evaluation.evaluated_clips:
+    for example in evaluation.clip_evaluations:
         metric = data.find_feature(example.metrics, "jaccard")
         assert metric is not None
 
@@ -150,11 +150,11 @@ def test_each_evaluated_example_has_average_precision(
 ):
     """Test if each evaluated example has an average precision metric."""
     evaluation = clip_multilabel_classification(
-        prediction_set=prediction_set,
-        annotation_set=annotation_set,
+        clip_predictions=prediction_set.clip_predictions,
+        clip_annotations=annotation_set.clip_annotations,
         tags=evaluation_tags,
     )
-    for example in evaluation.evaluated_clips:
+    for example in evaluation.clip_evaluations:
         metric = data.find_feature(example.metrics, "average_precision")
         assert metric is not None
 
@@ -166,8 +166,8 @@ def test_evaluation_has_global_score(
 ):
     """Test if the evaluation has a global score."""
     evaluation = clip_multilabel_classification(
-        prediction_set=prediction_set,
-        annotation_set=annotation_set,
+        clip_predictions=prediction_set.clip_predictions,
+        clip_annotations=annotation_set.clip_annotations,
         tags=evaluation_tags,
     )
     assert evaluation.score is not None
@@ -180,8 +180,8 @@ def test_evaluation_has_global_mean_average_precision(
 ):
     """Test if the evaluation has a global mean average precision."""
     evaluation = clip_multilabel_classification(
-        prediction_set=prediction_set,
-        annotation_set=annotation_set,
+        clip_predictions=prediction_set.clip_predictions,
+        clip_annotations=annotation_set.clip_annotations,
         tags=evaluation_tags,
     )
     metric = data.find_feature(evaluation.metrics, "mean_average_precision")
