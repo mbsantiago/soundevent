@@ -32,8 +32,8 @@ RUN_METRICS: Sequence[metrics.Metric] = (
 
 
 def sound_event_detection(
-    clip_predictions: Sequence[data.ClipPredictions],
-    clip_annotations: Sequence[data.ClipAnnotations],
+    clip_predictions: Sequence[data.ClipPrediction],
+    clip_annotations: Sequence[data.ClipAnnotation],
     tags: Sequence[data.Tag],
 ) -> data.Evaluation:
     encoder = create_tag_encoder(tags)
@@ -52,8 +52,6 @@ def sound_event_detection(
     score = _compute_overall_score(evaluated_clips)
 
     return data.Evaluation(
-        clip_predictions=clip_predictions,
-        clip_annotations=clip_annotations,
         evaluation_task="sound_event_detection",
         clip_evaluations=evaluated_clips,
         metrics=evaluation_metrics,
@@ -62,8 +60,8 @@ def sound_event_detection(
 
 
 def _evaluate_clips(
-    clip_predictions: Sequence[data.ClipPredictions],
-    clip_annotations: Sequence[data.ClipAnnotations],
+    clip_predictions: Sequence[data.ClipPrediction],
+    clip_annotations: Sequence[data.ClipAnnotation],
     encoder: Encoder,
 ):
     """Evaluate all examples in the given model run and evaluation set."""
@@ -104,8 +102,8 @@ def _compute_overall_metrics(true_classes, predicted_classes_scores):
 
 
 def _evaluate_clip(
-    clip_annotations: data.ClipAnnotations,
-    clip_predictions: data.ClipPredictions,
+    clip_annotations: data.ClipAnnotation,
+    clip_predictions: data.ClipPrediction,
     encoder: Encoder,
 ) -> Tuple[List[Optional[int]], List[np.ndarray], data.ClipEvaluation]:
     true_classes: List[Optional[int]] = []
@@ -121,7 +119,7 @@ def _evaluate_clip(
         ],
         target=[
             annotation.sound_event.geometry
-            for annotation in clip_annotations.annotations
+            for annotation in clip_annotations.sound_events
             if annotation.sound_event.geometry
         ],
     ):
@@ -146,7 +144,7 @@ def _evaluate_clip(
 
         # Handle the case where an annotation was not matched
         if annotation_index is not None and prediction_index is None:
-            annotation = clip_annotations.annotations[annotation_index]
+            annotation = clip_annotations.sound_events[annotation_index]
             y_true = classification_encoding(
                 tags=annotation.tags,
                 encoder=encoder,
@@ -169,7 +167,7 @@ def _evaluate_clip(
 
         if annotation_index is not None and prediction_index is not None:
             prediction = clip_predictions.sound_events[prediction_index]
-            annotation = clip_annotations.annotations[annotation_index]
+            annotation = clip_annotations.sound_events[annotation_index]
             true_class, predicted_class_scores, match = _evaluate_sound_event(
                 sound_event_prediction=prediction,
                 sound_event_annotation=annotation,

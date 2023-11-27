@@ -13,7 +13,7 @@ from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
 
-from soundevent.data.clip_annotations import ClipAnnotations
+from soundevent.data.clip_annotations import ClipAnnotation
 
 __all__ = [
     "AnnotationSet",
@@ -24,7 +24,7 @@ class AnnotationSet(BaseModel):
     """Annotation Set Class."""
 
     uuid: UUID = Field(default_factory=uuid4, repr=False)
-    clip_annotations: List[ClipAnnotations] = Field(
+    clip_annotations: List[ClipAnnotation] = Field(
         default_factory=list,
         repr=False,
     )

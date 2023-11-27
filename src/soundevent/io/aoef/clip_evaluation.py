@@ -9,7 +9,7 @@ from .adapters import DataAdapter
 from .clip_annotations import ClipAnnotationsAdapter
 from .clip_predictions import ClipPredictionsAdapter
 from .match import MatchAdapter
-from .note import NoteAdapter, NoteObject
+from .note import NoteAdapter
 
 
 class ClipEvaluationObject(BaseModel):
@@ -20,7 +20,6 @@ class ClipEvaluationObject(BaseModel):
     matches: Optional[List[int]] = None
     metrics: Optional[Dict[str, float]] = None
     score: Optional[float] = None
-    notes: Optional[List[NoteObject]] = None
 
 
 class ClipEvaluationAdapter(
@@ -61,9 +60,6 @@ class ClipEvaluationAdapter(
             if obj.metrics
             else None,
             score=obj.score,
-            notes=[self.note_adapter.to_aoef(note) for note in obj.notes]
-            if obj.notes
-            else None,
         )
 
     def assemble_soundevent(
@@ -99,11 +95,4 @@ class ClipEvaluationAdapter(
                 for name, value in (obj.metrics or {}).items()
             ],
             score=obj.score,
-            notes=[
-                self.note_adapter.to_soundevent(note)
-                for note in obj.notes or []
-            ],
         )
-
-    def to_soundevent(self, obj: ClipEvaluationObject) -> data.ClipEvaluation:
-        return super().to_soundevent(obj)

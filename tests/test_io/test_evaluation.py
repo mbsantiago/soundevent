@@ -15,7 +15,7 @@ def test_evaluation_is_recovered(
 
     # Act
     io.save(evaluation, path, audio_dir=audio_dir)
-    recovered = io.load(path, audio_dir=audio_dir)
+    recovered = io.load(path, audio_dir=audio_dir, type="evaluation")
 
     # Assert
     assert recovered == evaluation

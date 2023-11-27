@@ -17,6 +17,9 @@ from soundevent.io.aoef.note import NoteAdapter
 from soundevent.io.aoef.prediction_set import PredictionSetAdapter
 from soundevent.io.aoef.recording import RecordingAdapter
 from soundevent.io.aoef.recording_set import RecordingSetAdapter
+from soundevent.io.aoef.sequence import SequenceAdapter
+from soundevent.io.aoef.sequence_annotation import SequenceAnnotationAdapter
+from soundevent.io.aoef.sequence_prediction import SequencePredictionAdapter
 from soundevent.io.aoef.sound_event import SoundEventAdapter
 from soundevent.io.aoef.sound_event_annotation import (
     SoundEventAnnotationAdapter,
@@ -76,6 +79,11 @@ def recording_set_adapter(
 
 
 @pytest.fixture
+def sound_event_adapter() -> SoundEventAdapter:
+    return SoundEventAdapter()
+
+
+@pytest.fixture
 def clip_adapter(
     recording_adapter: RecordingAdapter,
 ) -> ClipAdapter:
@@ -83,8 +91,12 @@ def clip_adapter(
 
 
 @pytest.fixture
-def sound_event_adapter() -> SoundEventAdapter:
-    return SoundEventAdapter()
+def sequence_adapter(
+    sound_event_adapter: SoundEventAdapter,
+) -> SequenceAdapter:
+    return SequenceAdapter(
+        sound_event_adapter,
+    )
 
 
 @pytest.fixture
@@ -103,17 +115,34 @@ def sound_event_annotation_adapter(
 
 
 @pytest.fixture
+def sequence_annotation_adapter(
+    user_adapter: UserAdapter,
+    tag_adapter: TagAdapter,
+    note_adapter: NoteAdapter,
+    sequence_adapter: SequenceAdapter,
+) -> SequenceAnnotationAdapter:
+    return SequenceAnnotationAdapter(
+        user_adapter,
+        tag_adapter,
+        note_adapter,
+        sequence_adapter,
+    )
+
+
+@pytest.fixture
 def clip_annotations_adapter(
     clip_adapter: ClipAdapter,
     tag_adapter: TagAdapter,
     note_adapter: NoteAdapter,
     sound_event_annotation_adapter: SoundEventAnnotationAdapter,
+    sequence_annotation_adapter: SequenceAnnotationAdapter,
 ) -> ClipAnnotationsAdapter:
     return ClipAnnotationsAdapter(
         clip_adapter,
         tag_adapter,
         note_adapter,
         sound_event_annotation_adapter,
+        sequence_annotation_adapter,
     )
 
 
@@ -217,15 +246,28 @@ def sound_event_prediction_adapter(
 
 
 @pytest.fixture
+def sequence_prediction_adapter(
+    sequence_adapter: SequenceAdapter,
+    tag_adapter: TagAdapter,
+) -> SequencePredictionAdapter:
+    return SequencePredictionAdapter(
+        sequence_adapter,
+        tag_adapter,
+    )
+
+
+@pytest.fixture
 def clip_predictions_adapter(
     clip_adapter: ClipAdapter,
     sound_event_prediction_adapter: SoundEventPredictionAdapter,
     tag_adapter: TagAdapter,
+    sequence_prediction_adapter: SequencePredictionAdapter,
 ) -> ClipPredictionsAdapter:
     return ClipPredictionsAdapter(
         clip_adapter,
         sound_event_prediction_adapter,
         tag_adapter,
+        sequence_prediction_adapter,
     )
 
 

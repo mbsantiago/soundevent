@@ -15,7 +15,7 @@ def test_annotation_set_is_recovered(
 
     # Act
     io.save(annotation_set, path, audio_dir=audio_dir)
-    recovered = io.load(path, audio_dir=audio_dir)
+    recovered = io.load(path, audio_dir=audio_dir, type="annotation_set")
 
     # Assert
-    assert recovered == annotation_set
+    assert annotation_set == recovered

@@ -26,8 +26,8 @@ RUN_METRICS = (
 
 
 def clip_classification(
-    clip_predictions: Sequence[data.ClipPredictions],
-    clip_annotations: Sequence[data.ClipAnnotations],
+    clip_predictions: Sequence[data.ClipPrediction],
+    clip_annotations: Sequence[data.ClipAnnotation],
     tags: Sequence[data.Tag],
 ) -> data.Evaluation:
     # TODO: Add docstring
@@ -47,8 +47,6 @@ def clip_classification(
     score = _compute_overall_score(evaluated_examples)
 
     return data.Evaluation(
-        clip_predictions=clip_predictions,
-        clip_annotations=clip_annotations,
         evaluation_task="clip_classification",
         clip_evaluations=evaluated_examples,
         metrics=evaluation_metrics,
@@ -57,8 +55,8 @@ def clip_classification(
 
 
 def _evaluate_all_clips(
-    clip_predictions: Sequence[data.ClipPredictions],
-    clip_annotations: Sequence[data.ClipAnnotations],
+    clip_predictions: Sequence[data.ClipPrediction],
+    clip_annotations: Sequence[data.ClipAnnotation],
     encoder: Encoder,
 ):
     """Evaluate all examples in the given prediction set."""
@@ -106,8 +104,8 @@ def _compute_overall_metrics(true_classes, predicted_classes_scores):
 
 
 def _evaluate_example(
-    clip_annotations: data.ClipAnnotations,
-    clip_predictions: data.ClipPredictions,
+    clip_annotations: data.ClipAnnotation,
+    clip_predictions: data.ClipPrediction,
     encoder: Encoder,
     metrics: Sequence[metrics.Metric],
     scoring_fn: metrics.Metric,

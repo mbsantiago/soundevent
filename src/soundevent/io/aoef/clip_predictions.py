@@ -7,6 +7,7 @@ from soundevent import data
 
 from .adapters import DataAdapter
 from .clip import ClipAdapter
+from .sequence_prediction import SequencePredictionAdapter
 from .sound_event_prediction import SoundEventPredictionAdapter
 from .tag import TagAdapter
 
@@ -16,27 +17,30 @@ class ClipPredictionsObject(BaseModel):
     uuid: UUID
     clip: int
     sound_events: Optional[List[int]] = None
+    sequences: Optional[List[int]] = None
     tags: Optional[List[Tuple[int, float]]] = None
     features: Optional[Dict[str, float]] = None
 
 
 class ClipPredictionsAdapter(
-    DataAdapter[data.ClipPredictions, ClipPredictionsObject]
+    DataAdapter[data.ClipPrediction, ClipPredictionsObject]
 ):
     def __init__(
         self,
         clip_adapter: ClipAdapter,
         sound_event_prediction_adapter: SoundEventPredictionAdapter,
         tag_adapter: TagAdapter,
+        sequence_prediction_adapter: SequencePredictionAdapter,
     ):
         super().__init__()
         self.clip_adapter = clip_adapter
         self.sound_event_prediction_adapter = sound_event_prediction_adapter
         self.tag_adapter = tag_adapter
+        self.sequence_prediction_adapter = sequence_prediction_adapter
 
     def assemble_aoef(
         self,
-        obj: data.ClipPredictions,
+        obj: data.ClipPrediction,
         obj_id: int,
     ) -> ClipPredictionsObject:
         return ClipPredictionsObject(
@@ -48,6 +52,12 @@ class ClipPredictionsAdapter(
                 for sound_event in obj.sound_events
             ]
             if obj.sound_events
+            else None,
+            sequences=[
+                self.sequence_prediction_adapter.to_aoef(sequence).id
+                for sequence in obj.sequences
+            ]
+            if obj.sequences
             else None,
             tags=[
                 (tag.id, predicted_tag.score)
@@ -65,13 +75,13 @@ class ClipPredictionsAdapter(
     def assemble_soundevent(
         self,
         obj: ClipPredictionsObject,
-    ) -> data.ClipPredictions:
+    ) -> data.ClipPrediction:
         clip = self.clip_adapter.from_id(obj.clip)
 
         if clip is None:
             raise ValueError(f"Clip with ID {obj.clip} not found.")
 
-        return data.ClipPredictions(
+        return data.ClipPrediction(
             uuid=obj.uuid,
             clip=clip,
             sound_events=[
@@ -80,6 +90,16 @@ class ClipPredictionsAdapter(
                 if (
                     prediction := self.sound_event_prediction_adapter.from_id(
                         sound_event
+                    )
+                )
+                is not None
+            ],
+            sequences=[
+                prediction
+                for sequence in obj.sequences or []
+                if (
+                    prediction := self.sequence_prediction_adapter.from_id(
+                        sequence
                     )
                 )
                 is not None

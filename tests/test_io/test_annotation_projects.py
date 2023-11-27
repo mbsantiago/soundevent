@@ -98,7 +98,7 @@ def test_can_recover_project_with_empty_task(
     # Arrange
     annotation_project = data.AnnotationProject(
         name="test_project",
-        clip_annotations=[data.ClipAnnotations(clip=clip)],
+        clip_annotations=[data.ClipAnnotation(clip=clip)],
         tasks=[data.AnnotationTask(clip=clip)],
     )
     path = tmp_path / "test_project.json"
@@ -120,7 +120,7 @@ def test_can_recover_tasks_with_predicted_tags(
     annotation_project = data.AnnotationProject(
         name="test_project",
         clip_annotations=[
-            data.ClipAnnotations(
+            data.ClipAnnotation(
                 clip=clip,
                 tags=[
                     data.Tag(
@@ -223,7 +223,7 @@ def test_can_recover_task_notes(
     annotation_project = data.AnnotationProject(
         name="test_project",
         clip_annotations=[
-            data.ClipAnnotations(
+            data.ClipAnnotation(
                 clip=clip,
                 notes=[data.Note(message="test note", created_by=user)],
             )
@@ -283,9 +283,9 @@ def test_can_recover_task_simple_annotation(
     annotation_project = data.AnnotationProject(
         name="test_project",
         clip_annotations=[
-            data.ClipAnnotations(
+            data.ClipAnnotation(
                 clip=clip,
-                annotations=[
+                sound_events=[
                     data.SoundEventAnnotation(sound_event=sound_event)
                 ],
             )
@@ -301,17 +301,17 @@ def test_can_recover_task_simple_annotation(
     # Assert
     assert recovered == annotation_project
     assert (
-        recovered.clip_annotations[0].annotations[0].sound_event.geometry
+        recovered.clip_annotations[0].sound_events[0].sound_event.geometry
         is not None
     )
     assert sound_event.geometry is not None
     assert (
-        recovered.clip_annotations[0].annotations[0].sound_event.geometry.type
+        recovered.clip_annotations[0].sound_events[0].sound_event.geometry.type
         == sound_event.geometry.type
     )
     assert (
         recovered.clip_annotations[0]
-        .annotations[0]
+        .sound_events[0]
         .sound_event.geometry.coordinates
         == sound_event.geometry.coordinates
     )
@@ -327,9 +327,9 @@ def test_can_recover_task_annotation_with_tags(
     annotation_project = data.AnnotationProject(
         name="test_project",
         clip_annotations=[
-            data.ClipAnnotations(
+            data.ClipAnnotation(
                 clip=clip,
-                annotations=[
+                sound_events=[
                     data.SoundEventAnnotation(
                         sound_event=sound_event,
                         tags=[
@@ -353,10 +353,10 @@ def test_can_recover_task_annotation_with_tags(
     # Assert
     assert recovered == annotation_project
     assert (
-        recovered.clip_annotations[0].annotations[0].tags[0].key == "species"
+        recovered.clip_annotations[0].sound_events[0].tags[0].key == "species"
     )
     assert (
-        recovered.clip_annotations[0].annotations[0].tags[0].value
+        recovered.clip_annotations[0].sound_events[0].tags[0].value
         == "test_species"
     )
 
@@ -372,9 +372,9 @@ def test_can_recover_annotation_creator(
     annotation_project = data.AnnotationProject(
         name="test_project",
         clip_annotations=[
-            data.ClipAnnotations(
+            data.ClipAnnotation(
                 clip=clip,
-                annotations=[
+                sound_events=[
                     data.SoundEventAnnotation(
                         sound_event=sound_event,
                         created_by=user,
@@ -392,7 +392,7 @@ def test_can_recover_annotation_creator(
 
     # Assert
     assert recovered == annotation_project
-    assert recovered.clip_annotations[0].annotations[0].created_by == user
+    assert recovered.clip_annotations[0].sound_events[0].created_by == user
 
 
 def test_can_recover_annotation_creation_date(
@@ -406,9 +406,9 @@ def test_can_recover_annotation_creation_date(
     annotation_project = data.AnnotationProject(
         name="test_project",
         clip_annotations=[
-            data.ClipAnnotations(
+            data.ClipAnnotation(
                 clip=clip,
-                annotations=[
+                sound_events=[
                     data.SoundEventAnnotation(
                         sound_event=sound_event, created_on=date
                     )
@@ -425,7 +425,7 @@ def test_can_recover_annotation_creation_date(
 
     # Assert
     assert recovered == annotation_project
-    assert recovered.clip_annotations[0].annotations[0].created_on == date
+    assert recovered.clip_annotations[0].sound_events[0].created_on == date
 
 
 def test_can_recover_annotation_notes(
@@ -439,9 +439,9 @@ def test_can_recover_annotation_notes(
     annotation_project = data.AnnotationProject(
         name="test_project",
         clip_annotations=[
-            data.ClipAnnotations(
+            data.ClipAnnotation(
                 clip=clip,
-                annotations=[
+                sound_events=[
                     data.SoundEventAnnotation(
                         sound_event=sound_event,
                         notes=[
@@ -465,11 +465,11 @@ def test_can_recover_annotation_notes(
     # Assert
     assert recovered == annotation_project
     assert (
-        recovered.clip_annotations[0].annotations[0].notes[0].message
+        recovered.clip_annotations[0].sound_events[0].notes[0].message
         == "test_note"
     )
     assert (
-        recovered.clip_annotations[0].annotations[0].notes[0].created_by
+        recovered.clip_annotations[0].sound_events[0].notes[0].created_by
         == user
     )
 
@@ -484,9 +484,9 @@ def test_can_recover_sound_event_features(
     annotation_project = data.AnnotationProject(
         name="test_project",
         clip_annotations=[
-            data.ClipAnnotations(
+            data.ClipAnnotation(
                 clip=clip,
-                annotations=[
+                sound_events=[
                     data.SoundEventAnnotation(
                         sound_event=data.SoundEvent(
                             geometry=bounding_box,
@@ -513,14 +513,14 @@ def test_can_recover_sound_event_features(
     assert recovered == annotation_project
     assert (
         recovered.clip_annotations[0]
-        .annotations[0]
+        .sound_events[0]
         .sound_event.features[0]
         .name
         == "duration"
     )
     assert (
         recovered.clip_annotations[0]
-        .annotations[0]
+        .sound_events[0]
         .sound_event.features[0]
         .value
         == 1.0
@@ -547,7 +547,7 @@ def test_recording_paths_are_stored_as_relative_if_audio_dir_is_provided(
     )
     annotation_project = data.AnnotationProject(
         name="test_project",
-        clip_annotations=[data.ClipAnnotations(clip=clip)],
+        clip_annotations=[data.ClipAnnotation(clip=clip)],
         tasks=[data.AnnotationTask(clip=clip)],
     )
     path = tmp_path / "test_project.json"

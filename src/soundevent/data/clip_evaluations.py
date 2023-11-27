@@ -7,16 +7,15 @@ the evaluation process, including the original `EvaluationExample`, the model's
 predictions (`ProcessedClip`), matches between predicted and ground truth
 annotations (`Match` instances), and computed evaluation metrics.
 """
-from typing import List, Optional, Sequence
+from typing import Optional, Sequence
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field, model_validator
 
-from soundevent.data.clip_annotations import ClipAnnotations
-from soundevent.data.clip_predictions import ClipPredictions
+from soundevent.data.clip_annotations import ClipAnnotation
+from soundevent.data.clip_predictions import ClipPrediction
 from soundevent.data.features import Feature
 from soundevent.data.matches import Match
-from soundevent.data.notes import Note
 
 __all__ = ["ClipEvaluation"]
 
@@ -56,12 +55,11 @@ class ClipEvaluation(BaseModel):
     """
 
     uuid: UUID = Field(default_factory=uuid4, repr=False)
-    annotations: ClipAnnotations
-    predictions: ClipPredictions
+    annotations: ClipAnnotation
+    predictions: ClipPrediction
     matches: Sequence[Match] = Field(default_factory=list)
     metrics: Sequence[Feature] = Field(default_factory=list)
     score: Optional[float] = Field(default=None, ge=0.0, le=1.0)
-    notes: List[Note] = Field(default_factory=list, repr=False)
 
     @model_validator(mode="after")  # type: ignore
     def _check_clips_match(self):
@@ -88,7 +86,7 @@ class ClipEvaluation(BaseModel):
         sound event. This validation is handled by the Match model.
         """
         annotation_sound_events = {
-            annotation.uuid for annotation in self.annotations.annotations
+            annotation.uuid for annotation in self.annotations.sound_events
         }
 
         predicted_sound_events = {

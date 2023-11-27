@@ -4,9 +4,9 @@ from soundevent import data
 
 
 def iterate_over_valid_clips(
-    clip_predictions: Sequence[data.ClipPredictions],
-    clip_annotations: Sequence[data.ClipAnnotations],
-) -> Iterable[Tuple[data.ClipAnnotations, data.ClipPredictions]]:
+    clip_predictions: Sequence[data.ClipPrediction],
+    clip_annotations: Sequence[data.ClipAnnotation],
+) -> Iterable[Tuple[data.ClipAnnotation, data.ClipPrediction]]:
     annotated_clips = {
         example.clip.uuid: example
         for example in clip_annotations

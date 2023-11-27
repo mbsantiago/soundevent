@@ -5,11 +5,13 @@ from soundevent import data
 from .annotation_set import AnnotationSetAdapter, AnnotationSetObject
 from .annotation_task import AnnotationTaskAdapter, AnnotationTaskObject
 
+ColType = Literal["annotation_project"]
+
 
 class AnnotationProjectObject(AnnotationSetObject):
     """Schema definition for an annotation project object in AOEF format."""
 
-    collection_type: Literal["annotation_project"] = "annotation_project"  # type: ignore
+    collection_type: ColType = "annotation_project"  # type: ignore
     name: str
     description: Optional[str] = None
     instructions: Optional[str] = None
@@ -52,9 +54,11 @@ class AnnotationProjectAdapter(AnnotationSetAdapter):
             users=self.user_adapter.values(),
             tags=self.tag_adapter.values(),
             recordings=self.recording_adapter.values(),
-            clips=self.clip_adapter.values(),
             sound_events=self.sound_event_adapter.values(),
+            sequences=self.sequence_adapter.values(),
+            clips=self.clip_adapter.values(),
             sound_event_annotations=self.sound_event_annotations_adapter.values(),
+            sequence_annotations=self.sequence_annotations_adapter.values(),
             clip_annotations=annotation_set.clip_annotations,
             created_on=obj.created_on,
             name=obj.name,

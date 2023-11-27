@@ -36,9 +36,9 @@ def annotation_set(
     clip1, clip2, clip3 = clips
     return data.AnnotationSet(
         clip_annotations=[
-            data.ClipAnnotations(clip=clip1, tags=[tags[0], tags[2]]),
-            data.ClipAnnotations(clip=clip2, tags=[tags[3]]),
-            data.ClipAnnotations(clip=clip3, tags=[tags[0], tags[1], tags[5]]),
+            data.ClipAnnotation(clip=clip1, tags=[tags[0], tags[2]]),
+            data.ClipAnnotation(clip=clip2, tags=[tags[3]]),
+            data.ClipAnnotation(clip=clip3, tags=[tags[0], tags[1], tags[5]]),
         ],
     )
 
@@ -52,14 +52,14 @@ def prediction_set(
     clip1, clip2, _ = clips
     return data.PredictionSet(
         clip_predictions=[
-            data.ClipPredictions(
+            data.ClipPrediction(
                 clip=clip1,
                 tags=[
                     data.PredictedTag(tag=tags[0], score=0.9),
                     data.PredictedTag(tag=tags[2], score=0.1),
                 ],
             ),
-            data.ClipPredictions(
+            data.ClipPrediction(
                 clip=clip2,
                 tags=[
                     data.PredictedTag(tag=tags[1], score=0.9),
@@ -68,34 +68,6 @@ def prediction_set(
             ),
         ],
     )
-
-
-def test_evaluation_has_correct_prediction_set(
-    annotation_set: data.AnnotationSet,
-    prediction_set: data.PredictionSet,
-    evaluation_tags: List[data.Tag],
-):
-    """Test if the evaluation has the correct model run."""
-    evaluation = clip_multilabel_classification(
-        clip_predictions=prediction_set.clip_predictions,
-        clip_annotations=annotation_set.clip_annotations,
-        tags=evaluation_tags,
-    )
-    assert evaluation.clip_predictions == prediction_set.clip_predictions
-
-
-def test_evaluation_has_correct_annotation_set(
-    annotation_set: data.AnnotationSet,
-    prediction_set: data.PredictionSet,
-    evaluation_tags: List[data.Tag],
-):
-    """Test if the evaluation has the correct evaluation set."""
-    evaluation = clip_multilabel_classification(
-        clip_predictions=prediction_set.clip_predictions,
-        clip_annotations=annotation_set.clip_annotations,
-        tags=evaluation_tags,
-    )
-    assert evaluation.clip_annotations == annotation_set.clip_annotations
 
 
 def test_evaluation_has_all_possible_evaluated_examples(

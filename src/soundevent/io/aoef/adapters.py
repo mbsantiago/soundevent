@@ -28,8 +28,8 @@ class HasID(Protocol):
     id: int
 
 
-A = TypeVar("A", bound=HasUUID)
-B = TypeVar("B", bound=HasID)
+SoundEventObject = TypeVar("SoundEventObject", bound=HasUUID)
+AOEFObject = TypeVar("AOEFObject", bound=HasID)
 C = TypeVar("C", bound=DataObject)
 D = TypeVar("D", bound=BaseModel)
 
@@ -48,7 +48,7 @@ class AdapterProtocol(Protocol, Generic[C, D]):
         ...
 
 
-class DataAdapter(ABC, Generic[A, B]):
+class DataAdapter(ABC, Generic[SoundEventObject, AOEFObject]):
     """Base class for data adapters.
 
     A data adapter is used to convert between sound event and AOEF data
@@ -61,11 +61,11 @@ class DataAdapter(ABC, Generic[A, B]):
 
     def __init__(self):
         self._mapping: Dict[Hashable, int] = {}
-        self._soundevent_store: Dict[int, A] = {}
-        self._aoef_store: Dict[int, B] = {}
+        self._soundevent_store: Dict[int, SoundEventObject] = {}
+        self._aoef_store: Dict[int, AOEFObject] = {}
 
     @abstractmethod
-    def assemble_aoef(self, obj: A, obj_id: int) -> B:
+    def assemble_aoef(self, obj: SoundEventObject, obj_id: int) -> AOEFObject:
         """Create AOEF object from sound event object.
 
         Parameters
@@ -80,12 +80,12 @@ class DataAdapter(ABC, Generic[A, B]):
         ...
 
     @abstractmethod
-    def assemble_soundevent(self, obj: B) -> A:
+    def assemble_soundevent(self, obj: AOEFObject) -> SoundEventObject:
         """Create sound event object from AOEF object."""
         ...
 
     @classmethod
-    def _get_key(cls, obj: A) -> Hashable:
+    def _get_key(cls, obj: SoundEventObject) -> Hashable:
         """Get key for object.
 
         Internally, the data adapter uses a mapping between objects and
@@ -93,7 +93,7 @@ class DataAdapter(ABC, Generic[A, B]):
         """
         return obj.uuid
 
-    def to_aoef(self, obj: A) -> B:
+    def to_aoef(self, obj: SoundEventObject) -> AOEFObject:
         """Convert object to AOEF format."""
         obj_id = self.get_id(obj)
 
@@ -106,7 +106,7 @@ class DataAdapter(ABC, Generic[A, B]):
 
         return self._aoef_store[obj_id]
 
-    def to_soundevent(self, obj: B) -> A:
+    def to_soundevent(self, obj: AOEFObject) -> SoundEventObject:
         """Convert object to sound event format."""
         obj_id = obj.id
 
@@ -119,11 +119,11 @@ class DataAdapter(ABC, Generic[A, B]):
 
         return self._soundevent_store[obj_id]
 
-    def from_id(self, obj_id: int) -> Optional[A]:
+    def from_id(self, obj_id: int) -> Optional[SoundEventObject]:
         """Get object from ID."""
         return self._soundevent_store.get(obj_id)
 
-    def get_id(self, obj: A) -> int:
+    def get_id(self, obj: SoundEventObject) -> int:
         """Get ID for object."""
         key = self._get_key(obj)
 
@@ -138,7 +138,7 @@ class DataAdapter(ABC, Generic[A, B]):
 
         return obj_id
 
-    def values(self) -> Optional[List[B]]:
+    def values(self) -> Optional[List[AOEFObject]]:
         """Get all registered objects."""
         if not self._aoef_store:
             return None

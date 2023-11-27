@@ -40,7 +40,7 @@ from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
 
-from soundevent.data.clip_predictions import ClipPredictions
+from soundevent.data.clip_predictions import ClipPrediction
 
 __all__ = ["PredictionSet"]
 
@@ -71,7 +71,7 @@ class PredictionSet(BaseModel):
     """
 
     uuid: UUID = Field(default_factory=uuid4)
-    clip_predictions: List[ClipPredictions] = Field(default_factory=list)
+    clip_predictions: List[ClipPrediction] = Field(default_factory=list)
     created_on: datetime.datetime = Field(
         default_factory=datetime.datetime.now
     )

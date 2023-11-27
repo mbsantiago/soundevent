@@ -14,14 +14,15 @@ from pydantic import BaseModel, Field
 from soundevent.data.clips import Clip
 from soundevent.data.notes import Note
 from soundevent.data.sound_event_annotations import SoundEventAnnotation
+from soundevent.data.sequence_annotations import SequenceAnnotation
 from soundevent.data.tags import Tag
 
 __all__ = [
-    "ClipAnnotations",
+    "ClipAnnotation",
 ]
 
 
-class ClipAnnotations(BaseModel):
+class ClipAnnotation(BaseModel):
     """Clip Annotations Class.
 
     Represents annotations associated with a specific audio clip.
@@ -48,8 +49,9 @@ class ClipAnnotations(BaseModel):
 
     uuid: UUID = Field(default_factory=uuid4)
     clip: Clip
+    sound_events: List[SoundEventAnnotation] = Field(default_factory=list)
+    sequences: List[SequenceAnnotation] = Field(default_factory=list)
     tags: List[Tag] = Field(default_factory=list)
-    annotations: List[SoundEventAnnotation] = Field(default_factory=list)
     notes: List[Note] = Field(default_factory=list)
     created_on: datetime.datetime = Field(
         default_factory=datetime.datetime.now

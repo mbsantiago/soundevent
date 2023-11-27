@@ -9,6 +9,7 @@ from soundevent import data
 from .adapters import DataAdapter
 from .clip import ClipAdapter
 from .note import NoteAdapter, NoteObject
+from .sequence_annotation import SequenceAnnotationAdapter
 from .sound_event_annotation import SoundEventAnnotationAdapter
 from .tag import TagAdapter
 
@@ -20,13 +21,14 @@ class ClipAnnotationsObject(BaseModel):
     uuid: Optional[UUID] = None
     clip: int
     tags: Optional[List[int]] = None
-    annotations: Optional[List[int]] = None
+    sound_events: Optional[List[int]] = None
+    sequences: Optional[List[int]] = None
     notes: Optional[List[NoteObject]] = None
     created_on: Optional[datetime.datetime] = None
 
 
 class ClipAnnotationsAdapter(
-    DataAdapter[data.ClipAnnotations, ClipAnnotationsObject]
+    DataAdapter[data.ClipAnnotation, ClipAnnotationsObject]
 ):
     def __init__(
         self,
@@ -34,16 +36,18 @@ class ClipAnnotationsAdapter(
         tag_adapter: TagAdapter,
         note_adapter: NoteAdapter,
         sound_event_annotation_adapter: SoundEventAnnotationAdapter,
+        sequence_annotation_adapter: SequenceAnnotationAdapter,
     ):
         super().__init__()
         self.clip_adapter = clip_adapter
         self.tag_adapter = tag_adapter
         self.note_adapter = note_adapter
         self.sound_event_annotation_adapter = sound_event_annotation_adapter
+        self.sequence_annotation_adapter = sequence_annotation_adapter
 
     def assemble_aoef(
         self,
-        obj: data.ClipAnnotations,
+        obj: data.ClipAnnotation,
         obj_id: int,
     ) -> ClipAnnotationsObject:
         return ClipAnnotationsObject(
@@ -53,11 +57,17 @@ class ClipAnnotationsAdapter(
             tags=[self.tag_adapter.to_aoef(tag).id for tag in obj.tags]
             if obj.tags
             else None,
-            annotations=[
+            sound_events=[
                 self.sound_event_annotation_adapter.to_aoef(annotation).id
-                for annotation in obj.annotations
+                for annotation in obj.sound_events
             ]
-            if obj.annotations
+            if obj.sound_events
+            else None,
+            sequences=[
+                self.sequence_annotation_adapter.to_aoef(annotation).id
+                for annotation in obj.sequences
+            ]
+            if obj.sequences
             else None,
             notes=[self.note_adapter.to_aoef(note) for note in obj.notes]
             if obj.notes
@@ -68,12 +78,12 @@ class ClipAnnotationsAdapter(
     def assemble_soundevent(
         self,
         obj: ClipAnnotationsObject,
-    ) -> data.ClipAnnotations:
+    ) -> data.ClipAnnotation:
         clip = self.clip_adapter.from_id(obj.clip)
         if clip is None:
             raise ValueError(f"Clip with ID {obj.clip} not found.")
 
-        return data.ClipAnnotations(
+        return data.ClipAnnotation(
             uuid=obj.uuid or uuid4(),
             clip=clip,
             tags=[
@@ -81,11 +91,21 @@ class ClipAnnotationsAdapter(
                 for tag_id in obj.tags or []
                 if (tag := self.tag_adapter.from_id(tag_id)) is not None
             ],
-            annotations=[
+            sound_events=[
                 annotation
-                for annotation_id in obj.annotations or []
+                for annotation_id in obj.sound_events or []
                 if (
                     annotation := self.sound_event_annotation_adapter.from_id(
+                        annotation_id
+                    )
+                )
+                is not None
+            ],
+            sequences=[
+                annotation
+                for annotation_id in obj.sequences or []
+                if (
+                    annotation := self.sequence_annotation_adapter.from_id(
                         annotation_id
                     )
                 )

@@ -31,9 +31,9 @@ def annotation_set(
     tag1, tag2, tag3 = example_tags
     return data.AnnotationSet(
         clip_annotations=[
-            data.ClipAnnotations(clip=clip1, tags=[tag1]),
-            data.ClipAnnotations(clip=clip2, tags=[tag2]),
-            data.ClipAnnotations(clip=clip3, tags=[tag3]),
+            data.ClipAnnotation(clip=clip1, tags=[tag1]),
+            data.ClipAnnotation(clip=clip2, tags=[tag2]),
+            data.ClipAnnotation(clip=clip3, tags=[tag3]),
         ],
     )
 
@@ -55,14 +55,14 @@ def prediction_set(
     tag1, tag2, _ = example_tags
     return data.PredictionSet(
         clip_predictions=[
-            data.ClipPredictions(
+            data.ClipPrediction(
                 clip=clip1,
                 tags=[
                     data.PredictedTag(tag=tag1, score=0.9),
                     data.PredictedTag(tag=tag2, score=0.1),
                 ],
             ),
-            data.ClipPredictions(
+            data.ClipPrediction(
                 clip=clip2,
                 tags=[
                     data.PredictedTag(tag=tag1, score=0.9),
@@ -193,8 +193,8 @@ def test_evaluation_with_missing_class(
     tag1, _, tag3 = example_tags
     annotation_set = data.AnnotationSet(
         clip_annotations=[
-            data.ClipAnnotations(clip=clip1, tags=[tag1]),
-            data.ClipAnnotations(clip=clip2, tags=[tag3]),
+            data.ClipAnnotation(clip=clip1, tags=[tag1]),
+            data.ClipAnnotation(clip=clip2, tags=[tag3]),
         ],
     )
 

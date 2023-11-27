@@ -94,7 +94,7 @@ def test_can_recover_simple_processed_clip(
     # Arrange
     model_run = data.ModelRun(
         name="test_model",
-        clip_predictions=[data.ClipPredictions(clip=clip)],
+        clip_predictions=[data.ClipPrediction(clip=clip)],
     )
     path = tmp_path / "test_project.json"
     io.save(model_run, path)
@@ -115,7 +115,7 @@ def test_can_recover_processed_clip_tags(
     model_run = data.ModelRun(
         name="test_model",
         clip_predictions=[
-            data.ClipPredictions(
+            data.ClipPrediction(
                 clip=clip,
                 tags=[
                     data.PredictedTag(
@@ -153,7 +153,7 @@ def test_can_recover_processed_clip_features(
     model_run = data.ModelRun(
         name="test_model",
         clip_predictions=[
-            data.ClipPredictions(
+            data.ClipPrediction(
                 clip=clip,
                 features=[
                     data.Feature(
@@ -192,7 +192,7 @@ def test_can_recover_simple_predicted_sound_event(
     model_run = data.ModelRun(
         name="test_model",
         clip_predictions=[
-            data.ClipPredictions(
+            data.ClipPrediction(
                 clip=clip,
                 sound_events=[
                     data.SoundEventPrediction(
@@ -228,7 +228,7 @@ def test_can_recover_predicted_sound_event_with_predicted_tags(
     model_run = data.ModelRun(
         name="test_model",
         clip_predictions=[
-            data.ClipPredictions(
+            data.ClipPrediction(
                 clip=clip,
                 sound_events=[
                     data.SoundEventPrediction(

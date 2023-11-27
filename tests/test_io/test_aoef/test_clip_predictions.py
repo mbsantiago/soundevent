@@ -8,7 +8,7 @@ from soundevent.io.aoef.clip_predictions import (
 
 
 def test_clip_predictions_can_be_converted_to_aoef(
-    clip_predictions: data.ClipPredictions,
+    clip_predictions: data.ClipPrediction,
     clip_predictions_adapter: ClipPredictionsAdapter,
 ):
     """Test that a clip predictions can be converted to AOEF."""
@@ -17,7 +17,7 @@ def test_clip_predictions_can_be_converted_to_aoef(
 
 
 def test_clip_predictions_is_recovered(
-    clip_predictions: data.ClipPredictions,
+    clip_predictions: data.ClipPrediction,
     clip_predictions_adapter: ClipPredictionsAdapter,
 ):
     """Test that a clip predictions is recovered."""

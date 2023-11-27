@@ -7,9 +7,9 @@ from soundevent.data.annotation_tasks import (
     AnnotationTask,
     StatusBadge,
 )
-from soundevent.data.clip_annotations import ClipAnnotations
+from soundevent.data.clip_annotations import ClipAnnotation
 from soundevent.data.clip_evaluations import ClipEvaluation
-from soundevent.data.clip_predictions import ClipPredictions
+from soundevent.data.clip_predictions import ClipPrediction
 from soundevent.data.clips import Clip
 from soundevent.data.datasets import Dataset
 from soundevent.data.evaluation_sets import EvaluationSet
@@ -39,6 +39,8 @@ from soundevent.data.predicted_tags import PredictedTag
 from soundevent.data.prediction_sets import PredictionSet
 from soundevent.data.recording_sets import RecordingSet
 from soundevent.data.recordings import PathLike, Recording
+from soundevent.data.sequence_annotations import SequenceAnnotation
+from soundevent.data.sequence_predictions import SequencePrediction
 from soundevent.data.sequences import Sequence
 from soundevent.data.sound_event_annotations import SoundEventAnnotation
 from soundevent.data.sound_event_predictions import SoundEventPrediction
@@ -53,9 +55,9 @@ __all__ = [
     "AnnotationTask",
     "BoundingBox",
     "Clip",
-    "ClipAnnotations",
+    "ClipAnnotation",
     "ClipEvaluation",
-    "ClipPredictions",
+    "ClipPrediction",
     "Dataset",
     "Evaluation",
     "EvaluationSet",
@@ -79,6 +81,8 @@ __all__ = [
     "Recording",
     "RecordingSet",
     "Sequence",
+    "SequenceAnnotation",
+    "SequencePrediction",
     "SoundEvent",
     "SoundEventAnnotation",
     "SoundEventPrediction",

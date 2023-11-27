@@ -43,9 +43,7 @@ from uuid import UUID, uuid4
 from pydantic import BaseModel, Field
 
 from soundevent.data.features import Feature
-from soundevent.data.notes import Note
 from soundevent.data.sound_events import SoundEvent
-from soundevent.data.tags import Tag
 
 __all__ = ["Sequence"]
 
@@ -64,15 +62,9 @@ class Sequence(BaseModel):
         A unique identifier for the sequence.
     sound_event
         A list of sound events within the sequence.
-    tags
-        A list of tags describing the sequence, providing additional context or
-        categorization.
     features
         A list of features associated with the sequence, offering quantitative
         information about the sequence's acoustic characteristics.
-    notes: List[Note]
-        A list of notes about the sequence, serving as textual annotations to
-        provide additional context or details.
     parent
         If the sequence is a subsequence, this attribute refers to the parent
         sequence under which the current sequence is organized.
@@ -80,7 +72,5 @@ class Sequence(BaseModel):
 
     uuid: UUID = Field(default_factory=uuid4)
     sound_events: List[SoundEvent] = Field(default_factory=list)
-    tags: List[Tag] = Field(default_factory=list)
     features: List[Feature] = Field(default_factory=list)
-    notes: List[Note] = Field(default_factory=list)
     parent: Optional["Sequence"] = None

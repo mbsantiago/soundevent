@@ -58,6 +58,19 @@ def dataset(
 
 
 @pytest.fixture
+def sequence(
+    sound_event: data.SoundEvent,
+) -> data.Sequence:
+    return data.Sequence(
+        uuid=sound_event.uuid,
+        sound_events=[sound_event],
+        features=[
+            data.Feature(name="Duration", value=23.3),
+        ],
+    )
+
+
+@pytest.fixture
 def clip(
     recording: data.Recording,
 ) -> data.Clip:
@@ -88,17 +101,34 @@ def sound_event_annotation(
 
 
 @pytest.fixture
+def sequence_annotation(
+    tags: List[data.Tag],
+    sequence: data.Sequence,
+    note: data.Note,
+    user: data.User,
+):
+    return data.SequenceAnnotation(
+        sequence=sequence,
+        notes=[note],
+        created_by=user,
+        tags=tags,
+    )
+
+
+@pytest.fixture
 def clip_annotations(
     tags: List[data.Tag],
     clip: data.Clip,
     note: data.Note,
     sound_event_annotation: data.SoundEventAnnotation,
+    sequence_annotation: data.SequenceAnnotation,
 ):
-    return data.ClipAnnotations(
+    return data.ClipAnnotation(
         clip=clip,
         notes=[note],
         tags=tags[:2],
-        annotations=[sound_event_annotation],
+        sound_events=[sound_event_annotation],
+        sequences=[sequence_annotation],
     )
 
 
@@ -119,14 +149,14 @@ def annotation_task(
 
 
 @pytest.fixture
-def annotation_set(clip_annotations: data.ClipAnnotations):
+def annotation_set(clip_annotations: data.ClipAnnotation):
     return data.AnnotationSet(clip_annotations=[clip_annotations])
 
 
 @pytest.fixture
 def annotation_project(
     annotation_task: data.AnnotationTask,
-    clip_annotations: data.ClipAnnotations,
+    clip_annotations: data.ClipAnnotation,
     tags: List[data.Tag],
 ):
     return data.AnnotationProject(
@@ -140,7 +170,7 @@ def annotation_project(
 
 @pytest.fixture
 def evaluation_set(
-    clip_annotations: data.ClipAnnotations,
+    clip_annotations: data.ClipAnnotation,
     tags: List[data.Tag],
 ):
     return data.EvaluationSet(
@@ -182,12 +212,25 @@ def sound_event_prediction(
 
 
 @pytest.fixture
+def sequence_prediction(
+    sequence: data.Sequence,
+    predicted_tags: List[data.PredictedTag],
+):
+    return data.SequencePrediction(
+        sequence=sequence,
+        score=0.7,
+        tags=predicted_tags,
+    )
+
+
+@pytest.fixture
 def clip_predictions(
     clip: data.Clip,
     sound_event_prediction: data.SoundEventPrediction,
     predicted_tags: List[data.PredictedTag],
+    sequence_prediction: data.SequencePrediction,
 ):
-    return data.ClipPredictions(
+    return data.ClipPrediction(
         clip=clip,
         sound_events=[sound_event_prediction],
         tags=predicted_tags[1:],
@@ -195,12 +238,13 @@ def clip_predictions(
             data.Feature(name="VGGish1", value=23.3),
             data.Feature(name="VGGish2", value=-32.7),
         ],
+        sequences=[sequence_prediction],
     )
 
 
 @pytest.fixture
 def prediction_set(
-    clip_predictions: data.ClipPredictions,
+    clip_predictions: data.ClipPrediction,
 ):
     return data.PredictionSet(
         clip_predictions=[clip_predictions],
@@ -209,7 +253,7 @@ def prediction_set(
 
 @pytest.fixture
 def model_run(
-    clip_predictions: data.ClipPredictions,
+    clip_predictions: data.ClipPrediction,
 ) -> data.ModelRun:
     return data.ModelRun(
         name="Test Model Run",
@@ -240,10 +284,9 @@ def match(
 
 @pytest.fixture
 def clip_evaluation(
-    clip_annotations: data.ClipAnnotations,
-    clip_predictions: data.ClipPredictions,
+    clip_annotations: data.ClipAnnotation,
+    clip_predictions: data.ClipPrediction,
     match: data.Match,
-    note: data.Note,
 ) -> data.ClipEvaluation:
     return data.ClipEvaluation(
         annotations=clip_annotations,
@@ -260,20 +303,15 @@ def clip_evaluation(
             ),
         ],
         score=0.5,
-        notes=[note],
     )
 
 
 @pytest.fixture
 def evaluation(
-    annotation_set: data.AnnotationSet,
-    prediction_set: data.PredictionSet,
     clip_evaluation: data.ClipEvaluation,
 ) -> data.Evaluation:
     return data.Evaluation(
         evaluation_task="Classification",
-        clip_annotations=annotation_set.clip_annotations,
-        clip_predictions=prediction_set.clip_predictions,
         metrics=[
             data.Feature(
                 name="Accuracy",

@@ -31,8 +31,8 @@ RUN_METRICS: Sequence[metrics.Metric] = (
 
 
 def sound_event_classification(
-    clip_predictions: Sequence[data.ClipPredictions],
-    clip_annotations: Sequence[data.ClipAnnotations],
+    clip_predictions: Sequence[data.ClipPrediction],
+    clip_annotations: Sequence[data.ClipAnnotation],
     tags: Sequence[data.Tag],
 ) -> data.Evaluation:
     # TODO: Add docstring
@@ -52,8 +52,6 @@ def sound_event_classification(
     score = _compute_overall_score(evaluated_clips)
 
     return data.Evaluation(
-        clip_predictions=clip_predictions,
-        clip_annotations=clip_annotations,
         evaluation_task="sound_event_classification",
         clip_evaluations=evaluated_clips,
         metrics=evaluation_metrics,
@@ -62,8 +60,8 @@ def sound_event_classification(
 
 
 def _evaluate_clips(
-    clip_predictions: Sequence[data.ClipPredictions],
-    clip_annotations: Sequence[data.ClipAnnotations],
+    clip_predictions: Sequence[data.ClipPrediction],
+    clip_annotations: Sequence[data.ClipAnnotation],
     encoder: Encoder,
 ):
     """Evaluate all examples in the given model run and evaluation set."""
@@ -105,8 +103,8 @@ def _compute_overall_metrics(true_classes, predicted_classes_scores):
 
 
 def _evaluate_clip(
-    clip_annotations: data.ClipAnnotations,
-    clip_predictions: data.ClipPredictions,
+    clip_annotations: data.ClipAnnotation,
+    clip_predictions: data.ClipPrediction,
     encoder: Encoder,
 ) -> Tuple[List[Optional[int]], List[np.ndarray], data.ClipEvaluation]:
     true_classes: List[Optional[int]] = []
@@ -115,7 +113,7 @@ def _evaluate_clip(
 
     _valid_sound_events = {
         annotation.sound_event.uuid: annotation
-        for annotation in clip_annotations.annotations
+        for annotation in clip_annotations.sound_events
     }
 
     for sound_event_prediction in clip_predictions.sound_events:
