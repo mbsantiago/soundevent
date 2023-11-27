@@ -10,6 +10,7 @@
         - Feature
         - Note
         - Recording
+        - RecordingSet
         - Dataset
         - SoundEvent
         - Sequence
@@ -20,11 +21,13 @@
         - AnnotationState
         - StatusBadge
         - AnnotationTask
+        - AnnotationSet
         - AnnotationProject
         - PredictedTag
         - SoundEventPrediction
         - SequencePrediction
         - ClipPrediction
+        - PredictionSet
         - ModelRun
         - EvaluationSet
         - Match
@@ -46,3 +49,10 @@
         - MultiLineString
         - MultiPolygon
         - Geometry
+
+
+## Other
+
+::: soundevent.data.PathLike
+    options:
+        heading_level: 3

@@ -8,8 +8,7 @@
 ![Static Badge](https://img.shields.io/badge/formatting-black-black)
 [![codecov](https://codecov.io/gh/mbsantiago/soundevent/branch/main/graph/badge.svg?token=42kVE87avA)](https://codecov.io/gh/mbsantiago/soundevent)
 
-> **Warning**
-> This package is under active development, use with caution.
+> **Warning** This package is under active development, use with caution.
 
 `soundevent` is an open-source Python package that aims to support the
 computational biocoustic community in developing well-tested, coherent, and
@@ -20,23 +19,23 @@ definition. The package comprises three key components:
 
 ## Main features
 
-### 1. Data Classes for Bioacoustic Analysis
+### 1. Data Schemas for Bioacoustic Analysis
 
-The `soundevent` package defines several [data classes](https://mbsantiago.github.io/soundevent/data/) that conceptualize and
-standardize different recurrent objects in bioacoustic analysis. These data
-classes establish the relationships between various concepts and specify the
-attributes each object possesses. They are designed to be flexible enough to
-cover a wide range of use cases in bioacoustic analysis. The package also
-includes data validation mechanisms to ensure that the information stored is
-valid and meaningful. Specifically, it defines objects related to sound events,
-such as user annotations and model predictions.
+The `soundevent` package introduces several
+[data schemas](https://mbsantiago.github.io/soundevent/data_schemas/) designed
+to conceptualize and standardize recurring objects in bioacoustic analysis.
+These data schemas establish relationships between various concepts and define
+the attributes each object possesses. They provide flexibility to cover a broad
+spectrum of use cases in bioacoustic analysis while incorporating data
+validation mechanisms to ensure stored information is both valid and meaningful.
+Notably, the package defines schemas related to sound events, including user
+annotations and model predictions.
 
 ### 2. Serialization, Storage, and Reading Functions
 
 To promote standardized data formats for storing annotated datasets and other
 information about sounds in recordings, the `soundevent` package provides
-[several
-functions](https://mbsantiago.github.io/soundevent/generated/gallery/1_saving_and_loading/)
+[several functions](https://mbsantiago.github.io/soundevent/generated/gallery/1_saving_and_loading/)
 for serialization, storage, and reading of the different data classes offered.
 These functions enable easy sharing of information about common objects in
 bioacoustic research. By employing a consistent data format, researchers can
@@ -67,13 +66,15 @@ For detailed information on how to use the package, please refer to the
 
 ## Example Usage
 
-To see practical examples of how to use soundevent, you can explore the collection of examples provided in the
+To see practical examples of how to use soundevent, you can explore the
+collection of examples provided in the
 [documentation's gallery](https://mbsantiago.github.io/soundevent/generated/gallery/).
 
 ## Contributing
 
 We welcome contributions from the community to make `soundevent` even better. If
-you would like to contribute, please refer to the [contribution guidelines](CONTRIBUTING.md).
+you would like to contribute, please refer to the
+[contribution guidelines](CONTRIBUTING.md).
 
 ## License
 

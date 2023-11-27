@@ -41,7 +41,7 @@ print(json.dumps(dataset_contents, indent=2))
 # ### Loading Datasets
 # By using the loading functions provided by the `soundevent` package, you can
 # directly load the data into Python and obtain a
-# [`Dataset`](../../data.md#datasets) object.
+# [`Dataset`](../../data_schemas/audio_content.md#datasets) object.
 
 from soundevent import io
 
@@ -88,7 +88,8 @@ print(json.dumps(annotation_contents, indent=2))
 # ### Loading Annotation Projects
 # The [`load`][soundevent.io.load]
 # function can be used to load the annotations into Python and obtain an
-# [`AnnotationProject`](../../data.md#annotation_projects) object directly.
+# [`AnnotationProject`](../../data_schemas/annotation.md#annotation_projects) object
+# directly.
 
 nips4b_sample = io.load(annotation_path, type="annotation_set")
 print(repr(nips4b_sample))
@@ -97,15 +98,15 @@ print(repr(nips4b_sample))
 # This object allows you to access and analyze the annotations, along with
 # their associated objects.
 
-for task in nips4b_sample.clip_annotations:
-    clip = task.clip
+for clip_annotation in nips4b_sample.clip_annotations:
+    clip = clip_annotation.clip
     recording = clip.recording
     print(
         f"* Recording {recording.path} [from "
         f"{clip.start_time:.3f}s to {clip.end_time:.3f}s]"
     )
-    print(f"\t{len(task.annotations)} annotations found")
-    for annotation in task.annotations:
+    print(f"\t{len(clip_annotation.sound_events)} sound event annotations found")
+    for annotation in clip_annotation.sound_events:
         sound_event = annotation.sound_event
         start_time, end_time = sound_event.geometry.coordinates
         print(f"\t+ Sound event from {start_time:.3f}s to {end_time:.3f}s")
@@ -127,8 +128,8 @@ io.save(nips4b_sample, "nips4b_plus_sample.json")
 # [`save`][soundevent.io.save] and
 # [`load`][soundevent.io.load] functions, respectively. The
 # loading function reads the **AOEF** file and returns a
-# [`ModelRun`](../../data.md#model_run) object that can be used for further
-# analysis.
+# [`ModelRun`](../../data_schemas/prediction.md#model_run) object that can be used
+# for further analysis.
 #
 # By utilizing the saving and loading functions provided by soundevent, you can
 # easily manage and exchange acoustic data objects in AOEF format, promoting

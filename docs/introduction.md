@@ -14,8 +14,10 @@ Let's start with the basics. A schema is like the blueprint for your data. It's
 a formal way of specifying how data is structured, allowing you to clearly
 define what data objects hold and how they store it.
 
-> Note For a deeper dive into schemas, check out
-> [Understanding JSON Schema](https://json-schema.org/understanding-json-schema/about#what-is-a-schema).
+!!! info "More on Schemas"
+
+    For a deeper dive into schemas, check out [Understanding JSON
+    Schema](https://json-schema.org/understanding-json-schema/about#what-is-a-schema).
 
 ## Why should you care?
 
@@ -33,6 +35,8 @@ Now, let's discuss why these data schemas matter to us bioacousticians:
    Using these hints makes your code more robust, acting like guardrails to
    ensure that your data follows the rules.
 
-> Note For a quick introduction to what type hints are and how to use them,
-> check out this great explanation in the
-> [FastAPI documentation](https://fastapi.tiangolo.com/python-types/).
+!!! question "What are type hints?"
+
+    For a quick introduction to what type hints are and how to use them, check
+    out this great explanation in the [FastAPI
+    documentation](https://fastapi.tiangolo.com/python-types/).
