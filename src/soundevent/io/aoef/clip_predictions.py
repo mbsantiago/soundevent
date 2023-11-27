@@ -83,20 +83,20 @@ class ClipPredictionsAdapter(
             uuid=obj.uuid,
             clip=clip,
             sound_events=[
-                prediction
+                se_pred
                 for sound_event in obj.sound_events or []
                 if (
-                    prediction := self.sound_event_prediction_adapter.from_id(
+                    se_pred := self.sound_event_prediction_adapter.from_id(
                         sound_event
                     )
                 )
                 is not None
             ],
             sequences=[
-                prediction
+                seq_pred
                 for sequence in obj.sequences or []
                 if (
-                    prediction := self.sequence_prediction_adapter.from_id(
+                    seq_pred := self.sequence_prediction_adapter.from_id(
                         sequence
                     )
                 )

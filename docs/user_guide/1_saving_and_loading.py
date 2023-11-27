@@ -105,7 +105,9 @@ for clip_annotation in nips4b_sample.clip_annotations:
         f"* Recording {recording.path} [from "
         f"{clip.start_time:.3f}s to {clip.end_time:.3f}s]"
     )
-    print(f"\t{len(clip_annotation.sound_events)} sound event annotations found")
+    print(
+        f"\t{len(clip_annotation.sound_events)} sound event annotations found"
+    )
     for annotation in clip_annotation.sound_events:
         sound_event = annotation.sound_event
         start_time, end_time = sound_event.geometry.coordinates

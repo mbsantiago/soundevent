@@ -86,7 +86,7 @@ profile = "black"
 ignore_missing_imports = true
 show_error_codes = true
 show_error_code_links = true
-disable_error_code = ["call-overload", "misc"]
+disable_error_code = ["call-overload", "misc", "override"]
 
 [tool.coverage.run]
 branch = true

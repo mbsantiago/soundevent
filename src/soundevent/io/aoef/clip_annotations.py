@@ -90,20 +90,20 @@ class ClipAnnotationsAdapter(
                 if (tag := self.tag_adapter.from_id(tag_id)) is not None
             ],
             sound_events=[
-                annotation
+                se_ann
                 for annotation_id in obj.sound_events or []
                 if (
-                    annotation := self.sound_event_annotation_adapter.from_id(
+                    se_ann := self.sound_event_annotation_adapter.from_id(
                         annotation_id
                     )
                 )
                 is not None
             ],
             sequences=[
-                annotation
+                seq_ann
                 for annotation_id in obj.sequences or []
                 if (
-                    annotation := self.sequence_annotation_adapter.from_id(
+                    seq_ann := self.sequence_annotation_adapter.from_id(
                         annotation_id
                     )
                 )
