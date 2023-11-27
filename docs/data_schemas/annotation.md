@@ -1,119 +1,173 @@
-# Annotations
+# Annotation
 
-## User Annotations
+Deciphering the meaning of sounds within a recording can be a nuanced task.
+Typically, it involves someone carefully listening to the audio and choosing
+specific segments to highlight or describing the soundscape in a particular
+manner.
 
-Annotations play a crucial role in the analysis and interpretation of audio
-data. They are user-created [sound events](#sound_events_1) that are attached to
-audio [recordings](#recordings), providing valuable information about specific
-[sound events](#sound_events_1) or audio [features](#features) within the
-recordings. Annotations are typically created by annotators as part of an
-[annotation task](#tasks), where they identify and label sound events based on
-their expertise and criteria.
+In `soundevent`, we call this process "Annotation." It's about giving a human
+interpretation to the sounds you've identified. You can annotate various sound
+objects like **Clips**, **Events**, and **Sequences**. Annotations, in simple
+terms, include **Tags** to categorize stuff, **Notes** for adding details or
+thoughts about what the sound means, and info about who did the annotating and
+when.
 
-### Tags and Features
+So, let's dive in and see how `soundevent` handles different types of annotated
+objects.
 
-Similar to regular [sound events](#sound_events_1), annotations can be enriched
-with [tags](#tags) and [features](#features) to provide semantic meaning and
-additional information. These [tags](#tags) and [features](#features) help in
-identifying the characteristics of the annotated sound event, such as the
-species responsible for the sound or specific acoustic attributes. However, it
-is important to note that annotations are subject to the annotator's expertise,
-criteria, and biases. Therefore, the [tags](#tags) and [features](#features)
-attached to annotations should be considered as a result of the annotator's
-interpretation rather than ground truth.
+## Sound Event Annotation
 
-### User Information and Timestamps
+A [**SoundEventAnnotation**][soundevent.data.SoundEventAnnotation] object
+encompasses all details about an annotated **Sound Event**, including a
+reference to the _sound event_ itself (capturing the specific portion of sound),
+attached _tags_ (for classifying the sound event), _notes_, information about
+the _user who created_ the annotation, and the _timestamp_ of its creation.
+Through annotations, a sound event gains a distinct interpretation, providing
+clarity and context to the sound.
 
-Annotations are associated with the annotator who created them and are
-timestamped to track when they were made. This user information and timestamping
-serve multiple purposes. Researchers can filter and select annotations based on
-the annotator or the time of annotation. For instance, it can be used as a form
-of version control, allowing researchers to retrieve annotations created before
-a specific date. Additionally, researchers can attach notes to annotations to
-provide contextual information or engage in discussions about the assignment of
-specific tags to sound events.
+```mermaid
+erDiagram
+    SoundEventAnnotation {
+        UUID uuid
+        datetime created_on
+    }
+    SoundEvent
+    Tag
+    Note
+    User
+    SoundEventAnnotation ||--|| SoundEvent : sound_event
+    SoundEventAnnotation }|--o{ Tag : tags
+    SoundEventAnnotation ||--o{ Note : notes
+    SoundEventAnnotation }|--o| User : created_by
+```
 
-### Significance in Analysis
+## Sequence Annotation
 
-Annotations serve as a valuable resource for audio analysis and research. They
-allow researchers to capture subjective interpretations and expert knowledge
-about sound events. By incorporating annotations into the analysis pipeline,
-researchers can gain insights into specific sound event characteristics, explore
-trends or patterns, and compare annotations across different annotators or
-datasets. However, it is crucial to differentiate annotations from ground truth
-sound events, as annotations reflect individual interpretations and may
-introduce subjectivity into the analysis.
+Moving beyond individual **Sound Events**, `soundevent` introduces **Sequence
+Annotation**, a type of annotation applied to sequences of sound events. A
+[**SequenceAnnotation**][soundevent.data.SequenceAnnotation] object encapsulates
+details about the annotated sequence, referencing the particular _sequence_,
+attaching relevant _tags_, providing _notes_ for additional insights or
+interpretations, and recording information about the _annotating user_ and the
+_creation timestamp_. Sequence Annotation extends the interpretive layer to
+complex vocalization patterns, enhancing the understanding of structured sound
+sequences.
 
-## Tasks
+```mermaid
+erDiagram
+    SequenceAnnotation {
+        UUID uuid
+        datetime created_on
+    }
+    Sequence
+    Tag
+    Note
+    User
+    SequenceAnnotation ||--|| Sequence : sequence
+    SequenceAnnotation }|--o{ Tag : tags
+    SequenceAnnotation ||--o{ Note : notes
+    SequenceAnnotation }|--o| User : created_by
+```
 
-Annotation tasks form a fundamental component of
-[annotation projects](#annotation_projects) in bioacoustic research. The
-`soundevent` package introduces the `AnnotationTask` object, which represents a
-unit of annotation work. An annotation task corresponds to a specific
-[clip](#clip) that requires thorough annotation based on provided instructions.
+## Clip Annotations
 
-### Composition and Annotation Instructions
+Expanding the scope of annotations, `soundevent` introduces **Clip
+Annotations**, providing a way to annotate entire audio clips. The
+[**ClipAnnotation**][soundevent.data.ClipAnnotation] object encompasses _tags_
+and _notes_, offering additional insights into the overall acoustic content of
+the clip. It retains information about the _annotating user_ and the _creation
+timestamp_. Unlike sound event and sequence annotations, **Clip Annotation**
+goes further by storing the list of **AnnotatedSoundEvents** found within the
+clip, along with any **AnnotatedSequences**. This broader annotation approach
+allows for a comprehensive understanding of the audio content encapsulated by
+the clip.
 
-Each annotation task is composed of a distinct recording [clip](#clips) that
-serves as the focus of annotation. Annotators are tasked with meticulously
-annotating the [clip](#clips) according to the given annotation instructions.
-These instructions serve as a guide, directing annotators to identify and
-describe [sound events](#user_annotations) within the [clip](#clips), and
-include any pertinent contextual [tags](#tags).
+```mermaid
+erDiagram
+    ClipAnnotation {
+        UUID uuid
+        datetime created_on
+    }
+    Clip
+    Tag
+    Note
+    User
+    SoundEventAnnotation
+    SequenceAnnotation
+    ClipAnnotation ||--|| Clip : clip
+    ClipAnnotation }|--o{ Tag : tags
+    ClipAnnotation ||--o{ Note : notes
+    ClipAnnotation }|--o| User : created_by
+    ClipAnnotation ||--|{ SoundEventAnnotation : sound_events
+    ClipAnnotation ||--|{ SequenceAnnotation : sequences
+```
 
-### Annotator-Provided Tags and Annotations
+## Annotation Task
 
-Annotations allow annotators to contribute their expertise and insights by
-including [tags](#tags) that describe the acoustic content of the entire audio
-clip. These annotator-provided [tags](#tags) offer valuable semantic
-information, enhancing the overall understanding of the audio material.
-Additionally, annotators identify and annotate specific
-[sound events](#user_annotations) within the task clip, contributing to the
-detailed analysis and characterization of the audio data.
+When managing an annotation project, it's important to track which segments of
+the entire dataset have undergone annotation. In `soundevent`, we use the
+**Clip** as the fundamental unit for annotation tasks. Typically, annotators
+focus on inspecting and listening to an audio clip, completing the necessary
+annotations as part of the task. `soundevent` provides the
+[**AnnotationTask**][soundevent.data.AnnotationTask] object, containing
+essential details about the annotation task, including the _clip_ being
+annotated, information about the _status of annotation_ (as indicated by
+[**Status Badges**][soundevent.data.StatusBadge]), and additional information
+like the _creation date_. This data not only facilitates tracking the progress
+of annotations but also helps identify tasks in need of review or attention.
 
-### Notes and Completion Status
+```mermaid
+erDiagram
+    AnnotationTask {
+        UUID uuid
+        datetime created_on
+    }
+    StatusBadge {
+        str state
+        datetime created_on
+    }
+    Clip
+    User
+    AnnotationTask }|--|| Clip : clip
+    AnnotationTask ||--o{ StatusBadge : status_badges
+    StatusBadge }|--o{ User : owner
+```
 
-Annotations can be further enriched by including [notes](#notes), enabling
-annotators to provide additional discussions, explanations, or details related
-to the annotation task. Once an annotation task is completed, it should be
-marked as such. In multi-annotator scenarios, registering the user who completed
-the task allows for tracking and accountability.
+## Annotation Project
 
-## Annotation Projects
+An [**Annotation Project**][soundevent.data.AnnotationProject] object in
+soundevent consolidates all associated **Annotation Tasks** and the **Clip
+Annotations** made within that project. It's essential to note that **Clip
+Annotations** may encompass **Sound Event Annotations** and **Sequence
+Annotations**, making the **Annotation Project** a comprehensive repository of
+all annotated data related to the designated clips. In addition to _task_ and
+_annotation_ details, the annotation project is characterized by a _name_,
+serving to identify its purpose and content, and a _description_, providing
+additional insights into the project's objectives and goals. A critical
+component of the annotation project is the inclusion of _annotation
+instructions_. The term "completing an annotation task" gains clarity and
+relevance through explicit annotation instructions, guiding annotators on the
+expectations, methods, and adherence to project standards and goals.
 
-The `AnnotationProject` objects in the `soundevent` package represents a
-collection of human-provided [annotations](#user_annotations) within a cohesive
-annotation project. In bioacoustic research, [annotations](#user_annotations)
-are typically created as part of a larger project that involves annotating a
-specific underlying material, such as a set of audio [recordings](#recordings).
-This annotation project provides instructions to annotators, guiding them to
-generate annotations in a standardized manner and with specific objectives in
-mind.
+In the context of an **Annotation Project**, it is crucial to specify a set of
+valid **Tags** that annotators can use. This practice ensures better control
+over the information attached to the sound objects within the project. The
+selection of these tags should align with the annotation goals, facilitating a
+more focused and purposeful annotation process.
 
-### Annotation Projects and Tasks
-
-An annotation project serves as the unifying theme for grouping annotations. It
-encompasses the underlying material to be annotated and provides instructions to
-annotators. Within an annotation project, there are typically multiple
-[annotation tasks](#tasks). Each [annotation task](#tasks) corresponds to a
-single [clip](#clips) that requires full annotation. By "full annotation," we
-mean that the annotators have executed the annotation instructions completely on
-the given [clip](#clips).
-
-### Tags and Sound Event Annotations
-
-Within each task, annotators typically add [tags](#tags) to provide additional
-semantic information about the [clip](#clips). [Tags](#tags) can highlight
-specific aspects of the acoustic content or describe properties related to the
-[clip](#clips). Additionally, annotators may generate
-[annotated sound events](#user_annotations) that represent the relevant
-[sound events](#sound_events_1) occurring within the clip. These annotations
-contribute to a more detailed and comprehensive understanding of the audio data.
-
-The `AnnotationProject` objects provide functionality to manage and organize
-[annotations](#user_annotations) within an annotation project. It enables
-researchers to work with [annotations](#user_annotations), extract relevant
-information, and perform further analysis on the annotated clips and associated
-sound events. By utilizing the `AnnotationProject` class, researchers can
-efficiently handle and leverage human-provided annotations in their bioacoustic
-research projects.
+```mermaid
+erDiagram
+    AnnotationProject {
+        UUID uuid
+        str name
+        str description
+        str instructions
+        datetime created_on
+    }
+    Tag
+    AnnotationTask
+    ClipAnnotation
+    AnnotationProject }|--o{ Tag : annotation_tags
+    AnnotationProject }|--o{ AnnotationTask : tasks
+    AnnotationProject }|--o{ ClipAnnotation : clip_annotations
+```

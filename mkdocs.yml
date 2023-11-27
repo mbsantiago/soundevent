@@ -25,11 +25,10 @@ theme:
   name: material
   features:
     - content.code.copy
-    - navigation.instant
-    - navigation.instant.progress
     - navigation.tracking
     - navigation.indexes
     - navigation.top
+    - toc.follow
 plugins:
   - search
   - gallery:

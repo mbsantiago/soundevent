@@ -10,18 +10,21 @@
         - Feature
         - Note
         - Recording
-        - Clip
         - Dataset
         - SoundEvent
         - Sequence
+        - Clip
         - SoundEventAnnotation
-        - ClipAnnotations
+        - SequenceAnnotation
+        - ClipAnnotation
         - AnnotationState
+        - StatusBadge
         - AnnotationTask
         - AnnotationProject
         - PredictedTag
         - SoundEventPrediction
-        - ClipPredictions
+        - SequencePrediction
+        - ClipPrediction
         - ModelRun
         - EvaluationSet
         - Match

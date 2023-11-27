@@ -1,130 +1,161 @@
-# Sound Events
+# Acoustic Objects
 
-## Sound Events
-
-The `soundevent` package is designed to focus on the analysis of sound events,
-which play a crucial role in bioacoustic research. Sound events refer to
-distinct and discernible sounds within a [recording](#recordings) that are of
-particular interest for analysis. A recording can contain multiple sound events
-or none at all, depending on the audio content.
-
-### Identification and Localization
-
-Sound events typically occur within a specific time range and occupy a limited
-frequency space within a [recording](#recordings). There are various methods to
-specify the location of these events, such as indicating the onset timestamp,
-start and end times, or providing detailed information about the associated time
-and frequency regions. These approaches enable precise localization and
-description of sound events within the [recording](#recordings).
-
-### Tags and Semantic Information
-
-To provide meaningful context, sound events can be enriched with [tags](#tags),
-which are labels attached to the events. These tags offer semantic information
-about the sound events, including the species responsible for the sound, the
-behavior exhibited by the sound emitter, or even the specific syllable within a
-vocalization. Tags aid in organizing and categorizing sound events, enabling
-more efficient analysis and interpretation.
-
-### Features and Numerical Descriptors
-
-In addition to [tags](#tags), sound events can be characterized by
-[features](#features), which are numerical descriptors attached to the events.
-These features provide quantitative information about the sound events, such as
-duration, bandwidth, peak frequency, and other detailed measurements that can be
-extracted using advanced techniques like deep learning models.
-[Features](#features) offer valuable insights into the acoustic properties of
-the sound events.
+Now, we'll explore how `soundevent` handles various "objects" within the
+acoustic content. To begin, **Geometry** objects offer a means to define regions
+of interest in the time-frequency plane. **Sound events**, as acoustic objects
+within the audio, are characterized by a geometry that delineates their
+location. Additionally, `soundevent` introduces a method for specifying
+**Sequences** of these **Sound events**. Let's delve deeper into these concepts:
 
 ## Geometries
 
-[Sound event](#sound_events_1) **geometry** plays a crucial role in locating and
-describing sound events within a recording. Different geometry types offer
-flexibility in representing the location of sound events, allowing for varying
-levels of detail and precision. The `soundevent` package follows the
-[GeoJSON](https://geojson.org/) specification for **geometry types** and
-provides support for a range of geometry types.
+In `soundevent`, [**Geometry**][soundevent.data.Geometry] objects are essential
+for defining precise regions of interest in the time-frequency plane. The
+package offers various geometry types, providing flexibility in delineating
+regions of interest:
 
-### Units and Time Reference
+- [**TimeStamp**][soundevent.data.TimeStamp]: Represents a single point in time.
 
-All geometries in the `soundevent` package utilize **seconds** as the unit for
-time and **hertz** as the unit for frequency. It is important to note that time
-values are always **relative to the start of the recording**. By consistently
-using these units, it becomes easier to develop functions and interact with
-geometry objects based on convenient assumptions.
+- [**TimeInterval**][soundevent.data.TimeInterval]: Describes a time interval,
+  specifying both starting and ending times.
 
-### Supported Geometry Types
+- [**Point**][soundevent.data.Point]: Pinpoints the exact location in time and
+  frequency.
 
-The `soundevent` package supports the following geometry types, each serving a
-specific purpose in describing the location of sound events:
+- [**LineString**][soundevent.data.LineString]: Describes an unbroken
+  (potentially non-straight) line through a sequence of points.
 
-- _Onset_: Represents a single point in time.
+- [**Polygon**][soundevent.data.Polygon]: Defines a closed shape in time and
+  frequency, possibly with holes.
 
-- _Interval_: Describes a time interval, indicating a range of time within which
-  the sound event occurs.
+- [**BoundingBox**][soundevent.data.BoundingBox]: Represents a rectangle in time
+  and frequency, offered separately due to its common use.
 
-- _Point_: Represents a specific point in time and frequency, pinpointing the
-  exact location of the sound event.
+- [**MultiPoint**][soundevent.data.MultiPoint]: Describes a collection of
+  points.
 
-- _Line_: Represents a sequence of points in time and frequency, allowing for
-  the description of continuous sound events.
+- [**MultiLineString**][soundevent.data.MultiLineString]: A collection of line
+  strings.
 
-- _Polygon_: Defines a closed shape in time and frequency, enabling the
-  representation of complex sound event regions.
+- [**MultiPolygon**][soundevent.data.MultiLineString]: A collection of polygons,
+  useful for demarcating regions of interest that are interrupted by occluding
+  sounds.
 
-- _Box_: Represents a rectangle in time and frequency, useful for specifying
-  rectangular sound event areas.
+!!! warning "Important Note on Time and Frequency Units"
 
-- _Multi-Point_: Describes a collection of points, allowing for the
-  representation of multiple sound events occurring at different locations.
+    Pay careful attention to the units used in `soundevent` geometries. Time is
+    uniformly measured in **seconds**, and frequency is represented in **hertz**.
+    It's crucial to emphasize that all time values are consistently referenced
+    **relative to the start of the recording**. Adhering to these standardized
+    units ensures smoother development of functions and interaction with geometry
+    objects, built on reliable assumptions.
 
-- _Multi-Line_ String: Represents a collection of line strings, useful for
-  capturing multiple continuous sound events.
+!!! info "Understanding Geometry Objects in `soundevent`"
 
-- _Multi-Polygon_: Defines a collection of polygons, accommodating complex and
-  overlapping sound event regions.
+    `soundevent` adheres to the GeoJSON specification for structuring geometry
+    objects. Every geometry object comprises a *type* field, indicating its
+    specific geometry type, and a *coordinates* field defining its geometric
+    properties. For further details and specifications, refer to the [GeoJSON
+    Specification](https://geojson.org/).
 
-By offering these geometry types, the `soundevent` package provides a
-comprehensive framework for accurately and flexibly describing the location and
-extent of [sound events](#sound_events_1) within a [recording](#recordings).
+## Sound Events
+
+[**Sound Events**][soundevent.data.SoundEvent] take the spotlight in this
+package, serving as the key players representing distinct sounds within the
+audio content. These "events" unfold within specific time intervals and
+frequency ranges, and the `soundevent` package ensures their precise
+localization using handy **Geometry** objects.
+
+Adding a layer of richness to these **Sound Events** is the ability to
+characterize them through **Features**. These **Features** provide quantitative
+insights into various acoustic properties, ranging from the basics like
+duration, bandwidth, to peak frequency. You can attach any feature you fancy,
+including those extracted by Deep Learning models!
+
+```mermaid
+erDiagram
+    SoundEvent {
+        UUID uuid
+    }
+    Geometry
+    Feature
+    SoundEvent ||--|| Geometry : geometry
+    SoundEvent ||--o{ Feature : features
+```
 
 ## Sequences
 
-Animal communication is a fascinating and intricate phenomenon, often consisting
-of multiple vocalizations that form a cohesive message. In the `soundevent`
-package, we introduce the concept of a `Sequence` object to represent these
-complex vocalization patterns. A `Sequence` groups together multiple
-[sound event](#sound-events) objects, allowing researchers to analyze and
-understand the composition and dynamics of animal communication in a structured
-manner.
+A [**Sequence**][soundevent.data.Sequence] in `soundevent` is essentially a
+collection of **Sound Events**, providing a flexible modeling tool that groups
+multiple **Sound Events** with a unifying relation. Researchers have the freedom
+to determine which **Sound Events** constitute a sequence, allowing them to
+customize the structure based on their specific research requirements. The
+**Sequence** object can specify a _parent_ **Sequence**, supporting hierarchical
+arrangements, enabling the inclusion of subsequences and providing a
+comprehensive representation of intricate relationships within complex
+sequences. Similar to **Sound Events**, **Sequences** can be described using
+**Features**, offering numerical insights into their acoustic properties.
 
-### Flexible Modeling of Vocalization Patterns
+```mermaid
+erDiagram
+    Sequence {
+        UUID uuid
+    }
+    SoundEvent
+    Feature
+    Sequence }|--|{ SoundEvent : sound_events
+    Sequence ||--o{ Feature : features
+    Sequence }|--o| Sequence : parent
 
-The `Sequence` object is designed to provide flexibility to researchers,
-allowing them to model a wide range of sequence types and behaviors. While the
-[sound events](#sound_events_1) within a sequence should originate from the same
-recording, no other restrictions are imposed, empowering researchers to tailor
-the structure to their specific research needs.
+```
 
-### Sequence Description
+## Clips
 
-Similar to individual [sound events](#sound_events_1), sequences can be enriched
-with additional information using [tags](#tags), [features](#features), and
-[notes](#notes). Researchers can attach categorical [tags](#tags) to describe
-the type of sequence or the associated behavior, providing valuable insights
-into the communication context. Additionally, numerical [features](#features)
-can capture important characteristics of the sequence, such as overall duration,
-inter-pulse interval, or any other relevant acoustic properties.
+[**Clips**][soundevent.data.Clip] in `soundevent` represent distinct fragments
+of a **Recording**, delineated by their _start_ and _end times_. Serving as
+fundamental units for analysis and annotation tasks, **Clips** offer a more
+computationally efficient approach, particularly when working with lengthy audio
+files. Breaking down the **Recording** into manageable **Clips** not only
+enhances computational efficiency but also supports focused analysis on specific
+segments of interest. Standardizing **Clip** durations ensures consistency in
+annotations across diverse **Recordings** and facilitates easier interpretation
+and comparison of results in audio data. Many machine learning models process
+audio files in **Clips**, reinforcing the practical adoption of the **Clip**
+structure.
 
-### Hierarchical Structure
+The exploration of a **Clip**'s content is facilitated through **Features**
+attached to the **Clip**, providing numerical descriptors of its acoustic
+content. These features can vary widely, encompassing
+[Acoustic Indices](https://scikit-maad.github.io/features.html), simple
+descriptors of overall acoustic information, or even abstract features derived
+from
+[Deep Learning models](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwjP0tGqyt-CAxVsQkEAHTfeABQQFnoECBMQAQ&url=https%3A%2F%2Fwww.pnas.org%2Fdoi%2F10.1073%2Fpnas.2004702117&usg=AOvVaw2F_gXSQeIuS_Z3VUZqyB73&opi=89978449).
+You have the freedom to choose features that align with the specific
+requirements of your work, making it a flexible and customizable aspect of your
+analysis.
 
-Furthermore, recognizing the hierarchical nature of animal communication, the
-`Sequence` object allows the inclusion of subsequences. Researchers can specify
-a parent sequence, facilitating the representation of complex hierarchical
-relationships within the vocalization structure.
+```mermaid
+erDiagram
+    Clip {
+        UUID uuid
+        float start_time
+        float end_time
+    }
+    Recording
+    Feature
+    Clip }|--|| Recording : recording
+    Clip }|--o{ Feature : features
+```
 
-By incorporating sequences into the analysis workflow, researchers gain a
-flexible and expressive framework to explore and study the intricacies of animal
-communication. The `Sequence` object, along with its associated tags, features,
-and hierarchical capabilities, provides a powerful tool for understanding the
-rich complexity of vocalization sequences.
+???+ question "Understanding the Distinction between Clips and TimeInterval Sound Events"
+
+    While both **Clip** objects and **TimeInterval Sound Events** share a
+    common feature of being defined by a specific start and end time, their purpose
+    and usage significantly differ. Generally, TimeInterval Sound Events are
+    designed to emphasize a segment of the audio content that corresponds to a
+    distinct and cohesive sound. In contrast, Clips have no such restriction; they
+    represent a subset of a recording without a specific reference to a single
+    sound event. Clips are typically considered to encapsulate the entire acoustic
+    content, acknowledging that they may contain multiple sound events or none at
+    all. Therefore, discussions about clips generally revolve around the entirety
+    of the acoustic material rather than focusing on a particular sound instance.

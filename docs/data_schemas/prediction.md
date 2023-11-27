@@ -1,135 +1,123 @@
-## Automated Analysis
+# Prediction
 
-### Predicted Tags
+While **Annotation** involves expert human interpretation, often considered as
+ground truth, in `soundevent`, we use the term **Prediction** to denote
+interpretations derived through uncertain means, involving some level of
+guesswork or uncertainty. These interpretations could be the outputs of
+algorithms designed to automate the annotation task or even other individuals
+providing speculative insights into the "truth" of the sounds they are
+analyzing.
 
-In the realm of audio analysis, machine-learning-based methods often generate
-categorical descriptions of processed sound clips. These descriptions, here
-defined as predicted tags, serve to capture the output of these methods.
-However, in many cases, these methods operate using probabilistic models,
-resulting in the assignment of **probability scores** that measure the
-confidence of the [tag](#tags) assignment.
+In `soundevent`, we introduce objects designed for discussing predictions:
+**SoundEventPrediction**, **SequencePrediction**, **ClipPrediction**. These
+entities store predictions that aim to estimate the true state of their
+corresponding entities. All prediction objects share a similar structure,
+providing a measure of uncertainty by storing an overall confidence _score_.
+They also incorporate **PredictedTags**, resembling regular tags but with an
+additional confidence _score_ assigned to each tag.
 
-#### Probability Scores
+## Sound Event Predictions
 
-Predicted tags not only represent categorical descriptions but also carry vital
-information in the form of probability scores. These scores reflect the degree
-of confidence associated with the tag assignment. Ranging from 0 to 1, a score
-of 1 signifies a high level of certainty in the assigned tag. It is worth noting
-that in cases where the audio analysis method does not provide a score, the
-score is set to 1 as a default value.
+The [**SoundEventPrediction**][soundevent.data.SoundEventPrediction] object
+represents a single sound event predicted through uncertain means. This object
+contains information about the predicted _sound event_, including an overall
+confidence _score_, and a list of _predicted tags_ describing the anticipated
+characteristics of the sound event.
 
-By incorporating probability scores into predicted tags, machine learning-based
-audio analysis methods provide insights into the confidence level of the
-assigned [tags](#tags). Researchers can leverage this information to assess the
-reliability and accuracy of the predicted tags, facilitating further analysis
-and evaluation of the audio data.
+```mermaid
+erDiagram
+    SoundEventPrediction {
+        UUID uuid
+        float score
+    }
+    SoundEvent
+    PredictedTag {
+        float score
+    }
+    Tag
+    SoundEventPrediction ||--|| SoundEvent : soundevent
+    SoundEventPrediction ||--o{ PredictedTag : tags
+    PredictedTag }|--|| Tag : tag
+```
 
-### Predicted Sound Events
+## Sequence Predictions
 
-Predicted sound events occur frequently in the field of audio analysis, where
-machine learning models and automated methods are employed to identify
-[sound events](#sound_events_1) within audio [clips](#clips). These predicted
-sound events represent the outputs of these methods, providing valuable insights
-into the presence and characteristics of [sound events](#sound_events_1).
+The [**SequencePrediction**][soundevent.data.SequencePrediction] object
+represents a predicted sequence of sound events. Much like Sound Event
+Predictions, it encapsulates information about the _sequence_, offering an
+overall confidence _score_ for the prediction and a list of _PredictedTags_.
 
-#### Probability Scores and Confidence
+```mermaid
+erDiagram
+    SequencePrediction {
+        UUID uuid
+        float score
+    }
+    Sequence
+    PredictedTag {
+        float score
+    }
+    Tag
+    SequencePrediction ||--|| Sequence : sequence
+    SequencePrediction ||--o{ PredictedTag : tags
+    PredictedTag }|--|| Tag : tag
+```
 
-When a machine learning model or automated method identifies a sound event, it
-assigns a probability **score** to indicate its confidence in the presence of
-that event within the clip. This probability score reflects the degree of
-certainty associated with the event's identification. Researchers can utilize
-these scores to assess the reliability and accuracy of the predicted sound
-events, enabling further analysis and evaluation.
+## Clip Predictions
 
-#### Predicted Tags
+The [**ClipPrediction**][soundevent.data.ClipPrediction] object encompasses all
+predictions made for the entire **Clip**, incorporating predictions for _sound
+events_ or _sequences_. Like the preceding predictions, it retains fields for
+the overall confidence _score_ and the _predicted tags_.
 
-Predicted sound events can be enriched with additional information through the
-inclusion of [predicted tags](#predicted_tags). Each predicted sound event can
-have multiple [predicted tags](#predicted_tags) associated with it, providing
-semantic labels that offer insights into the nature and characteristics of the
-event. Each [predicted tag](#predicted_tags) is assigned its own probability
-score, which reflects the confidence of the model in the relevance of the tag to
-the event. These scores assist researchers in understanding the significance and
-reliability of the predicted tags.
+Interpreting predicted tags at the clip level is straightforward—they are tags
+that apply to the entire acoustic content, proving beneficial for tasks like
+sound scene classification. However, the interpretation of the score field
+differs from sound event or sequence predictions. Rather than providing an
+overall score for the confidence of sound event or sequence presence, the clip
+score can serve to encode the confidence of a binary classification problem. A
+low score indicates that the clip would not be considered a positive example in
+the binary classification problem. It's important to note that the utilization
+of scores to encode the necessary information is entirely at the discretion of
+the user.
 
-#### Acoustic Features
+```mermaid
+erDiagram
+    ClipPrediction {
+        UUID uuid
+        float score
+    }
+    Clip
+    PredictedTag {
+        float score
+    }
+    Tag
+    SoundEventPrediction
+    SequencePrediction
+    ClipPrediction }|--|| Clip : clip
+    ClipPrediction ||--o{ PredictedTag : tags
+    ClipPrediction ||--o{ SoundEventPrediction : sound_events
+    ClipPrediction ||--o{ SequencePrediction : sequences
+    PredictedTag }|--|| Tag : tag
+```
 
-Automated analysis methods often yield acoustic [features](#features) as a
-result of their processing. These [features](#features) capture various
-characteristics and properties of the predicted sound events. Researchers can
-attach these automatically extracted acoustic features to the predicted sound
-events, enabling a more comprehensive understanding and analysis of the events'
-acoustic content.
+## Model Runs
 
-### Processed Clips
+The [**ModelRun**][soundevent.data.ModelRun] object in `soundevent` serves to
+store collections of predictions originating from the same source. This object
+includes a set of _predictions_ and provides details such as the model's _name_,
+an optional _version_ (for precise method tracking), and a _description_ of the
+method employed.
 
-In the field of bioacoustics, it is common to process recording [clips](#clips)
-in order to extract relevant information. This processing can involve the use of
-machine learning models or non-machine learning pipelines specifically designed
-for tasks such as sound event detection or automated acoustic feature
-extraction. The `ProcessedClip` objects encapsulate the results of these
-processing steps.
-
-#### Types of Processing Results
-
-The `ProcessedClip` objects capture the outcomes of the processing steps applied
-to the recording clips. These outcomes can take different forms:
-
-- _Predicted Sound Events_: The processing may involve the detection or
-  identification of [sound events](#sound_events_1) within the clip. The
-  `ProcessedClip` object stores the
-  [predicted sound events](#predicted_sound_events), providing information about
-  their characteristics, such as their temporal and frequency properties.
-
-- _Predicted Tags at Clip Level_: The processing may also generate
-  [predicted tags](#predicted_tags) at the clip level, providing high-level
-  semantic information about the content of the clip. These tags highlight
-  specific aspects or categories of the acoustic content and can aid in the
-  organization and categorization of the clips.
-
-- _Features at Clip Level_: The processing may extract acoustic
-  [features](#features) from the clip, which can capture relevant information
-  about the audio content. These [features](#features) can be numerical
-  representations that describe properties such as signal to noise ratio,
-  spectral centroid, or other characteristics of the acoustic content of the
-  clip.
-
-#### Annotations and Additional Information
-
-The [predicted sound events](#predicted_sound_events) within the `ProcessedClip`
-object can be further enriched with [predicted tags](#predicted_tags) and/or
-[features](#features) associated with each predicted sound event. These
-annotations and additional information provide more detailed insights into the
-predicted events and aid in subsequent analysis and interpretation.
-
-## Model Run
-
-In bioacoustic research, it is common to apply the same processing pipeline to a
-set of audio [clips](#clips), such as all the clips in a [dataset](#datasets) or
-a test set. To maintain a reference to this group of
-[processed clips](#processed_clips) and the specific processing method used, the
-concept of a `ModelRun` is introduced. A `ModelRun` represents a collection of
-[processed clips](#processed_clips) that were generated in a single run using
-the same processing method.
-
-### Ensuring Consistency and Comparability
-
-By organizing [processed clips](#processed_clips) into `ModelRun` objects,
-researchers can ensure that all clips within a run were analyzed in the same
-exact manner. This guarantees consistency and comparability when comparing
-results across different runs or when evaluating against other groups of
-annotations.
-
-### Tracking Processing Method
-
-The `ModelRun` object keeps track of the specific processing method that was
-applied to generate the [processed clips](#processed_clips). This information is
-crucial for reproducing and replicating the results, as well as for accurately
-documenting the processing pipeline.
-
-### Comparative Analysis and Evaluation
-
-`ModelRun` objects facilitate comparative analysis and evaluation of different
-processing methods or runs. Researchers can easily compare the results and
-performance of various models, algorithms, or parameter settings by examining
-the [processed clips](#processed_clips) within each `ModelRun`.
+```mermaid
+erDiagram
+    ModelRun {
+        UUID uuid
+        datetime created_on
+        str name
+        str version
+        str description
+    }
+    ClipPrediction
+    ModelRun ||--|{ ClipPrediction : clip_predictions
+```
