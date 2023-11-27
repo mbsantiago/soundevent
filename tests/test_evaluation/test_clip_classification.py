@@ -244,7 +244,11 @@ def test_each_example_score_is_the_probability_of_the_true_class(
     assert len(evaluation.clip_evaluations[1].metrics) == 1
 
     assert evaluation.clip_evaluations[0].score is not None
-    assert math.isclose(evaluation.clip_evaluations[0].score, 0.9, rel_tol=1e-6)
+    assert math.isclose(
+        evaluation.clip_evaluations[0].score, 0.9, rel_tol=1e-6
+    )
 
     assert evaluation.clip_evaluations[1].score is not None
-    assert math.isclose(evaluation.clip_evaluations[1].score, 0.1, rel_tol=1e-6)
+    assert math.isclose(
+        evaluation.clip_evaluations[1].score, 0.1, rel_tol=1e-6
+    )

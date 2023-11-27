@@ -13,8 +13,8 @@ from pydantic import BaseModel, Field
 
 from soundevent.data.clips import Clip
 from soundevent.data.notes import Note
-from soundevent.data.sound_event_annotations import SoundEventAnnotation
 from soundevent.data.sequence_annotations import SequenceAnnotation
+from soundevent.data.sound_event_annotations import SoundEventAnnotation
 from soundevent.data.tags import Tag
 
 __all__ = [

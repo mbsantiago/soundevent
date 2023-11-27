@@ -6,6 +6,7 @@ from soundevent.io.aoef.sequence import (
     SequenceObject,
 )
 
+
 def test_sequence_can_be_converted_to_aoef(
     sequence: data.Sequence,
     sequence_adapter: SequenceAdapter,

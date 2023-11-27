@@ -58,7 +58,8 @@ class RecordingAdapter(DataAdapter[data.Recording, RecordingObject]):
         notes = [self._note_adapter.to_aoef(note) for note in obj.notes]
 
         owners = [
-            self._user_adapter.to_aoef(owner).uuid for owner in obj.owners or []
+            self._user_adapter.to_aoef(owner).uuid
+            for owner in obj.owners or []
         ]
 
         path = obj.path
