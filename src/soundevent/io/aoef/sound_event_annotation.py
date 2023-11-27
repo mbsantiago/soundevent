@@ -13,12 +13,11 @@ from .note import NoteObject
 class SoundEventAnnotationObject(BaseModel):
     """Schema definition for an annotation object in AOEF format."""
 
-    id: int
-    sound_event: int
+    uuid: UUID
+    sound_event: UUID
     notes: Optional[List[NoteObject]] = None
     tags: Optional[List[int]] = None
-    uuid: Optional[UUID] = None
-    created_by: Optional[int] = None
+    created_by: Optional[UUID] = None
     created_on: Optional[datetime.datetime] = None
 
 
@@ -41,17 +40,16 @@ class SoundEventAnnotationAdapter(
     def assemble_aoef(
         self,
         obj: data.SoundEventAnnotation,
-        obj_id: int,
+        _: int,
     ) -> SoundEventAnnotationObject:
         return SoundEventAnnotationObject(
-            id=obj_id,
-            sound_event=self.sound_event_adapter.to_aoef(obj.sound_event).id,
+            sound_event=self.sound_event_adapter.to_aoef(obj.sound_event).uuid,
             notes=[self.note_adapter.to_aoef(note) for note in obj.notes]
             if obj.notes
             else None,
             tags=[self.tag_adapter.to_aoef(tag).id for tag in obj.tags],
             uuid=obj.uuid,
-            created_by=self.user_adapter.to_aoef(obj.created_by).id
+            created_by=self.user_adapter.to_aoef(obj.created_by).uuid
             if obj.created_by
             else None,
             created_on=obj.created_on,
@@ -69,7 +67,7 @@ class SoundEventAnnotationAdapter(
             )
 
         return data.SoundEventAnnotation(
-            uuid=obj.uuid or UUID(int=obj.id),
+            uuid=obj.uuid,
             sound_event=sound_event,
             notes=[self.note_adapter.to_soundevent(note) for note in obj.notes]
             if obj.notes

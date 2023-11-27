@@ -25,8 +25,8 @@ from .user import UserAdapter, UserObject
 
 
 class AnnotationSetObject(BaseModel):
+    uuid: UUID
     collection_type: Literal["annotation_set"] = "annotation_set"
-    uuid: Optional[UUID] = None
     users: Optional[List[UserObject]] = None
     tags: Optional[List[TagObject]] = None
     recordings: Optional[List[RecordingObject]] = None

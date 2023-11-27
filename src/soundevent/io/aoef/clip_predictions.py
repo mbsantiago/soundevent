@@ -13,11 +13,10 @@ from .tag import TagAdapter
 
 
 class ClipPredictionsObject(BaseModel):
-    id: int
     uuid: UUID
-    clip: int
-    sound_events: Optional[List[int]] = None
-    sequences: Optional[List[int]] = None
+    clip: UUID
+    sound_events: Optional[List[UUID]] = None
+    sequences: Optional[List[UUID]] = None
     tags: Optional[List[Tuple[int, float]]] = None
     features: Optional[Dict[str, float]] = None
 
@@ -41,20 +40,19 @@ class ClipPredictionsAdapter(
     def assemble_aoef(
         self,
         obj: data.ClipPrediction,
-        obj_id: int,
+        _: int,
     ) -> ClipPredictionsObject:
         return ClipPredictionsObject(
-            id=obj_id,
             uuid=obj.uuid,
-            clip=self.clip_adapter.to_aoef(obj.clip).id,
+            clip=self.clip_adapter.to_aoef(obj.clip).uuid,
             sound_events=[
-                self.sound_event_prediction_adapter.to_aoef(sound_event).id
+                self.sound_event_prediction_adapter.to_aoef(sound_event).uuid
                 for sound_event in obj.sound_events
             ]
             if obj.sound_events
             else None,
             sequences=[
-                self.sequence_prediction_adapter.to_aoef(sequence).id
+                self.sequence_prediction_adapter.to_aoef(sequence).uuid
                 for sequence in obj.sequences
             ]
             if obj.sequences

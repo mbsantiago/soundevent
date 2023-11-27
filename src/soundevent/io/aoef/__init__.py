@@ -31,7 +31,7 @@ from typing import Optional, TypeVar, Union
 from pydantic import BaseModel, Field
 
 from soundevent import data
-from soundevent.io.types import DataObject, DataType
+from soundevent.io.types import DataCollections, DataType
 
 from .annotation_project import (
     AnnotationProjectAdapter,
@@ -101,7 +101,7 @@ def load(
     path: data.PathLike,
     audio_dir: Optional[data.PathLike] = None,
     type: Optional[DataType] = None,
-) -> DataObject:
+) -> DataCollections:
     """Load an AOEF object from a JSON file."""
     path = Path(path)
 
@@ -135,7 +135,7 @@ def load(
 
 
 def save(
-    obj: DataObject,
+    obj: DataCollections,
     path: data.PathLike,
     audio_dir: Optional[data.PathLike] = None,
 ) -> None:

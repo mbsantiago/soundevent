@@ -25,7 +25,7 @@ from .user import UserAdapter, UserObject
 
 
 class PredictionSetObject(BaseModel):
-    uuid: Optional[UUID] = None
+    uuid: UUID
     created_on: Optional[datetime.datetime] = None
     collection_type: Literal["prediction_set"] = "prediction_set"
     users: Optional[List[UserObject]] = None

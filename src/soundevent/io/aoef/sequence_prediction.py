@@ -11,9 +11,8 @@ from .tag import TagAdapter
 
 
 class SequencePredictionObject(BaseModel):
-    id: int
-    sequence: int
-    uuid: Optional[UUID] = None
+    uuid: UUID
+    sequence: UUID
     score: float
     tags: Optional[List[Tuple[int, float]]] = None
 
@@ -33,11 +32,10 @@ class SequencePredictionAdapter(
     def assemble_aoef(
         self,
         obj: data.SequencePrediction,
-        obj_id: int,
+        _: int,
     ) -> SequencePredictionObject:
         return SequencePredictionObject(
-            id=obj_id,
-            sequence=self.sequence_adapter.to_aoef(obj.sequence).id,
+            sequence=self.sequence_adapter.to_aoef(obj.sequence).uuid,
             uuid=obj.uuid,
             score=obj.score,
             tags=[

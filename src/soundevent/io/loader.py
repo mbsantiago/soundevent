@@ -4,12 +4,16 @@ from typing import Dict, Optional, overload
 from soundevent import data
 from soundevent.io import aoef
 from soundevent.io.formats import infer_format
-from soundevent.io.types import DataObject, DataType, Loader
+from soundevent.io.types import DataCollections, DataType, Loader
 
 if sys.version_info >= (3, 8):
     from typing import Literal
 else:
     from typing_extensions import Literal  # pragma: no cover
+
+__all__ = [
+    "load",
+]
 
 
 @overload
@@ -97,7 +101,26 @@ def load(
     audio_dir: Optional[data.PathLike] = None,
     format: Optional[str] = "aoef",
     type: Optional[DataType] = None,  # type: ignore
-) -> DataObject:  # type: ignore
+) -> DataCollections:  # type: ignore
+    """Load data from a file.
+
+    Parameters
+    ----------
+    path
+        Path to the file to load.
+    audio_dir
+        Path to the directory containing the audio files. Often, the audio
+        path is stored relative to some directory to avoid storing
+        absolute paths, which are not portable. In this case, the `audio_dir`
+        argument is used to resolve the relative paths.
+    format
+        Format of the file to load. If not specified, the format is inferred.
+    type
+        Type of the data to load. If not specified, the type is inferred.
+        This argument is mainly used for letting the type system know what
+        type of object is returned by the function and can be omitted in most
+        cases.
+    """
     if format is None:
         format = infer_format(path)
 

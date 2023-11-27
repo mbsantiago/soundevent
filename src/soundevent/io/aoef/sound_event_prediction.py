@@ -11,9 +11,8 @@ from .tag import TagAdapter
 
 
 class SoundEventPredictionObject(BaseModel):
-    id: int
-    sound_event: int
-    uuid: Optional[UUID] = None
+    uuid: UUID
+    sound_event: UUID
     score: float
     tags: Optional[List[Tuple[int, float]]] = None
 
@@ -33,11 +32,10 @@ class SoundEventPredictionAdapter(
     def assemble_aoef(
         self,
         obj: data.SoundEventPrediction,
-        obj_id: int,
+        _: int,
     ) -> SoundEventPredictionObject:
         return SoundEventPredictionObject(
-            id=obj_id,
-            sound_event=self.sound_event_adapter.to_aoef(obj.sound_event).id,
+            sound_event=self.sound_event_adapter.to_aoef(obj.sound_event).uuid,
             uuid=obj.uuid,
             score=obj.score,
             tags=[

@@ -16,9 +16,7 @@ from .user import UserAdapter
 class RecordingObject(BaseModel):
     """Schema definition for a recording object in AOEF format."""
 
-    id: int
-
-    uuid: Optional[UUID] = None
+    uuid: UUID
     path: Path
     duration: float
     channels: int
@@ -32,7 +30,7 @@ class RecordingObject(BaseModel):
     tags: Optional[List[int]] = None
     features: Optional[Dict[str, float]] = None
     notes: Optional[List[NoteObject]] = None
-    owners: Optional[List[int]] = None
+    owners: Optional[List[UUID]] = None
     rights: Optional[str] = None
 
 
@@ -53,14 +51,14 @@ class RecordingAdapter(DataAdapter[data.Recording, RecordingObject]):
     def assemble_aoef(
         self,
         obj: data.Recording,
-        obj_id: int,
+        _: int,
     ) -> RecordingObject:
         tag_ids = [self._tag_adapter.to_aoef(tag).id for tag in obj.tags]
 
         notes = [self._note_adapter.to_aoef(note) for note in obj.notes]
 
         owners = [
-            self._user_adapter.to_aoef(owner).id for owner in obj.owners or []
+            self._user_adapter.to_aoef(owner).uuid for owner in obj.owners or []
         ]
 
         path = obj.path
@@ -68,7 +66,6 @@ class RecordingAdapter(DataAdapter[data.Recording, RecordingObject]):
             path = Path(obj.path).relative_to(self.audio_dir)
 
         return RecordingObject(
-            id=obj_id,
             uuid=obj.uuid,
             path=path,
             duration=obj.duration,

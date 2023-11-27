@@ -12,9 +12,9 @@ from .user import UserAdapter
 class NoteObject(BaseModel):
     """Schema definition for a note object in AOEF format."""
 
-    uuid: Optional[UUID] = None
+    uuid: UUID
     message: str
-    created_by: Optional[int] = None
+    created_by: Optional[UUID] = None
     is_issue: bool = False
     created_on: Optional[datetime.datetime] = None
 
@@ -26,7 +26,7 @@ class NoteAdapter:
     def to_aoef(self, note: data.Note) -> NoteObject:
         user_id = None
         if note.created_by is not None:
-            user_id = self._user_adapter.to_aoef(note.created_by).id
+            user_id = self._user_adapter.to_aoef(note.created_by).uuid
 
         return NoteObject(
             uuid=note.uuid,

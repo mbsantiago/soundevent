@@ -32,5 +32,13 @@ class TagAdapter(DataAdapter[data.Tag, TagObject]):  # type: ignore
         )
 
     @classmethod
-    def _get_key(cls, tag: data.Tag) -> Tuple[str, str]:
+    def _get_soundevent_key(cls, tag: data.Tag) -> Tuple[str, str]:
         return (tag.key, tag.value)
+
+    @classmethod
+    def _get_aoef_key(cls, tag: TagObject) -> int:
+        return tag.id
+
+    def get_new_id(self, _: TagObject) -> int:
+        """Get new ID for object."""
+        return len(self._mapping)

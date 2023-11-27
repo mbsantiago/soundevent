@@ -15,16 +15,15 @@ class StatusBadgeObject(BaseModel):
     """Schema definition for a status badge object in AOEF format."""
 
     state: data.AnnotationState
-    owner: Optional[int] = None
+    owner: Optional[UUID] = None
     created_on: Optional[datetime.datetime] = None
 
 
 class AnnotationTaskObject(BaseModel):
     """Schema definition for an annotation task object in AOEF format."""
 
-    id: int
-    uuid: Optional[UUID] = None
-    clip: int
+    uuid: UUID
+    clip: UUID
     status_badges: Optional[List[StatusBadgeObject]] = None
     created_on: Optional[datetime.datetime] = None
 
@@ -44,20 +43,19 @@ class AnnotationTaskAdapter(
     def assemble_aoef(
         self,
         obj: data.AnnotationTask,
-        obj_id: int,
+        _: int,
     ) -> AnnotationTaskObject:
         for badge in obj.status_badges or []:
             if badge.owner is not None:
                 self.user_adapter.to_aoef(badge.owner)
 
         return AnnotationTaskObject(
-            id=obj_id,
             uuid=obj.uuid,
-            clip=self.clip_adapter.to_aoef(obj.clip).id,
+            clip=self.clip_adapter.to_aoef(obj.clip).uuid,
             status_badges=[
                 StatusBadgeObject(
                     state=badge.state,
-                    owner=self.user_adapter.to_aoef(badge.owner).id
+                    owner=self.user_adapter.to_aoef(badge.owner).uuid
                     if badge.owner is not None
                     else None,
                     created_on=badge.created_on,

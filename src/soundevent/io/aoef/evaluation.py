@@ -36,8 +36,8 @@ from .user import UserAdapter, UserObject
 
 
 class EvaluationObject(BaseModel):
-    collection_type: Literal["evaluation"] = "evaluation"
     uuid: UUID
+    collection_type: Literal["evaluation"] = "evaluation"
     created_on: Optional[datetime.datetime] = None
     evaluation_task: str
     users: Optional[List[UserObject]] = None

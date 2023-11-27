@@ -29,7 +29,7 @@ DataType = Literal[
     "recording_set",
 ]
 
-DataObject = Union[
+DataCollections = Union[
     data.Dataset,
     data.AnnotationSet,
     data.AnnotationProject,
@@ -39,8 +39,9 @@ DataObject = Union[
     data.Evaluation,
     data.RecordingSet,
 ]
+"""Type alias for all data collection types."""
 
-D = TypeVar("D", contravariant=True, bound=DataObject)
+D = TypeVar("D", contravariant=True, bound=DataCollections)
 
 
 class Saver(Protocol, Generic[D]):

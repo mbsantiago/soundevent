@@ -11,18 +11,14 @@ from .adapters import DataAdapter
 class SoundEventObject(BaseModel):
     """Schema definition for a sound event object in AOEF format."""
 
-    id: int
+    uuid: UUID
     geometry: Optional[data.Geometry] = None
-    uuid: Optional[UUID] = None
     features: Optional[Dict[str, float]] = None
 
 
 class SoundEventAdapter(DataAdapter[data.SoundEvent, SoundEventObject]):
-    def assemble_aoef(
-        self, obj: data.SoundEvent, obj_id: int
-    ) -> SoundEventObject:
+    def assemble_aoef(self, obj: data.SoundEvent, _: int) -> SoundEventObject:
         return SoundEventObject(
-            id=obj_id,
             geometry=obj.geometry,
             uuid=obj.uuid,
             features={feature.name: feature.value for feature in obj.features}

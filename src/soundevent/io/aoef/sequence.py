@@ -15,11 +15,10 @@ from .sound_event import SoundEventAdapter
 class SequenceObject(BaseModel):
     """Schema definition for a sound event object in AOEF format."""
 
-    id: int
-    uuid: Optional[UUID] = None
-    sound_events: List[int]
+    uuid: UUID
+    sound_events: List[UUID]
     features: Optional[Dict[str, float]] = None
-    parent: Optional[int] = None
+    parent: Optional[UUID] = None
 
 
 class SequenceAdapter(DataAdapter[data.Sequence, SequenceObject]):
@@ -30,18 +29,17 @@ class SequenceAdapter(DataAdapter[data.Sequence, SequenceObject]):
         super().__init__()
         self.soundevent_adapter = soundevent_adapter
 
-    def assemble_aoef(self, obj: data.Sequence, obj_id: int) -> SequenceObject:
+    def assemble_aoef(self, obj: data.Sequence, _: int) -> SequenceObject:
         parent = None
         if obj.parent:
-            parent = self.to_aoef(obj.parent).id
+            parent = self.to_aoef(obj.parent).uuid
 
         sound_events = [
-            self.soundevent_adapter.to_aoef(sound_event).id
+            self.soundevent_adapter.to_aoef(sound_event).uuid
             for sound_event in obj.sound_events
         ]
 
         return SequenceObject(
-            id=obj_id,
             uuid=obj.uuid,
             sound_events=sound_events,
             parent=parent,
@@ -54,14 +52,10 @@ class SequenceAdapter(DataAdapter[data.Sequence, SequenceObject]):
         self,
         obj: SequenceObject,
     ) -> data.Sequence:
-        sound_events=[
+        sound_events = [
             sound_event
             for sound_event_id in obj.sound_events
-            if (
-                sound_event := self.soundevent_adapter.from_id(
-                    sound_event_id
-                )
-            )
+            if (sound_event := self.soundevent_adapter.from_id(sound_event_id))
             is not None
         ]
 

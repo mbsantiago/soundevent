@@ -12,11 +12,10 @@ from .recording import RecordingAdapter
 class ClipObject(BaseModel):
     """Schema definition for a clip object in AOEF format."""
 
-    id: int
-    recording: int
+    uuid: UUID
+    recording: UUID
     start_time: float
     end_time: float
-    uuid: Optional[UUID] = None
     features: Optional[Dict[str, float]] = None
 
 
@@ -28,10 +27,9 @@ class ClipAdapter(DataAdapter[data.Clip, ClipObject]):
         super().__init__()
         self.recording_adapter = recording_adapter
 
-    def assemble_aoef(self, obj: data.Clip, obj_id: int) -> ClipObject:
+    def assemble_aoef(self, obj: data.Clip, _: int) -> ClipObject:
         return ClipObject(
-            id=obj_id,
-            recording=self.recording_adapter.to_aoef(obj.recording).id,
+            recording=self.recording_adapter.to_aoef(obj.recording).uuid,
             start_time=obj.start_time,
             end_time=obj.end_time,
             uuid=obj.uuid,

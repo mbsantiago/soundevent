@@ -1,4 +1,4 @@
-from typing import Dict, Optional, Tuple
+from typing import Dict, Optional
 from uuid import UUID
 
 from pydantic import BaseModel
@@ -11,9 +11,9 @@ from .sound_event_prediction import SoundEventPredictionAdapter
 
 
 class MatchObject(BaseModel):
-    id: int
-    source: Optional[int] = None
-    target: Optional[int] = None
+    uuid: UUID
+    source: Optional[UUID] = None
+    target: Optional[UUID] = None
     affinity: float
     score: Optional[float] = None
     metrics: Optional[Dict[str, float]] = None
@@ -32,24 +32,24 @@ class MatchAdapter(DataAdapter[data.Match, MatchObject]):  # type: ignore
     def assemble_aoef(
         self,
         obj: data.Match,
-        obj_id: int,
+        _: int,
     ) -> MatchObject:
         source = None
         if obj.source is not None:
             prediction = self.sound_event_prediction_adapter.to_aoef(
                 obj.source
             )
-            source = prediction.id if prediction is not None else None
+            source = prediction.uuid if prediction is not None else None
 
         target = None
         if obj.target is not None:
             annotation = self.sound_event_annotation_adapter.to_aoef(
                 obj.target
             )
-            target = annotation.id if annotation is not None else None
+            target = annotation.uuid if annotation is not None else None
 
         return MatchObject(
-            id=obj_id,
+            uuid=obj.uuid,
             source=source,
             target=target,
             affinity=obj.affinity,
@@ -72,6 +72,7 @@ class MatchAdapter(DataAdapter[data.Match, MatchObject]):  # type: ignore
             target = self.sound_event_annotation_adapter.from_id(obj.target)
 
         return data.Match(
+            uuid=obj.uuid,
             source=source,
             target=target,
             affinity=obj.affinity,
@@ -84,11 +85,3 @@ class MatchAdapter(DataAdapter[data.Match, MatchObject]):  # type: ignore
                 for name, value in (obj.metrics or {}).items()
             ],
         )
-
-    @classmethod
-    def _get_key(
-        cls, obj: data.Match
-    ) -> Tuple[Optional[UUID], Optional[UUID]]:
-        left = obj.source.uuid if obj.source is not None else None
-        right = obj.target.uuid if obj.target is not None else None
-        return (left, right)

@@ -13,11 +13,10 @@ from .note import NoteAdapter
 
 
 class ClipEvaluationObject(BaseModel):
-    id: int
-    uuid: Optional[UUID] = None
-    annotations: int
-    predictions: int
-    matches: Optional[List[int]] = None
+    uuid: UUID
+    annotations: UUID
+    predictions: UUID
+    matches: Optional[List[UUID]] = None
     metrics: Optional[Dict[str, float]] = None
     score: Optional[float] = None
 
@@ -41,18 +40,17 @@ class ClipEvaluationAdapter(
     def assemble_aoef(
         self,
         obj: data.ClipEvaluation,
-        obj_id: int,
+        _: int,
     ) -> ClipEvaluationObject:
         annotations = self.clip_annotations_adapter.to_aoef(obj.annotations)
         predictions = self.clip_predictions_adapter.to_aoef(obj.predictions)
 
         return ClipEvaluationObject(
-            id=obj_id,
             uuid=obj.uuid,
-            annotations=annotations.id,
-            predictions=predictions.id,
+            annotations=annotations.uuid,
+            predictions=predictions.uuid,
             matches=[
-                self.match_adapter.to_aoef(match).id for match in obj.matches
+                self.match_adapter.to_aoef(match).uuid for match in obj.matches
             ]
             if obj.matches
             else None,

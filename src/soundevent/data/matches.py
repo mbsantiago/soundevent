@@ -36,6 +36,7 @@ comparative studies and insights in bioacoustic research.
 """
 
 from typing import Optional, Sequence
+from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field, model_validator
 
@@ -80,6 +81,7 @@ class Match(BaseModel):
         in addition to the affinity and score.
     """
 
+    uuid: UUID = Field(default_factory=uuid4)
     source: Optional[SoundEventPrediction] = None
     target: Optional[SoundEventAnnotation] = None
     affinity: float = Field(default=0.0, ge=0.0, le=1.0)

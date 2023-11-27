@@ -17,12 +17,11 @@ from .tag import TagAdapter
 class ClipAnnotationsObject(BaseModel):
     """Schema definition for the clip annotations object in AOEF format."""
 
-    id: int
-    uuid: Optional[UUID] = None
-    clip: int
+    uuid: UUID
+    clip: UUID
     tags: Optional[List[int]] = None
-    sound_events: Optional[List[int]] = None
-    sequences: Optional[List[int]] = None
+    sound_events: Optional[List[UUID]] = None
+    sequences: Optional[List[UUID]] = None
     notes: Optional[List[NoteObject]] = None
     created_on: Optional[datetime.datetime] = None
 
@@ -48,23 +47,22 @@ class ClipAnnotationsAdapter(
     def assemble_aoef(
         self,
         obj: data.ClipAnnotation,
-        obj_id: int,
+        _: int,
     ) -> ClipAnnotationsObject:
         return ClipAnnotationsObject(
-            id=obj_id,
             uuid=obj.uuid,
-            clip=self.clip_adapter.to_aoef(obj.clip).id,
+            clip=self.clip_adapter.to_aoef(obj.clip).uuid,
             tags=[self.tag_adapter.to_aoef(tag).id for tag in obj.tags]
             if obj.tags
             else None,
             sound_events=[
-                self.sound_event_annotation_adapter.to_aoef(annotation).id
+                self.sound_event_annotation_adapter.to_aoef(annotation).uuid
                 for annotation in obj.sound_events
             ]
             if obj.sound_events
             else None,
             sequences=[
-                self.sequence_annotation_adapter.to_aoef(annotation).id
+                self.sequence_annotation_adapter.to_aoef(annotation).uuid
                 for annotation in obj.sequences
             ]
             if obj.sequences

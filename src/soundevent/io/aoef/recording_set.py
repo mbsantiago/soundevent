@@ -15,8 +15,8 @@ from .user import UserAdapter, UserObject
 class RecordingSetObject(BaseModel):
     """Schema definition for a dataset object in AOEF format."""
 
+    uuid: UUID
     collection_type: Literal["recording_set"] = "recording_set"
-    uuid: Optional[UUID] = None
     created_on: Optional[datetime.datetime] = None
     recordings: List[RecordingObject]
     tags: Optional[List[TagObject]] = None

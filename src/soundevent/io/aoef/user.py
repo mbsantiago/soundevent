@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Hashable
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel
@@ -11,8 +11,7 @@ from .adapters import DataAdapter
 class UserObject(BaseModel):
     """Schema definition for a user object in AOEF format."""
 
-    id: int
-    uuid: Optional[UUID] = None
+    uuid: UUID
     username: Optional[str] = None
     email: Optional[str] = None
     name: Optional[str] = None
@@ -20,9 +19,8 @@ class UserObject(BaseModel):
 
 
 class UserAdapter(DataAdapter[data.User, UserObject]):
-    def assemble_aoef(self, obj: data.User, obj_id: int) -> UserObject:
+    def assemble_aoef(self, obj: data.User, _: Hashable) -> UserObject:
         return UserObject(
-            id=obj_id,
             uuid=obj.uuid,
             username=obj.username,
             email=obj.email,

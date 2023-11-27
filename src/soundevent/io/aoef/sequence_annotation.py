@@ -16,12 +16,11 @@ from .user import UserAdapter
 class SequenceAnnotationObject(BaseModel):
     """Schema definition for a sequence annotation object in AOEF format."""
 
-    id: int
-    sequence: int
+    uuid: UUID
+    sequence: UUID
     notes: Optional[List[NoteObject]] = None
     tags: Optional[List[int]] = None
-    uuid: Optional[UUID] = None
-    created_by: Optional[int] = None
+    created_by: Optional[UUID] = None
     created_on: Optional[datetime.datetime] = None
 
 
@@ -44,11 +43,10 @@ class SequenceAnnotationAdapter(
     def assemble_aoef(
         self,
         obj: data.SequenceAnnotation,
-        obj_id: int,
+        _: int,
     ) -> SequenceAnnotationObject:
         return SequenceAnnotationObject(
-            id=obj_id,
-            sequence=self.sequence_adapter.to_aoef(obj.sequence).id,
+            sequence=self.sequence_adapter.to_aoef(obj.sequence).uuid,
             notes=[self.note_adapter.to_aoef(note) for note in obj.notes]
             if obj.notes
             else None,
@@ -56,7 +54,7 @@ class SequenceAnnotationAdapter(
             if obj.tags
             else None,
             uuid=obj.uuid,
-            created_by=self.user_adapter.to_aoef(obj.created_by).id
+            created_by=self.user_adapter.to_aoef(obj.created_by).uuid
             if obj.created_by
             else None,
             created_on=obj.created_on,
