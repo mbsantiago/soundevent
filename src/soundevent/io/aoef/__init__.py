@@ -49,6 +49,16 @@ __all__ = [
     "is_json",
     "load",
     "save",
+    "to_aeof",
+    "to_soundevent",
+    "RecordingSetObject",
+    "DatasetObject",
+    "AnnotationSetObject",
+    "AnnotationProjectObject",
+    "EvaluationObject",
+    "EvaluationSetObject",
+    "PredictionSetObject",
+    "ModelRunObject",
 ]
 
 C = TypeVar("C", bound=BaseModel)
@@ -97,6 +107,37 @@ def is_json(path: data.PathLike) -> bool:
     return path.suffix == ".json"
 
 
+def to_aeof(
+    obj: DataCollections,
+    audio_dir: Optional[data.PathLike] = None,
+) -> AOEFObject:
+    """Convert a data object to an AOEF object."""
+    for _, data_cls, adapter_cls in ADAPTERS:
+        if isinstance(obj, data_cls):
+            adapter = adapter_cls(audio_dir=audio_dir)
+            return AOEFObject(
+                data=adapter.to_aoef(obj),
+                created_on=datetime.datetime.now(),
+            )
+
+    raise NotImplementedError(f"Unsupported data type: {type(obj)}")
+
+
+def to_soundevent(
+    aoef_object: AOEFObject,
+    audio_dir: Optional[data.PathLike] = None,
+) -> DataCollections:
+    """Convert an AOEF object to a data object."""
+    for adapter_type, _, adapter_cls in ADAPTERS:
+        if aoef_object.data.collection_type == adapter_type:
+            adapter = adapter_cls(audio_dir=audio_dir)
+            return adapter.to_soundevent(aoef_object.data)  # type: ignore
+
+    raise NotImplementedError(
+        f"Unsupported data type: {aoef_object.data.collection_type}"
+    )
+
+
 def load(
     path: data.PathLike,
     audio_dir: Optional[data.PathLike] = None,
@@ -124,14 +165,7 @@ def load(
             f"Invalid AOEF version: {version} (expected {AOEF_VERSION})"
         )
 
-    for adapter_type, _, adapter_cls in ADAPTERS:
-        if aoef_object.data.collection_type == adapter_type:
-            adapter = adapter_cls(audio_dir=audio_dir)
-            return adapter.to_soundevent(aoef_object.data)  # type: ignore
-
-    raise NotImplementedError(
-        f"Unsupported data type: {aoef_object.data.collection_type}"
-    )
+    return to_soundevent(aoef_object, audio_dir=audio_dir)
 
 
 def save(
@@ -145,18 +179,10 @@ def save(
     if not path.parent.exists():
         path.parent.mkdir(parents=True)
 
-    for _, data_cls, adapter_cls in ADAPTERS:
-        if isinstance(obj, data_cls):
-            adapter = adapter_cls(audio_dir=audio_dir)
-            aoef_object = AOEFObject(
-                data=adapter.to_aoef(obj),
-                created_on=datetime.datetime.now(),
-            )
-            path.write_text(
-                aoef_object.model_dump_json(
-                    exclude_none=True,
-                )
-            )
-            return
+    aoef_object = to_aeof(obj, audio_dir=audio_dir)
 
-    raise NotImplementedError(f"Unsupported data type: {type(obj)}")
+    path.write_text(
+        aoef_object.model_dump_json(
+            exclude_none=True,
+        )
+    )
