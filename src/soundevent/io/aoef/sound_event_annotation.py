@@ -80,5 +80,5 @@ class SoundEventAnnotationAdapter(
             created_by=self.user_adapter.from_id(obj.created_by)
             if obj.created_by is not None
             else None,
-            created_on=obj.created_on,
+            created_on=obj.created_on or datetime.datetime.now(),
         )
