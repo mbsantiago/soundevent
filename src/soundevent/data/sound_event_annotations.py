@@ -104,7 +104,7 @@ class SoundEventAnnotation(BaseModel):
     notes: List[Note] = Field(default_factory=list, repr=False)
     tags: List[Tag] = Field(default_factory=list, repr=False)
     created_by: Optional[User] = None
-    created_on: Optional[datetime.datetime] = Field(
+    created_on: datetime.datetime = Field(
         default_factory=datetime.datetime.now,
         repr=False,
     )
