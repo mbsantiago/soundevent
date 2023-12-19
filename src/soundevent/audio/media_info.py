@@ -1,5 +1,6 @@
 """Functions for getting media information from WAV files."""
 import hashlib
+import struct
 from dataclasses import dataclass
 from typing import IO
 
@@ -192,3 +193,56 @@ def compute_md5_checksum(path: PathLike) -> str:
             md5.update(buffer)
             buffer = fp.read(BUFFER_SIZE)
     return md5.hexdigest()
+
+
+def generate_wav_header(
+    samplerate: int,
+    channels: int,
+    samples: int,
+    bit_depth: int = 16,
+) -> bytes:
+    """Generate the data of a WAV header.
+
+    This function generates the data of a WAV header according to the
+    given parameters. The WAV header is a 44-byte string that contains
+    information about the audio data, such as the sample rate, the
+    number of channels, and the number of samples. The WAV header
+    assumes that the audio data is PCM encoded.
+
+    Parameters
+    ----------
+    samplerate
+        Sample rate in Hz.
+    channels
+        Number of channels.
+    samples
+        Number of samples.
+    bit_depth
+        The number of bits per sample. By default, it is 16 bits.
+
+    Notes
+    -----
+    The structure of the WAV header is described in
+    (WAV PCM soundfile format)[http://soundfile.sapp.org/doc/WaveFormat/].
+    """
+
+    data_size = samples * channels * bit_depth // 8
+    byte_rate = samplerate * channels * bit_depth // 8
+    block_align = channels * bit_depth // 8
+
+    return struct.pack(
+        "<4si4s4sihhiihh4si",  # Format string
+        b"RIFF",  # RIFF chunk id
+        data_size + 36,  # Size of the entire file minus 8 bytes
+        b"WAVE",  # RIFF chunk id
+        b"fmt ",  # fmt chunk id
+        16,  # Size of the fmt chunk
+        1,  # Audio format (1 corresponds to PCM)
+        channels,  # Number of channels
+        samplerate,  # Sample rate in Hz
+        byte_rate,  # Byte rate
+        block_align,  # Block align
+        bit_depth,  # Number of bits per sample
+        b"data",  # data chunk id
+        data_size,  # Size of the data chunk
+    )

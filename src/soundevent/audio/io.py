@@ -2,7 +2,7 @@
 
 Currently only supports reading and writing of .wav files.
 """
-
+from io import BytesIO
 from pathlib import Path
 from typing import Dict, Optional, Tuple
 
@@ -213,3 +213,22 @@ def load_clip(
             "samplerate": recording.samplerate,
         },
     )
+
+
+def audio_to_bytes(
+    data: np.ndarray,
+    samplerate: int,
+    bit_depth: int = 16,
+) -> bytes:
+    """Convert audio data to bytes."""
+    buffer = BytesIO()
+    with sf.SoundFile(
+        buffer,
+        mode="w",
+        samplerate=samplerate,
+        channels=data.shape[1],
+        format="RAW",
+        subtype=f"PCM_{bit_depth}",
+    ) as fp:
+        fp.write(data)
+    return buffer.getvalue()

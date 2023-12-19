@@ -23,7 +23,7 @@ def load(
     format: Optional[str] = "aoef",
     type: Literal["recording_set"] = "recording_set",  # type: ignore
 ) -> data.RecordingSet:  # type: ignore
-    ...
+    ...  # pragma: no cover
 
 
 @overload
@@ -33,7 +33,7 @@ def load(
     format: Optional[str] = "aoef",
     type: Literal["dataset"] = "dataset",  # type: ignore
 ) -> data.Dataset:  # type: ignore
-    ...
+    ...  # pragma: no cover
 
 
 @overload
@@ -43,7 +43,7 @@ def load(
     format: Optional[str] = "aoef",
     type: Literal["annotation_set"] = "annotation_set",  # type: ignore
 ) -> data.AnnotationSet:  # type: ignore
-    ...
+    ...  # pragma: no cover
 
 
 @overload
@@ -53,7 +53,7 @@ def load(
     format: Optional[str] = "aoef",
     type: Literal["annotation_project"] = "annotation_project",  # type: ignore
 ) -> data.AnnotationProject:  # type: ignore
-    ...
+    ...  # pragma: no cover
 
 
 @overload
@@ -63,7 +63,7 @@ def load(
     format: Optional[str] = "aoef",
     type: Literal["prediction_set"] = "prediction_set",  # type: ignore
 ) -> data.PredictionSet:  # type: ignore
-    ...
+    ...  # pragma: no cover
 
 
 @overload
@@ -73,7 +73,7 @@ def load(
     format: Optional[str] = "aoef",
     type: Literal["model_run"] = "model_run",  # type: ignore
 ) -> data.ModelRun:  # type: ignore
-    ...
+    ...  # pragma: no cover
 
 
 @overload
@@ -83,7 +83,7 @@ def load(
     format: Optional[str] = "aoef",
     type: Literal["evaluation_set"] = "evaluation_set",  # type: ignore
 ) -> data.EvaluationSet:  # type: ignore
-    ...
+    ...  # pragma: no cover
 
 
 @overload
@@ -93,7 +93,7 @@ def load(
     format: Optional[str] = "aoef",
     type: Literal["evaluation"] = "evaluation",  # type: ignore
 ) -> data.Evaluation:  # type: ignore
-    ...
+    ...  # pragma: no cover
 
 
 def load(
