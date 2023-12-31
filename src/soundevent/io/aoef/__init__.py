@@ -33,7 +33,10 @@ from pydantic import BaseModel, Field
 from soundevent import data
 from soundevent.io.types import DataCollections, DataType
 
-from .annotation_project import AnnotationProjectAdapter, AnnotationProjectObject
+from .annotation_project import (
+    AnnotationProjectAdapter,
+    AnnotationProjectObject,
+)
 from .annotation_set import AnnotationSetAdapter, AnnotationSetObject
 from .dataset import DatasetAdapter, DatasetObject
 from .evaluation import EvaluationAdapter, EvaluationObject
