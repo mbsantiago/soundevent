@@ -29,7 +29,7 @@ class AnnotationTaskObject(BaseModel):
 
 
 class AnnotationTaskAdapter(
-    DataAdapter[data.AnnotationTask, AnnotationTaskObject]
+    DataAdapter[data.AnnotationTask, AnnotationTaskObject, UUID, UUID]
 ):
     def __init__(
         self,
@@ -43,7 +43,7 @@ class AnnotationTaskAdapter(
     def assemble_aoef(
         self,
         obj: data.AnnotationTask,
-        _: int,
+        obj_id: UUID,
     ) -> AnnotationTaskObject:
         for badge in obj.status_badges or []:
             if badge.owner is not None:

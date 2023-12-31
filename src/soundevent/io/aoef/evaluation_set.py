@@ -15,7 +15,7 @@ class EvaluationSetObject(AnnotationSetObject):
 
 
 class EvaluationSetAdapter(AnnotationSetAdapter):
-    def to_aoef(
+    def to_aoef(  # type: ignore
         self,
         obj: data.EvaluationSet,  # type: ignore
     ) -> EvaluationSetObject:
@@ -41,7 +41,7 @@ class EvaluationSetAdapter(AnnotationSetAdapter):
             else None,
         )
 
-    def to_soundevent(
+    def to_soundevent(  # type: ignore
         self,
         obj: EvaluationSetObject,  # type: ignore
     ) -> data.EvaluationSet:

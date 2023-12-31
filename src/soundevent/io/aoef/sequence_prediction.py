@@ -18,7 +18,7 @@ class SequencePredictionObject(BaseModel):
 
 
 class SequencePredictionAdapter(
-    DataAdapter[data.SequencePrediction, SequencePredictionObject]
+    DataAdapter[data.SequencePrediction, SequencePredictionObject, UUID, UUID]
 ):
     def __init__(
         self,
@@ -32,7 +32,7 @@ class SequencePredictionAdapter(
     def assemble_aoef(
         self,
         obj: data.SequencePrediction,
-        _: int,
+        obj_id: UUID,
     ) -> SequencePredictionObject:
         return SequencePredictionObject(
             sequence=self.sequence_adapter.to_aoef(obj.sequence).uuid,

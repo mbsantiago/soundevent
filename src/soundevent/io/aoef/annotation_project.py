@@ -34,7 +34,7 @@ class AnnotationProjectAdapter(AnnotationSetAdapter):
             )
         )
 
-    def to_aoef(
+    def to_aoef(  # type: ignore
         self,
         obj: data.AnnotationProject,  # type: ignore
     ) -> AnnotationProjectObject:
@@ -68,7 +68,7 @@ class AnnotationProjectAdapter(AnnotationSetAdapter):
             tasks=tasks,
         )
 
-    def to_soundevent(
+    def to_soundevent(  # type: ignore
         self,
         obj: AnnotationProjectObject,  # type: ignore
     ) -> data.AnnotationProject:

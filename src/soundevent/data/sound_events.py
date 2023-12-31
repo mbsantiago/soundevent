@@ -33,6 +33,7 @@ from pydantic import BaseModel, Field
 
 from soundevent.data.features import Feature
 from soundevent.data.geometries import Geometry
+from soundevent.data.recordings import Recording
 
 __all__ = [
     "SoundEvent",
@@ -63,6 +64,7 @@ class SoundEvent(BaseModel):
 
     uuid: UUID = Field(default_factory=uuid4, repr=False)
     geometry: Optional[Geometry]
+    recording: Recording
     features: List[Feature] = Field(default_factory=list, repr=False)
 
     def __hash__(self):

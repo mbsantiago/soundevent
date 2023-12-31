@@ -27,7 +27,7 @@ class ClipAnnotationsObject(BaseModel):
 
 
 class ClipAnnotationsAdapter(
-    DataAdapter[data.ClipAnnotation, ClipAnnotationsObject]
+    DataAdapter[data.ClipAnnotation, ClipAnnotationsObject, UUID, UUID]
 ):
     def __init__(
         self,
@@ -47,7 +47,7 @@ class ClipAnnotationsAdapter(
     def assemble_aoef(
         self,
         obj: data.ClipAnnotation,
-        _: int,
+        obj_id: UUID,
     ) -> ClipAnnotationsObject:
         return ClipAnnotationsObject(
             uuid=obj.uuid,

@@ -30,6 +30,8 @@ class HasID(Protocol):
 
 SoundEventObject = TypeVar("SoundEventObject", bound=HasUUID)
 AOEFObject = TypeVar("AOEFObject", bound=HasUUID)
+SoundEventKey = TypeVar("SoundEventKey", bound=Hashable)
+AOEFKey = TypeVar("AOEFKey", bound=Hashable)
 C = TypeVar("C", bound=DataCollections)
 D = TypeVar("D", bound=BaseModel)
 
@@ -48,7 +50,9 @@ class AdapterProtocol(Protocol, Generic[C, D]):
         ...
 
 
-class DataAdapter(ABC, Generic[SoundEventObject, AOEFObject]):
+class DataAdapter(
+    ABC, Generic[SoundEventObject, AOEFObject, SoundEventKey, AOEFKey]
+):
     """Base class for data adapters.
 
     A data adapter is used to convert between sound event and AOEF data
@@ -60,13 +64,13 @@ class DataAdapter(ABC, Generic[SoundEventObject, AOEFObject]):
     """
 
     def __init__(self):
-        self._mapping: Dict[Hashable, Hashable] = {}
-        self._soundevent_store: Dict[Hashable, SoundEventObject] = {}
-        self._aoef_store: Dict[Hashable, AOEFObject] = {}
+        self._mapping: Dict[SoundEventKey, AOEFKey] = {}
+        self._soundevent_store: Dict[AOEFKey, SoundEventObject] = {}
+        self._aoef_store: Dict[AOEFKey, AOEFObject] = {}
 
     @abstractmethod
     def assemble_aoef(
-        self, obj: SoundEventObject, obj_id: Hashable
+        self, obj: SoundEventObject, obj_id: AOEFKey
     ) -> AOEFObject:
         """Create AOEF object from sound event object.
 
@@ -87,22 +91,22 @@ class DataAdapter(ABC, Generic[SoundEventObject, AOEFObject]):
         ...
 
     @classmethod
-    def _get_soundevent_key(cls, obj: SoundEventObject) -> Hashable:
+    def _get_soundevent_key(cls, obj: SoundEventObject) -> SoundEventKey:
         """Get key for object.
 
         Internally, the data adapter uses a mapping between objects and
         IDs. This method returns the key used for the mapping.
         """
-        return obj.uuid
+        return obj.uuid  # type: ignore
 
     @classmethod
-    def _get_aoef_key(cls, obj: AOEFObject) -> Hashable:
+    def _get_aoef_key(cls, obj: AOEFObject) -> AOEFKey:
         """Get key for object.
 
         Internally, the data adapter uses a mapping between objects and
         IDs. This method returns the key used for the mapping.
         """
-        return obj.uuid
+        return obj.uuid  # type: ignore
 
     def to_aoef(self, obj: SoundEventObject) -> AOEFObject:
         """Convert object to AOEF format."""
@@ -130,15 +134,15 @@ class DataAdapter(ABC, Generic[SoundEventObject, AOEFObject]):
 
         return self._soundevent_store[obj_id]
 
-    def from_id(self, obj_id: Hashable) -> Optional[SoundEventObject]:
+    def from_id(self, obj_id: AOEFKey) -> Optional[SoundEventObject]:
         """Get object from ID."""
         return self._soundevent_store.get(obj_id)
 
-    def get_new_id(self, obj: SoundEventObject) -> Hashable:
+    def get_new_id(self, obj: SoundEventObject) -> AOEFKey:
         """Get new ID for object."""
-        return obj.uuid
+        return obj.uuid  # type: ignore
 
-    def get_id(self, obj: SoundEventObject) -> Hashable:
+    def get_id(self, obj: SoundEventObject) -> AOEFKey:
         """Get ID for object."""
         key = self._get_soundevent_key(obj)
 

@@ -19,7 +19,7 @@ class MatchObject(BaseModel):
     metrics: Optional[Dict[str, float]] = None
 
 
-class MatchAdapter(DataAdapter[data.Match, MatchObject]):  # type: ignore
+class MatchAdapter(DataAdapter[data.Match, MatchObject, UUID, UUID]):
     def __init__(
         self,
         sound_event_annotation_adapter: SoundEventAnnotationAdapter,
@@ -32,7 +32,7 @@ class MatchAdapter(DataAdapter[data.Match, MatchObject]):  # type: ignore
     def assemble_aoef(
         self,
         obj: data.Match,
-        _: int,
+        obj_id: UUID,
     ) -> MatchObject:
         source = None
         if obj.source is not None:

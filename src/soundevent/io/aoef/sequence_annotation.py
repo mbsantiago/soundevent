@@ -25,7 +25,7 @@ class SequenceAnnotationObject(BaseModel):
 
 
 class SequenceAnnotationAdapter(
-    DataAdapter[data.SequenceAnnotation, SequenceAnnotationObject]
+    DataAdapter[data.SequenceAnnotation, SequenceAnnotationObject, UUID, UUID]
 ):
     def __init__(
         self,
@@ -43,7 +43,7 @@ class SequenceAnnotationAdapter(
     def assemble_aoef(
         self,
         obj: data.SequenceAnnotation,
-        _: int,
+        obj_id: UUID,
     ) -> SequenceAnnotationObject:
         return SequenceAnnotationObject(
             sequence=self.sequence_adapter.to_aoef(obj.sequence).uuid,

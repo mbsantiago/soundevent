@@ -22,7 +22,7 @@ class ClipPredictionsObject(BaseModel):
 
 
 class ClipPredictionsAdapter(
-    DataAdapter[data.ClipPrediction, ClipPredictionsObject]
+    DataAdapter[data.ClipPrediction, ClipPredictionsObject, UUID, UUID]
 ):
     def __init__(
         self,
@@ -40,7 +40,7 @@ class ClipPredictionsAdapter(
     def assemble_aoef(
         self,
         obj: data.ClipPrediction,
-        _: int,
+        obj_id: UUID,
     ) -> ClipPredictionsObject:
         return ClipPredictionsObject(
             uuid=obj.uuid,

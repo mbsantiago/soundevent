@@ -489,6 +489,7 @@ def test_can_recover_sound_event_features(
                 sound_events=[
                     data.SoundEventAnnotation(
                         sound_event=data.SoundEvent(
+                            recording=clip.recording,
                             geometry=bounding_box,
                             features=[
                                 data.Feature(

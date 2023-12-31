@@ -54,7 +54,9 @@ def test_raw_data_chunk_has_correct_size(random_wav):
             data,
             samplerate=samplerate,
             channels=channels,
-            subtype="FLOAT",
+            subtype="PCM_16",
             format="RAW",
         ) as fp:
-            assert len(fp) == int(samplerate * duration)
+            frames = fp.read()
+            print(frames.shape)
+            assert len(frames) == int(samplerate * duration)

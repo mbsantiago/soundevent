@@ -64,7 +64,7 @@ def test_save_dataset_contains_datetime_of_creation(
 
     class MockDatetime(datetime.datetime):
         @classmethod
-        def now(cls):
+        def now(cls):  # type: ignore
             return fake_datetime
 
     monkeypatch.setattr(datetime, "datetime", MockDatetime)

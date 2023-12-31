@@ -19,7 +19,7 @@ class ClipObject(BaseModel):
     features: Optional[Dict[str, float]] = None
 
 
-class ClipAdapter(DataAdapter[data.Clip, ClipObject]):
+class ClipAdapter(DataAdapter[data.Clip, ClipObject, UUID, UUID]):
     def __init__(
         self,
         recording_adapter: RecordingAdapter,
@@ -27,7 +27,7 @@ class ClipAdapter(DataAdapter[data.Clip, ClipObject]):
         super().__init__()
         self.recording_adapter = recording_adapter
 
-    def assemble_aoef(self, obj: data.Clip, _: int) -> ClipObject:
+    def assemble_aoef(self, obj: data.Clip, obj_id: UUID) -> ClipObject:
         return ClipObject(
             recording=self.recording_adapter.to_aoef(obj.recording).uuid,
             start_time=obj.start_time,

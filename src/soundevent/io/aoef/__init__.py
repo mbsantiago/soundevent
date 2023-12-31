@@ -29,14 +29,12 @@ from pathlib import Path
 from typing import Optional, TypeVar, Union
 
 from pydantic import BaseModel, Field
+from pydantic.main import IncEx
 
 from soundevent import data
 from soundevent.io.types import DataCollections, DataType
 
-from .annotation_project import (
-    AnnotationProjectAdapter,
-    AnnotationProjectObject,
-)
+from .annotation_project import AnnotationProjectAdapter, AnnotationProjectObject
 from .annotation_set import AnnotationSetAdapter, AnnotationSetObject
 from .dataset import DatasetAdapter, DatasetObject
 from .evaluation import EvaluationAdapter, EvaluationObject
@@ -172,6 +170,7 @@ def save(
     obj: DataCollections,
     path: data.PathLike,
     audio_dir: Optional[data.PathLike] = None,
+    exclude: Optional[IncEx] = None,
 ) -> None:
     """Save an AOEF object to a JSON file."""
     path = Path(path)
@@ -184,5 +183,6 @@ def save(
     path.write_text(
         aoef_object.model_dump_json(
             exclude_none=True,
+            exclude=exclude,
         )
     )

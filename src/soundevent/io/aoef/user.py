@@ -1,4 +1,4 @@
-from typing import Hashable, Optional
+from typing import Optional
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel
@@ -18,8 +18,8 @@ class UserObject(BaseModel):
     institution: Optional[str] = None
 
 
-class UserAdapter(DataAdapter[data.User, UserObject]):
-    def assemble_aoef(self, obj: data.User, _: Hashable) -> UserObject:
+class UserAdapter(DataAdapter[data.User, UserObject, UUID, UUID]):
+    def assemble_aoef(self, obj: data.User, obj_id: UUID) -> UserObject:
         return UserObject(
             uuid=obj.uuid,
             username=obj.username,
