@@ -26,18 +26,14 @@ risk of errors and inconsistencies.
 """
 import datetime
 from pathlib import Path
-from typing import Optional, TypeVar, Union
+from typing import TYPE_CHECKING, Optional, TypeVar, Union
 
 from pydantic import BaseModel, Field
-from pydantic.main import IncEx
 
 from soundevent import data
 from soundevent.io.types import DataCollections, DataType
 
-from .annotation_project import (
-    AnnotationProjectAdapter,
-    AnnotationProjectObject,
-)
+from .annotation_project import AnnotationProjectAdapter, AnnotationProjectObject
 from .annotation_set import AnnotationSetAdapter, AnnotationSetObject
 from .dataset import DatasetAdapter, DatasetObject
 from .evaluation import EvaluationAdapter, EvaluationObject
@@ -45,6 +41,9 @@ from .evaluation_set import EvaluationSetAdapter, EvaluationSetObject
 from .model_run import ModelRunAdapter, ModelRunObject
 from .prediction_set import PredictionSetAdapter, PredictionSetObject
 from .recording_set import RecordingSetAdapter, RecordingSetObject
+
+if TYPE_CHECKING:
+    from pydantic.main import IncEx
 
 __all__ = [
     "is_json",
