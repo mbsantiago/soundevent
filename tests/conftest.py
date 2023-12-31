@@ -30,7 +30,7 @@ def write_random_wav(
     shape = (frames, channels)
     subtype = f"PCM_{bit_depth}"
     wav = np.random.random(size=shape).astype(np.float32)
-    sf.write(path, wav, samplerate, subtype=subtype)
+    sf.write(str(path), wav, samplerate, subtype=subtype)
 
 
 @pytest.fixture
