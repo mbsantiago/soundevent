@@ -215,6 +215,14 @@ def load_clip(
     )
 
 
+PCM_SUBTYPES = {
+    8: "PCM_S8",
+    16: "PCM_16",
+    24: "PCM_24",
+    32: "PCM_32",
+}
+
+
 def audio_to_bytes(
     data: np.ndarray,
     samplerate: int,
@@ -222,13 +230,19 @@ def audio_to_bytes(
 ) -> bytes:
     """Convert audio data to bytes."""
     buffer = BytesIO()
+    subtype = PCM_SUBTYPES.get(bit_depth)
+    if subtype is None:
+        raise ValueError(
+            "Unsupported bit depth: {bit_depth}. "
+            "Valid bit depths are: {PCM_SUBTYPES.keys()}."
+        )
     with sf.SoundFile(
         buffer,
         mode="w",
         samplerate=samplerate,
         channels=data.shape[1],
         format="RAW",
-        subtype=f"PCM_{bit_depth}",
+        subtype=subtype,
     ) as fp:
         fp.write(data)
     return buffer.getvalue()
