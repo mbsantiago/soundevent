@@ -18,7 +18,9 @@ class SoundEventPredictionObject(BaseModel):
 
 
 class SoundEventPredictionAdapter(
-    DataAdapter[data.SoundEventPrediction, SoundEventPredictionObject]
+    DataAdapter[
+        data.SoundEventPrediction, SoundEventPredictionObject, UUID, UUID
+    ]
 ):
     def __init__(
         self,
@@ -32,7 +34,7 @@ class SoundEventPredictionAdapter(
     def assemble_aoef(
         self,
         obj: data.SoundEventPrediction,
-        _: int,
+        obj_id: UUID,
     ) -> SoundEventPredictionObject:
         return SoundEventPredictionObject(
             sound_event=self.sound_event_adapter.to_aoef(obj.sound_event).uuid,

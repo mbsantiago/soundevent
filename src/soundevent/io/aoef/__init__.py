@@ -26,7 +26,7 @@ risk of errors and inconsistencies.
 """
 import datetime
 from pathlib import Path
-from typing import Optional, TypeVar, Union
+from typing import Any, Dict, Optional, Set, TypeVar, Union
 
 from pydantic import BaseModel, Field
 
@@ -168,10 +168,14 @@ def load(
     return to_soundevent(aoef_object, audio_dir=audio_dir)
 
 
+IncEx = Union[Set[int], Set[str], Dict[int, Any], Dict[str, Any], None]
+
+
 def save(
     obj: DataCollections,
     path: data.PathLike,
     audio_dir: Optional[data.PathLike] = None,
+    exclude: IncEx = None,
 ) -> None:
     """Save an AOEF object to a JSON file."""
     path = Path(path)
@@ -184,5 +188,6 @@ def save(
     path.write_text(
         aoef_object.model_dump_json(
             exclude_none=True,
+            exclude=exclude,
         )
     )

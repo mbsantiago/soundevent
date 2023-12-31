@@ -22,7 +22,7 @@ class ClipEvaluationObject(BaseModel):
 
 
 class ClipEvaluationAdapter(
-    DataAdapter[data.ClipEvaluation, ClipEvaluationObject]
+    DataAdapter[data.ClipEvaluation, ClipEvaluationObject, UUID, UUID]
 ):
     def __init__(
         self,
@@ -40,7 +40,7 @@ class ClipEvaluationAdapter(
     def assemble_aoef(
         self,
         obj: data.ClipEvaluation,
-        _: int,
+        obj_id: UUID,
     ) -> ClipEvaluationObject:
         annotations = self.clip_annotations_adapter.to_aoef(obj.annotations)
         predictions = self.clip_predictions_adapter.to_aoef(obj.predictions)

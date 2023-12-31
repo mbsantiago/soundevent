@@ -11,6 +11,7 @@ def save(
     path: data.PathLike,
     audio_dir: Optional[data.PathLike] = None,
     format: str = "aoef",
+    **kwargs,
 ) -> None:
     """Save a data object to a file.
 
@@ -49,7 +50,7 @@ def save(
     if saver is None:
         raise ValueError(f"Unknown format {format}")
 
-    return saver(obj, path, audio_dir)
+    return saver(obj, path, audio_dir, **kwargs)
 
 
 SAVERS: Dict[str, Saver] = {

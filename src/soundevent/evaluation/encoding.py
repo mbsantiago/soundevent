@@ -38,7 +38,7 @@ class Encoder(Protocol):
 
     num_classes: int
 
-    def encode(self, tags: data.Tag) -> Optional[int]:
+    def encode(self, tag: data.Tag) -> Optional[int]:
         """Encode a tag into an integer.
 
         Parameters

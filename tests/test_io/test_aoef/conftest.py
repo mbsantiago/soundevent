@@ -79,8 +79,10 @@ def recording_set_adapter(
 
 
 @pytest.fixture
-def sound_event_adapter() -> SoundEventAdapter:
-    return SoundEventAdapter()
+def sound_event_adapter(
+    recording_adapter: RecordingAdapter,
+) -> SoundEventAdapter:
+    return SoundEventAdapter(recording_adapter)
 
 
 @pytest.fixture

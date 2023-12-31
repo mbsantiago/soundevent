@@ -96,7 +96,9 @@ class EvaluationAdapter:
             self.note_adapter,
             audio_dir=self.audio_dir,
         )
-        self.sound_event_adapter = sound_event_adapter or SoundEventAdapter()
+        self.sound_event_adapter = sound_event_adapter or SoundEventAdapter(
+            self.recording_adapter
+        )
         self.sequence_adapter = sequence_adapter or SequenceAdapter(
             self.sound_event_adapter
         )

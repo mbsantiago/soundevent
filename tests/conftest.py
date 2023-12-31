@@ -7,7 +7,7 @@ from uuid import uuid4
 
 import numpy as np
 import pytest
-from scipy.io import wavfile
+import soundfile as sf
 
 from soundevent import data
 
@@ -23,12 +23,14 @@ def write_random_wav(
     samplerate: int = 22100,
     duration: float = 0.1,
     channels: int = 1,
+    bit_depth: int = 16,
 ) -> None:
     """Write a random wav file to the given path."""
     frames = int(samplerate * duration)
     shape = (frames, channels)
+    subtype = f"PCM_{bit_depth}"
     wav = np.random.random(size=shape).astype(np.float32)
-    wavfile.write(path, samplerate, wav)
+    sf.write(str(path), wav, samplerate, subtype=subtype)
 
 
 @pytest.fixture
@@ -66,11 +68,12 @@ def random_wav(audio_dir: Path):
         samplerate: int = 22100,
         duration: float = 0.1,
         channels: int = 1,
+        bit_depth: int = 16,
     ) -> Path:
         """Return a random wav file."""
         if path is None:
             path = audio_dir / f"{uuid4()}.wav"
-        write_random_wav(path, samplerate, duration, channels)
+        write_random_wav(path, samplerate, duration, channels, bit_depth)
         return path
 
     return _random_wav
@@ -102,9 +105,10 @@ def bounding_box() -> data.BoundingBox:
 @pytest.fixture
 def sound_event(
     bounding_box: data.BoundingBox,
+    recording: data.Recording,
 ) -> data.SoundEvent:
     """Return a sound event."""
-    return data.SoundEvent(geometry=bounding_box)
+    return data.SoundEvent(geometry=bounding_box, recording=recording)
 
 
 @pytest.fixture

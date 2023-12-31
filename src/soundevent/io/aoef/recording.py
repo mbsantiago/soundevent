@@ -34,7 +34,9 @@ class RecordingObject(BaseModel):
     rights: Optional[str] = None
 
 
-class RecordingAdapter(DataAdapter[data.Recording, RecordingObject]):
+class RecordingAdapter(
+    DataAdapter[data.Recording, RecordingObject, UUID, UUID]
+):
     def __init__(
         self,
         user_adapter: UserAdapter,
@@ -51,7 +53,7 @@ class RecordingAdapter(DataAdapter[data.Recording, RecordingObject]):
     def assemble_aoef(
         self,
         obj: data.Recording,
-        _: int,
+        obj_id: UUID,
     ) -> RecordingObject:
         tag_ids = [self._tag_adapter.to_aoef(tag).id for tag in obj.tags]
 
@@ -89,53 +91,51 @@ class RecordingAdapter(DataAdapter[data.Recording, RecordingObject]):
             rights=obj.rights,
         )
 
-    def assemble_soundevent(
-        self, recording: RecordingObject
-    ) -> data.Recording:
+    def assemble_soundevent(self, obj: RecordingObject) -> data.Recording:
         tags = [
             tag
-            for tag_id in (recording.tags or [])
+            for tag_id in (obj.tags or [])
             if (tag := self._tag_adapter.from_id(tag_id)) is not None
         ]
 
         notes = [
             self._note_adapter.to_soundevent(note)
-            for note in (recording.notes or [])
+            for note in (obj.notes or [])
         ]
 
         owners = [
             user
-            for owner_id in recording.owners or []
+            for owner_id in obj.owners or []
             if (user := self._user_adapter.from_id(owner_id)) is not None
         ]
 
-        path = recording.path
+        path = obj.path
         if self.audio_dir is not None:
-            path = self.audio_dir / recording.path
+            path = self.audio_dir / obj.path
 
         return data.Recording(
-            uuid=recording.uuid or uuid4(),
+            uuid=obj.uuid or uuid4(),
             path=path,
-            duration=recording.duration,
-            channels=recording.channels,
-            samplerate=recording.samplerate,
-            time_expansion=recording.time_expansion
-            if recording.time_expansion is not None
+            duration=obj.duration,
+            channels=obj.channels,
+            samplerate=obj.samplerate,
+            time_expansion=obj.time_expansion
+            if obj.time_expansion is not None
             else 1.0,
-            hash=recording.hash,
-            date=recording.date,
-            time=recording.time,
-            latitude=recording.latitude,
-            longitude=recording.longitude,
+            hash=obj.hash,
+            date=obj.date,
+            time=obj.time,
+            latitude=obj.latitude,
+            longitude=obj.longitude,
             tags=tags,
             features=[
                 data.Feature(
                     name=name,
                     value=value,
                 )
-                for name, value in (recording.features or {}).items()
+                for name, value in (obj.features or {}).items()
             ],
             notes=notes,
             owners=owners,
-            rights=recording.rights,
+            rights=obj.rights,
         )

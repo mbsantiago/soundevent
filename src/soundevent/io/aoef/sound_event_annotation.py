@@ -22,7 +22,9 @@ class SoundEventAnnotationObject(BaseModel):
 
 
 class SoundEventAnnotationAdapter(
-    DataAdapter[data.SoundEventAnnotation, SoundEventAnnotationObject]
+    DataAdapter[
+        data.SoundEventAnnotation, SoundEventAnnotationObject, UUID, UUID
+    ]
 ):
     def __init__(
         self,
@@ -40,7 +42,7 @@ class SoundEventAnnotationAdapter(
     def assemble_aoef(
         self,
         obj: data.SoundEventAnnotation,
-        _: int,
+        obj_id: UUID,
     ) -> SoundEventAnnotationObject:
         return SoundEventAnnotationObject(
             sound_event=self.sound_event_adapter.to_aoef(obj.sound_event).uuid,

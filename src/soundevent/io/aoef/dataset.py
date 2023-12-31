@@ -14,7 +14,7 @@ class DatasetObject(RecordingSetObject):
 
 
 class DatasetAdapter(RecordingSetAdapter):
-    def to_aoef(
+    def to_aoef(  # type: ignore
         self,
         obj: data.Dataset,  # type: ignore
     ) -> DatasetObject:
@@ -29,7 +29,7 @@ class DatasetAdapter(RecordingSetAdapter):
             description=obj.description,
         )
 
-    def to_soundevent(
+    def to_soundevent(  # type: ignore
         self,
         obj: DatasetObject,  # type: ignore
     ) -> data.Dataset:
