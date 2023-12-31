@@ -144,17 +144,6 @@ class BaseGeometry(BaseModel, ABC):
         reliability and consistency in spatial calculations.
     """
 
-    type: GeometryType = Field(
-        description="the type of geometry used to locate the sound event.",
-        frozen=True,
-        exclude=False,
-    )
-    coordinates: Union[float, List] = Field(
-        description="the coordinates of the geometry.",
-        frozen=True,
-        exclude=False,
-    )
-
     @classmethod
     def geom_type(cls) -> GeometryType:
         """Get the geometry type.
