@@ -26,7 +26,7 @@ risk of errors and inconsistencies.
 """
 import datetime
 from pathlib import Path
-from typing import TYPE_CHECKING, Optional, TypeVar, Union
+from typing import Any, Dict, Optional, Set, TypeVar, Union
 
 from pydantic import BaseModel, Field
 
@@ -44,9 +44,6 @@ from .evaluation_set import EvaluationSetAdapter, EvaluationSetObject
 from .model_run import ModelRunAdapter, ModelRunObject
 from .prediction_set import PredictionSetAdapter, PredictionSetObject
 from .recording_set import RecordingSetAdapter, RecordingSetObject
-
-if TYPE_CHECKING:
-    from pydantic.main import IncEx
 
 __all__ = [
     "is_json",
@@ -171,11 +168,14 @@ def load(
     return to_soundevent(aoef_object, audio_dir=audio_dir)
 
 
+IncEx = Union[Set[int], Set[str], Dict[int, Any], Dict[str, Any], None]
+
+
 def save(
     obj: DataCollections,
     path: data.PathLike,
     audio_dir: Optional[data.PathLike] = None,
-    exclude: Optional[IncEx] = None,
+    exclude: IncEx = None,
 ) -> None:
     """Save an AOEF object to a JSON file."""
     path = Path(path)
