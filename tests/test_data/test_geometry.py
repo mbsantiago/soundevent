@@ -326,4 +326,4 @@ def test_invalid_linestring():
 
     # Time is not sorted
     with pytest.raises(ValueError):
-        data.LineString(coordinates=[[0, 1], [2, 1], [1, 1]])
+        data.LineString(coordinates=[[1, 1], [0.5, 1], [0, 1]])
