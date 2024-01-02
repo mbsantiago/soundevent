@@ -399,7 +399,9 @@ class LineString(BaseGeometry):
     @field_validator("coordinates")
     def _is_ordered_by_time(cls, v: List[List[float]]) -> List[List[float]]:
         """Validate that the line is ordered by time."""
-        if not all(v[i][0] <= v[i + 1][0] for i in range(len(v) - 1)):
+        start_time = v[0][0]
+        end_time = v[-1][0]
+        if start_time > end_time:
             raise ValueError("The line must be ordered by time.")
         return v
 
@@ -706,9 +708,9 @@ class MultiLineString(BaseGeometry):
     ) -> List[List[List[float]]]:
         """Validate that each line is ordered by time."""
         for line in v:
-            if not all(
-                line[i][0] <= line[i + 1][0] for i in range(len(line) - 1)
-            ):
+            start_time = line[0][0]
+            end_time = line[-1][0]
+            if not (start_time < end_time):
                 raise ValueError("Each line must be ordered by time.")
         return v
 
