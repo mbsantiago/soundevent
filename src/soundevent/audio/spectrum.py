@@ -159,9 +159,7 @@ def pcen_core(
                 # if axis = +- 1, max_axis = 0
                 max_axis = np.mod(1 - axis, 2)
 
-            ref = scipy.ndimage.maximum_filter1d(
-                S, max_size, axis=max_axis
-            )
+            ref = scipy.ndimage.maximum_filter1d(S, max_size, axis=max_axis)
 
         # NOTE: Type checker trick
         assert ref is not None
