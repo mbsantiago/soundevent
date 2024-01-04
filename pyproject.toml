@@ -18,7 +18,9 @@ audio = [
     "cython>=0.29.36",
     "soundfile>=0.12.1",
 ]
-evaluation = ["scikit-learn>=1.3.3"]
+evaluation = [
+    "scikit-learn>=1.3.2",
+]
 geometry = ["shapely>=2.0.1"]
 all = [
     "soundevent[plot]",
