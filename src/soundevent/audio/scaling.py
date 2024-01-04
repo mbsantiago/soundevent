@@ -2,9 +2,15 @@
 
 from typing import Literal
 
-import librosa
 import numpy as np
 import xarray as xr
+
+from soundevent.audio.spectrum import (
+    amplitude_to_db,
+    db_to_amplitude,
+    db_to_power,
+    pcen_core,
+)
 
 __all__ = [
     "clamp_amplitude",
@@ -43,12 +49,12 @@ def clamp_amplitude(
     scale = spec.attrs.get("scale", "amplitude")
 
     if scale == "amplitude":
-        min_dB = librosa.db_to_amplitude(min_dB)  # type: ignore
-        max_dB = librosa.db_to_amplitude(max_dB)  # type: ignore
+        min_dB = db_to_amplitude(min_dB)
+        max_dB = db_to_amplitude(max_dB)
 
     if scale == "power":
-        min_dB = librosa.db_to_power(min_dB)  # type: ignore
-        max_dB = librosa.db_to_power(max_dB)  # type: ignore
+        min_dB = db_to_power(min_dB)
+        max_dB = db_to_power(max_dB)
 
     data = np.clip(spec.data, min_dB, max_dB)
 
@@ -86,7 +92,7 @@ def scale_amplitude(
     data = spec.data
 
     if scale == "dB":
-        data = librosa.amplitude_to_db(data, amin=1e-10)  # type: ignore
+        data = amplitude_to_db(data, amin=1e-10)
 
     elif scale == "power":
         data = data**2
@@ -128,7 +134,7 @@ def pcen(spec: xr.DataArray, **kwargs) -> xr.DataArray:
     sr = spec.attrs["samplerate"]
     hop_length = int(spec.attrs["hop_size"] * sr)
     time_axis: int = spec.get_axis_num("time")  # type: ignore
-    data = librosa.pcen(
+    data = pcen_core(
         spec.data,
         **{
             "sr": sr,
