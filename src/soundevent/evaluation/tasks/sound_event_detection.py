@@ -232,7 +232,7 @@ def evaluate_sound_event(
 
 
 def _mean(
-    scores: Sequence[float | None],
+    scores: Sequence[Optional[float]],
 ) -> float:
     valid_scores = [score for score in scores if score is not None]
 
