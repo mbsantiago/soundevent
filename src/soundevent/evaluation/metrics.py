@@ -214,6 +214,11 @@ def mean_average_precision(
     Note also that the y_score input is assumed to be an array of probabilities
     for each class.
     """
+    y_true = np.array(y_true).astype(np.float32)
+    no_class = np.isnan(y_true)
+    y_true = y_true[~no_class]
+    y_score = y_score[~no_class]
+
     return metrics.average_precision_score(  # type: ignore
         y_true=y_true,
         y_score=y_score,

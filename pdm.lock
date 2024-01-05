@@ -2,7 +2,7 @@
 # It is not intended for manual editing.
 
 [metadata]
-groups = ["default", "dev", "plot", "audio", "evaluation", "geometry"]
+groups = ["default", "all", "audio", "dev", "evaluation", "geometry", "plot"]
 strategy = ["cross_platform"]
 lock_version = "4.4"
 content_hash = "sha256:979a03b717e82edb585c684de22566827b48011d5984f31fde415f2af99d81b1"

@@ -16,6 +16,7 @@ from soundevent.evaluation.tasks.common import iterate_over_valid_clips
 
 __all__ = [
     "sound_event_detection",
+    "evaluate_clip",
 ]
 
 SOUNDEVENT_METRICS: Sequence[metrics.Metric] = (
@@ -25,6 +26,7 @@ SOUNDEVENT_METRICS: Sequence[metrics.Metric] = (
 EXAMPLE_METRICS: Sequence[metrics.Metric] = ()
 
 RUN_METRICS: Sequence[metrics.Metric] = (
+    metrics.mean_average_precision,
     metrics.balanced_accuracy,
     metrics.accuracy,
     metrics.top_3_accuracy,
@@ -44,18 +46,16 @@ def sound_event_detection(
         predicted_classes_scores,
     ) = _evaluate_clips(clip_predictions, clip_annotations, encoder)
 
-    evaluation_metrics = _compute_overall_metrics(
+    evaluation_metrics = compute_overall_metrics(
         true_classes,
         predicted_classes_scores,
     )
-
-    score = _compute_overall_score(evaluated_clips)
 
     return data.Evaluation(
         evaluation_task="sound_event_detection",
         clip_evaluations=evaluated_clips,
         metrics=evaluation_metrics,
-        score=score,
+        score=_mean([c.score for c in evaluated_clips]),
     )
 
 
@@ -70,9 +70,10 @@ def _evaluate_clips(
     predicted_classes_scores = []
 
     for annotations, predictions in iterate_over_valid_clips(
-        clip_predictions=clip_predictions, clip_annotations=clip_annotations
+        clip_predictions=clip_predictions,
+        clip_annotations=clip_annotations,
     ):
-        true_class, predicted_classes, evaluated_example = _evaluate_clip(
+        true_class, predicted_classes, evaluated_clip = evaluate_clip(
             clip_annotations=annotations,
             clip_predictions=predictions,
             encoder=encoder,
@@ -80,12 +81,12 @@ def _evaluate_clips(
 
         true_classes.extend(true_class)
         predicted_classes_scores.extend(predicted_classes)
-        evaluated_clips.append(evaluated_example)
+        evaluated_clips.append(evaluated_clip)
 
     return evaluated_clips, true_classes, np.array(predicted_classes_scores)
 
 
-def _compute_overall_metrics(true_classes, predicted_classes_scores):
+def compute_overall_metrics(true_classes, predicted_classes_scores):
     """Compute evaluation metrics based on true classes and predicted
     scores."""
     evaluation_metrics = [
@@ -101,7 +102,7 @@ def _compute_overall_metrics(true_classes, predicted_classes_scores):
     return evaluation_metrics
 
 
-def _evaluate_clip(
+def evaluate_clip(
     clip_annotations: data.ClipAnnotation,
     clip_predictions: data.ClipPrediction,
     encoder: Encoder,
@@ -111,7 +112,7 @@ def _evaluate_clip(
     matches: List[data.Match] = []
 
     # Iterate over all matches between predictions and annotations.
-    for annotation_index, prediction_index, affinity in match_geometries(
+    for prediction_index, annotation_index, affinity in match_geometries(
         source=[
             prediction.sound_event.geometry
             for prediction in clip_predictions.sound_events
@@ -168,7 +169,7 @@ def _evaluate_clip(
         if annotation_index is not None and prediction_index is not None:
             prediction = clip_predictions.sound_events[prediction_index]
             annotation = clip_annotations.sound_events[annotation_index]
-            true_class, predicted_class_scores, match = _evaluate_sound_event(
+            true_class, predicted_class_scores, match = evaluate_sound_event(
                 sound_event_prediction=prediction,
                 sound_event_annotation=annotation,
                 encoder=encoder,
@@ -194,15 +195,13 @@ def _evaluate_clip(
                 )
                 for metric in EXAMPLE_METRICS
             ],
-            score=np.mean(  # type: ignore
-                [match.score for match in matches if match.score],
-            ),
+            score=_mean([m.score for m in matches]),
             matches=matches,
         ),
     )
 
 
-def _evaluate_sound_event(
+def evaluate_sound_event(
     sound_event_prediction: data.SoundEventPrediction,
     sound_event_annotation: data.SoundEventAnnotation,
     encoder: Encoder,
@@ -215,11 +214,12 @@ def _evaluate_sound_event(
         tags=sound_event_prediction.tags,
         encoder=encoder,
     )
+    score = metrics.classification_score(true_class, predicted_class_scores)
     match = data.Match(
         source=sound_event_prediction,
         target=sound_event_annotation,
         affinity=1,
-        score=metrics.classification_score(true_class, predicted_class_scores),
+        score=score,
         metrics=[
             data.Feature(
                 name=metric.__name__,
@@ -231,12 +231,16 @@ def _evaluate_sound_event(
     return true_class, predicted_class_scores, match
 
 
-def _compute_overall_score(
-    evaluated_examples: Sequence[data.ClipEvaluation],
+def _mean(
+    scores: Sequence[float | None],
 ) -> float:
-    non_none_scores = [
-        example.score
-        for example in evaluated_examples
-        if example.score is not None
-    ]
-    return float(np.mean(non_none_scores)) if non_none_scores else 0.0
+    valid_scores = [score for score in scores if score is not None]
+
+    if not valid_scores:
+        return 0.0
+
+    score = float(np.mean(valid_scores))
+    if np.isnan(score):
+        return 0.0
+
+    return score
