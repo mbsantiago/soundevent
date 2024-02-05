@@ -94,9 +94,8 @@ def label_to_tags(
             pass
 
     if tag_mapping is not None:
-        tags = tag_mapping.get(label)
-
-        if tags is not None:
+        if label in tag_mapping:
+            tags = tag_mapping[label]
             return tags if isinstance(tags, list) else [tags]
 
     if key_mapping is not None:
