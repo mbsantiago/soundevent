@@ -1,4 +1,7 @@
+import sys
 import warnings
+
+import pytest
 
 warnings.filterwarnings("ignore", category=UserWarning, module="crowsetta")
 from pathlib import Path
@@ -8,6 +11,9 @@ import crowsetta
 from soundevent import data, io
 
 
+@pytest.mark.skipif(
+    sys.version_info < (3, 9), reason="requires python3.9 or higher"
+)
 def test_can_import_all_example_formats(
     tmp_path: Path,
     recording: data.Recording,
