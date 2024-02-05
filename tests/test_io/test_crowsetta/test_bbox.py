@@ -3,7 +3,8 @@
 import crowsetta
 import pytest
 
-from soundevent import data, io
+from soundevent import data
+import soundevent.io.crowsetta as crowsetta_io
 
 
 @pytest.fixture
@@ -52,7 +53,7 @@ def bbox() -> crowsetta.BBox:
 def test_bbox_from_annotation(
     sound_event_annotation: data.SoundEventAnnotation,
 ):
-    bbox = io.crowsetta.bbox_from_annotation(sound_event_annotation)
+    bbox = crowsetta_io.bbox_from_annotation(sound_event_annotation)
     assert isinstance(bbox, crowsetta.BBox)
     assert bbox.onset == 0.5
     assert bbox.low_freq == 0.5
@@ -69,7 +70,7 @@ def test_bbox_from_annotation_fails_on_other_geometries(
     )
 
     with pytest.raises(ValueError):
-        io.crowsetta.bbox_from_annotation(
+        crowsetta_io.bbox_from_annotation(
             sound_event_annotation,
             cast_to_bbox=False,
         )
@@ -86,7 +87,7 @@ def test_bbox_from_annotation_fails_on_empty_geometry(
     )
 
     with pytest.raises(ValueError):
-        io.crowsetta.bbox_from_annotation(
+        crowsetta_io.bbox_from_annotation(
             sound_event_annotation,
             cast_to_bbox=False,
         )
@@ -99,7 +100,7 @@ def test_bbox_from_annotations_can_cast_to_bbox(
         coordinates=[[0.5, 0.5], [1.5, 1.5]],
     )
 
-    bbox = io.crowsetta.bbox_from_annotation(
+    bbox = crowsetta_io.bbox_from_annotation(
         sound_event_annotation,
         cast_to_bbox=True,
     )
@@ -119,7 +120,7 @@ def test_bbox_from_annotation_fails_on_time_geometries(
     )
 
     with pytest.raises(ValueError):
-        io.crowsetta.bbox_from_annotation(
+        crowsetta_io.bbox_from_annotation(
             sound_event_annotation,
             cast_to_bbox=True,
         )
@@ -132,7 +133,7 @@ def test_bbox_from_annotation_cast_time_geometries(
         coordinates=[0.5, 1.5],
     )
 
-    bbox = io.crowsetta.bbox_from_annotation(
+    bbox = crowsetta_io.bbox_from_annotation(
         sound_event_annotation,
         cast_to_bbox=True,
         raise_on_time_geometries=False,
@@ -150,7 +151,7 @@ def test_bbox_to_annotation(
     bbox: crowsetta.BBox,
     recording: data.Recording,
 ):
-    annotation = io.crowsetta.bbox_to_annotation(bbox, recording)
+    annotation = crowsetta_io.bbox_to_annotation(bbox, recording)
     assert isinstance(annotation, data.SoundEventAnnotation)
     geometry = annotation.sound_event.geometry
     assert isinstance(geometry, data.BoundingBox)
@@ -167,7 +168,7 @@ def test_bbox_to_annotation_with_notes_and_created_by(
         message="random note",
         created_by=user,
     )
-    annotation = io.crowsetta.bbox_to_annotation(
+    annotation = crowsetta_io.bbox_to_annotation(
         bbox, recording, notes=[note], created_by=user
     )
     assert annotation.notes == [note]
@@ -178,7 +179,7 @@ def test_bbox_to_annotation_with_time_expanded_recording(
     bbox: crowsetta.BBox,
     time_expanded_recording: data.Recording,
 ):
-    annotation = io.crowsetta.bbox_to_annotation(bbox, time_expanded_recording)
+    annotation = crowsetta_io.bbox_to_annotation(bbox, time_expanded_recording)
     assert annotation.sound_event.recording == time_expanded_recording
     geometry = annotation.sound_event.geometry
     assert isinstance(geometry, data.BoundingBox)
@@ -189,7 +190,7 @@ def test_bbox_to_annotation_with_time_expanded_recording_no_adjustment(
     bbox: crowsetta.BBox,
     time_expanded_recording: data.Recording,
 ):
-    annotation = io.crowsetta.bbox_to_annotation(
+    annotation = crowsetta_io.bbox_to_annotation(
         bbox,
         time_expanded_recording,
         adjust_time_expansion=False,

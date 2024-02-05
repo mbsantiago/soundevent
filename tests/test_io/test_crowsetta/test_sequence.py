@@ -6,7 +6,8 @@ import crowsetta
 import numpy as np
 import pytest
 
-from soundevent import data, io
+import soundevent.io.crowsetta as crowsetta_io
+from soundevent import data
 from soundevent.io.crowsetta.segment import create_crowsetta_segment
 
 
@@ -73,7 +74,7 @@ def sequence() -> crowsetta.Sequence:
 def test_sequence_from_annotations(
     sound_event_annotations: List[data.SoundEventAnnotation],
 ):
-    sequence = io.crowsetta.sequence_from_annotations(sound_event_annotations)
+    sequence = crowsetta_io.sequence_from_annotations(sound_event_annotations)
     assert isinstance(sequence, crowsetta.Sequence)
     assert (sequence.onsets_s == np.array([0.5, 2.0])).all()
     assert (sequence.offsets_s == np.array([1.5, 2.5])).all()
@@ -99,7 +100,7 @@ def test_sequence_from_annotations_fails_on_non_compatible_geometries(
     ]
 
     with pytest.raises(ValueError):
-        io.crowsetta.sequence_from_annotations(
+        crowsetta_io.sequence_from_annotations(
             sound_event_annotations,
             cast_to_segment=False,
         )
@@ -123,7 +124,7 @@ def test_sequence_from_annotations_ignores_non_compatible_geometries(
         ),
     ]
 
-    sequence = io.crowsetta.sequence_from_annotations(
+    sequence = crowsetta_io.sequence_from_annotations(
         sound_event_annotations,
         cast_to_segment=False,
         ignore_errors=True,
@@ -150,7 +151,7 @@ def test_sequence_from_annotation_casts_to_geometry(
         ),
     ]
 
-    sequence = io.crowsetta.sequence_from_annotations(
+    sequence = crowsetta_io.sequence_from_annotations(
         sound_event_annotations,
         cast_to_segment=True,
     )
@@ -164,7 +165,7 @@ def test_sequence_to_annotations(
     sequence: crowsetta.Sequence,
     recording: data.Recording,
 ):
-    annotations = io.crowsetta.sequence_to_annotations(
+    annotations = crowsetta_io.sequence_to_annotations(
         sequence,
         recording,
     )

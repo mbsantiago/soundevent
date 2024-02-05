@@ -6,7 +6,8 @@ from pathlib import Path
 import crowsetta
 import pytest
 
-from soundevent import data, io
+import soundevent.io.crowsetta as crowsetta_io
+from soundevent import data
 from soundevent.io.crowsetta.segment import create_crowsetta_segment
 
 
@@ -114,7 +115,7 @@ def test_seq_annotation_from_clip_annotation(
     clip_annotation: data.ClipAnnotation,
     tmp_path: Path,
 ):
-    annotation = io.crowsetta.annotation_from_clip_annotation(
+    annotation = crowsetta_io.annotation_from_clip_annotation(
         clip_annotation,
         annot_path=tmp_path / "annotation.txt",
         annotation_fmt="seq",
@@ -128,7 +129,7 @@ def test_bbox_annotation_from_clip_annotation(
     clip_annotation: data.ClipAnnotation,
     tmp_path: Path,
 ):
-    annotation = io.crowsetta.annotation_from_clip_annotation(
+    annotation = crowsetta_io.annotation_from_clip_annotation(
         clip_annotation,
         annot_path=tmp_path / "annotation.txt",
         annotation_fmt="bbox",
@@ -146,7 +147,7 @@ def test_annotation_from_clip_annotation_fails_with_unknown_fmt(
     tmp_path: Path,
 ):
     with pytest.raises(ValueError):
-        io.crowsetta.annotation_from_clip_annotation(
+        crowsetta_io.annotation_from_clip_annotation(
             clip_annotation,
             annot_path=tmp_path / "annotation.txt",
             annotation_fmt="unknown",  # type: ignore
@@ -156,7 +157,7 @@ def test_annotation_from_clip_annotation_fails_with_unknown_fmt(
 def test_annotation_to_clip_annotation_from_seq(
     sequence_annotation: crowsetta.Annotation,
 ):
-    annotation = io.crowsetta.annotation_to_clip_annotation(
+    annotation = crowsetta_io.annotation_to_clip_annotation(
         sequence_annotation,
     )
     assert isinstance(annotation, data.ClipAnnotation)
@@ -167,7 +168,7 @@ def test_annotation_to_clip_annotation_from_seq(
 def test_annotation_to_clip_annotation_from_bbox(
     bbox_annotation: crowsetta.Annotation,
 ):
-    annotation = io.crowsetta.annotation_to_clip_annotation(
+    annotation = crowsetta_io.annotation_to_clip_annotation(
         bbox_annotation,
     )
     assert isinstance(annotation, data.ClipAnnotation)
@@ -182,7 +183,7 @@ def test_annotation_to_clip_annotation_with_notes_and_tags(
     tags = [
         data.Tag(key="soundscape", value="garden"),
     ]
-    annotation = io.crowsetta.annotation_to_clip_annotation(
+    annotation = crowsetta_io.annotation_to_clip_annotation(
         sequence_annotation,
         tags=tags,
         notes=[data.Note(message="random note")],
@@ -205,7 +206,7 @@ def test_annotation_to_clip_annotation_with_recording(
             time=datetime.time(12, 0, 0),
         )
     )
-    annotation = io.crowsetta.annotation_to_clip_annotation(
+    annotation = crowsetta_io.annotation_to_clip_annotation(
         sequence_annotation,
         recording=recording,
     )
@@ -218,7 +219,7 @@ def test_annotation_to_clip_annotation_with_recording(
 def test_annotation_to_clip_annotation_with_recording_kwargs(
     sequence_annotation: crowsetta.Annotation,
 ):
-    annotation = io.crowsetta.annotation_to_clip_annotation(
+    annotation = crowsetta_io.annotation_to_clip_annotation(
         sequence_annotation,
         recording_kwargs=dict(
             latitude=10,
@@ -256,7 +257,7 @@ def test_annotation_to_clip_annotation_fails_without_path(tmp_path: Path):
     )
 
     with pytest.raises(ValueError):
-        io.crowsetta.annotation_to_clip_annotation(annotation)
+        crowsetta_io.annotation_to_clip_annotation(annotation)
 
 
 def test_annotation_to_clp_annotation_fails_if_paths_dont_match(
@@ -284,7 +285,7 @@ def test_annotation_to_clp_annotation_fails_if_paths_dont_match(
     assert recording.path != annotation.notated_path
 
     with pytest.raises(ValueError):
-        io.crowsetta.annotation_to_clip_annotation(
+        crowsetta_io.annotation_to_clip_annotation(
             annotation,
             recording=recording,
         )
@@ -294,7 +295,7 @@ def test_bbox_annotation_from_clip_annotation_with_incompatible_geoms(
     clip_annotation: data.ClipAnnotation,
     tmp_path: Path,
 ):
-    bbox_annotation = io.crowsetta.annotation_from_clip_annotation(
+    bbox_annotation = crowsetta_io.annotation_from_clip_annotation(
         clip_annotation,
         annot_path=tmp_path / "annotation.txt",
         annotation_fmt="bbox",
@@ -310,7 +311,7 @@ def test_bbox_annotation_from_clip_annotation_fails_on_incompatible_geoms(
     tmp_path: Path,
 ):
     with pytest.raises(ValueError):
-        io.crowsetta.annotation_from_clip_annotation(
+        crowsetta_io.annotation_from_clip_annotation(
             clip_annotation,
             annot_path=tmp_path / "annotation.txt",
             annotation_fmt="bbox",

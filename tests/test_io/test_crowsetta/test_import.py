@@ -8,11 +8,13 @@ from pathlib import Path
 
 import crowsetta
 
-from soundevent import data, io
+from soundevent import data
+import soundevent.io.crowsetta as crowsetta_io
 
 
 @pytest.mark.skipif(
-    sys.version_info < (3, 9), reason="requires python3.9 or higher"
+    sys.version_info < (3, 9),
+    reason="requires python3.9 or higher",
 )
 def test_can_import_all_example_formats(
     tmp_path: Path,
@@ -64,7 +66,7 @@ def test_can_import_all_example_formats(
                 update=dict(path=annotation.notated_path)
             )
 
-        clip_annotation = io.crowsetta.annotation_to_clip_annotation(
+        clip_annotation = crowsetta_io.annotation_to_clip_annotation(
             annotation,
             recording=recording,
         )

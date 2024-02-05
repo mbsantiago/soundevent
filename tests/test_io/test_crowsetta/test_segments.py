@@ -3,7 +3,8 @@
 import crowsetta
 import pytest
 
-from soundevent import data, io
+from soundevent import data
+import soundevent.io.crowsetta as crowsetta_io
 from soundevent.io.crowsetta.segment import (
     create_crowsetta_segment,
 )
@@ -59,7 +60,7 @@ def test_segment_from_annotation_fails_on_empty_geometry(
     )
 
     with pytest.raises(ValueError):
-        io.crowsetta.segment_from_annotation(sound_event_annotation)
+        crowsetta_io.segment_from_annotation(sound_event_annotation)
 
 
 def test_segment_to_annotation_without_onset_and_offset_in_seconds(
@@ -71,7 +72,7 @@ def test_segment_to_annotation_without_onset_and_offset_in_seconds(
         onset_sample=3000,
         offset_sample=4000,
     )
-    annotation = io.crowsetta.segment_to_annotation(segment, recording)
+    annotation = crowsetta_io.segment_to_annotation(segment, recording)
     assert isinstance(annotation, data.SoundEventAnnotation)
     geometry = annotation.sound_event.geometry
     assert isinstance(geometry, data.TimeInterval)
@@ -84,7 +85,7 @@ def test_segment_to_annotation_without_onset_and_offset_in_seconds(
 def test_segment_from_annotation(
     sound_event_annotation: data.SoundEventAnnotation,
 ):
-    segment = io.crowsetta.segment_from_annotation(sound_event_annotation)
+    segment = crowsetta_io.segment_from_annotation(sound_event_annotation)
     assert isinstance(segment, crowsetta.Segment)
     assert segment.onset_s == 0.5
     assert segment.offset_s == 1.5
@@ -98,7 +99,7 @@ def test_segment_from_annotation_fails_if_not_a_time_interval(
         coordinates=[0.5, 1]
     )
     with pytest.raises(ValueError):
-        io.crowsetta.segment_from_annotation(
+        crowsetta_io.segment_from_annotation(
             sound_event_annotation,
             cast_to_segment=False,
         )
@@ -110,7 +111,7 @@ def test_segment_from_annotation_casts_to_segment(
     sound_event_annotation.sound_event.geometry = data.Point(
         coordinates=[0.5, 1]
     )
-    segment = io.crowsetta.segment_from_annotation(
+    segment = crowsetta_io.segment_from_annotation(
         sound_event_annotation,
         cast_to_segment=True,
     )
@@ -124,7 +125,7 @@ def test_segment_to_annotation(
     segment: crowsetta.Segment,
     recording: data.Recording,
 ):
-    annotation = io.crowsetta.segment_to_annotation(segment, recording)
+    annotation = crowsetta_io.segment_to_annotation(segment, recording)
     assert isinstance(annotation, data.SoundEventAnnotation)
     geometry = annotation.sound_event.geometry
     assert isinstance(geometry, data.TimeInterval)
@@ -142,7 +143,7 @@ def test_segment_to_annotation_with_notes_and_created_by(
         message="random note",
         created_by=user,
     )
-    annotation = io.crowsetta.segment_to_annotation(
+    annotation = crowsetta_io.segment_to_annotation(
         segment,
         recording,
         created_by=user,
@@ -157,7 +158,7 @@ def test_segment_to_annotation_on_time_expanded_recording(
     segment: crowsetta.Segment,
     time_expanded_recording: data.Recording,
 ):
-    annotation = io.crowsetta.segment_to_annotation(
+    annotation = crowsetta_io.segment_to_annotation(
         segment,
         time_expanded_recording,
     )
@@ -171,7 +172,7 @@ def test_segment_to_annotation_on_time_expanded_recording_without_adjustment(
     segment: crowsetta.Segment,
     time_expanded_recording: data.Recording,
 ):
-    annotation = io.crowsetta.segment_to_annotation(
+    annotation = crowsetta_io.segment_to_annotation(
         segment,
         time_expanded_recording,
         adjust_time_expansion=False,
