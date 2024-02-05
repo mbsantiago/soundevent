@@ -5,7 +5,7 @@
 groups = ["default", "all", "audio", "dev", "evaluation", "geometry", "plot", "crowsetta"]
 strategy = ["cross_platform"]
 lock_version = "4.4.1"
-content_hash = "sha256:4fa7a884a1bf159b291106f3eb8f890a89dfce0b2dc4888ddefc8542e4444ce2"
+content_hash = "sha256:fa52cc2cfb9e3e20eea61b9d1d31d9bf9ef990ea321a91ea6e697e7ce7ed58a1"
 
 [[package]]
 name = "annotated-types"
@@ -770,15 +770,15 @@ files = [
 
 [[package]]
 name = "importlib-resources"
-version = "6.1.1"
+version = "5.13.0"
 requires_python = ">=3.8"
 summary = "Read resources from Python packages"
 dependencies = [
     "zipp>=3.1.0; python_version < \"3.10\"",
 ]
 files = [
-    {file = "importlib_resources-6.1.1-py3-none-any.whl", hash = "sha256:e8bf90d8213b486f428c9c39714b920041cb02c184686a3dee24905aaa8105d6"},
-    {file = "importlib_resources-6.1.1.tar.gz", hash = "sha256:3893a00122eafde6894c59914446a512f728a0c1a45f9bb9b63721b6bacf0b4a"},
+    {file = "importlib_resources-5.13.0-py3-none-any.whl", hash = "sha256:9f7bd0c97b79972a6cce36a366356d16d5e13b09679c11a58f1014bfdf8e64b2"},
+    {file = "importlib_resources-5.13.0.tar.gz", hash = "sha256:82d5c6cca930697dbbd86c93333bb2c2e72861d4789a11c2662b933e5ad2b528"},
 ]
 
 [[package]]
