@@ -5,7 +5,7 @@
 groups = ["default", "all", "audio", "dev", "evaluation", "geometry", "plot", "crowsetta"]
 strategy = ["cross_platform"]
 lock_version = "4.4.1"
-content_hash = "sha256:1f8d4f2e93a0dce6ce636f709ee0b787a47611b8be7f7a81de3ab27f397f028a"
+content_hash = "sha256:4fa7a884a1bf159b291106f3eb8f890a89dfce0b2dc4888ddefc8542e4444ce2"
 
 [[package]]
 name = "annotated-types"
