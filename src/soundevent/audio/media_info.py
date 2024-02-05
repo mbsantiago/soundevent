@@ -1,4 +1,5 @@
 """Functions for getting media information from WAV files."""
+
 import hashlib
 import struct
 from dataclasses import dataclass

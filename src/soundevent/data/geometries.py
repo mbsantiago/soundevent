@@ -51,6 +51,7 @@ By offering these geometry types, the soundevent package provides a
 comprehensive framework for accurately and flexibly describing the
 location and extent of sound events within a recording.
 """
+
 import json
 import sys
 from abc import ABC

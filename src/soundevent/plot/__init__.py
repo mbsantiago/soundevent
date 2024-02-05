@@ -1,4 +1,5 @@
 """Plotting utilities."""
+
 from soundevent.plot.annotation import plot_annotation
 from soundevent.plot.geometries import plot_geometry
 from soundevent.plot.spectrogram import plot_spectrogram

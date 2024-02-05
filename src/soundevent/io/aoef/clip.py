@@ -33,9 +33,11 @@ class ClipAdapter(DataAdapter[data.Clip, ClipObject, UUID, UUID]):
             start_time=obj.start_time,
             end_time=obj.end_time,
             uuid=obj.uuid,
-            features={feature.name: feature.value for feature in obj.features}
-            if obj.features
-            else None,
+            features=(
+                {feature.name: feature.value for feature in obj.features}
+                if obj.features
+                else None
+            ),
         )
 
     def assemble_soundevent(
@@ -52,13 +54,15 @@ class ClipAdapter(DataAdapter[data.Clip, ClipObject, UUID, UUID]):
             start_time=obj.start_time,
             end_time=obj.end_time,
             uuid=obj.uuid or uuid4(),
-            features=[
-                data.Feature(
-                    name=name,
-                    value=value,
-                )
-                for name, value in obj.features.items()
-            ]
-            if obj.features
-            else [],
+            features=(
+                [
+                    data.Feature(
+                        name=name,
+                        value=value,
+                    )
+                    for name, value in obj.features.items()
+                ]
+                if obj.features
+                else []
+            ),
         )

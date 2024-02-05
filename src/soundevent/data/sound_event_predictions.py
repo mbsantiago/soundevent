@@ -1,4 +1,5 @@
 """Sound Event Predictions."""
+
 from typing import List
 from uuid import UUID, uuid4
 

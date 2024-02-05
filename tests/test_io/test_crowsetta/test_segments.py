@@ -75,7 +75,10 @@ def test_segment_to_annotation_without_onset_and_offset_in_seconds(
     assert isinstance(annotation, data.SoundEventAnnotation)
     geometry = annotation.sound_event.geometry
     assert isinstance(geometry, data.TimeInterval)
-    assert tuple(geometry.coordinates) == (3000 / samplerate, 4000 / samplerate)
+    assert tuple(geometry.coordinates) == (
+        3000 / samplerate,
+        4000 / samplerate,
+    )
 
 
 def test_segment_from_annotation(

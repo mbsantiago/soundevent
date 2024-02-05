@@ -1,4 +1,5 @@
 """Test suite for the soundevent.evaluation.ecoding module."""
+
 from typing import Callable, Sequence
 
 import numpy as np

@@ -52,24 +52,34 @@ class ClipAnnotationsAdapter(
         return ClipAnnotationsObject(
             uuid=obj.uuid,
             clip=self.clip_adapter.to_aoef(obj.clip).uuid,
-            tags=[self.tag_adapter.to_aoef(tag).id for tag in obj.tags]
-            if obj.tags
-            else None,
-            sound_events=[
-                self.sound_event_annotation_adapter.to_aoef(annotation).uuid
-                for annotation in obj.sound_events
-            ]
-            if obj.sound_events
-            else None,
-            sequences=[
-                self.sequence_annotation_adapter.to_aoef(annotation).uuid
-                for annotation in obj.sequences
-            ]
-            if obj.sequences
-            else None,
-            notes=[self.note_adapter.to_aoef(note) for note in obj.notes]
-            if obj.notes
-            else None,
+            tags=(
+                [self.tag_adapter.to_aoef(tag).id for tag in obj.tags]
+                if obj.tags
+                else None
+            ),
+            sound_events=(
+                [
+                    self.sound_event_annotation_adapter.to_aoef(
+                        annotation
+                    ).uuid
+                    for annotation in obj.sound_events
+                ]
+                if obj.sound_events
+                else None
+            ),
+            sequences=(
+                [
+                    self.sequence_annotation_adapter.to_aoef(annotation).uuid
+                    for annotation in obj.sequences
+                ]
+                if obj.sequences
+                else None
+            ),
+            notes=(
+                [self.note_adapter.to_aoef(note) for note in obj.notes]
+                if obj.notes
+                else None
+            ),
             created_on=obj.created_on,
         )
 

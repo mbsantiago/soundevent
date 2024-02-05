@@ -1,6 +1,5 @@
 """Sequence Prediction Class."""
 
-
 from typing import List
 from uuid import UUID, uuid4
 

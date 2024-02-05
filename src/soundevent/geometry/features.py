@@ -34,6 +34,7 @@ To compute the features of a bounding box:
     Feature(name='high_freq', value=1000),
     Feature(name='bandwidth', value=1000)]
 """
+
 from enum import Enum
 from typing import Any, Callable, Dict, List
 

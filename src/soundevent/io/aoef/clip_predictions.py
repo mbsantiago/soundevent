@@ -45,29 +45,39 @@ class ClipPredictionsAdapter(
         return ClipPredictionsObject(
             uuid=obj.uuid,
             clip=self.clip_adapter.to_aoef(obj.clip).uuid,
-            sound_events=[
-                self.sound_event_prediction_adapter.to_aoef(sound_event).uuid
-                for sound_event in obj.sound_events
-            ]
-            if obj.sound_events
-            else None,
-            sequences=[
-                self.sequence_prediction_adapter.to_aoef(sequence).uuid
-                for sequence in obj.sequences
-            ]
-            if obj.sequences
-            else None,
-            tags=[
-                (tag.id, predicted_tag.score)
-                for predicted_tag in obj.tags
-                if (tag := self.tag_adapter.to_aoef(predicted_tag.tag))
-                is not None
-            ]
-            if obj.tags
-            else None,
-            features={feature.name: feature.value for feature in obj.features}
-            if obj.features is not None
-            else None,
+            sound_events=(
+                [
+                    self.sound_event_prediction_adapter.to_aoef(
+                        sound_event
+                    ).uuid
+                    for sound_event in obj.sound_events
+                ]
+                if obj.sound_events
+                else None
+            ),
+            sequences=(
+                [
+                    self.sequence_prediction_adapter.to_aoef(sequence).uuid
+                    for sequence in obj.sequences
+                ]
+                if obj.sequences
+                else None
+            ),
+            tags=(
+                [
+                    (tag.id, predicted_tag.score)
+                    for predicted_tag in obj.tags
+                    if (tag := self.tag_adapter.to_aoef(predicted_tag.tag))
+                    is not None
+                ]
+                if obj.tags
+                else None
+            ),
+            features=(
+                {feature.name: feature.value for feature in obj.features}
+                if obj.features is not None
+                else None
+            ),
         )
 
     def assemble_soundevent(

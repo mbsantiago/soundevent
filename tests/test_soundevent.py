@@ -1,4 +1,5 @@
 """Unit tests for soundevent."""
+
 import soundevent
 
 

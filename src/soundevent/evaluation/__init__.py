@@ -1,4 +1,5 @@
 """Evaluation functions."""
+
 from soundevent.evaluation.affinity import compute_affinity
 from soundevent.evaluation.encoding import (
     classification_encoding,

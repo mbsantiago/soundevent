@@ -49,14 +49,19 @@ class ClipEvaluationAdapter(
             uuid=obj.uuid,
             annotations=annotations.uuid,
             predictions=predictions.uuid,
-            matches=[
-                self.match_adapter.to_aoef(match).uuid for match in obj.matches
-            ]
-            if obj.matches
-            else None,
-            metrics={metrics.name: metrics.value for metrics in obj.metrics}
-            if obj.metrics
-            else None,
+            matches=(
+                [
+                    self.match_adapter.to_aoef(match).uuid
+                    for match in obj.matches
+                ]
+                if obj.matches
+                else None
+            ),
+            metrics=(
+                {metrics.name: metrics.value for metrics in obj.metrics}
+                if obj.metrics
+                else None
+            ),
             score=obj.score,
         )
 

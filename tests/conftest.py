@@ -1,4 +1,5 @@
 """Pytest fixtures for the audio tests."""
+
 import random
 import string
 from pathlib import Path

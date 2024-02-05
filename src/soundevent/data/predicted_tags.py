@@ -23,6 +23,7 @@ confidence level of the assigned tags. Researchers can leverage this
 information to assess the reliability and accuracy of the predicted
 tags, facilitating further analysis and evaluation of the audio data.
 """
+
 from pydantic import BaseModel, Field
 
 from soundevent.data.tags import Tag

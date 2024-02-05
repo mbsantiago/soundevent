@@ -1,6 +1,5 @@
 """Model Run Module."""
 
-
 from typing import Optional
 
 from soundevent.data.prediction_sets import PredictionSet

@@ -5,6 +5,7 @@ annotations associated with a specific audio clip. It includes details about
 the clip, associated tags, annotations, status badges indicating the state of
 the annotation process, and any additional notes related to the annotations.
 """
+
 import datetime
 from typing import List
 from uuid import UUID, uuid4

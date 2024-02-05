@@ -40,6 +40,7 @@ def recording(
         ],
     )
 
+
 @pytest.fixture
 def time_expanded_recording(
     random_wav: Callable[[], Path],

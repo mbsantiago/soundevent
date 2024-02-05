@@ -1,4 +1,5 @@
 """Test suite for sound event detection evaluation."""
+
 from pathlib import Path
 
 from soundevent import data, io
