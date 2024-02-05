@@ -146,13 +146,35 @@ def segment_to_annotation(
     start_time = segment.onset_s
     end_time = segment.offset_s
 
+    if start_time is None:
+        samplerate = recording.samplerate / recording.time_expansion
+
+        if segment.onset_sample is None:
+            raise ValueError(
+                "Cannot convert to a soundevent annotation "
+                "because the segment has no onset time."
+            )
+
+        start_time = segment.onset_sample / samplerate
+
+    if end_time is None:
+        samplerate = recording.samplerate / recording.time_expansion
+
+        if segment.offset_sample is None:
+            raise ValueError(
+                "Cannot convert to a soundevent annotation "
+                "because the segment has no offset time."
+            )
+
+        end_time = segment.offset_sample / samplerate
+
     if adjust_time_expansion and recording.time_expansion != 1:
         # NOTE: The time expansion factor is applied to the segment's onset and
         # offset times to convert them to the original recording's time scale.
         # This is necessary because the segment's onset and offset times are
         # stored in the time scale of the expanded recording.
-        start_time = segment.onset_s / recording.time_expansion
-        end_time = segment.offset_s / recording.time_expansion
+        start_time = start_time / recording.time_expansion
+        end_time = end_time / recording.time_expansion
 
     geometry = data.TimeInterval(coordinates=[start_time, end_time])
 

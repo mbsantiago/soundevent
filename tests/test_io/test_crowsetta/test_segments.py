@@ -59,6 +59,22 @@ def test_segment_from_annotation_fails_on_empty_geometry(
         io.crowsetta.segment_from_annotation(sound_event_annotation)
 
 
+def test_segment_to_annotation_without_onset_and_offset_in_seconds(
+    recording: data.Recording,
+):
+    samplerate = recording.samplerate
+    segment = crowsetta.Segment.from_keyword(
+        label="dog",
+        onset_sample=3000,
+        offset_sample=4000,
+    )
+    annotation = io.crowsetta.segment_to_annotation(segment, recording)
+    assert isinstance(annotation, data.SoundEventAnnotation)
+    geometry = annotation.sound_event.geometry
+    assert isinstance(geometry, data.TimeInterval)
+    assert tuple(geometry.coordinates) == (3000 / samplerate, 4000 / samplerate)
+
+
 def test_segment_from_annotation(
     sound_event_annotation: data.SoundEventAnnotation,
 ):
