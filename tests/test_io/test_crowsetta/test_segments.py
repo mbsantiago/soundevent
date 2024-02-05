@@ -4,6 +4,9 @@ import crowsetta
 import pytest
 
 from soundevent import data, io
+from soundevent.io.crowsetta.segment import (
+    create_crowsetta_segment,
+)
 
 
 @pytest.fixture
@@ -38,7 +41,7 @@ def sound_event_annotation(
 
 @pytest.fixture
 def segment() -> crowsetta.Segment:
-    return crowsetta.Segment.from_keyword(
+    return create_crowsetta_segment(
         label="dog",
         onset_s=0.5,
         offset_s=1.5,
@@ -63,7 +66,7 @@ def test_segment_to_annotation_without_onset_and_offset_in_seconds(
     recording: data.Recording,
 ):
     samplerate = recording.samplerate
-    segment = crowsetta.Segment.from_keyword(
+    segment = create_crowsetta_segment(
         label="dog",
         onset_sample=3000,
         offset_sample=4000,

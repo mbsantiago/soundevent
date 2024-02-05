@@ -2,7 +2,7 @@
 
 from typing import List, Optional
 
-from crowsetta import Segment
+import crowsetta
 
 from soundevent import data
 from soundevent.geometry import compute_bounds
@@ -36,11 +36,48 @@ def convert_time_to_sample(recording: data.Recording, time: float) -> int:
     return int(time * recording.samplerate)
 
 
+crowsetta_version = crowsetta.__version__[0]
+
+if crowsetta_version == "4":
+
+    def create_crowsetta_segment(
+        onset_s: Optional[float] = None,
+        offset_s: Optional[float] = None,
+        onset_sample: Optional[int] = None,
+        offset_sample: Optional[int] = None,
+        label: Optional[str] = None,
+    ) -> crowsetta.Segment:
+        return crowsetta.Segment.from_keyword(
+            label=label,
+            onset_s=onset_s,
+            offset_s=offset_s,
+            onset_sample=onset_sample,
+            offset_sample=offset_sample,
+        )
+
+else:
+
+    def create_crowsetta_segment(
+        onset_s: Optional[float] = None,
+        offset_s: Optional[float] = None,
+        onset_sample: Optional[int] = None,
+        offset_sample: Optional[int] = None,
+        label: Optional[str] = None,
+    ) -> crowsetta.Segment:
+        return crowsetta.Segment(
+            onset_s=onset_s,  # type: ignore
+            offset_s=offset_s,  # type: ignore
+            onset_sample=onset_sample,  # type: ignore
+            offset_sample=offset_sample,  # type: ignore
+            label=label,  # type: ignore
+        )
+
+
 def segment_from_annotation(
     obj: data.SoundEventAnnotation,
     cast_to_segment: bool = True,
     **kwargs,
-) -> Segment:
+) -> crowsetta.Segment:
     """Convert a soundevent annotation to a crowsetta segment.
 
     This function transforms a SoundEventAnnotation object into a Crowsetta
@@ -89,7 +126,7 @@ def segment_from_annotation(
     end_sample = convert_time_to_sample(sound_event.recording, end_time)
     label = label_from_tags(obj.tags, **kwargs)
 
-    return Segment.from_keyword(
+    return create_crowsetta_segment(
         onset_s=start_time,
         offset_s=end_time,
         onset_sample=start_sample,
@@ -99,7 +136,7 @@ def segment_from_annotation(
 
 
 def segment_to_annotation(
-    segment: Segment,
+    segment: crowsetta.Segment,
     recording: data.Recording,
     adjust_time_expansion: bool = True,
     notes: Optional[List[data.Note]] = None,

@@ -7,6 +7,7 @@ import numpy as np
 import pytest
 
 from soundevent import data, io
+from soundevent.io.crowsetta.segment import create_crowsetta_segment
 
 
 @pytest.fixture
@@ -55,12 +56,12 @@ def sound_event_annotations(
 def sequence() -> crowsetta.Sequence:
     return crowsetta.Sequence.from_segments(
         [
-            crowsetta.Segment.from_keyword(
+            create_crowsetta_segment(
                 label="dog",
                 onset_s=0.5,
                 offset_s=1.5,
             ),
-            crowsetta.Segment.from_keyword(
+            create_crowsetta_segment(
                 label="cat",
                 onset_s=2.0,
                 offset_s=2.5,
@@ -92,7 +93,7 @@ def test_sequence_from_annotations_fails_on_non_compatible_geometries(
         data.SoundEventAnnotation(
             sound_event=data.SoundEvent(
                 recording=recording,
-                geometry=data.TimeInterval(coordinates=[0.5, 1.5])
+                geometry=data.TimeInterval(coordinates=[0.5, 1.5]),
             ),
         ),
     ]
@@ -117,7 +118,7 @@ def test_sequence_from_annotations_ignores_non_compatible_geometries(
         data.SoundEventAnnotation(
             sound_event=data.SoundEvent(
                 recording=recording,
-                geometry=data.TimeInterval(coordinates=[0.5, 1.5])
+                geometry=data.TimeInterval(coordinates=[0.5, 1.5]),
             ),
         ),
     ]
@@ -144,7 +145,7 @@ def test_sequence_from_annotation_casts_to_geometry(
         data.SoundEventAnnotation(
             sound_event=data.SoundEvent(
                 recording=recording,
-                geometry=data.TimeInterval(coordinates=[0.5, 1.5])
+                geometry=data.TimeInterval(coordinates=[0.5, 1.5]),
             ),
         ),
     ]
@@ -168,5 +169,7 @@ def test_sequence_to_annotations(
         recording,
     )
     assert len(annotations) == 2
-    assert all(isinstance(ann, data.SoundEventAnnotation) for ann in annotations)
+    assert all(
+        isinstance(ann, data.SoundEventAnnotation) for ann in annotations
+    )
     assert all(ann.sound_event.recording == recording for ann in annotations)

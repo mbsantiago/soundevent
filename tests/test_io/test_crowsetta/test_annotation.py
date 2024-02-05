@@ -7,6 +7,7 @@ import crowsetta
 import pytest
 
 from soundevent import data, io
+from soundevent.io.crowsetta.segment import create_crowsetta_segment
 
 
 @pytest.fixture
@@ -67,12 +68,12 @@ def sequence_annotation(
         notated_path=recording.path,
         seq=crowsetta.Sequence.from_segments(
             [
-                crowsetta.Segment.from_keyword(
+                create_crowsetta_segment(
                     label="dog",
                     onset_s=0.5,
                     offset_s=1.5,
                 ),
-                crowsetta.Segment.from_keyword(
+                create_crowsetta_segment(
                     label="cat",
                     onset_s=2.0,
                     offset_s=2.5,
@@ -240,12 +241,12 @@ def test_annotation_to_clip_annotation_fails_without_path(tmp_path: Path):
         annot_path=tmp_path / "annotation.txt",
         seq=crowsetta.Sequence.from_segments(
             [
-                crowsetta.Segment.from_keyword(
+                create_crowsetta_segment(
                     label="dog",
                     onset_s=0.5,
                     offset_s=1.5,
                 ),
-                crowsetta.Segment.from_keyword(
+                create_crowsetta_segment(
                     label="cat",
                     onset_s=2.0,
                     offset_s=2.5,
@@ -267,12 +268,12 @@ def test_annotation_to_clp_annotation_fails_if_paths_dont_match(
         notated_path=tmp_path / "non_existent.wav",
         seq=crowsetta.Sequence.from_segments(
             [
-                crowsetta.Segment.from_keyword(
+                create_crowsetta_segment(
                     label="dog",
                     onset_s=0.5,
                     offset_s=1.5,
                 ),
-                crowsetta.Segment.from_keyword(
+                create_crowsetta_segment(
                     label="cat",
                     onset_s=2.0,
                     offset_s=2.5,
