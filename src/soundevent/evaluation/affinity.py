@@ -1,6 +1,5 @@
 """Measures of affinity between sound events geometries."""
 
-
 from soundevent import data
 from soundevent.geometry import (
     buffer_geometry,

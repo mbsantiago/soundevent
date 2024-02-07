@@ -34,11 +34,14 @@ class EvaluationSetAdapter(AnnotationSetAdapter):
             created_on=obj.created_on,
             name=obj.name,
             description=obj.description,
-            evaluation_tags=[
-                self.tag_adapter.to_aoef(tag).id for tag in obj.evaluation_tags
-            ]
-            if obj.evaluation_tags
-            else None,
+            evaluation_tags=(
+                [
+                    self.tag_adapter.to_aoef(tag).id
+                    for tag in obj.evaluation_tags
+                ]
+                if obj.evaluation_tags
+                else None
+            ),
         )
 
     def to_soundevent(  # type: ignore

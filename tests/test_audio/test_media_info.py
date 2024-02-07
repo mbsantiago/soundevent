@@ -1,4 +1,5 @@
 """Test suite for soundevent.audio.media_info module."""
+
 from pathlib import Path
 
 from soundevent.audio.media_info import (

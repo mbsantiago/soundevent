@@ -7,6 +7,7 @@ the evaluation process, including the original `EvaluationExample`, the model's
 predictions (`ProcessedClip`), matches between predicted and ground truth
 annotations (`Match` instances), and computed evaluation metrics.
 """
+
 from typing import Optional, Sequence
 from uuid import UUID, uuid4
 

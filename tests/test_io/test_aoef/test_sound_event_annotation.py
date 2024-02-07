@@ -1,6 +1,5 @@
 """Test suite for AOEF sound event annotation adapter."""
 
-
 from soundevent import data
 from soundevent.io.aoef.sound_event_annotation import (
     SoundEventAnnotationAdapter,

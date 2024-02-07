@@ -34,6 +34,7 @@ enriched with tags and/or features associated with each predicted sound event.
 These annotations and additional information provide more detailed insights
 into the predicted events and aid in subsequent analysis and interpretation.
 """
+
 from typing import Sequence
 from uuid import UUID, uuid4
 

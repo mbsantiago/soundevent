@@ -189,13 +189,15 @@ class EvaluationAdapter:
             sequence_predictions=self.sequence_prediction_adapter.values(),
             clip_predictions=self.clip_predictions_adapter.values(),
             clip_evaluations=self.clip_evaluation_adapter.values(),
-            metrics={
-                metric.name: metric.value
-                for metric in obj.metrics
-                if metric.value is not None
-            }
-            if obj.metrics
-            else None,
+            metrics=(
+                {
+                    metric.name: metric.value
+                    for metric in obj.metrics
+                    if metric.value is not None
+                }
+                if obj.metrics
+                else None
+            ),
             score=obj.score,
             matches=self.match_adapter.values(),
         )

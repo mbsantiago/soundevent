@@ -37,6 +37,7 @@ animal communication. The Sequence object, along with its associated tags,
 features, and hierarchical capabilities, provides a powerful tool for
 understanding the rich complexity of vocalization sequences.
 """
+
 from typing import List, Optional
 from uuid import UUID, uuid4
 

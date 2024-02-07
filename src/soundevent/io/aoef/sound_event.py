@@ -37,9 +37,11 @@ class SoundEventAdapter(
             geometry=obj.geometry,
             uuid=obj.uuid,
             recording=self.recording_adapter.to_aoef(obj.recording).uuid,
-            features={feature.name: feature.value for feature in obj.features}
-            if obj.features
-            else None,
+            features=(
+                {feature.name: feature.value for feature in obj.features}
+                if obj.features
+                else None
+            ),
         )
 
     def assemble_soundevent(

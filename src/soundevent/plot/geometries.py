@@ -1,4 +1,5 @@
 """Functions for plotting sound event geometries."""
+
 import sys
 from typing import Dict, Optional
 
@@ -25,8 +26,7 @@ class GeometryPlotter(Protocol):
         geometry: data.Geometry,
         ax: Axes,
         **kwargs,
-    ) -> Axes:
-        ...
+    ) -> Axes: ...
 
 
 def plot_geometry(

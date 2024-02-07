@@ -12,6 +12,7 @@ The RIFF file format is used for storing audio and video data. The RIFF file
 format is also used for storing other types of data, such as text, images,
 and metadata.
 """
+
 import os
 from dataclasses import dataclass, field
 from typing import BinaryIO, Dict, List, Optional

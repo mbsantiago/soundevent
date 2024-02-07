@@ -52,18 +52,22 @@ class AnnotationTaskAdapter(
         return AnnotationTaskObject(
             uuid=obj.uuid,
             clip=self.clip_adapter.to_aoef(obj.clip).uuid,
-            status_badges=[
-                StatusBadgeObject(
-                    state=badge.state,
-                    owner=self.user_adapter.to_aoef(badge.owner).uuid
-                    if badge.owner is not None
-                    else None,
-                    created_on=badge.created_on,
-                )
-                for badge in obj.status_badges
-            ]
-            if obj.status_badges
-            else None,
+            status_badges=(
+                [
+                    StatusBadgeObject(
+                        state=badge.state,
+                        owner=(
+                            self.user_adapter.to_aoef(badge.owner).uuid
+                            if badge.owner is not None
+                            else None
+                        ),
+                        created_on=badge.created_on,
+                    )
+                    for badge in obj.status_badges
+                ]
+                if obj.status_badges
+                else None
+            ),
             created_on=obj.created_on,
         )
 
@@ -82,9 +86,11 @@ class AnnotationTaskAdapter(
             status_badges=[
                 data.StatusBadge(
                     state=badge.state,
-                    owner=self.user_adapter.from_id(badge.owner)
-                    if badge.owner is not None
-                    else None,
+                    owner=(
+                        self.user_adapter.from_id(badge.owner)
+                        if badge.owner is not None
+                        else None
+                    ),
                     created_on=badge.created_on or datetime.datetime.now(),
                 )
                 for badge in obj.status_badges or []

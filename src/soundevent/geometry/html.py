@@ -1,4 +1,5 @@
 """HTML representation of geometries."""
+
 import shapely
 
 from soundevent import data
@@ -93,18 +94,22 @@ def shapely_to_html(geometry: shapely.Geometry) -> str:
                 "position: absolute",
                 "top: 0; " if top else "bottom: 0",
                 "left: 0; " if left else "right: 0",
-                "transform: translate(-105%, 0)"
-                if axis == "freq"
-                else "transform: translate(0, 100%)",
+                (
+                    "transform: translate(-105%, 0)"
+                    if axis == "freq"
+                    else "transform: translate(0, 100%)"
+                ),
             ]
         )
 
         inner_style = "; ".join(
             [
                 "display: inline",
-                "vertical-align: top"
-                if axis == "time"
-                else "vertical-align: bottom",
+                (
+                    "vertical-align: top"
+                    if axis == "time"
+                    else "vertical-align: bottom"
+                ),
             ]
         )
 

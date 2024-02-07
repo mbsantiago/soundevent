@@ -54,9 +54,11 @@ class MatchAdapter(DataAdapter[data.Match, MatchObject, UUID, UUID]):
             target=target,
             affinity=obj.affinity,
             score=obj.score,
-            metrics={metrics.name: metrics.value for metrics in obj.metrics}
-            if obj.metrics
-            else None,
+            metrics=(
+                {metrics.name: metrics.value for metrics in obj.metrics}
+                if obj.metrics
+                else None
+            ),
         )
 
     def assemble_soundevent(

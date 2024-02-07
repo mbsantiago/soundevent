@@ -121,6 +121,27 @@ class Recording(BaseModel):
     notes : List[Note]
         A list of notes associated with the recording. Default is an empty
         list.
+
+    Notes
+    -----
+    When dealing with time-expanded recordings, adjustments are made to both
+    the duration and sample rate based on the time expansion factor. As a
+    result, the duration and sample rate stored in the Recording object may
+    deviate from the values derived from the file metadata.
+
+    A time-expanded recording is one that has been either slowed down or sped
+    up, typically to facilitate the playback and analysis of audio data. In
+    these cases, although the audio was originally captured at a specific
+    sample rate, the resulting audio file exhibits a different sample rate due
+    to the time expansion process. The time expansion factor represents the
+    ratio of the original sample rate to the sample rate of the time-expanded
+    recording.
+
+    Since the actual sample rate used to capture the audio differs from the
+    stored sample rate in the audio file, we have chosen to store the true
+    sample rate in the Recording object. This ensures that the Recording object
+    accurately reflects the sample rate at which the audio was originally
+    captured.
     """
 
     uuid: UUID = Field(default_factory=uuid4, repr=False)

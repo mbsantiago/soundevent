@@ -1,6 +1,5 @@
 """Test suite of the Clip Multi-Label Classification module."""
 
-
 from typing import List
 
 import pytest

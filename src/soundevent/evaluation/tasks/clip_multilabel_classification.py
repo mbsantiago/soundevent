@@ -58,7 +58,11 @@ def _evaluate_clips(
     clip_predictions: Sequence[data.ClipPrediction],
     clip_annotations: Sequence[data.ClipAnnotation],
     encoder: Encoder,
-) -> Tuple[List[data.ClipEvaluation], np.ndarray, np.ndarray,]:
+) -> Tuple[
+    List[data.ClipEvaluation],
+    np.ndarray,
+    np.ndarray,
+]:
     """Evaluate all examples in the given model run and evaluation set."""
     evaluated_clips = []
     true_classes = []

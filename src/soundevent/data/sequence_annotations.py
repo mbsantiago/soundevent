@@ -1,6 +1,5 @@
 """Sequence Annotation Class."""
 
-
 import datetime
 from typing import List, Optional
 from uuid import UUID, uuid4

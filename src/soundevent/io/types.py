@@ -1,4 +1,5 @@
 """Submodule of io module containing type definitions."""
+
 import sys
 from typing import Generic, Optional, TypeVar, Union
 

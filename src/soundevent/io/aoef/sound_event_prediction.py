@@ -40,14 +40,16 @@ class SoundEventPredictionAdapter(
             sound_event=self.sound_event_adapter.to_aoef(obj.sound_event).uuid,
             uuid=obj.uuid,
             score=obj.score,
-            tags=[
-                (tag.id, predicted_tag.score)
-                for predicted_tag in obj.tags
-                if (tag := self.tag_adapter.to_aoef(predicted_tag.tag))
-                is not None
-            ]
-            if obj.tags
-            else None,
+            tags=(
+                [
+                    (tag.id, predicted_tag.score)
+                    for predicted_tag in obj.tags
+                    if (tag := self.tag_adapter.to_aoef(predicted_tag.tag))
+                    is not None
+                ]
+                if obj.tags
+                else None
+            ),
         )
 
     def assemble_soundevent(

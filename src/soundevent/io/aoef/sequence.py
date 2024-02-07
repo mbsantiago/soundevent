@@ -1,6 +1,5 @@
 """Sequence object in AOEF format."""
 
-
 from typing import Dict, List, Optional
 from uuid import UUID, uuid4
 
@@ -45,9 +44,11 @@ class SequenceAdapter(DataAdapter[data.Sequence, SequenceObject, UUID, UUID]):
             uuid=obj.uuid,
             sound_events=sound_events,
             parent=parent,
-            features={feature.name: feature.value for feature in obj.features}
-            if obj.features
-            else None,
+            features=(
+                {feature.name: feature.value for feature in obj.features}
+                if obj.features
+                else None
+            ),
         )
 
     def assemble_soundevent(

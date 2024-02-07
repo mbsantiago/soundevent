@@ -1,6 +1,5 @@
 """Test suite for AOEF Model Run Adapter."""
 
-
 from soundevent import data
 from soundevent.io.aoef.model_run import ModelRunAdapter, ModelRunObject
 

@@ -42,6 +42,31 @@ def recording(
 
 
 @pytest.fixture
+def time_expanded_recording(
+    random_wav: Callable[[], Path],
+    user: data.User,
+    tags: List[data.Tag],
+    note: data.Note,
+) -> data.Recording:
+    path = random_wav()
+    return data.Recording.from_file(
+        path,
+        date=datetime.date(2020, 1, 1),
+        time=datetime.time(12, 0, 0),
+        time_expansion=10,
+        latitude=1.0,
+        longitude=2.0,
+        owners=[user],
+        rights="CC BY 4.0",
+        tags=tags,
+        notes=[note],
+        features=[
+            data.Feature(name="MaxAmp", value=23.3),
+        ],
+    )
+
+
+@pytest.fixture
 def recording_set(recording: data.Recording) -> data.RecordingSet:
     return data.RecordingSet(recordings=[recording])
 

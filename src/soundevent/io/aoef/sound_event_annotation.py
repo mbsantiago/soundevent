@@ -46,14 +46,18 @@ class SoundEventAnnotationAdapter(
     ) -> SoundEventAnnotationObject:
         return SoundEventAnnotationObject(
             sound_event=self.sound_event_adapter.to_aoef(obj.sound_event).uuid,
-            notes=[self.note_adapter.to_aoef(note) for note in obj.notes]
-            if obj.notes
-            else None,
+            notes=(
+                [self.note_adapter.to_aoef(note) for note in obj.notes]
+                if obj.notes
+                else None
+            ),
             tags=[self.tag_adapter.to_aoef(tag).id for tag in obj.tags],
             uuid=obj.uuid,
-            created_by=self.user_adapter.to_aoef(obj.created_by).uuid
-            if obj.created_by
-            else None,
+            created_by=(
+                self.user_adapter.to_aoef(obj.created_by).uuid
+                if obj.created_by
+                else None
+            ),
             created_on=obj.created_on,
         )
 
@@ -71,16 +75,20 @@ class SoundEventAnnotationAdapter(
         return data.SoundEventAnnotation(
             uuid=obj.uuid,
             sound_event=sound_event,
-            notes=[self.note_adapter.to_soundevent(note) for note in obj.notes]
-            if obj.notes
-            else [],
+            notes=(
+                [self.note_adapter.to_soundevent(note) for note in obj.notes]
+                if obj.notes
+                else []
+            ),
             tags=[
                 tag
                 for tag_id in obj.tags or []
                 if (tag := self.tag_adapter.from_id(tag_id)) is not None
             ],
-            created_by=self.user_adapter.from_id(obj.created_by)
-            if obj.created_by is not None
-            else None,
+            created_by=(
+                self.user_adapter.from_id(obj.created_by)
+                if obj.created_by is not None
+                else None
+            ),
             created_on=obj.created_on or datetime.datetime.now(),
         )

@@ -74,18 +74,20 @@ class RecordingAdapter(
             duration=obj.duration,
             channels=obj.channels,
             samplerate=obj.samplerate,
-            time_expansion=obj.time_expansion
-            if obj.time_expansion != 1.0
-            else None,
+            time_expansion=(
+                obj.time_expansion if obj.time_expansion != 1.0 else None
+            ),
             hash=obj.hash,
             date=obj.date,
             time=obj.time,
             latitude=obj.latitude,
             longitude=obj.longitude,
             tags=tag_ids if tag_ids else None,
-            features={feature.name: feature.value for feature in obj.features}
-            if obj.features
-            else None,
+            features=(
+                {feature.name: feature.value for feature in obj.features}
+                if obj.features
+                else None
+            ),
             notes=notes if notes else None,
             owners=owners,
             rights=obj.rights,
@@ -119,9 +121,9 @@ class RecordingAdapter(
             duration=obj.duration,
             channels=obj.channels,
             samplerate=obj.samplerate,
-            time_expansion=obj.time_expansion
-            if obj.time_expansion is not None
-            else 1.0,
+            time_expansion=(
+                obj.time_expansion if obj.time_expansion is not None else 1.0
+            ),
             hash=obj.hash,
             date=obj.date,
             time=obj.time,
