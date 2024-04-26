@@ -1,4 +1,5 @@
 """Storage formats for soundevent objects."""
+
 from typing import Callable, Dict
 
 from soundevent.data import PathLike

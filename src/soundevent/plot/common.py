@@ -1,4 +1,5 @@
 """Common utilities for plotting."""
+
 from typing import Optional, Tuple
 
 import matplotlib.pyplot as plt

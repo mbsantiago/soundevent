@@ -47,16 +47,22 @@ class SequenceAnnotationAdapter(
     ) -> SequenceAnnotationObject:
         return SequenceAnnotationObject(
             sequence=self.sequence_adapter.to_aoef(obj.sequence).uuid,
-            notes=[self.note_adapter.to_aoef(note) for note in obj.notes]
-            if obj.notes
-            else None,
-            tags=[self.tag_adapter.to_aoef(tag).id for tag in obj.tags]
-            if obj.tags
-            else None,
+            notes=(
+                [self.note_adapter.to_aoef(note) for note in obj.notes]
+                if obj.notes
+                else None
+            ),
+            tags=(
+                [self.tag_adapter.to_aoef(tag).id for tag in obj.tags]
+                if obj.tags
+                else None
+            ),
             uuid=obj.uuid,
-            created_by=self.user_adapter.to_aoef(obj.created_by).uuid
-            if obj.created_by
-            else None,
+            created_by=(
+                self.user_adapter.to_aoef(obj.created_by).uuid
+                if obj.created_by
+                else None
+            ),
             created_on=obj.created_on,
         )
 
@@ -72,16 +78,20 @@ class SequenceAnnotationAdapter(
         return data.SequenceAnnotation(
             uuid=obj.uuid or uuid4(),
             sequence=sequence,
-            notes=[self.note_adapter.to_soundevent(note) for note in obj.notes]
-            if obj.notes
-            else [],
+            notes=(
+                [self.note_adapter.to_soundevent(note) for note in obj.notes]
+                if obj.notes
+                else []
+            ),
             tags=[
                 tag
                 for tag_id in obj.tags or []
                 if (tag := self.tag_adapter.from_id(tag_id)) is not None
             ],
-            created_by=self.user_adapter.from_id(obj.created_by)
-            if obj.created_by is not None
-            else None,
+            created_by=(
+                self.user_adapter.from_id(obj.created_by)
+                if obj.created_by is not None
+                else None
+            ),
             created_on=obj.created_on or datetime.datetime.now(),
         )

@@ -1,6 +1,5 @@
 """Test suite for AOEF Match Adapter."""
 
-
 from soundevent import data
 from soundevent.io.aoef.match import MatchAdapter, MatchObject
 

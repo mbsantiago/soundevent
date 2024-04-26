@@ -1,4 +1,5 @@
 """Common fixtures for audio tests."""
+
 from pathlib import Path
 
 import pytest

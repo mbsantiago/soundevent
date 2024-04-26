@@ -81,7 +81,7 @@ plugins:
             docstring_section_style: "table"
             summary: true
             signature_crossrefs: true
-            show_signature_annotations: true
+            show_signature_annotations: false
             filters:
               - "!^_"
             docstring_options:

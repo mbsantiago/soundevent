@@ -1,6 +1,8 @@
 """Pytest fixtures for the audio tests."""
+
 import random
 import string
+import sys
 from pathlib import Path
 from typing import Optional
 from uuid import uuid4
@@ -10,6 +12,10 @@ import pytest
 import soundfile as sf
 
 from soundevent import data
+
+if sys.version_info < (3, 9):
+    # NOTE: Crowsetta is not supported in Python 3.8
+    collect_ignore_glob = ["test_io/test_crowsetta/*.py"]  # pragma: no cover
 
 
 def get_random_string(length):
