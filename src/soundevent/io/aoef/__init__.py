@@ -34,10 +34,7 @@ from pydantic import BaseModel, Field
 from soundevent import data
 from soundevent.io.types import DataCollections, DataType
 
-from .annotation_project import (
-    AnnotationProjectAdapter,
-    AnnotationProjectObject,
-)
+from .annotation_project import AnnotationProjectAdapter, AnnotationProjectObject
 from .annotation_set import AnnotationSetAdapter, AnnotationSetObject
 from .dataset import DatasetAdapter, DatasetObject
 from .evaluation import EvaluationAdapter, EvaluationObject
@@ -87,9 +84,7 @@ class AOEFObject(BaseModel):
     """Schema definition for an AOEF object."""
 
     version: str = AOEF_VERSION
-    created_on: datetime.datetime = Field(
-        default_factory=datetime.datetime.now
-    )
+    created_on: datetime.datetime = Field(default_factory=datetime.datetime.now)
     data: Union[
         EvaluationObject,
         DatasetObject,
@@ -162,9 +157,7 @@ def load(
 
     if aoef_object.version != AOEF_VERSION:
         version = aoef_object.version
-        raise ValueError(
-            f"Invalid AOEF version: {version} (expected {AOEF_VERSION})"
-        )
+        raise ValueError(f"Invalid AOEF version: {version} (expected {AOEF_VERSION})")
 
     return to_soundevent(aoef_object, audio_dir=audio_dir)
 

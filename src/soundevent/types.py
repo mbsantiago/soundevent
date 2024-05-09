@@ -1,8 +1,9 @@
 """Common types and interfaces within bioacoustic analysis."""
 
-from abc import abstractmethod, ABC
-from soundevent import data
+from abc import ABC, abstractmethod
 from typing import List, Optional
+
+from soundevent import data
 
 
 class ClassMapper(ABC):

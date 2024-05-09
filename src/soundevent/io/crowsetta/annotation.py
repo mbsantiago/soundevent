@@ -5,10 +5,7 @@ from typing import List, Literal, Optional, Union
 import crowsetta
 
 from soundevent import data
-from soundevent.io.crowsetta.bbox import (
-    bbox_from_annotation,
-    bbox_to_annotation,
-)
+from soundevent.io.crowsetta.bbox import bbox_from_annotation, bbox_to_annotation
 from soundevent.io.crowsetta.sequence import (
     sequence_from_annotations,
     sequence_to_annotations,
@@ -88,8 +85,7 @@ def annotation_from_clip_annotation(
 
     if annotation_fmt != "seq":
         raise ValueError(
-            "annotation_fmt must be either 'bbox' or 'seq', "
-            f"not {annotation_fmt}."
+            "annotation_fmt must be either 'bbox' or 'seq', " f"not {annotation_fmt}."
         )
 
     return crowsetta.Annotation(
@@ -176,8 +172,7 @@ def annotation_to_clip_annotation(
 
     if path is not None and path != recording.path:
         raise ValueError(
-            "The path of the annotation does not match the path of the "
-            "recording."
+            "The path of the annotation does not match the path of the " "recording."
         )
 
     sound_event_annotations = []
@@ -195,9 +190,9 @@ def annotation_to_clip_annotation(
             )
         )
 
-    crowsetta_sequences: Union[
-        List[crowsetta.Sequence], crowsetta.Sequence
-    ] = getattr(annot, "seq", [])
+    crowsetta_sequences: Union[List[crowsetta.Sequence], crowsetta.Sequence] = getattr(
+        annot, "seq", []
+    )
 
     if not isinstance(crowsetta_sequences, list):
         crowsetta_sequences = [crowsetta_sequences]

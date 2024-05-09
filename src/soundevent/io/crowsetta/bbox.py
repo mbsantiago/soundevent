@@ -23,10 +23,7 @@ def convert_geometry_to_bbox(
             "because the sound event geometry is not a BoundingBox."
         )
 
-    if (
-        geometry.type in ["TimeInterval", "TimeStamp"]
-        and raise_on_time_geometries
-    ):
+    if geometry.type in ["TimeInterval", "TimeStamp"] and raise_on_time_geometries:
         raise ValueError(
             "Cannot convert to a crowsetta bbox because "
             "the sound event geometry is a TimeInterval or TimeStamp "
@@ -162,9 +159,7 @@ def bbox_to_annotation(
         low_freq = low_freq * recording.time_expansion
         high_freq = high_freq * recording.time_expansion
 
-    geometry = data.BoundingBox(
-        coordinates=[start_time, low_freq, end_time, high_freq]
-    )
+    geometry = data.BoundingBox(coordinates=[start_time, low_freq, end_time, high_freq])
 
     tags = label_to_tags(bbox.label, **kwargs)
 

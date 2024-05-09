@@ -156,9 +156,7 @@ def get_media_info(path: PathLike) -> MediaInfo:
         # chunk is the size of the data subchunk divided by the number
         # of channels and the bit depth.
         data_chunk = chunk.subchunks["data"]
-        samples = (
-            8 * data_chunk.size // (fmt_info.channels * fmt_info.bit_depth)
-        )
+        samples = 8 * data_chunk.size // (fmt_info.channels * fmt_info.bit_depth)
         duration = samples / fmt_info.samplerate
 
         return MediaInfo(

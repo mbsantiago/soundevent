@@ -96,9 +96,7 @@ def test_multi_linestring_is_supported():
 
 
 def test_multi_polygon_is_supported():
-    multi_polygon = data.MultiPolygon(
-        coordinates=[[[[1, 2], [4, 3], [5, 6], [1, 2]]]]
-    )
+    multi_polygon = data.MultiPolygon(coordinates=[[[[1, 2], [4, 3], [5, 6], [1, 2]]]])
     matches = list(match_geometries([multi_polygon], [multi_polygon]))
     assert len(matches) == 1
     source_index, target_index, affinity = matches[0]

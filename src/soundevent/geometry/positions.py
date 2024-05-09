@@ -1,10 +1,10 @@
-from typing import Tuple, Literal
+from typing import Literal, Tuple
+
 import shapely
 
 from soundevent.data import Geometry
-from soundevent.geometry.operations import compute_bounds
 from soundevent.geometry.conversion import geometry_to_shapely
-
+from soundevent.geometry.operations import compute_bounds
 
 __all__ = [
     "get_geometry_point",

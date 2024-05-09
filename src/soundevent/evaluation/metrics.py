@@ -43,9 +43,7 @@ def balanced_accuracy(
     y_score: np.ndarray,
 ) -> float:
     num_classes = y_score.shape[1]
-    y_true_array = np.array(
-        [y if y is not None else num_classes for y in y_true]
-    )
+    y_true_array = np.array([y if y is not None else num_classes for y in y_true])
     y_score = np.c_[y_score, 1 - y_score.sum(axis=1, keepdims=True)]
     y_pred = y_score.argmax(axis=1)
     return metrics.balanced_accuracy_score(
@@ -59,9 +57,7 @@ def accuracy(
     y_score: np.ndarray,
 ) -> float:
     num_classes = y_score.shape[1]
-    y_true_array = np.array(
-        [y if y is not None else num_classes for y in y_true]
-    )
+    y_true_array = np.array([y if y is not None else num_classes for y in y_true])
     y_score = np.c_[y_score, 1 - y_score.sum(axis=1, keepdims=True)]
     y_pred = y_score.argmax(axis=1)
     return metrics.accuracy_score(  # type: ignore
@@ -75,9 +71,7 @@ def top_3_accuracy(
     y_score: np.ndarray,
 ) -> float:
     num_classes = y_score.shape[1]
-    y_true_array = np.array(
-        [y if y is not None else num_classes for y in y_true]
-    )
+    y_true_array = np.array([y if y is not None else num_classes for y in y_true])
     y_score = np.c_[y_score, 1 - y_score.sum(axis=1, keepdims=True)]
     return metrics.top_k_accuracy_score(  # type: ignore
         y_true=y_true_array,

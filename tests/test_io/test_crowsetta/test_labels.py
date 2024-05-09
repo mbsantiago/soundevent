@@ -136,9 +136,7 @@ def test_label_to_tags_with_key_mapping():
 
 def test_label_to_tags_with_key_mapping_fallback():
     key_mapping = {"bat": "animal"}
-    tag = crowsetta_io.label_to_tags(
-        "dog", key_mapping=key_mapping, fallback="pet"
-    )
+    tag = crowsetta_io.label_to_tags("dog", key_mapping=key_mapping, fallback="pet")
     assert tag == [data.Tag(key="pet", value="dog")]
 
 

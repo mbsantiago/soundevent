@@ -16,9 +16,7 @@ from soundevent.evaluation.encoding import Encoder
 
 
 @pytest.fixture
-def tags(
-    random_tags: Callable[[int], Sequence[data.Tag]]
-) -> Sequence[data.Tag]:
+def tags(random_tags: Callable[[int], Sequence[data.Tag]]) -> Sequence[data.Tag]:
     """Tags for testing."""
     return random_tags(10)
 

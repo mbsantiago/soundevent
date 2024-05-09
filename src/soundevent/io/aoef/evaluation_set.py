@@ -35,10 +35,7 @@ class EvaluationSetAdapter(AnnotationSetAdapter):
             name=obj.name,
             description=obj.description,
             evaluation_tags=(
-                [
-                    self.tag_adapter.to_aoef(tag).id
-                    for tag in obj.evaluation_tags
-                ]
+                [self.tag_adapter.to_aoef(tag).id for tag in obj.evaluation_tags]
                 if obj.evaluation_tags
                 else None
             ),
@@ -50,11 +47,7 @@ class EvaluationSetAdapter(AnnotationSetAdapter):
     ) -> data.EvaluationSet:
         annotation_set = super().to_soundevent(obj)
         return data.EvaluationSet(
-            **{
-                field: value
-                for field, value in annotation_set
-                if value is not None
-            },
+            **{field: value for field, value in annotation_set if value is not None},
             name=obj.name,
             description=obj.description,
             evaluation_tags=[

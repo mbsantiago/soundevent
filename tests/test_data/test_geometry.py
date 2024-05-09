@@ -184,9 +184,7 @@ def test_load_multilinestring_from_dict():
 
 def test_load_multilinestring_from_attributes():
     """Test that a MultiLineString can be loaded from attributes."""
-    obj = data.MultiLineString(
-        coordinates=[[[0, 1], [2, 3]], [[4, 5], [6, 7]]]
-    )
+    obj = data.MultiLineString(coordinates=[[[0, 1], [2, 3]], [[4, 5], [6, 7]]])
     geom = data.geometry_validate(obj, mode="attributes")
     assert isinstance(geom, data.MultiLineString)
     assert geom.coordinates == [[[0, 1], [2, 3]], [[4, 5], [6, 7]]]

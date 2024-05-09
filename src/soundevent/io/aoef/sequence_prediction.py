@@ -42,8 +42,7 @@ class SequencePredictionAdapter(
                 [
                     (tag.id, predicted_tag.score)
                     for predicted_tag in obj.tags
-                    if (tag := self.tag_adapter.to_aoef(predicted_tag.tag))
-                    is not None
+                    if (tag := self.tag_adapter.to_aoef(predicted_tag.tag)) is not None
                 ]
                 if obj.tags
                 else None

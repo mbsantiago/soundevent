@@ -7,11 +7,7 @@ import xarray as xr
 from numpy.typing import DTypeLike
 from xarray.core.types import InterpOptions
 
-from soundevent.arrays.dimensions import (
-    create_range_dim,
-    get_dim_range,
-    get_dim_step,
-)
+from soundevent.arrays.dimensions import create_range_dim, get_dim_range, get_dim_step
 
 __all__ = [
     "center",
@@ -92,9 +88,7 @@ def crop_dim(
         stop = current_stop
 
     if start > stop:
-        raise ValueError(
-            f"Start value {start} must be less than stop value {stop}"
-        )
+        raise ValueError(f"Start value {start} must be less than stop value {stop}")
 
     if start < current_start or stop > current_stop:
         raise ValueError(
@@ -180,9 +174,7 @@ def extend_dim(
         stop = current_stop
 
     if start > stop:
-        raise ValueError(
-            f"Start value {start} must be less than stop value {stop}"
-        )
+        raise ValueError(f"Start value {start} must be less than stop value {stop}")
 
     step = get_dim_step(arr, dim)
 
@@ -312,9 +304,7 @@ def set_value_at_pos(
         start, stop = get_dim_range(array, dim)
 
         if coord < start or coord > stop:
-            raise KeyError(
-                f"Position {coord} is outside the range of dimension {dim}."
-            )
+            raise KeyError(f"Position {coord} is outside the range of dimension {dim}.")
 
         index = array.indexes[dim].get_slice_bound(coord, "right")
         indexer[dims[dim]] = index - 1

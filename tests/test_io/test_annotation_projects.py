@@ -40,9 +40,7 @@ def test_saved_annotation_project_is_saved_to_json_file(
     assert path.exists()
 
 
-def test_saved_annotation_project_has_correct_info(
-    monkeypatch, tmp_path: Path
-) -> None:
+def test_saved_annotation_project_has_correct_info(monkeypatch, tmp_path: Path) -> None:
     """Test that the saved annotation project has the correct info."""
     # Arrange
     annotation_project = data.AnnotationProject(
@@ -175,10 +173,7 @@ def test_can_recover_task_status(
 
     # Assert
     assert recovered == annotation_project
-    assert (
-        recovered.tasks[0].status_badges[0].state
-        == data.AnnotationState.completed
-    )
+    assert recovered.tasks[0].status_badges[0].state == data.AnnotationState.completed
 
 
 def test_can_recover_user_that_completed_task(
@@ -285,9 +280,7 @@ def test_can_recover_task_simple_annotation(
         clip_annotations=[
             data.ClipAnnotation(
                 clip=clip,
-                sound_events=[
-                    data.SoundEventAnnotation(sound_event=sound_event)
-                ],
+                sound_events=[data.SoundEventAnnotation(sound_event=sound_event)],
             )
         ],
         tasks=[data.AnnotationTask(clip=clip)],
@@ -301,8 +294,7 @@ def test_can_recover_task_simple_annotation(
     # Assert
     assert recovered == annotation_project
     assert (
-        recovered.clip_annotations[0].sound_events[0].sound_event.geometry
-        is not None
+        recovered.clip_annotations[0].sound_events[0].sound_event.geometry is not None
     )
     assert sound_event.geometry is not None
     assert (
@@ -310,9 +302,7 @@ def test_can_recover_task_simple_annotation(
         == sound_event.geometry.type
     )
     assert (
-        recovered.clip_annotations[0]
-        .sound_events[0]
-        .sound_event.geometry.coordinates
+        recovered.clip_annotations[0].sound_events[0].sound_event.geometry.coordinates
         == sound_event.geometry.coordinates
     )
 
@@ -352,13 +342,8 @@ def test_can_recover_task_annotation_with_tags(
 
     # Assert
     assert recovered == annotation_project
-    assert (
-        recovered.clip_annotations[0].sound_events[0].tags[0].key == "species"
-    )
-    assert (
-        recovered.clip_annotations[0].sound_events[0].tags[0].value
-        == "test_species"
-    )
+    assert recovered.clip_annotations[0].sound_events[0].tags[0].key == "species"
+    assert recovered.clip_annotations[0].sound_events[0].tags[0].value == "test_species"
 
 
 def test_can_recover_annotation_creator(
@@ -409,9 +394,7 @@ def test_can_recover_annotation_creation_date(
             data.ClipAnnotation(
                 clip=clip,
                 sound_events=[
-                    data.SoundEventAnnotation(
-                        sound_event=sound_event, created_on=date
-                    )
+                    data.SoundEventAnnotation(sound_event=sound_event, created_on=date)
                 ],
             ),
         ],
@@ -464,14 +447,8 @@ def test_can_recover_annotation_notes(
 
     # Assert
     assert recovered == annotation_project
-    assert (
-        recovered.clip_annotations[0].sound_events[0].notes[0].message
-        == "test_note"
-    )
-    assert (
-        recovered.clip_annotations[0].sound_events[0].notes[0].created_by
-        == user
-    )
+    assert recovered.clip_annotations[0].sound_events[0].notes[0].message == "test_note"
+    assert recovered.clip_annotations[0].sound_events[0].notes[0].created_by == user
 
 
 def test_can_recover_sound_event_features(
@@ -513,17 +490,11 @@ def test_can_recover_sound_event_features(
     # Assert
     assert recovered == annotation_project
     assert (
-        recovered.clip_annotations[0]
-        .sound_events[0]
-        .sound_event.features[0]
-        .name
+        recovered.clip_annotations[0].sound_events[0].sound_event.features[0].name
         == "duration"
     )
     assert (
-        recovered.clip_annotations[0]
-        .sound_events[0]
-        .sound_event.features[0]
-        .value
+        recovered.clip_annotations[0].sound_events[0].sound_event.features[0].value
         == 1.0
     )
 
@@ -564,9 +535,7 @@ def test_recording_paths_are_stored_as_relative_if_audio_dir_is_provided(
 
 def test_can_parse_nips4plus(tmp_path: Path):
     """Test that NIPS4BPlus annotations can be parsed."""
-    original_path = (
-        BASE_DIR / "docs" / "user_guide" / "nips4b_plus_sample.json"
-    )
+    original_path = BASE_DIR / "docs" / "user_guide" / "nips4b_plus_sample.json"
     path = tmp_path / "test.json"
 
     # Act

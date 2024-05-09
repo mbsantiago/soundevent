@@ -164,8 +164,6 @@ def _compute_overall_score(
     evaluated_examples: Sequence[data.ClipEvaluation],
 ) -> float:
     non_none_scores = [
-        example.score
-        for example in evaluated_examples
-        if example.score is not None
+        example.score for example in evaluated_examples if example.score is not None
     ]
     return float(np.mean(non_none_scores)) if non_none_scores else 0.0

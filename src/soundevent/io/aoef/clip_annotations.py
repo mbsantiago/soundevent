@@ -59,9 +59,7 @@ class ClipAnnotationsAdapter(
             ),
             sound_events=(
                 [
-                    self.sound_event_annotation_adapter.to_aoef(
-                        annotation
-                    ).uuid
+                    self.sound_event_annotation_adapter.to_aoef(annotation).uuid
                     for annotation in obj.sound_events
                 ]
                 if obj.sound_events
@@ -103,25 +101,16 @@ class ClipAnnotationsAdapter(
                 se_ann
                 for annotation_id in obj.sound_events or []
                 if (
-                    se_ann := self.sound_event_annotation_adapter.from_id(
-                        annotation_id
-                    )
+                    se_ann := self.sound_event_annotation_adapter.from_id(annotation_id)
                 )
                 is not None
             ],
             sequences=[
                 seq_ann
                 for annotation_id in obj.sequences or []
-                if (
-                    seq_ann := self.sequence_annotation_adapter.from_id(
-                        annotation_id
-                    )
-                )
+                if (seq_ann := self.sequence_annotation_adapter.from_id(annotation_id))
                 is not None
             ],
-            notes=[
-                self.note_adapter.to_soundevent(note)
-                for note in obj.notes or []
-            ],
+            notes=[self.note_adapter.to_soundevent(note) for note in obj.notes or []],
             created_on=obj.created_on or datetime.datetime.now(),
         )

@@ -50,10 +50,7 @@ class ClipEvaluationAdapter(
             annotations=annotations.uuid,
             predictions=predictions.uuid,
             matches=(
-                [
-                    self.match_adapter.to_aoef(match).uuid
-                    for match in obj.matches
-                ]
+                [self.match_adapter.to_aoef(match).uuid for match in obj.matches]
                 if obj.matches
                 else None
             ),
@@ -73,14 +70,10 @@ class ClipEvaluationAdapter(
         predictions = self.clip_predictions_adapter.from_id(obj.predictions)
 
         if annotations is None:
-            raise ValueError(
-                f"Clip annotations with ID {obj.annotations} not found."
-            )
+            raise ValueError(f"Clip annotations with ID {obj.annotations} not found.")
 
         if predictions is None:
-            raise ValueError(
-                f"Clip predictions with ID {obj.predictions} not found."
-            )
+            raise ValueError(f"Clip predictions with ID {obj.predictions} not found.")
 
         matches = [
             match

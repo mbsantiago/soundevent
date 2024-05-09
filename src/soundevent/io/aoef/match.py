@@ -36,16 +36,12 @@ class MatchAdapter(DataAdapter[data.Match, MatchObject, UUID, UUID]):
     ) -> MatchObject:
         source = None
         if obj.source is not None:
-            prediction = self.sound_event_prediction_adapter.to_aoef(
-                obj.source
-            )
+            prediction = self.sound_event_prediction_adapter.to_aoef(obj.source)
             source = prediction.uuid if prediction is not None else None
 
         target = None
         if obj.target is not None:
-            annotation = self.sound_event_annotation_adapter.to_aoef(
-                obj.target
-            )
+            annotation = self.sound_event_annotation_adapter.to_aoef(obj.target)
             target = annotation.uuid if annotation is not None else None
 
         return MatchObject(

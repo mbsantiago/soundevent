@@ -28,6 +28,4 @@ class AnnotationSet(BaseModel):
         default_factory=list,
         repr=False,
     )
-    created_on: datetime.datetime = Field(
-        default_factory=datetime.datetime.now
-    )
+    created_on: datetime.datetime = Field(default_factory=datetime.datetime.now)

@@ -183,9 +183,7 @@ def test_create_frequency_dim_from_array_sets_attrs():
 def test_create_frequency_dim_from_array_estimates_step():
     """Test create_frequency_dim_from_array function."""
     arr = np.array([1, 2, 3])
-    frequency_dim = arrays.create_frequency_dim_from_array(
-        arr, estimate_step=True
-    )
+    frequency_dim = arrays.create_frequency_dim_from_array(arr, estimate_step=True)
     assert frequency_dim.attrs["step"] == 1
 
 

@@ -170,7 +170,5 @@ def test_sequence_to_annotations(
         recording,
     )
     assert len(annotations) == 2
-    assert all(
-        isinstance(ann, data.SoundEventAnnotation) for ann in annotations
-    )
+    assert all(isinstance(ann, data.SoundEventAnnotation) for ann in annotations)
     assert all(ann.sound_event.recording == recording for ann in annotations)

@@ -54,6 +54,4 @@ class ClipAnnotation(BaseModel):
     sequences: List[SequenceAnnotation] = Field(default_factory=list)
     tags: List[Tag] = Field(default_factory=list)
     notes: List[Note] = Field(default_factory=list)
-    created_on: datetime.datetime = Field(
-        default_factory=datetime.datetime.now
-    )
+    created_on: datetime.datetime = Field(default_factory=datetime.datetime.now)

@@ -47,9 +47,7 @@ class ClipPredictionsAdapter(
             clip=self.clip_adapter.to_aoef(obj.clip).uuid,
             sound_events=(
                 [
-                    self.sound_event_prediction_adapter.to_aoef(
-                        sound_event
-                    ).uuid
+                    self.sound_event_prediction_adapter.to_aoef(sound_event).uuid
                     for sound_event in obj.sound_events
                 ]
                 if obj.sound_events
@@ -67,8 +65,7 @@ class ClipPredictionsAdapter(
                 [
                     (tag.id, predicted_tag.score)
                     for predicted_tag in obj.tags
-                    if (tag := self.tag_adapter.to_aoef(predicted_tag.tag))
-                    is not None
+                    if (tag := self.tag_adapter.to_aoef(predicted_tag.tag)) is not None
                 ]
                 if obj.tags
                 else None
@@ -95,21 +92,13 @@ class ClipPredictionsAdapter(
             sound_events=[
                 se_pred
                 for sound_event in obj.sound_events or []
-                if (
-                    se_pred := self.sound_event_prediction_adapter.from_id(
-                        sound_event
-                    )
-                )
+                if (se_pred := self.sound_event_prediction_adapter.from_id(sound_event))
                 is not None
             ],
             sequences=[
                 seq_pred
                 for sequence in obj.sequences or []
-                if (
-                    seq_pred := self.sequence_prediction_adapter.from_id(
-                        sequence
-                    )
-                )
+                if (seq_pred := self.sequence_prediction_adapter.from_id(sequence))
                 is not None
             ],
             tags=[

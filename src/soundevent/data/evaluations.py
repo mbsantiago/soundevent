@@ -25,9 +25,7 @@ class Evaluation(BaseModel):
     """Evaluation Class."""
 
     uuid: UUID = Field(default_factory=uuid4, repr=False)
-    created_on: datetime.datetime = Field(
-        default_factory=datetime.datetime.now
-    )
+    created_on: datetime.datetime = Field(default_factory=datetime.datetime.now)
     evaluation_task: str
     clip_evaluations: Sequence[ClipEvaluation] = Field(default_factory=list)
     metrics: Sequence[Feature] = Field(default_factory=list)

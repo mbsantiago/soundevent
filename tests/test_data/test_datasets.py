@@ -52,9 +52,7 @@ def test_create_dataset_ignores_non_audio_files(tmp_path: Path):
 def test_create_dataset_fails_with_non_existing_directory():
     """Test that we can create a dataset from audio files."""
     with pytest.raises(ValueError):
-        data.Dataset.from_directory(
-            Path("non-existing-directory"), name="test"
-        )
+        data.Dataset.from_directory(Path("non-existing-directory"), name="test")
 
 
 def test_create_dataset_fails_if_path_is_file(tmp_path: Path):
@@ -78,9 +76,7 @@ def test_create_dataset_without_recursive(tmp_path: Path, random_wav):
     """Test that we can create a dataset from audio files."""
     (tmp_path / "test1").mkdir()
     random_wav(path=tmp_path / "test1" / "test1.wav")
-    dataset = data.Dataset.from_directory(
-        tmp_path, recursive=False, name="test"
-    )
+    dataset = data.Dataset.from_directory(tmp_path, recursive=False, name="test")
 
     assert len(dataset.recordings) == 0
 

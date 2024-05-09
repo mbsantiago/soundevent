@@ -120,9 +120,7 @@ def pcen_core(
         raise ValueError(f"eps={eps} must be strictly positive")
 
     if time_constant <= 0:
-        raise ValueError(
-            f"time_constant={time_constant} must be strictly positive"
-        )
+        raise ValueError(f"time_constant={time_constant} must be strictly positive")
 
     if b is None:
         t_frames = time_constant * sr / float(hop_length)
@@ -146,9 +144,7 @@ def pcen_core(
         if max_size == 1:
             ref = S
         elif S.ndim == 1:
-            raise ValueError(
-                "Max-filtering cannot be applied to 1-dimensional input"
-            )
+            raise ValueError("Max-filtering cannot be applied to 1-dimensional input")
         else:
             if max_axis is None:
                 if S.ndim != 2:

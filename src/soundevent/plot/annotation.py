@@ -75,8 +75,7 @@ def get_tags_position(
 
     if func is None:
         raise NotImplementedError(
-            f"Plotting tags for geometry of type {geometry.type} "
-            "is not implemented."
+            f"Plotting tags for geometry of type {geometry.type} " "is not implemented."
         )
 
     return func(geometry, bounds)
@@ -117,9 +116,7 @@ def _get_tags_position_bounding_box(
 
 _TAG_POSITION_FUNCTIONS: Dict[
     data.GeometryType,
-    Callable[
-        [data.Geometry, Tuple[float, float, float, float]], Tuple[float, float]
-    ],
+    Callable[[data.Geometry, Tuple[float, float, float, float]], Tuple[float, float]],
 ] = {
     data.BoundingBox.geom_type(): _get_tags_position_bounding_box,
 }

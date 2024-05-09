@@ -29,9 +29,7 @@ class TagColorMapper:
         self._tags: Dict[data.Tag, str] = {}
 
         colormap = get_cmap(cmap)
-        self._colors = cycle(
-            [colormap(x) for x in np.linspace(0, 1, num_colors)]
-        )
+        self._colors = cycle([colormap(x) for x in np.linspace(0, 1, num_colors)])
 
     def get_color(self, tag: data.Tag) -> str:
         """Get color for tag."""

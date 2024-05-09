@@ -71,9 +71,7 @@ def test_load_fails_if_aoef_version_is_not_supported(tmp_path):
         io.load(path)
 
 
-def test_save_creates_parent_directories(
-    tmp_path: Path, dataset: data.Dataset
-):
+def test_save_creates_parent_directories(tmp_path: Path, dataset: data.Dataset):
     """Test that the save function creates parent directories."""
     # Arrange
     path = tmp_path / "parent" / "child" / "test.json"

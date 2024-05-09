@@ -18,9 +18,7 @@ class SoundEventPredictionObject(BaseModel):
 
 
 class SoundEventPredictionAdapter(
-    DataAdapter[
-        data.SoundEventPrediction, SoundEventPredictionObject, UUID, UUID
-    ]
+    DataAdapter[data.SoundEventPrediction, SoundEventPredictionObject, UUID, UUID]
 ):
     def __init__(
         self,
@@ -44,8 +42,7 @@ class SoundEventPredictionAdapter(
                 [
                     (tag.id, predicted_tag.score)
                     for predicted_tag in obj.tags
-                    if (tag := self.tag_adapter.to_aoef(predicted_tag.tag))
-                    is not None
+                    if (tag := self.tag_adapter.to_aoef(predicted_tag.tag)) is not None
                 ]
                 if obj.tags
                 else None
@@ -59,9 +56,7 @@ class SoundEventPredictionAdapter(
         sound_event = self.sound_event_adapter.from_id(obj.sound_event)
 
         if sound_event is None:
-            raise ValueError(
-                f"Sound event with ID {obj.sound_event} not found."
-            )
+            raise ValueError(f"Sound event with ID {obj.sound_event} not found.")
 
         return data.SoundEventPrediction(
             uuid=obj.uuid or uuid4(),

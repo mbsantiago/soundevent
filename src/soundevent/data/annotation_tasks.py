@@ -60,15 +60,11 @@ class StatusBadge(BaseModel):
 
     state: AnnotationState
     owner: Optional[User] = None
-    created_on: datetime.datetime = Field(
-        default_factory=datetime.datetime.now
-    )
+    created_on: datetime.datetime = Field(default_factory=datetime.datetime.now)
 
 
 class AnnotationTask(BaseModel):
     uuid: UUID = Field(default_factory=uuid4, repr=False)
     clip: Clip
     status_badges: List[StatusBadge] = Field(default_factory=list)
-    created_on: datetime.datetime = Field(
-        default_factory=datetime.datetime.now
-    )
+    created_on: datetime.datetime = Field(default_factory=datetime.datetime.now)

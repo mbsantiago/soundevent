@@ -22,9 +22,7 @@ class SoundEventAnnotationObject(BaseModel):
 
 
 class SoundEventAnnotationAdapter(
-    DataAdapter[
-        data.SoundEventAnnotation, SoundEventAnnotationObject, UUID, UUID
-    ]
+    DataAdapter[data.SoundEventAnnotation, SoundEventAnnotationObject, UUID, UUID]
 ):
     def __init__(
         self,
@@ -68,9 +66,7 @@ class SoundEventAnnotationAdapter(
         sound_event = self.sound_event_adapter.from_id(obj.sound_event)
 
         if sound_event is None:
-            raise ValueError(
-                f"Sound event with ID {obj.sound_event} not found."
-            )
+            raise ValueError(f"Sound event with ID {obj.sound_event} not found.")
 
         return data.SoundEventAnnotation(
             uuid=obj.uuid,

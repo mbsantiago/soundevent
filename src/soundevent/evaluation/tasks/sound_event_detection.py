@@ -20,9 +20,7 @@ __all__ = [
     "evaluate_clip",
 ]
 
-SOUNDEVENT_METRICS: Sequence[metrics.Metric] = (
-    metrics.true_class_probability,
-)
+SOUNDEVENT_METRICS: Sequence[metrics.Metric] = (metrics.true_class_probability,)
 
 EXAMPLE_METRICS: Sequence[metrics.Metric] = ()
 

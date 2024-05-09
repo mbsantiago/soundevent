@@ -36,6 +36,4 @@ def infer_format(path: PathLike) -> str:
         if inferrer(path):
             return format_
 
-    raise ValueError(
-        f"Cannot infer format of file {path}, or format not supported."
-    )
+    raise ValueError(f"Cannot infer format of file {path}, or format not supported.")

@@ -8,10 +8,7 @@ from soundevent.io.crowsetta.annotation import (
     annotation_from_clip_annotation,
     annotation_to_clip_annotation,
 )
-from soundevent.io.crowsetta.bbox import (
-    bbox_from_annotation,
-    bbox_to_annotation,
-)
+from soundevent.io.crowsetta.bbox import bbox_from_annotation, bbox_to_annotation
 from soundevent.io.crowsetta.labels import (
     label_from_tag,
     label_from_tags,

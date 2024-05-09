@@ -28,9 +28,7 @@ def test_can_evaluate_nips_data():
     assert isinstance(evaluation, data.Evaluation)
 
     # check that all clips have been evaluated
-    assert len(evaluation.clip_evaluations) == len(
-        evaluation_set.clip_annotations
-    )
+    assert len(evaluation.clip_evaluations) == len(evaluation_set.clip_annotations)
 
     # check that all metrics are present
     assert len(evaluation.metrics) == 4

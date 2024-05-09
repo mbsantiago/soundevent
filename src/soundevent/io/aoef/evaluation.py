@@ -14,14 +14,8 @@ from .match import MatchAdapter, MatchObject
 from .note import NoteAdapter
 from .recording import RecordingAdapter, RecordingObject
 from .sequence import SequenceAdapter, SequenceObject
-from .sequence_annotation import (
-    SequenceAnnotationAdapter,
-    SequenceAnnotationObject,
-)
-from .sequence_prediction import (
-    SequencePredictionAdapter,
-    SequencePredictionObject,
-)
+from .sequence_annotation import SequenceAnnotationAdapter, SequenceAnnotationObject
+from .sequence_prediction import SequencePredictionAdapter, SequencePredictionObject
 from .sound_event import SoundEventAdapter, SoundEventObject
 from .sound_event_annotation import (
     SoundEventAnnotationAdapter,
@@ -69,19 +63,11 @@ class EvaluationAdapter:
         sound_event_adapter: Optional[SoundEventAdapter] = None,
         sequence_adapter: Optional[SequenceAdapter] = None,
         clip_adapter: Optional[ClipAdapter] = None,
-        sound_event_annotation_adapter: Optional[
-            SoundEventAnnotationAdapter
-        ] = None,
-        sequence_annotation_adapter: Optional[
-            SequenceAnnotationAdapter
-        ] = None,
+        sound_event_annotation_adapter: Optional[SoundEventAnnotationAdapter] = None,
+        sequence_annotation_adapter: Optional[SequenceAnnotationAdapter] = None,
         clip_annotations_adapter: Optional[ClipAnnotationsAdapter] = None,
-        sound_event_prediction_adapter: Optional[
-            SoundEventPredictionAdapter
-        ] = None,
-        sequence_prediction_adapter: Optional[
-            SequencePredictionAdapter
-        ] = None,
+        sound_event_prediction_adapter: Optional[SoundEventPredictionAdapter] = None,
+        sequence_prediction_adapter: Optional[SequencePredictionAdapter] = None,
         clip_predictions_adapter: Optional[ClipPredictionsAdapter] = None,
         clip_evaluation_adapter: Optional[ClipEvaluationAdapter] = None,
         match_adapter: Optional[MatchAdapter] = None,
@@ -158,14 +144,11 @@ class EvaluationAdapter:
             self.sound_event_annotation_adapter,
             self.sound_event_prediction_adapter,
         )
-        self.clip_evaluation_adapter = (
-            clip_evaluation_adapter
-            or ClipEvaluationAdapter(
-                self.clip_annotations_adapter,
-                self.clip_predictions_adapter,
-                self.note_adapter,
-                self.match_adapter,
-            )
+        self.clip_evaluation_adapter = clip_evaluation_adapter or ClipEvaluationAdapter(
+            self.clip_annotations_adapter,
+            self.clip_predictions_adapter,
+            self.note_adapter,
+            self.match_adapter,
         )
 
     def to_aoef(self, obj: data.Evaluation) -> EvaluationObject:
@@ -225,9 +208,7 @@ class EvaluationAdapter:
             self.clip_adapter.to_soundevent(clip)
 
         for sound_event_annotation in obj.sound_event_annotations or []:
-            self.sound_event_annotation_adapter.to_soundevent(
-                sound_event_annotation
-            )
+            self.sound_event_annotation_adapter.to_soundevent(sound_event_annotation)
 
         for sequence_annotation in obj.sequence_annotations or []:
             self.sequence_annotation_adapter.to_soundevent(sequence_annotation)
@@ -236,9 +217,7 @@ class EvaluationAdapter:
             self.clip_annotations_adapter.to_soundevent(clip_annotation)
 
         for sound_event_prediction in obj.sound_event_predictions or []:
-            self.sound_event_prediction_adapter.to_soundevent(
-                sound_event_prediction
-            )
+            self.sound_event_prediction_adapter.to_soundevent(sound_event_prediction)
 
         for sequence_prediction in obj.sequence_predictions or []:
             self.sequence_prediction_adapter.to_soundevent(sequence_prediction)
