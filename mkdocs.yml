@@ -15,6 +15,7 @@ nav:
   - Reference:
       - data: reference/data.md
       - io: reference/io.md
+      - arrays: reference/arrays.md
       - audio: reference/audio.md
       - geometry: reference/geometry.md
       - evaluation: reference/evaluation.md
@@ -100,6 +101,9 @@ markdown_extensions:
   - pymdownx.critic
   - pymdownx.keys
   - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - pymdownx.superfences:
       preserve_tabs: true
       custom_fences:

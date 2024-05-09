@@ -20,6 +20,7 @@ from soundevent.geometry.features import (
 )
 from soundevent.geometry.html import geometry_to_html
 from soundevent.geometry.operations import buffer_geometry, compute_bounds
+from soundevent.geometry.positions import get_geometry_point
 
 __all__ = [
     "GeometricFeature",
@@ -28,4 +29,5 @@ __all__ = [
     "compute_geometric_features",
     "geometry_to_html",
     "geometry_to_shapely",
+    "get_geometry_point",
 ]
