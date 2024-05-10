@@ -1,4 +1,4 @@
-"""Test suite for the soundevent.io.crowsetta.sequence module"""
+"""Test suite for the soundevent.io.crowsetta.sequence module."""
 
 from typing import List
 

@@ -1,3 +1,11 @@
+"""Module for converting between SoundEvent annotations and Crowsetta bounding boxes.
+
+This module provides functions to seamlessly convert between
+`SoundEventAnnotation` objects, containing sound event information with
+bounding box geometries, and `crowsetta.BBox` objects used by the Crowsetta
+tool.
+"""
+
 from typing import List, Optional, Tuple
 
 from crowsetta import BBox

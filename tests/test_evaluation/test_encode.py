@@ -26,7 +26,7 @@ def tags(
 def encoder(
     tags: Sequence[data.Tag],
 ) -> Encoder:
-    """Encoder for testing."""
+    """Encode for testing."""
     target_tags = tags[:5]
     return create_tag_encoder(target_tags)
 

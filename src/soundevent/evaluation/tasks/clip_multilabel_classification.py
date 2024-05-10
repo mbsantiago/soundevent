@@ -97,9 +97,7 @@ def _compute_overall_metrics(
     true_classes,
     predicted_classes_scores,
 ) -> List[data.Feature]:
-    """Compute evaluation metrics based on true classes and predicted
-    scores.
-    """
+    """Compute evaluation metrics based on true classes and predicted scores."""
     return [
         data.Feature(
             name=metric.__name__,

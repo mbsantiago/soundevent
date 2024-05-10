@@ -88,9 +88,7 @@ def _evaluate_clips(
 
 
 def compute_overall_metrics(true_classes, predicted_classes_scores):
-    """Compute evaluation metrics based on true classes and predicted
-    scores.
-    """
+    """Compute evaluation metrics based on true classes and predicted scores."""
     evaluation_metrics = [
         data.Feature(
             name=metric.__name__,

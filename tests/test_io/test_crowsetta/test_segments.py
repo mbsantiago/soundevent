@@ -1,4 +1,4 @@
-"""Test suite for the soundevent.io.crowsetta.segments module"""
+"""Test suite for the soundevent.io.crowsetta.segments module."""
 
 import crowsetta
 import pytest

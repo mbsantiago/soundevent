@@ -1,4 +1,4 @@
-"""Test suite for the soundevent.io.crowsetta.bbox module"""
+"""Test suite for the soundevent.io.crowsetta.bbox module."""
 
 import crowsetta
 import pytest

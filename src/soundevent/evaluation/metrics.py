@@ -154,8 +154,7 @@ def average_precision(
     y_true: np.ndarray,
     y_score: np.ndarray,
 ) -> float:
-    """Compute the average precision score for the given true and predicted
-    labels.
+    """Compute the average precision score for the given true and predicted labels.
 
     Parameters
     ----------
@@ -189,8 +188,7 @@ def mean_average_precision(
     y_true: np.ndarray,
     y_score: np.ndarray,
 ) -> float:
-    """Compute the mean average precision score for the given true and
-    predicted labels.
+    """Compute the mean average precision score for the given true and predicted labels.
 
     Parameters
     ----------

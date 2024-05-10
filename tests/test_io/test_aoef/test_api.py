@@ -30,9 +30,7 @@ def test_load_fails_if_file_is_not_a_json_file(tmp_path):
 
 
 def test_load_fails_if_collection_type_is_not_supported(tmp_path):
-    """Test that the load function fails if the collection type is not
-    supported.
-    """
+    """Test that the load function fails if the collection type is not supported."""
     # Arrange
     path = tmp_path / "collection_type_not_supported.json"
     path.write_text(
@@ -51,9 +49,7 @@ def test_load_fails_if_collection_type_is_not_supported(tmp_path):
 
 
 def test_load_fails_if_aoef_version_is_not_supported(tmp_path):
-    """Test that the load function fails if the aoef version is not
-    supported.
-    """
+    """Test that the load function fails if the aoef version is not supported."""
     # Arrange
     path = tmp_path / "aoef_version_not_supported.json"
     path.write_text(
@@ -92,9 +88,7 @@ def test_save_fails_if_trying_to_save_unsupported_collection_type(
     tmp_path: Path,
     clip_evaluation: data.ClipEvaluation,
 ):
-    """Test that the save function fails if trying to save an unsupported
-    collection type.
-    """
+    """Test that the save function fails if trying to save an unsupported collection type."""
     # Arrange
     path = tmp_path / "unsupported_collection_type.json"
 

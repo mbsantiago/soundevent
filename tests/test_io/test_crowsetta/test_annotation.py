@@ -1,4 +1,4 @@
-"""Test suite for the soundevent.io.crowsetta.annotation module"""
+"""Test suite for the soundevent.io.crowsetta.annotation module."""
 
 import datetime
 from pathlib import Path

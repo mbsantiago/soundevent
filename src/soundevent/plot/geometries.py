@@ -34,6 +34,7 @@ def plot_geometry(
     ax: Optional[Axes] = None,
     **kwargs,
 ) -> Axes:
+    """Plot a geometry in the given ax."""
     if ax is None:
         ax = create_axes(**kwargs)
 

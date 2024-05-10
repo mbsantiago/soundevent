@@ -214,9 +214,7 @@ def test_overall_score_is_the_mean_of_the_scores_of_all_evaluated_clips(
     prediction_set: data.PredictionSet,
     evaluation_tags: List[data.Tag],
 ):
-    """Test that the overall score is the mean of the scores of all evaluated
-    examples.
-    """
+    """Test that the overall score is the mean of the scores of all evaluated examples."""
     evaluation = clip_classification(
         clip_annotations=annotation_set.clip_annotations,
         clip_predictions=prediction_set.clip_predictions,

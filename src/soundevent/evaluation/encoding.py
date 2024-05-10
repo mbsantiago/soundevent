@@ -117,7 +117,7 @@ def classification_encoding(
     tags: Sequence[data.Tag],
     encoder: Encoder,
 ) -> Optional[int]:
-    """Encodes a list of tags into an integer value.
+    """Encode a list of tags into an integer value.
 
     This function is commonly used for mapping a list of tags to a compact
     integer representation, typically representing classes associated with
@@ -171,7 +171,7 @@ def multilabel_encoding(
     tags: Sequence[data.Tag],
     encoder: Encoder,
 ) -> np.ndarray:
-    """Encodes a list of tags into a binary multilabel array.
+    """Encode a list of tags into a binary multilabel array.
 
     Parameters
     ----------
@@ -226,7 +226,7 @@ def prediction_encoding(
     tags: Sequence[data.PredictedTag],
     encoder: Encoder,
 ) -> np.ndarray:
-    """Encodes a list of predicted tags into a floating-point array of scores.
+    """Encode a list of predicted tags into a floating-point array of scores.
 
     Parameters
     ----------

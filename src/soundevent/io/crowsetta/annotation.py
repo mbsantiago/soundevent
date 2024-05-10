@@ -1,3 +1,10 @@
+"""Module for converting between ClipAnnotation and Crowsetta annotation formats.
+
+This module provides functions to facilitate the interoperability between sound
+event data represented in the SoundEvent library's `ClipAnnotation` format and
+the `crowsetta.Annotation` format used by the Crowsetta tool.
+"""
+
 import os
 from pathlib import Path
 from typing import List, Literal, Optional, Union

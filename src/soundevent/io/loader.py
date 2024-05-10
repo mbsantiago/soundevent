@@ -1,3 +1,9 @@
+"""Module for loading sound event data in various formats.
+
+This module provides a flexible `load` function to load different types of sound
+event data.
+"""
+
 import sys
 from typing import Dict, Optional, overload
 
