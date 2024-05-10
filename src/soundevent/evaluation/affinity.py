@@ -84,7 +84,6 @@ def compute_affinity(
     >>> affinity
     0.75
     """
-
     geometry1 = _prepare_geometry(geometry1, time_buffer, freq_buffer)
     geometry2 = _prepare_geometry(geometry2, time_buffer, freq_buffer)
 

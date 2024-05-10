@@ -19,7 +19,7 @@ objects encountered in bioacoustic analysis. These include:
 
 Delving into the core of acoustic analysis, we have schemas for:
 
-- [Recordings](audio_content.md#recordins): Complete audio files.
+- [Recordings](audio_content.md#recordings): Complete audio files.
 - [Dataset](audio_content.md#datasets): A collection of recordings from a common
   source.
 

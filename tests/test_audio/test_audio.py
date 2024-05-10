@@ -9,7 +9,6 @@ import xarray as xr
 from hypothesis import HealthCheck, given, settings
 from hypothesis import strategies as st
 from scipy.io import wavfile
-
 from soundevent import data
 from soundevent.audio.io import load_clip, load_recording
 
@@ -53,11 +52,6 @@ def test_load_recording(
     assert wav.dims == ("time", "channel")
     assert wav.coords["time"].shape == (int(samplerate * duration),)
     assert wav.coords["channel"].shape == (channels,)
-
-    # Check that the wav has the correct metadata
-    assert wav.attrs["samplerate"] == samplerate
-    assert wav.attrs["time_expansion"] == time_expansion
-    assert wav.attrs["time_units"] == "seconds"
 
 
 @given(
@@ -114,20 +108,15 @@ def test_read_clip(
     # Check that clip is the correct shape
     assert isinstance(clip_wav, xr.DataArray)
     assert clip_wav.shape == (
-        int(np.ceil(samplerate * clip_duration)),
+        int(np.floor(samplerate * clip_duration)),
         channels,
     )
     assert clip_wav.dtype == np.float32
     assert clip_wav.dims == ("time", "channel")
 
-    # Check that the wav has the correct metadata
-    assert clip_wav.attrs["samplerate"] == samplerate
-    assert clip_wav.attrs["time_expansion"] == time_expansion
-    assert clip_wav.attrs["time_units"] == "seconds"
-
     # Check that the clip is the same as the original wav
     start_index = int(np.floor(clip.start_time * samplerate))
-    clip_samples = int(np.ceil(clip_duration * samplerate))
+    clip_samples = int(np.floor(clip_duration * samplerate))
     end_index = start_index + clip_samples
     assert np.allclose(clip_wav, wav[start_index:end_index, :])
     assert np.allclose(
@@ -143,7 +132,6 @@ def test_read_clip(
     # Check that we can slice the recording array to get the same clip
     # Load recording with xarray.
     rec_xr = load_recording(recording)
-    assert rec_xr.attrs["samplerate"] == samplerate
     assert rec_xr.shape == (samples, channels)
     assert np.allclose(
         clip_wav.data,

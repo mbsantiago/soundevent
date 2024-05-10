@@ -1,11 +1,10 @@
-"""Test suite for the soundevent.io.crowsetta.annotation module"""
+"""Test suite for the soundevent.io.crowsetta.annotation module."""
 
 import datetime
 from pathlib import Path
 
 import crowsetta
 import pytest
-
 import soundevent.io.crowsetta as crowsetta_io
 from soundevent import data
 from soundevent.io.crowsetta.segment import create_crowsetta_segment

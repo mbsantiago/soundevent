@@ -5,7 +5,6 @@ from dataclasses import dataclass
 from typing import List
 
 import pytest
-
 from soundevent import data
 
 
@@ -280,7 +279,6 @@ def test_invalid_time_interval_fails():
 
 def test_invalid_bounding_box_fails():
     """Test that an invalid bounds fails."""
-
     # No negative time
     with pytest.raises(ValueError):
         data.BoundingBox(coordinates=[-1, 0, 0, 1])

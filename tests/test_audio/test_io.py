@@ -1,9 +1,8 @@
-from typing import Optional
 from pathlib import Path
+from typing import Optional
 
 import numpy as np
 import pytest
-
 from soundevent.audio.io import audio_to_bytes, load_audio
 
 

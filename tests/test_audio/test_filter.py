@@ -6,7 +6,6 @@ import numpy as np
 import pytest
 import xarray as xr
 from scipy import signal
-
 from soundevent import audio
 
 

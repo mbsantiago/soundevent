@@ -1,15 +1,13 @@
 import sys
 import warnings
-
-import pytest
-
-warnings.filterwarnings("ignore", category=UserWarning, module="crowsetta")
-from pathlib import Path
+from pathlib import Path  # noqa: E402
 
 import crowsetta
-
-from soundevent import data
+import pytest
 import soundevent.io.crowsetta as crowsetta_io
+from soundevent import data
+
+warnings.filterwarnings("ignore", category=UserWarning, module="crowsetta")
 
 
 @pytest.mark.skipif(

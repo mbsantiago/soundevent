@@ -1,4 +1,4 @@
-"""Test Suite for the soundevent.io.crowsetta.labels module"""
+"""Test Suite for the soundevent.io.crowsetta.labels module."""
 
 import soundevent.io.crowsetta as crowsetta_io
 from soundevent import data

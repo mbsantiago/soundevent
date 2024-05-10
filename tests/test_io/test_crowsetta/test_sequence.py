@@ -1,11 +1,10 @@
-"""Test suite for the soundevent.io.crowsetta.sequence module"""
+"""Test suite for the soundevent.io.crowsetta.sequence module."""
 
 from typing import List
 
 import crowsetta
 import numpy as np
 import pytest
-
 import soundevent.io.crowsetta as crowsetta_io
 from soundevent import data
 from soundevent.io.crowsetta.segment import create_crowsetta_segment

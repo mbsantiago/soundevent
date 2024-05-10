@@ -3,7 +3,6 @@
 import numpy as np
 import pytest
 import xarray as xr
-
 from soundevent import audio
 
 

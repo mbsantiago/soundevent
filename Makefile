@@ -23,16 +23,20 @@ install:          ## Install the project in dev mode.
 
 .PHONY: fmt
 fmt:              ## Format code using black & isort.
-	$(ENV_PREFIX)isort $(PROJECT_NAME)/
-	$(ENV_PREFIX)black $(PROJECT_NAME)/
-	$(ENV_PREFIX)black tests/
+	$(ENV_PREFIX)ruff format $(PROJECT_NAME)/
+	$(ENV_PREFIX)ruff format tests/
+
+.PHONY: lint-mypy
+lint-pyright:
+	$(ENV_PREFIX)pyright $(PROJECT_NAME)/
+
+.PHONY: lint-ruff
+lint-ruff:
+	$(ENV_PREFIX)ruff check $(PROJECT_NAME)/
+	$(ENV_PREFIX)ruff check tests/
 
 .PHONY: lint
-lint:             ## Run ruff, black, mypy linters.
-	$(ENV_PREFIX)ruff $(PROJECT_NAME)/
-	$(ENV_PREFIX)black --check $(PROJECT_NAME)/
-	$(ENV_PREFIX)black --check tests/
-	$(ENV_PREFIX)mypy $(PROJECT_NAME)/ --config-file pyproject.toml
+lint: lint-mypy lint-ruff
 
 .PHONY: test-watch
 test-watch:    ## Run tests and generate coverage report.

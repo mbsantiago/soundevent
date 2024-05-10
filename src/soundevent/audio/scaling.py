@@ -2,9 +2,9 @@
 
 from typing import Literal
 
-import numpy as np
 import xarray as xr
 
+from soundevent.arrays import get_dim_step
 from soundevent.audio.spectrum import (
     amplitude_to_db,
     db_to_amplitude,
@@ -34,7 +34,7 @@ def clamp_amplitude(
 
     Parameters
     ----------
-    spectogram
+    spec
         Spectrogram with clamped amplitude values.
     min_dB : float
         Minimum amplitude value in dB. Defaults to -80.
@@ -56,18 +56,7 @@ def clamp_amplitude(
         min_dB = db_to_power(min_dB)
         max_dB = db_to_power(max_dB)
 
-    data = np.clip(spec.data, min_dB, max_dB)
-
-    return xr.DataArray(
-        data,
-        dims=spec.dims,
-        coords=spec.coords,
-        attrs={
-            **spec.attrs,
-            "min_dB": min_dB,
-            "max_dB": max_dB,
-        },
-    )
+    return spec.clip(min=min_dB, max=max_dB, keep_attrs=True)
 
 
 def scale_amplitude(
@@ -131,9 +120,12 @@ def pcen(spec: xr.DataArray, **kwargs) -> xr.DataArray:
     Uses librosa.pcen implementation. If sr and hop_length are not provided,
     they will be inferred from the spectrogram attributes.
     """
-    sr = spec.attrs["samplerate"]
+    step = get_dim_step(spec, "time")
+    sr = 1 / step
+
     hop_length = int(spec.attrs["hop_size"] * sr)
     time_axis: int = spec.get_axis_num("time")  # type: ignore
+
     data = pcen_core(
         spec.data,
         **{
@@ -143,6 +135,7 @@ def pcen(spec: xr.DataArray, **kwargs) -> xr.DataArray:
             **kwargs,
         },
     )
+
     return xr.DataArray(
         data,
         dims=spec.dims,

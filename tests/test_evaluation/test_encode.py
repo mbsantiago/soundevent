@@ -4,7 +4,6 @@ from typing import Callable, Sequence
 
 import numpy as np
 import pytest
-
 from soundevent import data
 from soundevent.evaluation import (
     classification_encoding,
@@ -17,7 +16,7 @@ from soundevent.evaluation.encoding import Encoder
 
 @pytest.fixture
 def tags(
-    random_tags: Callable[[int], Sequence[data.Tag]]
+    random_tags: Callable[[int], Sequence[data.Tag]],
 ) -> Sequence[data.Tag]:
     """Tags for testing."""
     return random_tags(10)
@@ -27,7 +26,7 @@ def tags(
 def encoder(
     tags: Sequence[data.Tag],
 ) -> Encoder:
-    """Encoder for testing."""
+    """Encode for testing."""
     target_tags = tags[:5]
     return create_tag_encoder(target_tags)
 
@@ -37,7 +36,6 @@ def test_classification_encoding(
     encoder: Encoder,
 ):
     """Test encoding objects with tags."""
-
     encoded = classification_encoding(
         tags=[tags[3]],
         encoder=encoder,

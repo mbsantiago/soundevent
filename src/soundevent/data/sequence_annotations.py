@@ -25,7 +25,9 @@ class SequenceAnnotation(BaseModel):
         A unique identifier for the annotation.
     sequence
         The sequence being annotated.
-    notes
+
+    Notes
+    -----
         A list of notes associated with the sequence.
     tags
         The tags attached to the sequence providing semantic information.

@@ -1,3 +1,10 @@
+"""Module for saving sound event data in various formats.
+
+This module provides a versatile `save` function for storing different types of
+sound event data. Data can be saved in formats compatible with the
+`soundevent.io.load` function.
+"""
+
 from typing import Dict, Optional
 
 from soundevent import data
@@ -42,7 +49,6 @@ def save(
         Format to save the data in. If `None`, the format will be inferred
         from the file extension.
     """
-
     if format is None:
         format = infer_format(path)
 

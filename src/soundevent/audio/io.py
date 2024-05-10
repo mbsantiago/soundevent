@@ -12,6 +12,7 @@ import soundfile as sf
 import xarray as xr
 
 from soundevent import data
+from soundevent.arrays import Dimensions, create_time_range
 from soundevent.audio.chunks import parse_into_chunks
 from soundevent.audio.media_info import extract_media_info_from_chunks
 from soundevent.audio.raw import RawData
@@ -128,20 +129,16 @@ def load_recording(
         data=data,
         dims=("time", "channel"),
         coords={
-            "time": np.linspace(
-                0,
-                recording.duration,
-                data.shape[0],
-                endpoint=False,
+            Dimensions.time.value: create_time_range(
+                start_time=0,
+                end_time=recording.duration,
+                samplerate=recording.samplerate,
             ),
-            "channel": range(data.shape[1]),
+            Dimensions.channel.value: range(data.shape[1]),
         },
         attrs={
-            "recording_id": recording.uuid,
-            "path": recording.path,
-            "time_units": "seconds",
-            "time_expansion": recording.time_expansion,
-            "samplerate": recording.samplerate,
+            "recording_id": str(recording.uuid),
+            "path": str(recording.path),
         },
     )
 
@@ -173,7 +170,7 @@ def load_clip(
 
     offset = int(np.floor(clip.start_time * samplerate))
     duration = clip.end_time - clip.start_time
-    samples = int(np.ceil(duration * samplerate))
+    samples = int(np.floor(duration * samplerate))
 
     path = recording.path
     if audio_dir is not None:
@@ -185,11 +182,11 @@ def load_clip(
         samples=samples,
     )
 
-    # Adjust start and end time to be on sample boundaries. This is necessary
-    # because the specified start and end time might not align precisely with
-    # the sampling moments of the audio. By aligning with the sample
-    # boundaries, we ensure that any time location within the clip, relative to
-    # the original audio file, remains accurate.
+    # NOTE: Adjust start and end time to be on sample boundaries. This is
+    # necessary because the specified start and end time might not align
+    # precisely with the sampling moments of the audio. By aligning with the
+    # sample boundaries, we ensure that any time location within the clip,
+    # relative to the original audio file, remains accurate.
     start_time = offset / samplerate
     end_time = start_time + samples / samplerate
 
@@ -197,21 +194,17 @@ def load_clip(
         data=data,
         dims=("time", "channel"),
         coords={
-            "time": np.linspace(
-                start_time,
-                end_time,
-                data.shape[0],
-                endpoint=False,
+            Dimensions.time.value: create_time_range(
+                start_time=start_time,
+                end_time=end_time,
+                samplerate=samplerate,
             ),
-            "channel": range(data.shape[1]),
+            Dimensions.channel.value: range(data.shape[1]),
         },
         attrs={
-            "recording_id": recording.uuid,
-            "clip_id": clip.uuid,
-            "path": recording.path,
-            "time_units": "seconds",
-            "time_expansion": recording.time_expansion,
-            "samplerate": recording.samplerate,
+            "recording_id": str(recording.uuid),
+            "clip_id": str(clip.uuid),
+            "path": str(recording.path),
         },
     )
 

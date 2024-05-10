@@ -226,7 +226,6 @@ def generate_wav_header(
     The structure of the WAV header is described in
     (WAV PCM soundfile format)[http://soundfile.sapp.org/doc/WaveFormat/].
     """
-
     data_size = samples * channels * bit_depth // 8
     byte_rate = samplerate * channels * bit_depth // 8
     block_align = channels * bit_depth // 8

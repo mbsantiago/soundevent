@@ -1,7 +1,6 @@
 """Test Suite for geometry conversion functions."""
 
 import shapely
-
 from soundevent import data, geometry
 
 

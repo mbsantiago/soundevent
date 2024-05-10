@@ -1,10 +1,9 @@
-"""Test suite for the soundevent.io.crowsetta.bbox module"""
+"""Test suite for the soundevent.io.crowsetta.bbox module."""
 
 import crowsetta
 import pytest
-
-from soundevent import data
 import soundevent.io.crowsetta as crowsetta_io
+from soundevent import data
 
 
 @pytest.fixture

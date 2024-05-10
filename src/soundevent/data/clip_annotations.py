@@ -43,7 +43,9 @@ class ClipAnnotation(BaseModel):
     annotations
         A list of Annotation instances representing detailed annotations of
         sound events in the clip.
-    notes
+
+    Notes
+    -----
         A list of Note instances representing additional contextual
         information or remarks associated with the clip.
     """

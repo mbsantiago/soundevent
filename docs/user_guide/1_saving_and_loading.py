@@ -1,4 +1,4 @@
-"""# Saving and Loading data
+"""# Saving and Loading data.
 
 In `soundevent`, we use the **Acoustic Objects Exchange Format** (**AOEF**) for
 storing and exchanging audio objects. **AOEF** is a JSON-based format
@@ -88,8 +88,8 @@ print(json.dumps(annotation_contents, indent=2))
 # ### Loading Annotation Projects
 # The [`load`][soundevent.io.load]
 # function can be used to load the annotations into Python and obtain an
-# [`AnnotationProject`](../../data_schemas/annotation.md#annotation_projects) object
-# directly.
+# [`AnnotationProject`](../../data_schemas/annotation.md#annotation_project)
+# object directly.
 
 nips4b_sample = io.load(annotation_path, type="annotation_set")
 print(repr(nips4b_sample))
@@ -130,8 +130,8 @@ io.save(nips4b_sample, "nips4b_plus_sample.json")
 # [`save`][soundevent.io.save] and
 # [`load`][soundevent.io.load] functions, respectively. The
 # loading function reads the **AOEF** file and returns a
-# [`ModelRun`](../../data_schemas/prediction.md#model_run) object that can be used
-# for further analysis.
+# [`ModelRun`](../../data_schemas/prediction.md#model_runs) object that can be
+# used for further analysis.
 #
 # By utilizing the saving and loading functions provided by soundevent, you can
 # easily manage and exchange acoustic data objects in AOEF format, promoting

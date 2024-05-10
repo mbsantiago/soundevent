@@ -76,10 +76,12 @@ def amplitude_to_db(
 
 
 def db_to_power(value: float) -> float:
+    """Convert dB to power."""
     return np.power(10.0, value * 0.1)
 
 
 def db_to_amplitude(value: float) -> float:
+    """Convert dB to amplitude."""
     return db_to_power(value) ** 0.5
 
 
@@ -100,7 +102,7 @@ def pcen_core(
     max_axis: Optional[int] = None,
     zi: Optional[np.ndarray] = None,
 ) -> np.ndarray:
-    """Per-channel energy normalization (PCEN)
+    """Per-channel energy normalization (PCEN).
 
     Notes
     -----

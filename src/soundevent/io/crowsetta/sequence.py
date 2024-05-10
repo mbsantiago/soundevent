@@ -1,3 +1,10 @@
+"""Module for converting between SoundEvent annotations and Crowsetta sequences.
+
+This module facilitates the conversion between sequences of
+`SoundEventAnnotation` objects, used within the SoundEvent library, and
+`crowsetta.Sequence` objects employed by the Crowsetta tool.
+"""
+
 from typing import List, Optional, Sequence
 
 import crowsetta
@@ -52,7 +59,6 @@ def sequence_from_annotations(
     ValueError
         If an annotation cannot be converted and `ignore_errors` is False.
     """
-
     segments = []
 
     for annotation in annotations:

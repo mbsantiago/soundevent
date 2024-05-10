@@ -134,7 +134,6 @@ def jaccard(
     for each class. This function will convert the probabilities to binary
     predictions using the given threshold.
     """
-
     if y_true.ndim == 1:
         y_true = y_true[np.newaxis, :]
 
@@ -155,8 +154,7 @@ def average_precision(
     y_true: np.ndarray,
     y_score: np.ndarray,
 ) -> float:
-    """Compute the average precision score for the given true and predicted
-    labels.
+    """Compute the average precision score for the given true and predicted labels.
 
     Parameters
     ----------
@@ -190,8 +188,7 @@ def mean_average_precision(
     y_true: np.ndarray,
     y_score: np.ndarray,
 ) -> float:
-    """Compute the mean average precision score for the given true and
-    predicted labels.
+    """Compute the mean average precision score for the given true and predicted labels.
 
     Parameters
     ----------
