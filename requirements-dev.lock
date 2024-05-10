@@ -23,7 +23,6 @@ babel==2.14.0
     # via mkdocs-material
 birdsong-recognition-dataset==0.3.2.post1
     # via crowsetta
-black==24.4.2
 cachetools==5.3.3
     # via tox
 certifi==2024.2.2
@@ -35,7 +34,6 @@ chardet==5.2.0
 charset-normalizer==3.3.2
     # via requests
 click==8.1.7
-    # via black
     # via mkdocs
     # via mkdocstrings
 colorama==0.4.6
@@ -143,11 +141,10 @@ mkdocstrings-python==1.10.0
     # via mkdocstrings
 multimethod==1.10
     # via pandera
-mypy==1.10.0
 mypy-extensions==1.0.0
-    # via black
-    # via mypy
     # via typing-inspect
+nodeenv==1.8.0
+    # via pyright
 numpy==1.24.4
     # via birdsong-recognition-dataset
     # via contourpy
@@ -161,7 +158,6 @@ numpy==1.24.4
     # via shapely
     # via xarray
 packaging==24.0
-    # via black
     # via matplotlib
     # via mkdocs
     # via mkdocs-gallery
@@ -179,12 +175,10 @@ pandas==2.0.3
 pandera==0.18.3
     # via crowsetta
 pathspec==0.12.1
-    # via black
     # via mkdocs
 pillow==10.3.0
     # via matplotlib
 platformdirs==4.2.1
-    # via black
     # via mkdocs-get-deps
     # via mkdocstrings
     # via tox
@@ -211,6 +205,7 @@ pyparsing==3.1.2
     # via matplotlib
 pyproject-api==1.6.1
     # via tox
+pyright==1.1.362
 pytest==8.1.2
     # via pytest-cov
     # via pytest-testmon
@@ -248,6 +243,8 @@ scipy==1.10.1
     # via evfuncs
     # via scikit-learn
     # via soundevent
+setuptools==69.5.1
+    # via nodeenv
 shapely==2.0.4
     # via soundevent
 six==1.16.0
@@ -263,9 +260,7 @@ soundfile==0.12.1
 threadpoolctl==3.4.0
     # via scikit-learn
 tomli==2.0.1
-    # via black
     # via coverage
-    # via mypy
     # via pyproject-api
     # via pytest
     # via tox
@@ -276,9 +271,7 @@ typeguard==4.2.1
     # via pandera
 typing-extensions==4.11.0
     # via annotated-types
-    # via black
     # via mkdocstrings
-    # via mypy
     # via pydantic
     # via pydantic-core
     # via typeguard

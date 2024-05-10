@@ -908,7 +908,7 @@ def geometry_validate(
         if not hasattr(obj, "type"):
             raise ValueError(f"Object {obj} does not have a type attribute.")
 
-        geom_type = obj.type
+        geom_type = obj.type  # type: ignore
 
     if geom_type not in GEOMETRY_MAPPING:
         raise ValueError(f"Object {obj} does not have a geometry valid type.")

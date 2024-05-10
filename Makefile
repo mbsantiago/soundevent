@@ -26,11 +26,17 @@ fmt:              ## Format code using black & isort.
 	$(ENV_PREFIX)ruff format $(PROJECT_NAME)/
 	$(ENV_PREFIX)ruff format tests/
 
-.PHONY: lint
-lint:             ## Run ruff, black, mypy linters.
+.PHONY: lint-mypy
+lint-pyright:
+	$(ENV_PREFIX)pyright $(PROJECT_NAME)/
+
+.PHONY: lint-ruff
+lint-ruff:
 	$(ENV_PREFIX)ruff check $(PROJECT_NAME)/
 	$(ENV_PREFIX)ruff check tests/
-	$(ENV_PREFIX)mypy $(PROJECT_NAME)/ --config-file pyproject.toml
+
+.PHONY: lint
+lint: lint-mypy lint-ruff
 
 .PHONY: test-watch
 test-watch:    ## Run tests and generate coverage report.

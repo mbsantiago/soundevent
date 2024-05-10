@@ -23,7 +23,7 @@ EMPTY_LABEL = "__empty__"
 
 
 LabelToTagFn = Callable[[str], Union[List[data.Tag], data.Tag]]
-LabelToTagMap = dict[str, Union[List[data.Tag], data.Tag]]
+LabelToTagMap = Dict[str, Union[List[data.Tag], data.Tag]]
 
 
 def label_to_tags(
@@ -110,7 +110,7 @@ def label_to_tags(
 def label_from_tag(
     tag: data.Tag,
     label_fn: Optional[Callable[[data.Tag], str]] = None,
-    label_mapping: Optional[dict[data.Tag, str]] = None,
+    label_mapping: Optional[Dict[data.Tag, str]] = None,
     value_only: bool = False,
     separator: str = ":",
 ) -> str:
