@@ -193,7 +193,10 @@ class Recording(BaseModel):
         Recording
             The recording object.
         """
-        from soundevent.audio.media_info import compute_md5_checksum, get_media_info
+        from soundevent.audio.media_info import (
+            compute_md5_checksum,
+            get_media_info,
+        )
 
         media_info = get_media_info(path)
 

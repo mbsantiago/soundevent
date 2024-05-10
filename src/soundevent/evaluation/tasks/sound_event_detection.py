@@ -20,7 +20,9 @@ __all__ = [
     "evaluate_clip",
 ]
 
-SOUNDEVENT_METRICS: Sequence[metrics.Metric] = (metrics.true_class_probability,)
+SOUNDEVENT_METRICS: Sequence[metrics.Metric] = (
+    metrics.true_class_probability,
+)
 
 EXAMPLE_METRICS: Sequence[metrics.Metric] = ()
 
@@ -87,7 +89,8 @@ def _evaluate_clips(
 
 def compute_overall_metrics(true_classes, predicted_classes_scores):
     """Compute evaluation metrics based on true classes and predicted
-    scores."""
+    scores.
+    """
     evaluation_metrics = [
         data.Feature(
             name=metric.__name__,

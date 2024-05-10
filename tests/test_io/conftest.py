@@ -3,7 +3,6 @@ from pathlib import Path
 from typing import Callable, List
 
 import pytest
-
 from soundevent import data
 
 

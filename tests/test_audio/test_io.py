@@ -1,9 +1,8 @@
-from typing import Optional
 from pathlib import Path
+from typing import Optional
 
 import numpy as np
 import pytest
-
 from soundevent.audio.io import audio_to_bytes, load_audio
 
 
@@ -27,7 +26,9 @@ def test_audio_to_bytes_has_correct_length(
     dtype: np.dtype,
 ):
     samples = int(duration * samplerate)
-    array = np.random.random(size=[int(duration * samplerate), channels]).astype(dtype)
+    array = np.random.random(
+        size=[int(duration * samplerate), channels]
+    ).astype(dtype)
 
     bytes_per_sample = (bit_depth // 8) * channels
     expected_bytes = samples * bytes_per_sample

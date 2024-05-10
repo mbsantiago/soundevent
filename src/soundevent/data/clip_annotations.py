@@ -43,7 +43,9 @@ class ClipAnnotation(BaseModel):
     annotations
         A list of Annotation instances representing detailed annotations of
         sound events in the clip.
-    notes
+
+    Notes
+    -----
         A list of Note instances representing additional contextual
         information or remarks associated with the clip.
     """
@@ -54,4 +56,6 @@ class ClipAnnotation(BaseModel):
     sequences: List[SequenceAnnotation] = Field(default_factory=list)
     tags: List[Tag] = Field(default_factory=list)
     notes: List[Note] = Field(default_factory=list)
-    created_on: datetime.datetime = Field(default_factory=datetime.datetime.now)
+    created_on: datetime.datetime = Field(
+        default_factory=datetime.datetime.now
+    )

@@ -23,10 +23,6 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install pytest hypothesis ruff mypy black html5lib
           python -m pip install ".[all]"
-      - name: Check format is correct
-        run: |
-          black --check src
-          black --check tests
       - name: Make sure types are consistent
         run: mypy --ignore-missing-imports src
       - name: Lint with ruff

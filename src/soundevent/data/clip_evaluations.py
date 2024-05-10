@@ -95,13 +95,17 @@ class ClipEvaluation(BaseModel):
         }
 
         match_targets = [
-            match.target.uuid for match in self.matches if match.target is not None
+            match.target.uuid
+            for match in self.matches
+            if match.target is not None
         ]
 
         match_targets_set = set(match_targets)
 
         match_sources = [
-            match.source.uuid for match in self.matches if match.source is not None
+            match.source.uuid
+            for match in self.matches
+            if match.source is not None
         ]
 
         match_sources_set = set(match_sources)

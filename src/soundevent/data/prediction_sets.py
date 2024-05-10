@@ -73,4 +73,6 @@ class PredictionSet(BaseModel):
 
     uuid: UUID = Field(default_factory=uuid4)
     clip_predictions: List[ClipPrediction] = Field(default_factory=list)
-    created_on: datetime.datetime = Field(default_factory=datetime.datetime.now)
+    created_on: datetime.datetime = Field(
+        default_factory=datetime.datetime.now
+    )

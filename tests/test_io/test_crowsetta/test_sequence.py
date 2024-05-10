@@ -5,7 +5,6 @@ from typing import List
 import crowsetta
 import numpy as np
 import pytest
-
 import soundevent.io.crowsetta as crowsetta_io
 from soundevent import data
 from soundevent.io.crowsetta.segment import create_crowsetta_segment
@@ -170,5 +169,7 @@ def test_sequence_to_annotations(
         recording,
     )
     assert len(annotations) == 2
-    assert all(isinstance(ann, data.SoundEventAnnotation) for ann in annotations)
+    assert all(
+        isinstance(ann, data.SoundEventAnnotation) for ann in annotations
+    )
     assert all(ann.sound_event.recording == recording for ann in annotations)

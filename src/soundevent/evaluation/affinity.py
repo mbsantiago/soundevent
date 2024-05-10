@@ -1,7 +1,11 @@
 """Measures of affinity between sound events geometries."""
 
 from soundevent import data
-from soundevent.geometry import buffer_geometry, compute_bounds, geometry_to_shapely
+from soundevent.geometry import (
+    buffer_geometry,
+    compute_bounds,
+    geometry_to_shapely,
+)
 
 __all__ = [
     "compute_affinity",
@@ -80,11 +84,13 @@ def compute_affinity(
     >>> affinity
     0.75
     """
-
     geometry1 = _prepare_geometry(geometry1, time_buffer, freq_buffer)
     geometry2 = _prepare_geometry(geometry2, time_buffer, freq_buffer)
 
-    if geometry1.type in TIME_GEOMETRY_TYPES or geometry2.type in TIME_GEOMETRY_TYPES:
+    if (
+        geometry1.type in TIME_GEOMETRY_TYPES
+        or geometry2.type in TIME_GEOMETRY_TYPES
+    ):
         return compute_affinity_in_time(geometry1, geometry2)
 
     shp1 = geometry_to_shapely(geometry1)
@@ -107,8 +113,12 @@ def compute_affinity_in_time(
     start_time1, _, end_time1, _ = compute_bounds(geometry1)
     start_time2, _, end_time2, _ = compute_bounds(geometry2)
 
-    intersection = max(0, min(end_time1, end_time2) - max(start_time1, start_time2))
-    union = (end_time1 - start_time1) + (end_time2 - start_time2) - intersection
+    intersection = max(
+        0, min(end_time1, end_time2) - max(start_time1, start_time2)
+    )
+    union = (
+        (end_time1 - start_time1) + (end_time2 - start_time2) - intersection
+    )
 
     if union == 0:
         return 0

@@ -47,7 +47,8 @@ class RecordingSetAdapter:
         obj: data.RecordingSet,
     ) -> RecordingSetObject:
         recording_objects = [
-            self.recording_adapter.to_aoef(recording) for recording in obj.recordings
+            self.recording_adapter.to_aoef(recording)
+            for recording in obj.recordings
         ]
         return RecordingSetObject(
             uuid=obj.uuid,

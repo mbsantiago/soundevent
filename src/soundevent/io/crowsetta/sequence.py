@@ -52,7 +52,6 @@ def sequence_from_annotations(
     ValueError
         If an annotation cannot be converted and `ignore_errors` is False.
     """
-
     segments = []
 
     for annotation in annotations:

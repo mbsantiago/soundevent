@@ -11,7 +11,10 @@ from .clip_predictions import ClipPredictionsAdapter, ClipPredictionsObject
 from .note import NoteAdapter
 from .recording import RecordingAdapter, RecordingObject
 from .sequence import SequenceAdapter, SequenceObject
-from .sequence_prediction import SequencePredictionAdapter, SequencePredictionObject
+from .sequence_prediction import (
+    SequencePredictionAdapter,
+    SequencePredictionObject,
+)
 from .sound_event import SoundEventAdapter, SoundEventObject
 from .sound_event_prediction import (
     SoundEventPredictionAdapter,
@@ -47,8 +50,12 @@ class PredictionSetAdapter:
         sound_event_adapter: Optional[SoundEventAdapter] = None,
         sequence_adapter: Optional[SequenceAdapter] = None,
         clip_adapter: Optional[ClipAdapter] = None,
-        sound_event_prediction_adapter: Optional[SoundEventPredictionAdapter] = None,
-        sequence_prediction_adapter: Optional[SequencePredictionAdapter] = None,
+        sound_event_prediction_adapter: Optional[
+            SoundEventPredictionAdapter
+        ] = None,
+        sequence_prediction_adapter: Optional[
+            SequencePredictionAdapter
+        ] = None,
         clip_predictions_adapter: Optional[ClipPredictionsAdapter] = None,
     ):
         self.user_adapter = user_adapter or UserAdapter()
@@ -129,7 +136,9 @@ class PredictionSetAdapter:
             self.clip_adapter.to_soundevent(clip)
 
         for sound_event_prediction in obj.sound_event_predictions or []:
-            self.sound_event_prediction_adapter.to_soundevent(sound_event_prediction)
+            self.sound_event_prediction_adapter.to_soundevent(
+                sound_event_prediction
+            )
 
         for sequence_prediction in obj.sequence_predictions or []:
             self.sequence_prediction_adapter.to_soundevent(sequence_prediction)

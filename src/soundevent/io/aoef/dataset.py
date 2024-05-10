@@ -35,7 +35,9 @@ class DatasetAdapter(RecordingSetAdapter):
     ) -> data.Dataset:
         recording_set = super().to_soundevent(obj)
         return data.Dataset(
-            **{key: value for key, value in recording_set if value is not None},
+            **{
+                key: value for key, value in recording_set if value is not None
+            },
             name=obj.name,
             description=obj.description,
         )

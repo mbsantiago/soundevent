@@ -1,7 +1,6 @@
 from pathlib import Path
 
 import pytest
-
 from soundevent.io.aoef.annotation_project import AnnotationProjectAdapter
 from soundevent.io.aoef.annotation_set import AnnotationSetAdapter
 from soundevent.io.aoef.annotation_task import AnnotationTaskAdapter

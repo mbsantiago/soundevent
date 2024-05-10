@@ -1,7 +1,7 @@
 """Test suite for the soundevent.arrays.operations module."""
 
-import pytest
 import numpy as np
+import pytest
 import xarray as xr
 from soundevent.arrays import operations as ops
 

@@ -1,6 +1,6 @@
 """crowsetta.segment module."""
 
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 import crowsetta
 
@@ -17,7 +17,7 @@ __all__ = [
 def convert_geometry_to_interval(
     geometry: data.Geometry,
     cast_to_segment: bool = False,
-) -> tuple[float, float]:
+) -> Tuple[float, float]:
     if geometry.type != "TimeInterval":
         if not cast_to_segment:
             raise ValueError(
@@ -176,7 +176,6 @@ def segment_to_annotation(
         containing a SoundEvent with the time interval, associated tags,
         notes, and creator information.
     """
-
     if notes is None:
         notes = []
 

@@ -105,7 +105,11 @@ def shapely_to_html(geometry: shapely.Geometry) -> str:
         inner_style = "; ".join(
             [
                 "display: inline",
-                ("vertical-align: top" if axis == "time" else "vertical-align: bottom"),
+                (
+                    "vertical-align: top"
+                    if axis == "time"
+                    else "vertical-align: bottom"
+                ),
             ]
         )
 

@@ -1,7 +1,6 @@
 """Test suite for soundevent.evaluation.metrics.py."""
 
 import numpy as np
-
 from soundevent.evaluation import metrics
 
 

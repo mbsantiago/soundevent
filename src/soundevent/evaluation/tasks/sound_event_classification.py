@@ -18,7 +18,9 @@ __all__ = [
     "sound_event_classification",
 ]
 
-SOUNDEVENT_METRICS: Sequence[metrics.Metric] = (metrics.true_class_probability,)
+SOUNDEVENT_METRICS: Sequence[metrics.Metric] = (
+    metrics.true_class_probability,
+)
 
 EXAMPLE_METRICS: Sequence[metrics.Metric] = ()
 
@@ -87,7 +89,8 @@ def _evaluate_clips(
 
 def _compute_overall_metrics(true_classes, predicted_classes_scores):
     """Compute evaluation metrics based on true classes and predicted
-    scores."""
+    scores.
+    """
     evaluation_metrics = [
         data.Feature(
             name=metric.__name__,
@@ -119,7 +122,9 @@ def _evaluate_clip(
         if sound_event_prediction.sound_event.uuid not in _valid_sound_events:
             continue
 
-        annotation = _valid_sound_events[sound_event_prediction.sound_event.uuid]
+        annotation = _valid_sound_events[
+            sound_event_prediction.sound_event.uuid
+        ]
         true_class, predicted_classes, match = _evaluate_sound_event(
             sound_event_prediction=sound_event_prediction,
             sound_event_annotation=annotation,
@@ -130,7 +135,9 @@ def _evaluate_clip(
         predicted_classes_scores.append(predicted_classes)
         matches.append(match)
 
-    score = np.mean([match.score for match in matches if match.score is not None])
+    score = np.mean(
+        [match.score for match in matches if match.score is not None]
+    )
 
     return (
         true_classes,
@@ -187,6 +194,8 @@ def _compute_overall_score(
     evaluated_clip: Sequence[data.ClipEvaluation],
 ) -> float:
     non_none_scores = [
-        example.score for example in evaluated_clip if example.score is not None
+        example.score
+        for example in evaluated_clip
+        if example.score is not None
     ]
     return float(np.mean(non_none_scores)) if non_none_scores else 0.0

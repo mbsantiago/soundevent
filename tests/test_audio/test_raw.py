@@ -1,7 +1,6 @@
 """Test suite for the RawData class."""
 
 import soundfile as sf
-
 from soundevent.audio.chunks import parse_into_chunks
 from soundevent.audio.raw import RawData
 

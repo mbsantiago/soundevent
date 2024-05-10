@@ -26,18 +26,26 @@ class AnnotationProjectAdapter(AnnotationSetAdapter):
         **kwargs,
     ):
         super().__init__(**kwargs)
-        self.annotation_task_adapter = annotation_task_adapter or AnnotationTaskAdapter(
-            self.clip_adapter,
-            self.user_adapter,
+        self.annotation_task_adapter = (
+            annotation_task_adapter
+            or AnnotationTaskAdapter(
+                self.clip_adapter,
+                self.user_adapter,
+            )
         )
 
     def to_aoef(  # type: ignore
         self,
         obj: data.AnnotationProject,  # type: ignore
     ) -> AnnotationProjectObject:
-        tasks = [self.annotation_task_adapter.to_aoef(task) for task in obj.tasks or []]
+        tasks = [
+            self.annotation_task_adapter.to_aoef(task)
+            for task in obj.tasks or []
+        ]
 
-        project_tags = [self.tag_adapter.to_aoef(tag).id for tag in obj.annotation_tags]
+        project_tags = [
+            self.tag_adapter.to_aoef(tag).id for tag in obj.annotation_tags
+        ]
 
         annotation_set = super().to_aoef(obj)
 
@@ -67,11 +75,16 @@ class AnnotationProjectAdapter(AnnotationSetAdapter):
         annotation_set = super().to_soundevent(obj)
 
         tasks = [
-            self.annotation_task_adapter.to_soundevent(task) for task in obj.tasks or []
+            self.annotation_task_adapter.to_soundevent(task)
+            for task in obj.tasks or []
         ]
 
         return data.AnnotationProject(
-            **{field: value for field, value in annotation_set if value is not None},
+            **{
+                field: value
+                for field, value in annotation_set
+                if value is not None
+            },
             tasks=tasks,
             name=obj.name,
             description=obj.description,

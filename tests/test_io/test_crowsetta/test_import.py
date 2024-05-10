@@ -7,9 +7,8 @@ warnings.filterwarnings("ignore", category=UserWarning, module="crowsetta")
 from pathlib import Path
 
 import crowsetta
-
-from soundevent import data
 import soundevent.io.crowsetta as crowsetta_io
+from soundevent import data
 
 
 @pytest.mark.skipif(
@@ -52,9 +51,9 @@ def test_can_import_all_example_formats(
             from_file_kwargs = {"audio_path": recording.path}
             to_annot_kwargs = {"samplerate": recording.samplerate}
 
-        annotation = scribe.from_file(example.annot_path, **from_file_kwargs).to_annot(
-            **to_annot_kwargs
-        )
+        annotation = scribe.from_file(
+            example.annot_path, **from_file_kwargs
+        ).to_annot(**to_annot_kwargs)
 
         if isinstance(annotation, list):
             annotation = annotation[0]
@@ -62,7 +61,9 @@ def test_can_import_all_example_formats(
         assert isinstance(annotation, crowsetta.Annotation)
 
         if annotation.notated_path is not None:
-            recording = recording.model_copy(update=dict(path=annotation.notated_path))
+            recording = recording.model_copy(
+                update=dict(path=annotation.notated_path)
+            )
 
         clip_annotation = crowsetta_io.annotation_to_clip_annotation(
             annotation,

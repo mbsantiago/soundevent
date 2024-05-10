@@ -9,7 +9,7 @@ the conversion of labels to tags and vice versa, and they allow users to
 customize the conversion process using various options.
 """
 
-from typing import Callable, List, Optional, Sequence, Union
+from typing import Callable, Dict, List, Optional, Sequence, Union
 
 from soundevent import data
 
@@ -30,7 +30,7 @@ def label_to_tags(
     label: str,
     tag_fn: Optional[LabelToTagFn] = None,
     tag_mapping: Optional[LabelToTagMap] = None,
-    key_mapping: Optional[dict[str, str]] = None,
+    key_mapping: Optional[Dict[str, str]] = None,
     key: Optional[str] = None,
     fallback: str = "crowsetta",
     empty_labels: Sequence[str] = (EMPTY_LABEL,),

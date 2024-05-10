@@ -5,9 +5,7 @@ import json
 from pathlib import Path
 
 import pytest
-
-from soundevent import data
-from soundevent import io
+from soundevent import data, io
 
 
 def test_load_fails_if_file_does_not_exist():
@@ -33,7 +31,8 @@ def test_load_fails_if_file_is_not_a_json_file(tmp_path):
 
 def test_load_fails_if_collection_type_is_not_supported(tmp_path):
     """Test that the load function fails if the collection type is not
-    supported."""
+    supported.
+    """
     # Arrange
     path = tmp_path / "collection_type_not_supported.json"
     path.write_text(
@@ -53,7 +52,8 @@ def test_load_fails_if_collection_type_is_not_supported(tmp_path):
 
 def test_load_fails_if_aoef_version_is_not_supported(tmp_path):
     """Test that the load function fails if the aoef version is not
-    supported."""
+    supported.
+    """
     # Arrange
     path = tmp_path / "aoef_version_not_supported.json"
     path.write_text(
@@ -71,7 +71,9 @@ def test_load_fails_if_aoef_version_is_not_supported(tmp_path):
         io.load(path)
 
 
-def test_save_creates_parent_directories(tmp_path: Path, dataset: data.Dataset):
+def test_save_creates_parent_directories(
+    tmp_path: Path, dataset: data.Dataset
+):
     """Test that the save function creates parent directories."""
     # Arrange
     path = tmp_path / "parent" / "child" / "test.json"
@@ -91,7 +93,8 @@ def test_save_fails_if_trying_to_save_unsupported_collection_type(
     clip_evaluation: data.ClipEvaluation,
 ):
     """Test that the save function fails if trying to save an unsupported
-    collection type."""
+    collection type.
+    """
     # Arrange
     path = tmp_path / "unsupported_collection_type.json"
 

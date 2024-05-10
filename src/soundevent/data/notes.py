@@ -95,7 +95,9 @@ class Note(BaseModel):
     message: str
     created_by: Optional[User] = None
     is_issue: bool = False
-    created_on: datetime.datetime = Field(default_factory=datetime.datetime.now)
+    created_on: datetime.datetime = Field(
+        default_factory=datetime.datetime.now
+    )
 
     def __hash__(self):
         """Hash the Note object."""

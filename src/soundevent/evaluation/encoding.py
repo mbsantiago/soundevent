@@ -142,10 +142,10 @@ def classification_encoding(
     --------
     Consider the following set of tags:
 
-    >>> dog = data.Tag(key='animal', value='dog')
-    >>> cat = data.Tag(key='animal', value='cat')
-    >>> brown = data.Tag(key='color', value='brown')
-    >>> blue = data.Tag(key='color', value='blue')
+    >>> dog = data.Tag(key="animal", value="dog")
+    >>> cat = data.Tag(key="animal", value="cat")
+    >>> brown = data.Tag(key="color", value="brown")
+    >>> blue = data.Tag(key="color", value="blue")
 
     If we are interested in encoding only the 'dog' and 'brown' classes, the
     following examples demonstrate how the encoding works for tag list:
@@ -193,10 +193,10 @@ def multilabel_encoding(
     --------
     Consider the following set of tags:
 
-    >>> dog = data.Tag(key='animal', value='dog')
-    >>> cat = data.Tag(key='animal', value='cat')
-    >>> brown = data.Tag(key='color', value='brown')
-    >>> blue = data.Tag(key='color', value='blue')
+    >>> dog = data.Tag(key="animal", value="dog")
+    >>> cat = data.Tag(key="animal", value="cat")
+    >>> brown = data.Tag(key="color", value="brown")
+    >>> blue = data.Tag(key="color", value="blue")
 
     And we are only interested in encoding the following two classes:
 
@@ -248,10 +248,10 @@ def prediction_encoding(
     --------
     Consider the following set of tags:
 
-    >>> dog = data.Tag(key='animal', value='dog')
-    >>> cat = data.Tag(key='animal', value='cat')
-    >>> brown = data.Tag(key='color', value='brown')
-    >>> blue = data.Tag(key='color', value='blue')
+    >>> dog = data.Tag(key="animal", value="dog")
+    >>> cat = data.Tag(key="animal", value="cat")
+    >>> brown = data.Tag(key="color", value="brown")
+    >>> blue = data.Tag(key="color", value="blue")
 
     And we are only interested in encoding the following two classes:
 
@@ -259,21 +259,32 @@ def prediction_encoding(
 
     Then the following examples show how the encoding works for predicted tags:
 
-    >>> prediction_encoding([data.PredictedTag(tag=brown, score=0.5)], encoder)
+    >>> prediction_encoding(
+    ...     [data.PredictedTag(tag=brown, score=0.5)], encoder
+    ... )
     array([0, 0.5])
-    >>> multilabel_encoding([
-    ...    data.PredictedTag(tag=dog, score=0.2),
-    ...    data.PredictedTag(tag=blue, score=0.9),
-    ... ], encoder)
+    >>> multilabel_encoding(
+    ...     [
+    ...         data.PredictedTag(tag=dog, score=0.2),
+    ...         data.PredictedTag(tag=blue, score=0.9),
+    ...     ],
+    ...     encoder,
+    ... )
     array([0.2, 0])
-    >>> multilabel_encoding([
-    ...     data.PredictedTag(tag=dog, score=0.2),
-    ...     data.PredictedTag(tag=brown, score=0.5),
-    ... ], encoder)
+    >>> multilabel_encoding(
+    ...     [
+    ...         data.PredictedTag(tag=dog, score=0.2),
+    ...         data.PredictedTag(tag=brown, score=0.5),
+    ...     ],
+    ...     encoder,
+    ... )
     array([0.2, 0.5])
-    >>> classification_encoding([
-    ...     data.PredictedTag(tag=cat, score=0.7),
-    ... ], encoder)
+    >>> classification_encoding(
+    ...     [
+    ...         data.PredictedTag(tag=cat, score=0.7),
+    ...     ],
+    ...     encoder,
+    ... )
     array([0, 0])
     """
     encoded = np.zeros(encoder.num_classes, dtype=np.float32)

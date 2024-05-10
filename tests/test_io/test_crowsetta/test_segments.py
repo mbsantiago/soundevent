@@ -2,9 +2,8 @@
 
 import crowsetta
 import pytest
-
-from soundevent import data
 import soundevent.io.crowsetta as crowsetta_io
+from soundevent import data
 from soundevent.io.crowsetta.segment import (
     create_crowsetta_segment,
 )
@@ -95,7 +94,9 @@ def test_segment_from_annotation(
 def test_segment_from_annotation_fails_if_not_a_time_interval(
     sound_event_annotation: data.SoundEventAnnotation,
 ):
-    sound_event_annotation.sound_event.geometry = data.Point(coordinates=[0.5, 1])
+    sound_event_annotation.sound_event.geometry = data.Point(
+        coordinates=[0.5, 1]
+    )
     with pytest.raises(ValueError):
         crowsetta_io.segment_from_annotation(
             sound_event_annotation,
@@ -106,7 +107,9 @@ def test_segment_from_annotation_fails_if_not_a_time_interval(
 def test_segment_from_annotation_casts_to_segment(
     sound_event_annotation: data.SoundEventAnnotation,
 ):
-    sound_event_annotation.sound_event.geometry = data.Point(coordinates=[0.5, 1])
+    sound_event_annotation.sound_event.geometry = data.Point(
+        coordinates=[0.5, 1]
+    )
     segment = crowsetta_io.segment_from_annotation(
         sound_event_annotation,
         cast_to_segment=True,

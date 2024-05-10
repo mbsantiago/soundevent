@@ -18,7 +18,9 @@ class SoundEventObject(BaseModel):
     features: Optional[Dict[str, float]] = None
 
 
-class SoundEventAdapter(DataAdapter[data.SoundEvent, SoundEventObject, UUID, UUID]):
+class SoundEventAdapter(
+    DataAdapter[data.SoundEvent, SoundEventObject, UUID, UUID]
+):
     def __init__(
         self,
         recording_adapter: RecordingAdapter,

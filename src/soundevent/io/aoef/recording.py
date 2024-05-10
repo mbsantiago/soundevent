@@ -34,7 +34,9 @@ class RecordingObject(BaseModel):
     rights: Optional[str] = None
 
 
-class RecordingAdapter(DataAdapter[data.Recording, RecordingObject, UUID, UUID]):
+class RecordingAdapter(
+    DataAdapter[data.Recording, RecordingObject, UUID, UUID]
+):
     def __init__(
         self,
         user_adapter: UserAdapter,
@@ -57,7 +59,10 @@ class RecordingAdapter(DataAdapter[data.Recording, RecordingObject, UUID, UUID])
 
         notes = [self._note_adapter.to_aoef(note) for note in obj.notes]
 
-        owners = [self._user_adapter.to_aoef(owner).uuid for owner in obj.owners or []]
+        owners = [
+            self._user_adapter.to_aoef(owner).uuid
+            for owner in obj.owners or []
+        ]
 
         path = obj.path
         if self.audio_dir is not None:
@@ -69,7 +74,9 @@ class RecordingAdapter(DataAdapter[data.Recording, RecordingObject, UUID, UUID])
             duration=obj.duration,
             channels=obj.channels,
             samplerate=obj.samplerate,
-            time_expansion=(obj.time_expansion if obj.time_expansion != 1.0 else None),
+            time_expansion=(
+                obj.time_expansion if obj.time_expansion != 1.0 else None
+            ),
             hash=obj.hash,
             date=obj.date,
             time=obj.time,
@@ -93,7 +100,10 @@ class RecordingAdapter(DataAdapter[data.Recording, RecordingObject, UUID, UUID])
             if (tag := self._tag_adapter.from_id(tag_id)) is not None
         ]
 
-        notes = [self._note_adapter.to_soundevent(note) for note in (obj.notes or [])]
+        notes = [
+            self._note_adapter.to_soundevent(note)
+            for note in (obj.notes or [])
+        ]
 
         owners = [
             user

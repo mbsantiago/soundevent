@@ -4,7 +4,6 @@ import math
 from typing import List
 
 import pytest
-
 from soundevent import data
 from soundevent.evaluation import clip_classification
 
@@ -156,7 +155,9 @@ def test_evaluation_has_balanced_accuracy(
         tags=evaluation_tags,
     )
 
-    balanced_accuracy = data.find_feature(evaluation.metrics, name="balanced_accuracy")
+    balanced_accuracy = data.find_feature(
+        evaluation.metrics, name="balanced_accuracy"
+    )
     assert balanced_accuracy is not None
     assert math.isclose(balanced_accuracy.value, 0.5, rel_tol=1e-6)
 
@@ -173,7 +174,9 @@ def test_evaluation_has_top_3_accuracy(
         tags=evaluation_tags,
     )
 
-    top_3_accuracy = data.find_feature(evaluation.metrics, name="top_3_accuracy")
+    top_3_accuracy = data.find_feature(
+        evaluation.metrics, name="top_3_accuracy"
+    )
     assert top_3_accuracy is not None
     assert math.isclose(top_3_accuracy.value, 1.0, rel_tol=1e-6)
 
@@ -212,7 +215,8 @@ def test_overall_score_is_the_mean_of_the_scores_of_all_evaluated_clips(
     evaluation_tags: List[data.Tag],
 ):
     """Test that the overall score is the mean of the scores of all evaluated
-    examples."""
+    examples.
+    """
     evaluation = clip_classification(
         clip_annotations=annotation_set.clip_annotations,
         clip_predictions=prediction_set.clip_predictions,
@@ -240,7 +244,11 @@ def test_each_example_score_is_the_probability_of_the_true_class(
     assert len(evaluation.clip_evaluations[1].metrics) == 1
 
     assert evaluation.clip_evaluations[0].score is not None
-    assert math.isclose(evaluation.clip_evaluations[0].score, 0.9, rel_tol=1e-6)
+    assert math.isclose(
+        evaluation.clip_evaluations[0].score, 0.9, rel_tol=1e-6
+    )
 
     assert evaluation.clip_evaluations[1].score is not None
-    assert math.isclose(evaluation.clip_evaluations[1].score, 0.1, rel_tol=1e-6)
+    assert math.isclose(
+        evaluation.clip_evaluations[1].score, 0.1, rel_tol=1e-6
+    )

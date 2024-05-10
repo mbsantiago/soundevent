@@ -111,7 +111,8 @@ def _read_chunk(riff: BinaryIO) -> Optional[Chunk]:
 
     if chunk_id in CHUNKS_WITH_SUBCHUNKS:
         chunk.subchunks = {
-            subchunk.chunk_id: subchunk for subchunk in _get_subchunks(riff, size - 4)
+            subchunk.chunk_id: subchunk
+            for subchunk in _get_subchunks(riff, size - 4)
         }
     else:
         riff.seek(size, os.SEEK_CUR)

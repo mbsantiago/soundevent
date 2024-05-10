@@ -21,7 +21,6 @@ def plot_annotation(
     **kwargs,
 ) -> Axes:
     """Plot an annotation."""
-
     geometry = annotation.sound_event.geometry
 
     if geometry is None:
@@ -70,12 +69,12 @@ def get_tags_position(
     float
         Frequency position for tag plotting in Hertz.
     """
-
     func = _TAG_POSITION_FUNCTIONS.get(geometry.type, None)
 
     if func is None:
         raise NotImplementedError(
-            f"Plotting tags for geometry of type {geometry.type} " "is not implemented."
+            f"Plotting tags for geometry of type {geometry.type} "
+            "is not implemented."
         )
 
     return func(geometry, bounds)
@@ -116,7 +115,9 @@ def _get_tags_position_bounding_box(
 
 _TAG_POSITION_FUNCTIONS: Dict[
     data.GeometryType,
-    Callable[[data.Geometry, Tuple[float, float, float, float]], Tuple[float, float]],
+    Callable[
+        [data.Geometry, Tuple[float, float, float, float]], Tuple[float, float]
+    ],
 ] = {
     data.BoundingBox.geom_type(): _get_tags_position_bounding_box,
 }

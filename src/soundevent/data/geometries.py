@@ -252,7 +252,9 @@ class TimeInterval(BaseGeometry):
                 after the end time).
         """
         if len(v) != 2:
-            raise ValueError("The time interval must have exactly two time stamps.")
+            raise ValueError(
+                "The time interval must have exactly two time stamps."
+            )
 
         if v[0] > v[1]:
             raise ValueError("The start time must be before the end time.")
@@ -323,7 +325,9 @@ class Point(BaseGeometry):
             raise ValueError("The time must be positive.")
 
         if frequency < 0 or frequency > MAX_FREQUENCY:
-            raise ValueError(f"The frequency must be between 0 and {MAX_FREQUENCY}.")
+            raise ValueError(
+                f"The frequency must be between 0 and {MAX_FREQUENCY}."
+            )
 
         return v
 
@@ -469,7 +473,8 @@ class Polygon(BaseGeometry):
 
                 if frequency < 0 or frequency > MAX_FREQUENCY:
                     raise ValueError(
-                        f"The frequency must be between 0 and " f"{MAX_FREQUENCY}."
+                        f"The frequency must be between 0 and "
+                        f"{MAX_FREQUENCY}."
                     )
 
         return v
@@ -527,7 +532,9 @@ class BoundingBox(BaseGeometry):
                 negative or the frequency is outside the valid range).
         """
         if len(v) != 4:
-            raise ValueError("The bounding box must have exactly four coordinates.")
+            raise ValueError(
+                "The bounding box must have exactly four coordinates."
+            )
 
         start_time, low_freq, end_time, high_freq = v
 
@@ -551,7 +558,9 @@ class BoundingBox(BaseGeometry):
             raise ValueError("The start time must be before the end time.")
 
         if low_freq > high_freq:
-            raise ValueError("The start frequency must be before the end frequency.")
+            raise ValueError(
+                "The start frequency must be before the end frequency."
+            )
 
         return v
 
@@ -762,7 +771,9 @@ class MultiPolygon(BaseGeometry):
                 negative or the frequency is outside the valid range).
         """
         if len(v) < 1:
-            raise ValueError("The multipolygon must have at least one polygon.")
+            raise ValueError(
+                "The multipolygon must have at least one polygon."
+            )
 
         for polygon in v:
             if len(polygon) < 1:
@@ -770,7 +781,9 @@ class MultiPolygon(BaseGeometry):
 
             for ring in polygon:
                 if len(ring) < 3:
-                    raise ValueError("Each ring must have at least three points.")
+                    raise ValueError(
+                        "Each ring must have at least three points."
+                    )
 
                 for time, frequency in ring:
                     if time < 0:
@@ -778,7 +791,8 @@ class MultiPolygon(BaseGeometry):
 
                     if frequency < 0 or frequency > MAX_FREQUENCY:
                         raise ValueError(
-                            f"The frequency must be between 0 and " f"{MAX_FREQUENCY}."
+                            f"The frequency must be between 0 and "
+                            f"{MAX_FREQUENCY}."
                         )
 
         return v
@@ -894,7 +908,7 @@ def geometry_validate(
         if not hasattr(obj, "type"):
             raise ValueError(f"Object {obj} does not have a type attribute.")
 
-        geom_type = getattr(obj, "type")
+        geom_type = obj.type
 
     if geom_type not in GEOMETRY_MAPPING:
         raise ValueError(f"Object {obj} does not have a geometry valid type.")
@@ -907,4 +921,6 @@ def geometry_validate(
             from_attributes=mode == "attributes",
         )
     except ValidationError as error:
-        raise ValueError(f"Object {obj} is not a valid {geom_type}.") from error
+        raise ValueError(
+            f"Object {obj} is not a valid {geom_type}."
+        ) from error

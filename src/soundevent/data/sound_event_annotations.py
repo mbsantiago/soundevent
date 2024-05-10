@@ -83,7 +83,9 @@ class SoundEventAnnotation(BaseModel):
         being annotated. Sound events define distinct audio occurrences, such as bird
         calls or animal vocalizations, and are essential for categorizing the content
         of the audio data.
-    notes
+
+    Notes
+    -----
         A list of `Note` instances representing additional contextual information or
         remarks associated with the annotation. Notes can provide insights into specific
         characteristics of the sound event, aiding in the comprehensive understanding

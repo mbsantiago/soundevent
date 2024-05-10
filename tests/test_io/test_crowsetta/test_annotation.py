@@ -5,7 +5,6 @@ from pathlib import Path
 
 import crowsetta
 import pytest
-
 import soundevent.io.crowsetta as crowsetta_io
 from soundevent import data
 from soundevent.io.crowsetta.segment import create_crowsetta_segment
@@ -35,7 +34,9 @@ def clip_annotation(recording: data.Recording) -> data.ClipAnnotation:
             data.SoundEventAnnotation(
                 sound_event=data.SoundEvent(
                     recording=recording,
-                    geometry=data.BoundingBox(coordinates=[0.5, 0.5, 1.5, 1.5]),
+                    geometry=data.BoundingBox(
+                        coordinates=[0.5, 0.5, 1.5, 1.5]
+                    ),
                     features=[data.Feature(name="test", value=1.0)],
                 ),
                 tags=[data.Tag(key="animal", value="cat")],
@@ -44,7 +45,9 @@ def clip_annotation(recording: data.Recording) -> data.ClipAnnotation:
             data.SoundEventAnnotation(
                 sound_event=data.SoundEvent(
                     recording=recording,
-                    geometry=data.LineString(coordinates=[[0.5, 0.5], [1.5, 1.5]]),
+                    geometry=data.LineString(
+                        coordinates=[[0.5, 0.5], [1.5, 1.5]]
+                    ),
                     features=[data.Feature(name="test", value=1.0)],
                 ),
                 tags=[data.Tag(key="animal", value="cat")],

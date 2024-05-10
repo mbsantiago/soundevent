@@ -18,7 +18,9 @@ def _get_filter(
     order: int = 5,
 ) -> np.ndarray:
     if low_freq is None and high_freq is None:
-        raise ValueError("At least one of low_freq and high_freq must be specified.")
+        raise ValueError(
+            "At least one of low_freq and high_freq must be specified."
+        )
 
     if low_freq is None:
         # Low pass filter

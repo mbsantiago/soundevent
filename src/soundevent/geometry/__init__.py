@@ -14,7 +14,10 @@ a clear and efficient interface for handling sound event geometries.
 """
 
 from soundevent.geometry.conversion import geometry_to_shapely
-from soundevent.geometry.features import GeometricFeature, compute_geometric_features
+from soundevent.geometry.features import (
+    GeometricFeature,
+    compute_geometric_features,
+)
 from soundevent.geometry.html import geometry_to_html
 from soundevent.geometry.operations import buffer_geometry, compute_bounds
 from soundevent.geometry.positions import get_geometry_point

@@ -42,7 +42,6 @@ def save(
         Format to save the data in. If `None`, the format will be inferred
         from the file extension.
     """
-
     if format is None:
         format = infer_format(path)
 

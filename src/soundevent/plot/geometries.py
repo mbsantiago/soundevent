@@ -58,7 +58,8 @@ def _plot_bounding_box_geometry(
 ) -> Axes:
     if not isinstance(geometry, data.BoundingBox):
         raise ValueError(
-            f"Expected geometry of type {data.BoundingBox}, " f"got {type(geometry)}."
+            f"Expected geometry of type {data.BoundingBox}, "
+            f"got {type(geometry)}."
         )
 
     start_time, low_freq, end_time, high_freq = geometry.coordinates

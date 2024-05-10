@@ -28,7 +28,9 @@ class SequenceAdapter(DataAdapter[data.Sequence, SequenceObject, UUID, UUID]):
         super().__init__()
         self.soundevent_adapter = soundevent_adapter
 
-    def assemble_aoef(self, obj: data.Sequence, obj_id: UUID) -> SequenceObject:
+    def assemble_aoef(
+        self, obj: data.Sequence, obj_id: UUID
+    ) -> SequenceObject:
         parent = None
         if obj.parent:
             parent = self.to_aoef(obj.parent).uuid

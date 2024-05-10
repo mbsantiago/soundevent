@@ -47,7 +47,9 @@ class AdapterProtocol(Protocol, Generic[C, D]):
     def to_soundevent(self, obj: D) -> C: ...
 
 
-class DataAdapter(ABC, Generic[SoundEventObject, AOEFObject, SoundEventKey, AOEFKey]):
+class DataAdapter(
+    ABC, Generic[SoundEventObject, AOEFObject, SoundEventKey, AOEFKey]
+):
     """Base class for data adapters.
 
     A data adapter is used to convert between sound event and AOEF data
@@ -64,7 +66,9 @@ class DataAdapter(ABC, Generic[SoundEventObject, AOEFObject, SoundEventKey, AOEF
         self._aoef_store: Dict[AOEFKey, AOEFObject] = {}
 
     @abstractmethod
-    def assemble_aoef(self, obj: SoundEventObject, obj_id: AOEFKey) -> AOEFObject:
+    def assemble_aoef(
+        self, obj: SoundEventObject, obj_id: AOEFKey
+    ) -> AOEFObject:
         """Create AOEF object from sound event object.
 
         Parameters

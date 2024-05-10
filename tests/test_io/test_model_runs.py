@@ -138,7 +138,9 @@ def test_can_recover_processed_clip_tags(
     # Assert
     assert model_run == recovered
     assert recovered.clip_predictions[0].tags[0].tag.key == "species"
-    assert recovered.clip_predictions[0].tags[0].tag.value == "Myotis lucifugus"
+    assert (
+        recovered.clip_predictions[0].tags[0].tag.value == "Myotis lucifugus"
+    )
     assert recovered.clip_predictions[0].tags[0].score == 0.9
 
 
@@ -209,7 +211,10 @@ def test_can_recover_simple_predicted_sound_event(
 
     # Assert
     assert recovered.clip_predictions[0].sound_events[0].score == 0.9
-    assert recovered.clip_predictions[0].sound_events[0].sound_event == sound_event
+    assert (
+        recovered.clip_predictions[0].sound_events[0].sound_event
+        == sound_event
+    )
     assert model_run == recovered
 
 
@@ -249,7 +254,10 @@ def test_can_recover_predicted_sound_event_with_predicted_tags(
     recovered = io.load(path, type="model_run")
 
     # Assert
-    assert recovered.clip_predictions[0].sound_events[0].tags[0].tag.key == "species"
+    assert (
+        recovered.clip_predictions[0].sound_events[0].tags[0].tag.key
+        == "species"
+    )
     assert (
         recovered.clip_predictions[0].sound_events[0].tags[0].tag.value
         == "Myotis lucifugus"

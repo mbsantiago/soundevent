@@ -6,7 +6,7 @@ audio files into a workable format. In `soundevent`, we use
 [`xarray.DataArray`][xarray.DataArray] objects to hold loaded audio data.
 [`xarray.DataArray`][xarray.DataArray] objects are an extension of
 [`numpy`][numpy.ndarray] arrays, so there's no need to learn new concepts
-if you are already familiar with [`numpy`][numpy.ndarray] arrays. 
+if you are already familiar with [`numpy`][numpy.ndarray] arrays.
 
 
 !!! note "Why use `xarray.DataArray` objects?"

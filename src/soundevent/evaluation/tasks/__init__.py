@@ -5,7 +5,9 @@ from soundevent.evaluation.tasks.clip_multilabel_classification import (
 from soundevent.evaluation.tasks.sound_event_classification import (
     sound_event_classification,
 )
-from soundevent.evaluation.tasks.sound_event_detection import sound_event_detection
+from soundevent.evaluation.tasks.sound_event_detection import (
+    sound_event_detection,
+)
 
 __all__ = [
     "clip_classification",

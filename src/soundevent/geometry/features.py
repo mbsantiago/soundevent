@@ -154,7 +154,9 @@ def _compute_multi_point_features(
         Feature(name=GeometricFeature.LOW_FREQ, value=low_freq),
         Feature(name=GeometricFeature.HIGH_FREQ, value=high_freq),
         Feature(name=GeometricFeature.BANDWIDTH, value=high_freq - low_freq),
-        Feature(name=GeometricFeature.NUM_SEGMENTS, value=len(geometry.coordinates)),
+        Feature(
+            name=GeometricFeature.NUM_SEGMENTS, value=len(geometry.coordinates)
+        ),
     ]
 
 
@@ -169,7 +171,9 @@ def _compute_multi_linestring_features(
         Feature(name=GeometricFeature.LOW_FREQ, value=low_freq),
         Feature(name=GeometricFeature.HIGH_FREQ, value=high_freq),
         Feature(name=GeometricFeature.BANDWIDTH, value=high_freq - low_freq),
-        Feature(name=GeometricFeature.NUM_SEGMENTS, value=len(geometry.coordinates)),
+        Feature(
+            name=GeometricFeature.NUM_SEGMENTS, value=len(geometry.coordinates)
+        ),
     ]
 
 
@@ -184,11 +188,15 @@ def _compute_multi_polygon_features(
         Feature(name=GeometricFeature.LOW_FREQ, value=low_freq),
         Feature(name=GeometricFeature.HIGH_FREQ, value=high_freq),
         Feature(name=GeometricFeature.BANDWIDTH, value=high_freq - low_freq),
-        Feature(name=GeometricFeature.NUM_SEGMENTS, value=len(geometry.coordinates)),
+        Feature(
+            name=GeometricFeature.NUM_SEGMENTS, value=len(geometry.coordinates)
+        ),
     ]
 
 
-_COMPUTE_FEATURES: Dict[geometries.GeometryType, Callable[[Any], List[Feature]]] = {
+_COMPUTE_FEATURES: Dict[
+    geometries.GeometryType, Callable[[Any], List[Feature]]
+] = {
     geometries.TimeStamp.geom_type(): _compute_time_stamp_features,
     geometries.TimeInterval.geom_type(): _compute_time_interval_features,
     geometries.BoundingBox.geom_type(): _compute_bounding_box_features,

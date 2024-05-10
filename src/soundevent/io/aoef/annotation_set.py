@@ -11,7 +11,10 @@ from .clip_annotations import ClipAnnotationsAdapter, ClipAnnotationsObject
 from .note import NoteAdapter
 from .recording import RecordingAdapter, RecordingObject
 from .sequence import SequenceAdapter, SequenceObject
-from .sequence_annotation import SequenceAnnotationAdapter, SequenceAnnotationObject
+from .sequence_annotation import (
+    SequenceAnnotationAdapter,
+    SequenceAnnotationObject,
+)
 from .sound_event import SoundEventAdapter, SoundEventObject
 from .sound_event_annotation import (
     SoundEventAnnotationAdapter,
@@ -47,8 +50,12 @@ class AnnotationSetAdapter:
         sound_event_adapter: Optional[SoundEventAdapter] = None,
         sequence_adapter: Optional[SequenceAdapter] = None,
         clip_adapter: Optional[ClipAdapter] = None,
-        sound_event_annotations_adapter: Optional[SoundEventAnnotationAdapter] = None,
-        sequence_annotations_adapter: Optional[SequenceAnnotationAdapter] = None,
+        sound_event_annotations_adapter: Optional[
+            SoundEventAnnotationAdapter
+        ] = None,
+        sequence_annotations_adapter: Optional[
+            SequenceAnnotationAdapter
+        ] = None,
         clip_annotation_adapter: Optional[ClipAnnotationsAdapter] = None,
     ):
         self.user_adapter = user_adapter or UserAdapter()
@@ -141,10 +148,14 @@ class AnnotationSetAdapter:
             self.sequence_adapter.to_soundevent(sequence)
 
         for sound_event_annotation in obj.sound_event_annotations or []:
-            self.sound_event_annotations_adapter.to_soundevent(sound_event_annotation)
+            self.sound_event_annotations_adapter.to_soundevent(
+                sound_event_annotation
+            )
 
         for sequence_annotation in obj.sequence_annotations or []:
-            self.sequence_annotations_adapter.to_soundevent(sequence_annotation)
+            self.sequence_annotations_adapter.to_soundevent(
+                sequence_annotation
+            )
 
         annotated_clips = [
             self.clip_annotation_adapter.to_soundevent(clip_annotation)

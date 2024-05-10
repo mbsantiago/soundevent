@@ -44,7 +44,6 @@ def match_geometries(
         is not matched to any source geometry, the source index is None.
         Every source and target geometry is matched exactly once.
     """
-
     # Compute the affinity between all pairs of geometries.
     cost_matrix = np.zeros(shape=(len(source), len(target)))
     for (index1, geometry1), (index2, geometry2) in product(

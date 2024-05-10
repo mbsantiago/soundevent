@@ -493,7 +493,9 @@ def get_dim_step(
         return attrs[DimAttrs.step.value]
 
     if not estimate_step:
-        raise ValueError(f"Step size not found in the '{dim}' dimension attributes.")
+        raise ValueError(
+            f"Step size not found in the '{dim}' dimension attributes."
+        )
 
     return estimate_dim_step(
         coord.data,
