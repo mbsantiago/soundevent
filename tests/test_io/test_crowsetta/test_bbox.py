@@ -2,6 +2,7 @@
 
 import crowsetta
 import pytest
+
 import soundevent.io.crowsetta as crowsetta_io
 from soundevent import data
 

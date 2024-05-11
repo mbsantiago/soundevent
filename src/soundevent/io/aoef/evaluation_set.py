@@ -1,8 +1,7 @@
 from typing import List, Literal, Optional
 
-from soundevent import data
-
 from .annotation_set import AnnotationSetAdapter, AnnotationSetObject
+from soundevent import data
 
 
 class EvaluationSetObject(AnnotationSetObject):

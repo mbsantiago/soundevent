@@ -98,3 +98,8 @@ class Clip(BaseModel):
         if values["start_time"] > values["end_time"]:
             raise ValueError("start_time must be less than end_time")
         return values
+
+    @property
+    def duration(self) -> float:
+        """Return the duration of the clip."""
+        return self.end_time - self.start_time

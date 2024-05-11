@@ -3,6 +3,7 @@ from typing import Optional
 
 import numpy as np
 import pytest
+
 from soundevent.audio.io import audio_to_bytes, load_audio
 
 
@@ -66,3 +67,9 @@ def test_load_audio_has_correct_shape(
 
     else:
         assert array.shape == (samples, channels)
+
+
+def test_audio_to_bytes_fails_with_invalid_bit_depth():
+    array = np.random.random(size=[1024, 2])
+    with pytest.raises(ValueError):
+        audio_to_bytes(array, 16000, bit_depth=12)

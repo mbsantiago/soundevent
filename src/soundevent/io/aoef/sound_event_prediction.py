@@ -3,11 +3,10 @@ from uuid import UUID, uuid4
 
 from pydantic import BaseModel
 
-from soundevent import data
-
 from .adapters import DataAdapter
 from .sound_event import SoundEventAdapter
 from .tag import TagAdapter
+from soundevent import data
 
 
 class SoundEventPredictionObject(BaseModel):

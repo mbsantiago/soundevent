@@ -4,6 +4,8 @@ from pathlib import Path
 
 from soundevent.audio.media_info import (
     MediaInfo,
+    compute_md5_checksum,
+    compute_sha2_checksum,
     generate_wav_header,
     get_media_info,
 )
@@ -11,13 +13,14 @@ from soundevent.audio.media_info import (
 
 def test_can_read_media_info(sample_24_bit_audio: Path):
     media_info = get_media_info(sample_24_bit_audio)
+
     assert isinstance(media_info, MediaInfo)
+    assert media_info.format == "WAV"
+    assert media_info.subtype == "PCM_24"
     assert media_info.duration_s == 19.4015625
-    assert media_info.bit_depth == 24
     assert media_info.samplerate_hz == 96000
     assert media_info.channels == 1
     assert media_info.samples == 1862550
-    assert media_info.audio_format == 1
 
 
 def test_can_generate_wav_header():
@@ -34,3 +37,17 @@ def test_can_generate_wav_header():
     samples = 2048 // (channels * bit_depth // 8)
     generated = generate_wav_header(samplerate, channels, samples, bit_depth)
     assert header[:44] == generated
+
+
+def test_compute_hash_functions_succesfully(tmp_path: Path):
+    path = tmp_path / "test_file.txt"
+    path.write_text("This is a test file.")
+
+    sha2 = compute_sha2_checksum(path)
+    assert (
+        sha2
+        == "f29bc64a9d3732b4b9035125fdb3285f5b6455778edca72414671e0ca3b2e0de"
+    )
+
+    md5 = compute_md5_checksum(path)
+    assert md5 == "3de8f8b0dc94b8c2230fab9ec0ba0506"

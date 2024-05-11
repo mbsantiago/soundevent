@@ -18,6 +18,16 @@ if you are already familiar with [`numpy`][numpy.ndarray] arrays.
     `xarray.DataArray` objects, see the
     [xarray documentation](https://docs.xarray.dev/en/stable/getting-started-guide/why-xarray.html).
 
+
+!!! note "Supported audio formats"
+
+    `soundevent` supports most of the audio file formats supported by the
+    [`soundfile`](https://python-soundfile.readthedocs.io/) library. Some
+    formats were excluded because they do not support seeking and are not
+    suitable for random access. This still includes most of the common audio
+    file formats, such as WAV, FLAC, AIFF, and MP3. For a full list of
+    supported formats, see the
+    [audio.is_audio_file][soundevent.audio.is_audio_file] documentation.
 """
 
 # %%

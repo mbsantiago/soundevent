@@ -4,10 +4,9 @@ from uuid import UUID
 
 from pydantic import BaseModel
 
-from soundevent import data
-
 from .adapters import DataAdapter
 from .note import NoteObject
+from soundevent import data
 
 
 class SoundEventAnnotationObject(BaseModel):

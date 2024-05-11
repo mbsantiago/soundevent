@@ -3,13 +3,12 @@ from uuid import UUID, uuid4
 
 from pydantic import BaseModel
 
-from soundevent import data
-
 from .adapters import DataAdapter
 from .clip_annotations import ClipAnnotationsAdapter
 from .clip_predictions import ClipPredictionsAdapter
 from .match import MatchAdapter
 from .note import NoteAdapter
+from soundevent import data
 
 
 class ClipEvaluationObject(BaseModel):

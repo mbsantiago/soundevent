@@ -4,13 +4,12 @@ from uuid import UUID, uuid4
 
 from pydantic import BaseModel
 
-from soundevent import data
-
 from .adapters import DataAdapter
 from .note import NoteAdapter, NoteObject
 from .sequence import SequenceAdapter
 from .tag import TagAdapter
 from .user import UserAdapter
+from soundevent import data
 
 
 class SequenceAnnotationObject(BaseModel):

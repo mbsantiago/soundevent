@@ -10,6 +10,7 @@ from uuid import uuid4
 import numpy as np
 import pytest
 import soundfile as sf
+
 from soundevent import data
 
 if sys.version_info < (3, 9):

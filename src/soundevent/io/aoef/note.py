@@ -4,9 +4,8 @@ from uuid import UUID, uuid4
 
 from pydantic import BaseModel
 
-from soundevent import data
-
 from .user import UserAdapter
+from soundevent import data
 
 
 class NoteObject(BaseModel):

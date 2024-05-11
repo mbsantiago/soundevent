@@ -31,9 +31,6 @@ from typing import Any, Dict, Optional, Set, TypeVar, Union
 
 from pydantic import BaseModel, Field
 
-from soundevent import data
-from soundevent.io.types import DataCollections, DataType
-
 from .annotation_project import (
     AnnotationProjectAdapter,
     AnnotationProjectObject,
@@ -45,6 +42,8 @@ from .evaluation_set import EvaluationSetAdapter, EvaluationSetObject
 from .model_run import ModelRunAdapter, ModelRunObject
 from .prediction_set import PredictionSetAdapter, PredictionSetObject
 from .recording_set import RecordingSetAdapter, RecordingSetObject
+from soundevent import data
+from soundevent.io.types import DataCollections, DataType
 
 __all__ = [
     "is_json",

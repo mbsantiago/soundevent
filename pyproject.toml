@@ -56,10 +56,11 @@ rye = { dev-dependencies = [
     "pytest-testmon>=2.0.12",
     "html5lib>=1.1",
     "pyright>=1.1.362",
+    "pytest-xdist>=3.6.1",
 ] }
 
 [tool.pytest.ini_options]
-addopts = "-vv"
+addopts = "-vv -n auto"
 
 [tool.ruff]
 line-length = 79
@@ -76,10 +77,13 @@ ignore = ["D1"]
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"
 
+[tool.ruff.lint.isort]
+known-local-folder = ["src", "soundevent"]
+
 [tool.pyright]
 venvPath = "."
 venv = ".venv"
-include = ["src", "tests"]
+include = ["src"]
 verboseOutput = true
 
 [tool.coverage.run]

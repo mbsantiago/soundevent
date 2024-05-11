@@ -4,11 +4,10 @@ from uuid import UUID, uuid4
 
 from pydantic import BaseModel
 
-from soundevent import data
-
 from .adapters import DataAdapter
 from .clip import ClipAdapter
 from .user import UserAdapter
+from soundevent import data
 
 
 class StatusBadgeObject(BaseModel):

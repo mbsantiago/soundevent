@@ -2,6 +2,7 @@
 
 import pytest
 from pydantic import ValidationError
+
 from soundevent import data
 
 

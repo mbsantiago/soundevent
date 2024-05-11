@@ -1,8 +1,7 @@
 from typing import Literal, Optional
 
-from soundevent import data
-
 from .recording_set import RecordingSetAdapter, RecordingSetObject
+from soundevent import data
 
 
 class DatasetObject(RecordingSetObject):

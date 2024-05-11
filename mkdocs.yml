@@ -120,6 +120,8 @@ markdown_extensions:
       toc_depth: 4
       permalink: "#"
       separator: "_"
+  - pymdownx.arithmatex:
+      generic: true
 extra_javascript:
   - javascripts/jquery-3.3.1.min.js
   - javascripts/jquery.json-viewer.js
@@ -127,6 +129,10 @@ extra_javascript:
   - optionalConfig.js
   - https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js
   - extra-loader.js
+  - javascripts/katex.js
+  - https://unpkg.com/katex@0/dist/katex.min.js
+  - https://unpkg.com/katex@0/dist/contrib/auto-render.min.js
 extra_css:
   - stylesheets/jquery.json-viewer.css
   - css/mkdocstrings.css
+  - https://unpkg.com/katex@0/dist/katex.min.css

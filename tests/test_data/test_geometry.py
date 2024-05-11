@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from typing import List
 
 import pytest
+
 from soundevent import data
 
 
