@@ -4,8 +4,6 @@ from uuid import UUID
 
 from pydantic import BaseModel
 
-from soundevent import data
-
 from .clip import ClipAdapter, ClipObject
 from .clip_annotations import ClipAnnotationsAdapter, ClipAnnotationsObject
 from .clip_evaluation import ClipEvaluationAdapter, ClipEvaluationObject
@@ -33,6 +31,7 @@ from .sound_event_prediction import (
 )
 from .tag import TagAdapter, TagObject
 from .user import UserAdapter, UserObject
+from soundevent import data
 
 
 class EvaluationObject(BaseModel):

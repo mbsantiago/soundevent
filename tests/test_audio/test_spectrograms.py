@@ -2,6 +2,7 @@
 
 import numpy as np
 import xarray as xr
+
 from soundevent import arrays, audio, data
 
 
@@ -26,7 +27,7 @@ def test_compute_spectrograms_from_recordings(random_wav):
     # Assert
     # Is correct type
     assert isinstance(spectrogram, xr.DataArray)
-    assert spectrogram.dtype == np.float32
+    assert spectrogram.dtype == np.float64
 
     # Has correct dimensions
     assert spectrogram.dims == ("frequency", "time", "channel")

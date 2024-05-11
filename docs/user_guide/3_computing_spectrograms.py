@@ -19,7 +19,8 @@ Here we will show how to compute spectrograms using the
 # First, we will load a recording. We will use the
 # the example recording from the (audio loading tutorial)[audio_loading].
 
-from soundevent import audio, data
+import numpy as np
+from soundevent import audio, data, arrays
 
 recording = data.Recording.from_file("sample_audio.wav")
 wave = audio.load_recording(recording)
@@ -44,3 +45,35 @@ print(spectrogram)
 # *frequency*, the second is *time*, and the third is *channel*. The
 # spectrogram is computed separately for each channel of the audio
 # signal.
+#
+# One of the nice things about using xarray is that it allows us to
+# easily plot the spectrogram using the built-in plotting functions.
+
+spectrogram.plot()
+
+# %%
+# The initial plot is hard to interpret due to the linear scale. Decibels (dB) 
+# are more perceptually relevant for sound.
+# Let's convert it to decibels using the
+# [`arrays.to_db`][soundevent.arrays.to_db] function.
+
+spectrogram_db = arrays.to_db(spectrogram)
+spectrogram_db.plot()
+
+# %%
+# This is much better! We can now clearly see the frequency
+# content evolving over time.
+#
+# To make subtle details even more apparent, we can apply a
+# de-noising technique like PCEN (Per-Channel Energy
+# Normalization). PCEN helps reduce background noise and
+# enhance the target sounds. We can apply PCEN using the
+# [`audio.pcen`][soundevent.audio.pcen] function.
+
+pcen = audio.pcen(spectrogram)
+pcen_db = arrays.to_db(pcen)
+pcen_db.plot()
+
+# %%
+# In this case the PCEN transformation has not made a huge
+# difference, but it can be very useful in other cases.

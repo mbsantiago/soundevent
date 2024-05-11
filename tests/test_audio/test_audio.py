@@ -9,6 +9,7 @@ import xarray as xr
 from hypothesis import HealthCheck, given, settings
 from hypothesis import strategies as st
 from scipy.io import wavfile
+
 from soundevent import data
 from soundevent.audio.io import load_clip, load_recording
 
@@ -48,10 +49,66 @@ def test_load_recording(
     # Check that the loaded audio is correct
     assert isinstance(wav, xr.DataArray)
     assert wav.shape == (int(samplerate * duration), channels)
-    assert wav.dtype == np.float32
+    assert wav.dtype == np.float64
     assert wav.dims == ("time", "channel")
     assert wav.coords["time"].shape == (int(samplerate * duration),)
     assert wav.coords["channel"].shape == (channels,)
+
+
+def test_load_recording_with_relative_path_and_audio_dir(
+    tmp_path: Path, random_wav
+):
+    """Test loading a recording with a relative path and audio directory."""
+    # Arrange
+    # Create a random wav file
+    filename = Path(f"{uuid4()}.wav")
+    path = tmp_path / filename
+    random_wav(path=path)
+
+    # Create a recording with a relative path
+    recording = data.Recording.from_file(path)
+    recording.path = filename
+
+    # Act
+    wav = load_recording(recording, audio_dir=tmp_path)
+
+    # Assert
+    assert isinstance(wav, xr.DataArray)
+    assert wav.shape == (
+        int(recording.samplerate * recording.duration),
+        recording.channels,
+    )
+
+
+def test_load_clip_with_relative_path_and_audio_dir(
+    tmp_path: Path, random_wav
+):
+    """Test loading a clip with a relative path and audio directory."""
+    # Arrange
+    # Create a random wav file
+    filename = Path(f"{uuid4()}.wav")
+    path = tmp_path / filename
+    random_wav(path=path)
+
+    # Create a recording with a relative path
+    recording = data.Recording.from_file(path)
+    recording.path = filename
+
+    clip = data.Clip(
+        recording=recording,
+        start_time=0.1,
+        end_time=0.2,
+    )
+
+    # Act
+    wav = load_clip(clip, audio_dir=tmp_path)
+
+    # Assert
+    assert isinstance(wav, xr.DataArray)
+    assert wav.shape == (
+        int(recording.samplerate * clip.duration),
+        recording.channels,
+    )
 
 
 @given(
@@ -111,7 +168,7 @@ def test_read_clip(
         int(np.floor(samplerate * clip_duration)),
         channels,
     )
-    assert clip_wav.dtype == np.float32
+    assert clip_wav.dtype == np.float64
     assert clip_wav.dims == ("time", "channel")
 
     # Check that the clip is the same as the original wav
@@ -181,3 +238,137 @@ def test_loading_clip_after_end_time_will_pad_with_zeros(
     # Act
     wav = load_clip(clip)
     assert wav.shape == (recording.samplerate * 1, recording.channels)
+
+
+@pytest.mark.parametrize(
+    "filename",
+    [
+        "aiff_alaw.aiff",
+        "aiff_double.aiff",
+        "aiff_float.aiff",
+        "aiff_ima_adpcm.aiff",
+        "aiff_pcm_16.aiff",
+        "aiff_pcm_24.aiff",
+        "aiff_pcm_32.aiff",
+        "aiff_pcm_s8.aiff",
+        "aiff_pcm_u8.aiff",
+        "aiff_ulaw.aiff",
+        "au_alaw.au",
+        "au_double.au",
+        "au_float.au",
+        "au_pcm_16.au",
+        "au_pcm_24.au",
+        "au_pcm_32.au",
+        "au_pcm_s8.au",
+        "au_ulaw.au",
+        "avr_pcm_16.avr",
+        "avr_pcm_s8.avr",
+        "avr_pcm_u8.avr",
+        "caf_alac_16.caf",
+        "caf_alac_20.caf",
+        "caf_alac_24.caf",
+        "caf_alac_32.caf",
+        "caf_alaw.caf",
+        "caf_double.caf",
+        "caf_float.caf",
+        "caf_pcm_16.caf",
+        "caf_pcm_24.caf",
+        "caf_pcm_32.caf",
+        "caf_pcm_s8.caf",
+        "caf_ulaw.caf",
+        "flac_pcm_16.flac",
+        "flac_pcm_24.flac",
+        "flac_pcm_s8.flac",
+        "htk_pcm_16.htk",
+        "ircam_alaw.ircam",
+        "ircam_float.ircam",
+        "ircam_pcm_16.ircam",
+        "ircam_pcm_32.ircam",
+        "ircam_ulaw.ircam",
+        "mat4_double.mat4",
+        "mat4_float.mat4",
+        "mat4_pcm_16.mat4",
+        "mat4_pcm_32.mat4",
+        "mat5_double.mat5",
+        "mat5_float.mat5",
+        "mat5_pcm_16.mat5",
+        "mat5_pcm_32.mat5",
+        "mat5_pcm_u8.mat5",
+        "mp3_mpeg_layer_iii.mp3",
+        "mpc2k_pcm_16.mpc2k",
+        "nist_alaw.nist",
+        "nist_pcm_16.nist",
+        "nist_pcm_24.nist",
+        "nist_pcm_32.nist",
+        "nist_pcm_s8.nist",
+        "nist_ulaw.nist",
+        "ogg_opus.ogg",
+        "ogg_vorbis.ogg",
+        "paf_pcm_16.paf",
+        "paf_pcm_24.paf",
+        "paf_pcm_s8.paf",
+        "pvf_pcm_16.pvf",
+        "pvf_pcm_32.pvf",
+        "pvf_pcm_s8.pvf",
+        "rf64_alaw.rf64",
+        "rf64_double.rf64",
+        "rf64_float.rf64",
+        "rf64_pcm_16.rf64",
+        "rf64_pcm_24.rf64",
+        "rf64_pcm_32.rf64",
+        "rf64_pcm_u8.rf64",
+        "rf64_ulaw.rf64",
+        "sds_pcm_16.sds",
+        "sds_pcm_24.sds",
+        "sds_pcm_s8.sds",
+        "svx_pcm_16.svx",
+        "svx_pcm_s8.svx",
+        "voc_alaw.voc",
+        "voc_pcm_16.voc",
+        "voc_pcm_u8.voc",
+        "voc_ulaw.voc",
+        "w64_alaw.w64",
+        "w64_double.w64",
+        "w64_float.w64",
+        "w64_ima_adpcm.w64",
+        "w64_ms_adpcm.w64",
+        "w64_pcm_16.w64",
+        "w64_pcm_24.w64",
+        "w64_pcm_32.w64",
+        "w64_pcm_u8.w64",
+        "w64_ulaw.w64",
+        "wav_alaw.wav",
+        "wav_double.wav",
+        "wav_float.wav",
+        "wav_ima_adpcm.wav",
+        "wav_ms_adpcm.wav",
+        "wav_pcm_16.wav",
+        "wav_pcm_24.wav",
+        "wav_pcm_32.wav",
+        "wav_pcm_u8.wav",
+        "wav_ulaw.wav",
+        "wavex_alaw.wavex",
+        "wavex_double.wavex",
+        "wavex_float.wavex",
+        "wavex_pcm_16.wavex",
+        "wavex_pcm_24.wavex",
+        "wavex_pcm_32.wavex",
+        "wavex_pcm_u8.wavex",
+        "wavex_ulaw.wavex",
+        "wve_alaw.wve",
+    ],
+)
+def test_load_100ms_from_all_test_formats(filename):
+    """Test loading 100ms from all test formats."""
+    audio_dir = Path(__file__).parent / "data"
+    recording = data.Recording.from_file(audio_dir / filename)
+    clip = data.Clip(
+        recording=recording,
+        start_time=0.2,
+        end_time=0.3,
+    )
+    wav = load_clip(clip)
+    assert wav.shape == (
+        np.floor(recording.samplerate * clip.duration),
+        recording.channels,
+    )

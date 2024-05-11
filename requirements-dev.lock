@@ -66,6 +66,8 @@ evfuncs==0.3.5.post1
 exceptiongroup==1.2.1
     # via hypothesis
     # via pytest
+execnet==2.1.1
+    # via pytest-xdist
 executing==2.0.1
     # via icecream
 filelock==3.13.4
@@ -210,6 +212,7 @@ pytest==8.1.2
     # via pytest-cov
     # via pytest-testmon
     # via pytest-watch
+    # via pytest-xdist
 pytest-cov==5.0.0
     # via pytest-cover
 pytest-cover==3.0.0
@@ -217,6 +220,7 @@ pytest-cover==3.0.0
 pytest-coverage==0.0
 pytest-testmon==2.1.1
 pytest-watch==4.2.0
+pytest-xdist==3.6.1
 python-dateutil==2.9.0.post0
     # via ghp-import
     # via matplotlib

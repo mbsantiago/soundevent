@@ -4,6 +4,7 @@ from typing import Callable, Sequence
 
 import numpy as np
 import pytest
+
 from soundevent import data
 from soundevent.evaluation import (
     classification_encoding,

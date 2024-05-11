@@ -31,7 +31,7 @@ Now, let's discuss why these data schemas matter to us bioacousticians:
    data? Schemas make it happen. They enable you to check an object against the
    schema, validating if the data has everything it needs and is correct.
 
-3. **Enhanced develper experience**: Python is entering the era of Type hints.
+3. **Enhanced developer experience**: Python is entering the era of Type hints.
    Using these hints makes your code more robust, acting like guardrails to
    ensure that your data follows the rules.
 

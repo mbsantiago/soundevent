@@ -2,9 +2,8 @@ from typing import Tuple
 
 from pydantic import BaseModel
 
-from soundevent import data
-
 from .adapters import DataAdapter
+from soundevent import data
 
 __all__ = ["TagObject"]
 

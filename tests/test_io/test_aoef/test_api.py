@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 
 import pytest
+
 from soundevent import data, io
 
 

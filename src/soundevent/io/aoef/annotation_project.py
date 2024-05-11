@@ -1,9 +1,8 @@
 from typing import List, Literal, Optional
 
-from soundevent import data
-
 from .annotation_set import AnnotationSetAdapter, AnnotationSetObject
 from .annotation_task import AnnotationTaskAdapter, AnnotationTaskObject
+from soundevent import data
 
 ColType = Literal["annotation_project"]
 

@@ -3,6 +3,7 @@
 from typing import List
 
 import pytest
+
 from soundevent import data
 from soundevent.evaluation import clip_multilabel_classification
 

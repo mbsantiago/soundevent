@@ -1,6 +1,7 @@
 """Test that geometries get converted to HTML."""
 
 import html5lib
+
 from soundevent import data
 from soundevent.geometry.html import geometry_to_html
 

@@ -1,8 +1,7 @@
 from typing import Literal, Optional
 
-from soundevent import data
-
 from .prediction_set import PredictionSetAdapter, PredictionSetObject
+from soundevent import data
 
 
 class ModelRunObject(PredictionSetObject):

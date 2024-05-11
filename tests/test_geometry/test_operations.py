@@ -4,6 +4,7 @@ import math
 from typing import List
 
 import pytest
+
 from soundevent import data
 from soundevent.data.geometries import BaseGeometry
 from soundevent.geometry.operations import buffer_geometry, compute_bounds

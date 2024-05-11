@@ -1,6 +1,7 @@
 """Common fixtures for testing geometry functions."""
 
 import pytest
+
 from soundevent import data
 
 
