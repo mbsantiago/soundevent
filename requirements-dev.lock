@@ -8,24 +8,31 @@
 #   with-sources: false
 
 -e file:.
+affine==2.4.0
+    # via rasterio
 annotated-types==0.6.0
     # via pydantic
 appdirs==1.4.4
     # via crowsetta
 asttokens==2.4.1
     # via icecream
+    # via stack-data
 astunparse==1.6.3
     # via griffe
 attrs==23.2.0
     # via crowsetta
     # via hypothesis
+    # via rasterio
 babel==2.14.0
     # via mkdocs-material
+backcall==0.2.0
+    # via ipython
 birdsong-recognition-dataset==0.3.2.post1
     # via crowsetta
 cachetools==5.3.3
     # via tox
 certifi==2024.2.2
+    # via rasterio
     # via requests
 cffi==1.16.0
     # via soundfile
@@ -34,14 +41,23 @@ chardet==5.2.0
 charset-normalizer==3.3.2
     # via requests
 click==8.1.7
+    # via click-plugins
+    # via cligj
     # via mkdocs
     # via mkdocstrings
+    # via rasterio
+click-plugins==1.1.1
+    # via rasterio
+cligj==0.7.2
+    # via rasterio
 colorama==0.4.6
     # via griffe
     # via icecream
     # via mkdocs-material
     # via pytest-watch
     # via tox
+comm==0.2.2
+    # via ipykernel
 contourpy==1.1.1
     # via matplotlib
 coverage==7.5.0
@@ -53,6 +69,10 @@ cycler==0.12.1
     # via matplotlib
 cython==3.0.10
     # via soundevent
+debugpy==1.8.1
+    # via ipykernel
+decorator==5.1.1
+    # via ipython
 distlib==0.3.8
     # via virtualenv
 dnspython==2.6.1
@@ -70,6 +90,7 @@ execnet==2.1.1
     # via pytest-xdist
 executing==2.0.1
     # via icecream
+    # via stack-data
 filelock==3.13.4
     # via tox
     # via virtualenv
@@ -86,10 +107,12 @@ idna==3.7
     # via email-validator
     # via requests
 importlib-metadata==7.1.0
+    # via jupyter-client
     # via markdown
     # via mkdocs
     # via mkdocs-get-deps
     # via mkdocstrings
+    # via rasterio
     # via typeguard
 importlib-resources==5.13.0
     # via crowsetta
@@ -97,13 +120,23 @@ importlib-resources==5.13.0
     # via soundevent
 iniconfig==2.0.0
     # via pytest
+ipykernel==6.29.4
+ipython==8.12.3
+    # via ipykernel
 isort==5.13.2
+jedi==0.19.1
+    # via ipython
 jinja2==3.1.3
     # via mkdocs
     # via mkdocs-material
     # via mkdocstrings
 joblib==1.4.0
     # via scikit-learn
+jupyter-client==8.6.1
+    # via ipykernel
+jupyter-core==5.7.2
+    # via ipykernel
+    # via jupyter-client
 kiwisolver==1.4.5
     # via matplotlib
 markdown==3.6
@@ -119,6 +152,9 @@ markupsafe==2.1.5
     # via mkdocstrings
 matplotlib==3.7.5
     # via soundevent
+matplotlib-inline==0.1.7
+    # via ipykernel
+    # via ipython
 memory-profiler==0.61.0
 mergedeep==1.3.4
     # via mkdocs
@@ -145,6 +181,8 @@ multimethod==1.10
     # via pandera
 mypy-extensions==1.0.0
     # via typing-inspect
+nest-asyncio==1.6.0
+    # via ipykernel
 nodeenv==1.8.0
     # via pyright
 numpy==1.24.4
@@ -155,11 +193,14 @@ numpy==1.24.4
     # via matplotlib
     # via pandas
     # via pandera
+    # via rasterio
     # via scikit-learn
     # via scipy
     # via shapely
+    # via snuggs
     # via xarray
 packaging==24.0
+    # via ipykernel
     # via matplotlib
     # via mkdocs
     # via mkdocs-gallery
@@ -176,11 +217,18 @@ pandas==2.0.3
     # via xarray
 pandera==0.18.3
     # via crowsetta
+parso==0.8.4
+    # via jedi
 pathspec==0.12.1
     # via mkdocs
+pexpect==4.9.0
+    # via ipython
+pickleshare==0.7.5
+    # via ipython
 pillow==10.3.0
     # via matplotlib
 platformdirs==4.2.1
+    # via jupyter-core
     # via mkdocs-get-deps
     # via mkdocstrings
     # via tox
@@ -188,8 +236,15 @@ platformdirs==4.2.1
 pluggy==1.5.0
     # via pytest
     # via tox
+prompt-toolkit==3.0.43
+    # via ipython
 psutil==5.9.8
+    # via ipykernel
     # via memory-profiler
+ptyprocess==0.7.0
+    # via pexpect
+pure-eval==0.2.2
+    # via stack-data
 pycparser==2.22
     # via cffi
 pydantic==2.7.1
@@ -199,12 +254,14 @@ pydantic-core==2.18.2
     # via pydantic
 pygments==2.17.2
     # via icecream
+    # via ipython
     # via mkdocs-material
 pymdown-extensions==10.8
     # via mkdocs-material
     # via mkdocstrings
 pyparsing==3.1.2
     # via matplotlib
+    # via snuggs
 pyproject-api==1.6.1
     # via tox
 pyright==1.1.362
@@ -223,6 +280,7 @@ pytest-watch==4.2.0
 pytest-xdist==3.6.1
 python-dateutil==2.9.0.post0
     # via ghp-import
+    # via jupyter-client
     # via matplotlib
     # via pandas
 pytz==2024.1
@@ -235,6 +293,11 @@ pyyaml==6.0.1
     # via pyyaml-env-tag
 pyyaml-env-tag==0.1
     # via mkdocs
+pyzmq==26.0.3
+    # via ipykernel
+    # via jupyter-client
+rasterio==1.3.10
+    # via soundevent
 regex==2024.4.16
     # via mkdocs-material
 requests==2.31.0
@@ -249,6 +312,7 @@ scipy==1.10.1
     # via soundevent
 setuptools==69.5.1
     # via nodeenv
+    # via rasterio
 shapely==2.0.4
     # via soundevent
 six==1.16.0
@@ -256,11 +320,15 @@ six==1.16.0
     # via astunparse
     # via html5lib
     # via python-dateutil
+snuggs==1.4.7
+    # via rasterio
 sortedcontainers==2.4.0
     # via hypothesis
 soundfile==0.12.1
     # via crowsetta
     # via soundevent
+stack-data==0.6.3
+    # via ipython
 threadpoolctl==3.4.0
     # via scikit-learn
 tomli==2.0.1
@@ -268,13 +336,24 @@ tomli==2.0.1
     # via pyproject-api
     # via pytest
     # via tox
+tornado==6.4
+    # via ipykernel
+    # via jupyter-client
 tox==4.15.0
 tqdm==4.66.2
     # via mkdocs-gallery
+traitlets==5.14.3
+    # via comm
+    # via ipykernel
+    # via ipython
+    # via jupyter-client
+    # via jupyter-core
+    # via matplotlib-inline
 typeguard==4.2.1
     # via pandera
 typing-extensions==4.11.0
     # via annotated-types
+    # via ipython
     # via mkdocstrings
     # via pydantic
     # via pydantic-core
@@ -291,6 +370,8 @@ virtualenv==20.26.0
 watchdog==4.0.0
     # via mkdocs
     # via pytest-watch
+wcwidth==0.2.13
+    # via prompt-toolkit
 webencodings==0.5.1
     # via html5lib
 wheel==0.43.0

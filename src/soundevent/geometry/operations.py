@@ -1,11 +1,19 @@
 """Functions that handle SoundEvent geometries."""
 
 import json
-from typing import Any, Tuple
+from typing import Any, List, Tuple, Union
 
+import numpy as np
 import shapely
+import xarray as xr
+from numpy.typing import DTypeLike
+from rasterio import features
 
 from soundevent import data
+from soundevent.arrays import (
+    Dimensions,
+    get_coord_index,
+)
 from soundevent.geometry.conversion import geometry_to_shapely
 
 __all__ = [
@@ -225,3 +233,60 @@ def buffer_shapely_geometry(
     if json_data["type"] == "Polygon":
         return data.Polygon(coordinates=json_data["coordinates"])
     return data.MultiPolygon(coordinates=json_data["coordinates"])
+
+
+Value = Union[float, int]
+
+
+def rasterize(
+    geometries: List[data.Geometry],
+    array: xr.DataArray,
+    values: Union[Value, List[Value], Tuple[Value]] = 1,
+    fill: float = 0,
+    dtype: DTypeLike = np.float32,
+    xdim: str = Dimensions.time.value,
+    ydim: str = Dimensions.frequency.value,
+    all_touched: bool = False,
+) -> xr.DataArray:
+    if not isinstance(values, (list, tuple)):
+        values = [values] * len(geometries)
+
+    if len(values) != len(geometries):
+        raise ValueError(
+            "The number of values must match the number of geometries."
+        )
+
+    def transform_coordinates(coords: np.ndarray):
+        return np.array(
+            [
+                [
+                    get_coord_index(array, xdim, x, raise_error=False),
+                    get_coord_index(array, ydim, y, raise_error=False),
+                ]
+                for x, y in coords
+            ],
+            dtype=np.float64,
+        )
+
+    geometries = [
+        shapely.transform(geometry_to_shapely(geom), transform_coordinates)
+        for geom in geometries
+    ]
+
+    rast = features.rasterize(
+        [(geom, val) for geom, val in zip(geometries, values)],
+        array.shape,
+        default_value=1,
+        dtype=dtype,
+        fill=fill,  # type: ignore
+        all_touched=all_touched,
+    )
+
+    return xr.DataArray(
+        data=rast,
+        dims=(xdim, ydim),
+        coords={
+            xdim: array.coords[xdim],
+            ydim: array.coords[ydim],
+        },
+    )

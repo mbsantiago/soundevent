@@ -9,6 +9,7 @@ from xarray.core.types import InterpOptions
 
 from soundevent.arrays.dimensions import (
     create_range_dim,
+    get_coord_index,
     get_dim_range,
     get_dim_step,
 )
@@ -302,22 +303,11 @@ def set_value_at_pos(
            [1., 2., 3.],
            [0., 0., 0.]])
     """
-    dims = {dim: n for n, dim in enumerate(array.dims)}
     indexer: List[Union[slice, int]] = [slice(None) for _ in range(array.ndim)]
 
     for dim, coord in query.items():
-        if dim not in dims:
-            raise ValueError(f"Dimension {dim} not found in array.")
-
-        start, stop = get_dim_range(array, dim)
-
-        if coord < start or coord > stop:
-            raise KeyError(
-                f"Position {coord} is outside the range of dimension {dim}."
-            )
-
-        index = array.indexes[dim].get_slice_bound(coord, "right")
-        indexer[dims[dim]] = index - 1
+        dim_index: int = array.get_axis_num(dim)  # type: ignore
+        indexer[dim_index] = get_coord_index(array, dim, coord)
 
     if isinstance(value, (tuple, list)):
         coord = np.array(value)

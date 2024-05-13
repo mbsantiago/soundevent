@@ -45,6 +45,7 @@ __all__ = [
     "get_dim_step",
     "get_dim_width",
     "set_dim_attrs",
+    "get_coord_index",
 ]
 
 TIME_UNITS = "s"
@@ -607,3 +608,52 @@ def create_frequency_dim_from_array(
         data=coods,
         attrs=attrs,
     )
+
+
+def get_coord_index(
+    arr: xr.DataArray,
+    dim: str,
+    value: float,
+    raise_error: bool = True,
+) -> int:
+    """Get the index of a value along a dimension in a DataArray.
+
+    Parameters
+    ----------
+    arr : xr.DataArray
+        The input DataArray.
+    dim : str
+        The name of the dimension.
+    value : float
+        The value to find along the dimension.
+    raise_error: bool, optional
+        A flag indicating whether to raise an error if the value is outside
+        the range of the dimension. If True (default), raises a KeyError.
+        If False, returns the index of the closest value within the range.
+
+    Returns
+    -------
+    int
+        The index of the value along the specified dimension.
+
+    Raises
+    ------
+    ValueError
+        If the value is not found within the range of the dimension or if the
+        dimension is not found in the DataArray.
+    """
+    start, stop = get_dim_range(arr, dim)
+
+    if value < start or value > stop:
+        if raise_error:
+            raise KeyError(
+                f"Position {value} is outside the range of dimension {dim}."
+            )
+
+        if value < start:
+            return 0
+
+        return arr.sizes[dim] - 1
+
+    index = arr.indexes[dim].get_slice_bound(value, "right")
+    return index - 1
