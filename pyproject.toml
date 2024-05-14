@@ -65,7 +65,7 @@ rye = { dev-dependencies = [
 ] }
 
 [tool.pytest.ini_options]
-addopts = "-vv -n auto"
+addopts = "-vv"
 
 [tool.ruff]
 line-length = 79

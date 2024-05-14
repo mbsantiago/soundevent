@@ -1,5 +1,7 @@
 """Test suite for functions computing the geometric features."""
 
+import pytest
+
 from soundevent.data import geometries
 from soundevent.geometry import GeometricFeature, compute_geometric_features
 
@@ -135,3 +137,16 @@ def test_compute_multipolygon_features():
     assert features[3].value == 5
     assert features[4].name == GeometricFeature.NUM_SEGMENTS
     assert features[4].value == 2
+
+
+def test_compute_geometry_features_fails_on_unrecognized_geometry():
+    """Test that an error is raised when an unrecognized geometry is passed."""
+
+    class UnrecognizedGeometry(geometries.BaseGeometry):
+        type: str = "unrecognized"
+
+        coordinates: list
+
+    geometry = UnrecognizedGeometry(coordinates=[0, 1, 2, 3])
+    with pytest.raises(NotImplementedError):
+        compute_geometric_features(geometry)  # type: ignore

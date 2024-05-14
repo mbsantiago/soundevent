@@ -653,7 +653,7 @@ def get_coord_index(
         if value < start:
             return 0
 
-        return arr.sizes[dim] - 1
+        return arr.sizes[dim]
 
     index = arr.indexes[dim].get_slice_bound(value, "right")
     return index - 1
