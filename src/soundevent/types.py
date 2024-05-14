@@ -6,6 +6,28 @@ from typing import List, Optional
 from soundevent import data
 
 
+class Model(ABC):
+    """Abstract class for bioacoustic models."""
+
+    @abstractmethod
+    def predict(self, clip: data.Clip, **kwargs) -> data.ClipPrediction:
+        """Predict sound events in a clip.
+
+        Parameters
+        ----------
+        clip : data.Clip
+            A clip data object.
+        **kwargs
+            Additional keyword arguments.
+
+        Returns
+        -------
+        data.ClipPrediction
+            A clip prediction object.
+        """
+        ...
+
+
 class ClassMapper(ABC):
     """Abstract class for encoding and decoding labels."""
 

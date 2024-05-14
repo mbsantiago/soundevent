@@ -337,21 +337,24 @@ def rasterize(
     )
 
 
+Positions = Literal[
+    "bottom-left",
+    "bottom-right",
+    "top-left",
+    "top-right",
+    "center-left",
+    "center-right",
+    "top-center",
+    "bottom-center",
+    "center",
+    "centroid",
+    "point_on_surface",
+]
+
+
 def get_geometry_point(
     geometry: Geometry,
-    position: Literal[
-        "bottom-left",
-        "bottom-right",
-        "top-left",
-        "top-right",
-        "center-left",
-        "center-right",
-        "top-center",
-        "bottom-center",
-        "center",
-        "centroid",
-        "point_on_surface",
-    ] = "bottom-left",
+    position: Positions = "bottom-left",
 ) -> Tuple[float, float]:
     """
     Calculate the coordinates of a specific point within a geometry.

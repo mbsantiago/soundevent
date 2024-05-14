@@ -12,7 +12,7 @@ import soundfile as sf
 import xarray as xr
 
 from soundevent import data
-from soundevent.arrays import Dimensions, create_time_range
+from soundevent.arrays import ArrayAttrs, Dimensions, create_time_range
 from soundevent.audio.attributes import AudioAttrs
 
 __all__ = [
@@ -95,6 +95,9 @@ def load_recording(
         attrs={
             AudioAttrs.recording_id.value: str(recording.uuid),
             AudioAttrs.path.value: str(recording.path),
+            ArrayAttrs.units.value: "V",
+            ArrayAttrs.standard_name.value: "amplitude",
+            ArrayAttrs.long_name.value: "Amplitude",
         },
     )
 
@@ -161,6 +164,9 @@ def load_clip(
             AudioAttrs.recording_id.value: str(recording.uuid),
             AudioAttrs.clip_id.value: str(clip.uuid),
             AudioAttrs.path.value: str(recording.path),
+            ArrayAttrs.units.value: "V",
+            ArrayAttrs.standard_name.value: "amplitude",
+            ArrayAttrs.long_name.value: "Amplitude",
         },
     )
 
