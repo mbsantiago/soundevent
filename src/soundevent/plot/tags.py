@@ -4,8 +4,8 @@ from itertools import cycle
 from typing import Dict, Optional
 
 import numpy as np
+from matplotlib import colormaps
 from matplotlib.axes import Axes
-from matplotlib.cm import get_cmap
 
 from soundevent import data
 from soundevent.plot.common import create_axes
@@ -28,7 +28,7 @@ class TagColorMapper:
         """Initialize color mapper."""
         self._tags: Dict[data.Tag, str] = {}
 
-        colormap = get_cmap(cmap)
+        colormap = colormaps.get_cmap(cmap)
         self._colors = cycle(
             [colormap(x) for x in np.linspace(0, 1, num_colors)]
         )
@@ -36,7 +36,7 @@ class TagColorMapper:
     def get_color(self, tag: data.Tag) -> str:
         """Get color for tag."""
         if tag not in self._tags:
-            self._tags[tag] = next(self._colors)
+            self._tags[tag] = next(self._colors)  # type: ignore
 
         return self._tags[tag]
 
@@ -75,7 +75,7 @@ def add_tags_legend(
     for tag in color_mapper._tags:
         color = color_mapper.get_color(tag)
         handles.append(ax.scatter([], [], color=color))
-        labels.append(str(tag))
+        labels.append(f"{tag.key}: {tag.value}")
 
     ax.legend(handles, labels, loc="upper right")
 

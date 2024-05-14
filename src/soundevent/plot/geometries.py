@@ -1,12 +1,13 @@
 """Functions for plotting sound event geometries."""
 
 import sys
-from typing import Dict, Optional
+from typing import Dict, Optional, Tuple
 
 from matplotlib.axes import Axes
-from matplotlib.patches import Rectangle
+from shapely.plotting import plot_line, plot_points, plot_polygon
 
 from soundevent import data
+from soundevent.geometry import geometry_to_shapely
 from soundevent.plot.common import create_axes
 
 if sys.version_info >= (3, 8):
@@ -32,11 +33,12 @@ class GeometryPlotter(Protocol):
 def plot_geometry(
     geometry: data.Geometry,
     ax: Optional[Axes] = None,
+    figsize: Optional[Tuple[float, float]] = None,
     **kwargs,
 ) -> Axes:
     """Plot a geometry in the given ax."""
     if ax is None:
-        ax = create_axes(**kwargs)
+        ax = create_axes(figsize=figsize)
 
     geometry_type = geometry.type
 
@@ -52,31 +54,101 @@ def plot_geometry(
     return ax
 
 
-def _plot_bounding_box_geometry(
+def _plot_timestamp_geometry(
     geometry: data.Geometry,
     ax: Axes,
     **kwargs,
 ) -> Axes:
-    if not isinstance(geometry, data.BoundingBox):
+    if not isinstance(geometry, data.TimeStamp):
         raise ValueError(
-            f"Expected geometry of type {data.BoundingBox}, "
+            f"Expected geometry of type {data.TimeStamp}, "
             f"got {type(geometry)}."
         )
 
-    start_time, low_freq, end_time, high_freq = geometry.coordinates
+    time = geometry.coordinates
+    ax.axvline(time, **kwargs)  # type: ignore
+    return ax
 
-    rect = Rectangle(
-        (start_time, low_freq),
-        end_time - start_time,
-        high_freq - low_freq,
-        **kwargs,
-    )
 
-    ax.add_patch(rect)
+def _plot_timeinterval_geometry(
+    geometry: data.Geometry,
+    ax: Axes,
+    alpha: float = 1,
+    **kwargs,
+) -> Axes:
+    if not isinstance(geometry, data.TimeInterval):
+        raise ValueError(
+            f"Expected geometry of type {data.TimeInterval}, "
+            f"got {type(geometry)}."
+        )
 
+    start_time, end_time = geometry.coordinates
+    ax.axvline(start_time, alpha=alpha, **kwargs)  # type: ignore
+    ax.axvspan(start_time, end_time, alpha=alpha * 0.5, **kwargs)  # type: ignore
+    ax.axvline(end_time, alpha=alpha, **kwargs)  # type: ignore
+    return ax
+
+
+def _plot_point_geometry(
+    geometry: data.Geometry,
+    ax: Axes,
+    **kwargs,
+) -> Axes:
+    if not isinstance(geometry, (data.Point, data.MultiPoint)):
+        raise ValueError(
+            "Expected geometry of type "
+            f"{data.Point} or {data.MultiPoint}, "
+            f"got {type(geometry)}."
+        )
+
+    geometry = geometry_to_shapely(geometry)
+    plot_points(geometry, ax=ax, **kwargs)
+    return ax
+
+
+def _plot_line_string_geometry(
+    geometry: data.Geometry,
+    ax: Axes,
+    **kwargs,
+) -> Axes:
+    if not isinstance(geometry, (data.LineString, data.MultiLineString)):
+        raise ValueError(
+            "Expected geometry of type "
+            f"{data.LineString} or {data.MultiLineString}, "
+            f"got {type(geometry)}."
+        )
+
+    geometry = geometry_to_shapely(geometry)
+    plot_line(geometry, ax=ax, **kwargs)
+    return ax
+
+
+def _plot_polygon_geometry(
+    geometry: data.Geometry,
+    ax: Axes,
+    **kwargs,
+) -> Axes:
+    if not isinstance(
+        geometry, (data.Polygon, data.MultiPolygon, data.BoundingBox)
+    ):
+        raise ValueError(
+            "Expected geometry of type "
+            f"{data.Polygon}, {data.MultiPolygon} or {data.BoundingBox}, "
+            f"got {type(geometry)}."
+        )
+
+    geometry = geometry_to_shapely(geometry)
+    plot_polygon(geometry, ax=ax, **kwargs)
     return ax
 
 
 _GEOMETRY_PLOTTERS: Dict[data.GeometryType, GeometryPlotter] = {
-    data.BoundingBox.geom_type(): _plot_bounding_box_geometry,
+    data.BoundingBox.geom_type(): _plot_polygon_geometry,
+    data.TimeStamp.geom_type(): _plot_timestamp_geometry,
+    data.TimeInterval.geom_type(): _plot_timeinterval_geometry,
+    data.Point.geom_type(): _plot_point_geometry,
+    data.LineString.geom_type(): _plot_line_string_geometry,
+    data.Polygon.geom_type(): _plot_polygon_geometry,
+    data.MultiPolygon.geom_type(): _plot_polygon_geometry,
+    data.MultiLineString.geom_type(): _plot_line_string_geometry,
 }

@@ -1,5 +1,3 @@
-"""Functions for plotting annotations."""
-
 from typing import Iterable, Optional
 
 from matplotlib.axes import Axes
@@ -11,23 +9,24 @@ from soundevent.plot.geometries import plot_geometry
 from soundevent.plot.tags import TagColorMapper, add_tags_legend, plot_tag
 
 __all__ = [
-    "plot_annotation",
-    "plot_annotations",
+    "plot_prediction",
+    "plot_predictions",
 ]
 
 
-def plot_annotation(
-    annotation: data.SoundEventAnnotation,
+def plot_prediction(
+    prediction: data.SoundEventPrediction,
     ax: Optional[Axes] = None,
     position: Positions = "top-right",
     color_mapper: Optional[TagColorMapper] = None,
     time_offset: float = 0.001,
     freq_offset: float = 1000,
+    max_alpha: float = 0.5,
     color: Optional[str] = None,
     **kwargs,
 ) -> Axes:
     """Plot an annotation."""
-    geometry = annotation.sound_event.geometry
+    geometry = prediction.sound_event.geometry
 
     if geometry is None:
         raise ValueError("Annotation does not have a geometry.")
@@ -38,49 +37,58 @@ def plot_annotation(
     if color_mapper is None:
         color_mapper = TagColorMapper()
 
-    ax = plot_geometry(geometry, ax=ax, color=color, **kwargs)
+    ax = plot_geometry(
+        geometry,
+        ax=ax,
+        color=color,
+        alpha=prediction.score * max_alpha,
+        **kwargs,
+    )
 
     x, y = get_geometry_point(geometry, position=position)
 
-    for index, tag in enumerate(annotation.tags):
-        color = color_mapper.get_color(tag)
+    for index, tag in enumerate(prediction.tags):
+        color = color_mapper.get_color(tag.tag)
         ax = plot_tag(
             time=x + time_offset,
             frequency=y - index * freq_offset,
             color=color,
             ax=ax,
+            alpha=prediction.score,
             **kwargs,
         )
 
     return ax
 
 
-def plot_annotations(
-    annotations: Iterable[data.SoundEventAnnotation],
+def plot_predictions(
+    predictions: Iterable[data.SoundEventPrediction],
     ax: Optional[Axes] = None,
     position: Positions = "top-right",
     color_mapper: Optional[TagColorMapper] = None,
     time_offset: float = 0.001,
     freq_offset: float = 1000,
     legend: bool = True,
+    max_alpha: float = 0.5,
     color: Optional[str] = None,
     **kwargs,
 ):
-    """Plot an annotation."""
+    """Plot an prediction."""
     if ax is None:
         ax = create_axes(**kwargs)
 
     if color_mapper is None:
         color_mapper = TagColorMapper()
 
-    for annotation in annotations:
-        ax = plot_annotation(
-            annotation,
+    for prediction in predictions:
+        ax = plot_prediction(
+            prediction,
             ax=ax,
             position=position,
             color_mapper=color_mapper,
             time_offset=time_offset,
             freq_offset=freq_offset,
+            max_alpha=max_alpha,
             color=color,
             **kwargs,
         )
