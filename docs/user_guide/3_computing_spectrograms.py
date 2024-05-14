@@ -19,8 +19,7 @@ Here we will show how to compute spectrograms using the
 # First, we will load a recording. We will use the
 # the example recording from the (audio loading tutorial)[audio_loading].
 
-import numpy as np
-from soundevent import audio, data, arrays
+from soundevent import arrays, audio, data
 
 recording = data.Recording.from_file("sample_audio.wav")
 wave = audio.load_recording(recording)

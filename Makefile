@@ -48,7 +48,7 @@ test:    ## Run tests and generate coverage report.
 
 .PHONY: coverage
 coverage:    ## Run tests and generate coverage report.
-	$(ENV_PREFIX)coverage run -m pytest  tests/
+	$(ENV_PREFIX)coverage run -m pytest tests/
 
 .PHONY: coverage-report
 coverage-report: coverage

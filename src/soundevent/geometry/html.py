@@ -145,7 +145,7 @@ def geometry_to_html(geom: data.Geometry) -> str:
     str
         The HTML representation of the geometry.
     """
-    if geom.type == "timestamp":
+    if geom.type == "TimeStamp":
         return timestamp_to_html(geom)
     else:
         return shapely_to_html(geometry_to_shapely(geom))

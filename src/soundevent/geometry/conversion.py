@@ -23,11 +23,11 @@ def time_stamp_to_shapely(geom: data.TimeStamp) -> shapely.Geometry:
     shapely.Geometry
         The converted shapely geometry.
     """
-    return geometry.box(
-        geom.coordinates,
-        0,
-        geom.coordinates,
-        data.MAX_FREQUENCY,
+    return shapely.linestrings(
+        [
+            [geom.coordinates, 0],
+            [geom.coordinates, data.MAX_FREQUENCY],
+        ]
     )
 
 
