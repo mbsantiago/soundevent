@@ -98,8 +98,6 @@ def is_audio_file(path: PathLike, strict: bool = False) -> bool:
 
     extension = path.suffix[1:].lower()
 
-    print(extension)
-
     if extension not in VALID_AUDIO_EXTENSIONS:
         return False
 
