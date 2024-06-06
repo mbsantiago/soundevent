@@ -238,6 +238,7 @@ def test_loading_clip_after_end_time_will_pad_with_zeros(
     # Act
     wav = load_clip(clip)
     assert wav.shape == (recording.samplerate * 1, recording.channels)
+    assert np.allclose(wav.sel(time=slice(1, None)), 0)
 
 
 @pytest.mark.parametrize(

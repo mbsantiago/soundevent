@@ -313,13 +313,13 @@ def rasterize(
             dtype=np.float64,
         )
 
-    geometries = [
+    shapely_geometries = [
         shapely.transform(geometry_to_shapely(geom), transform_coordinates)
         for geom in geometries
     ]
 
     rast = features.rasterize(
-        [(geom, val) for geom, val in zip(geometries, values)],
+        [(geom, val) for geom, val in zip(shapely_geometries, values)],
         array.shape,
         default_value=1,
         dtype=dtype,

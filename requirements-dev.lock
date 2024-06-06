@@ -6,6 +6,7 @@
 #   features: []
 #   all-features: true
 #   with-sources: false
+#   generate-hashes: false
 
 -e file:.
 affine==2.4.0
@@ -264,7 +265,7 @@ pyparsing==3.1.2
     # via snuggs
 pyproject-api==1.6.1
     # via tox
-pyright==1.1.362
+pyright==1.1.366
 pytest==8.1.2
     # via pytest-cov
     # via pytest-testmon

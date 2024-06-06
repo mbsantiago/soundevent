@@ -1,5 +1,7 @@
 """Convert Geometry objects into shapely objects and vice versa."""
 
+from typing import overload
+
 import shapely
 from shapely import geometry
 
@@ -10,7 +12,7 @@ __all__ = [
 ]
 
 
-def time_stamp_to_shapely(geom: data.TimeStamp) -> shapely.Geometry:
+def time_stamp_to_shapely(geom: data.TimeStamp) -> shapely.LineString:
     """Convert a TimeStamp to a shapely geometry.
 
     Parameters
@@ -31,7 +33,7 @@ def time_stamp_to_shapely(geom: data.TimeStamp) -> shapely.Geometry:
     )
 
 
-def time_interval_to_shapely(geom: data.TimeInterval) -> shapely.Geometry:
+def time_interval_to_shapely(geom: data.TimeInterval) -> shapely.Polygon:
     """Convert a TimeInterval to a shapely geometry.
 
     Parameters
@@ -181,6 +183,60 @@ def multipolygon_to_shapely(
         polygon = geometry.Polygon(shell, holes)
         polgons.append(polygon)
     return geometry.MultiPolygon(polgons)
+
+
+@overload
+def geometry_to_shapely(
+    geom: data.TimeStamp,
+) -> shapely.LineString: ...
+
+
+@overload
+def geometry_to_shapely(
+    geom: data.TimeInterval,
+) -> shapely.Polygon: ...
+
+
+@overload
+def geometry_to_shapely(
+    geom: data.Point,
+) -> shapely.Point: ...
+
+
+@overload
+def geometry_to_shapely(
+    geom: data.LineString,
+) -> shapely.LineString: ...
+
+
+@overload
+def geometry_to_shapely(
+    geom: data.Polygon,
+) -> shapely.Polygon: ...
+
+
+@overload
+def geometry_to_shapely(
+    geom: data.BoundingBox,
+) -> shapely.Polygon: ...
+
+
+@overload
+def geometry_to_shapely(
+    geom: data.MultiPoint,
+) -> shapely.MultiPoint: ...
+
+
+@overload
+def geometry_to_shapely(
+    geom: data.MultiLineString,
+) -> shapely.MultiLineString: ...
+
+
+@overload
+def geometry_to_shapely(
+    geom: data.MultiPolygon,
+) -> shapely.MultiPolygon: ...
 
 
 def geometry_to_shapely(

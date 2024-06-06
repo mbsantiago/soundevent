@@ -61,7 +61,7 @@ def shapely_to_html(geometry: shapely.Geometry) -> str:
     str
         The HTML representation of the geometry.
     """
-    start_time, low_freq, end_time, high_freq = geometry.bounds
+    start_time, low_freq, end_time, high_freq = shapely.bounds(geometry)
 
     duration = end_time - start_time
     bandwidth = high_freq - low_freq
@@ -74,7 +74,7 @@ def shapely_to_html(geometry: shapely.Geometry) -> str:
     transformed = shapely.transform(
         geometry,
         lambda x: x * factor,
-    )._repr_svg_()
+    )
 
     style = (
         "display: inline-block; "

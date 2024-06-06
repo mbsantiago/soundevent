@@ -26,7 +26,7 @@ fmt:              ## Format code using black & isort.
 	$(ENV_PREFIX)ruff format $(PROJECT_NAME)/
 	$(ENV_PREFIX)ruff format tests/
 
-.PHONY: lint-mypy
+.PHONY: lint-pyright
 lint-pyright:
 	$(ENV_PREFIX)pyright $(PROJECT_NAME)/
 
@@ -36,7 +36,7 @@ lint-ruff:
 	$(ENV_PREFIX)ruff check tests/
 
 .PHONY: lint
-lint: lint-mypy lint-ruff
+lint: lint-pyright lint-ruff
 
 .PHONY: test-watch
 test-watch:    ## Run tests and generate coverage report.
@@ -66,9 +66,13 @@ clean:            ## Clean unused files.
 	@find src/ -name '__pycache__' -exec rm -rf {} \;
 	@find src/ -name 'Thumbs.db' -exec rm -f {} \;
 	@find src/ -name '*~' -exec rm -f {} \;
+	@rm -rf __pycache__
 	@rm -rf .cache
 	@rm -rf .mypy_cache
 	@rm -rf .ruff_cache
+	@rm -rf .virtual_documents
+	@rm -rf .ipynb_checkpoints
+	@rm -rf .pytest_cache
 
 .PHONY: clean-build
 clean-build:
