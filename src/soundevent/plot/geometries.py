@@ -3,6 +3,7 @@
 import sys
 from typing import Dict, Optional, Tuple
 
+import shapely
 from matplotlib.axes import Axes
 from shapely.plotting import plot_line, plot_points, plot_polygon
 
@@ -101,8 +102,8 @@ def _plot_point_geometry(
             f"got {type(geometry)}."
         )
 
-    geometry = geometry_to_shapely(geometry)
-    plot_points(geometry, ax=ax, **kwargs)
+    shapely_geometry = geometry_to_shapely(geometry)
+    plot_points(shapely_geometry, ax=ax, **kwargs)
     return ax
 
 
@@ -118,8 +119,17 @@ def _plot_line_string_geometry(
             f"got {type(geometry)}."
         )
 
-    geometry = geometry_to_shapely(geometry)
-    plot_line(geometry, ax=ax, **kwargs)
+    shapely_geometry = geometry_to_shapely(geometry)
+    if not isinstance(
+        shapely_geometry,
+        (shapely.LineString, shapely.MultiLineString, shapely.LinearRing),
+    ):
+        raise ValueError(
+            "Expected geometry of type "
+            f"{shapely.LineString}, {shapely.MultiLineString} or {shapely.LinearRing}, "
+            f"got {type(geometry)}."
+        )
+    plot_line(shapely_geometry, ax=ax, **kwargs)
     return ax
 
 
@@ -137,8 +147,19 @@ def _plot_polygon_geometry(
             f"got {type(geometry)}."
         )
 
-    geometry = geometry_to_shapely(geometry)
-    plot_polygon(geometry, ax=ax, **kwargs)
+    shapely_geometry = geometry_to_shapely(geometry)
+
+    if not isinstance(
+        shapely_geometry,
+        (shapely.Polygon, shapely.MultiPolygon),
+    ):
+        raise ValueError(
+            "Expected geometry of type "
+            f"{shapely.Polygon}, {shapely.MultiPolygon} or {shapely.LinearRing}, "
+            f"got {type(geometry)}."
+        )
+
+    plot_polygon(shapely_geometry, ax=ax, **kwargs)
     return ax
 
 
