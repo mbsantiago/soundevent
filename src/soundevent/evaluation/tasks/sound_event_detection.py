@@ -1,6 +1,6 @@
 """Sound event detection evaluation."""
 
-from typing import List, Optional, Sequence, Tuple
+from typing import Optional, Sequence
 
 import numpy as np
 
@@ -14,23 +14,27 @@ from soundevent.evaluation.encoding import (
 )
 from soundevent.evaluation.match import match_geometries
 from soundevent.evaluation.tasks.common import iterate_over_valid_clips
+from soundevent.terms import metrics as terms
 
 __all__ = [
     "sound_event_detection",
     "evaluate_clip",
 ]
 
-SOUNDEVENT_METRICS: Sequence[metrics.Metric] = (
-    metrics.true_class_probability,
+SOUNDEVENT_METRICS: Sequence[tuple[data.Term, metrics.Metric]] = (
+    (
+        terms.true_class_probability,
+        metrics.true_class_probability,
+    ),
 )
 
-EXAMPLE_METRICS: Sequence[metrics.Metric] = ()
+EXAMPLE_METRICS: Sequence[tuple[data.Term, metrics.Metric]] = ()
 
-RUN_METRICS: Sequence[metrics.Metric] = (
-    metrics.mean_average_precision,
-    metrics.balanced_accuracy,
-    metrics.accuracy,
-    metrics.top_3_accuracy,
+RUN_METRICS: Sequence[tuple[data.Term, metrics.Metric]] = (
+    (terms.mean_average_precision, metrics.mean_average_precision),
+    (terms.balanced_accuracy, metrics.balanced_accuracy),
+    (terms.accuracy, metrics.accuracy),
+    (terms.top_3_accuracy, metrics.top_3_accuracy),
 )
 
 
@@ -91,13 +95,13 @@ def compute_overall_metrics(true_classes, predicted_classes_scores):
     """Compute evaluation metrics based on true classes and predicted scores."""
     evaluation_metrics = [
         data.Feature(
-            name=metric.__name__,
+            term=term,
             value=metric(
                 true_classes,
                 predicted_classes_scores,
             ),
         )
-        for metric in RUN_METRICS
+        for term, metric in RUN_METRICS
     ]
     return evaluation_metrics
 
@@ -106,10 +110,10 @@ def evaluate_clip(
     clip_annotations: data.ClipAnnotation,
     clip_predictions: data.ClipPrediction,
     encoder: Encoder,
-) -> Tuple[List[Optional[int]], List[np.ndarray], data.ClipEvaluation]:
-    true_classes: List[Optional[int]] = []
-    predicted_classes_scores: List[np.ndarray] = []
-    matches: List[data.Match] = []
+) -> tuple[list[Optional[int]], list[np.ndarray], data.ClipEvaluation]:
+    true_classes: list[Optional[int]] = []
+    predicted_classes_scores: list[np.ndarray] = []
+    matches: list[data.Match] = []
 
     # Iterate over all matches between predictions and annotations.
     for prediction_index, annotation_index, affinity in match_geometries(
@@ -187,13 +191,13 @@ def evaluate_clip(
             predictions=clip_predictions,
             metrics=[
                 data.Feature(
-                    name=metric.__name__,
+                    term=term,
                     value=metric(
                         true_classes,
                         np.stack(predicted_classes_scores),
                     ),
                 )
-                for metric in EXAMPLE_METRICS
+                for term, metric in EXAMPLE_METRICS
             ],
             score=_mean([m.score for m in matches]),
             matches=matches,
@@ -205,7 +209,7 @@ def evaluate_sound_event(
     sound_event_prediction: data.SoundEventPrediction,
     sound_event_annotation: data.SoundEventAnnotation,
     encoder: Encoder,
-) -> Tuple[Optional[int], np.ndarray, data.Match]:
+) -> tuple[Optional[int], np.ndarray, data.Match]:
     true_class = classification_encoding(
         tags=sound_event_annotation.tags,
         encoder=encoder,
@@ -222,10 +226,10 @@ def evaluate_sound_event(
         score=score,
         metrics=[
             data.Feature(
-                name=metric.__name__,
+                term=term,
                 value=metric(true_class, predicted_class_scores),
             )
-            for metric in SOUNDEVENT_METRICS
+            for term, metric in SOUNDEVENT_METRICS
         ],
     )
     return true_class, predicted_class_scores, match

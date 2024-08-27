@@ -6,6 +6,7 @@
     options:
         members:
         - User
+        - Term
         - Tag
         - Feature
         - Note

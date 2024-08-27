@@ -1,7 +1,6 @@
 """Functions for plotting sound event geometries."""
 
-import sys
-from typing import Dict, Optional, Tuple
+from typing import Dict, Optional, Protocol, Tuple
 
 import shapely
 from matplotlib.axes import Axes
@@ -10,12 +9,6 @@ from shapely.plotting import plot_line, plot_points, plot_polygon
 from soundevent import data
 from soundevent.geometry import geometry_to_shapely
 from soundevent.plot.common import create_axes
-
-if sys.version_info >= (3, 8):
-    from typing import Protocol
-else:
-    from typing_extensions import Protocol
-
 
 __all__ = [
     "plot_geometry",

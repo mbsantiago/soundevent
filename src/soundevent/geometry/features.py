@@ -24,69 +24,39 @@ Examples
 --------
 To compute the features of a bounding box:
 
->>> from soundevent import data, features
+>>> from soundevent import data, features, terms
 >>> geometry = data.BoundingBox(
 ...     coordinates=(0, 0, 1, 1000),
 ... )
 >>> features.compute_geometric_features(geometry)
-[Feature(name='duration', value=1),
-    Feature(name='low_freq', value=0),
-    Feature(name='high_freq', value=1000),
-    Feature(name='bandwidth', value=1000)]
+[Feature(term=terms.duration, value=1),
+    Feature(terms=terms.low_freq, value=0),
+    Feature(terms=terms.high_freq, value=1000),
+    Feature(terms=terms.bandwidth, value=1000)]
 """
 
-from enum import Enum
 from typing import Any, Callable, Dict, List
 
+from soundevent import terms
 from soundevent.data import Feature, geometries
 from soundevent.geometry.conversion import geometry_to_shapely
 
 __all__ = [
     "compute_geometric_features",
-    "GeometricFeature",
 ]
-
-
-class GeometricFeature(str, Enum):
-    """Geometric features computed from geometries.
-
-    This enumeration defines various geometric features computed from sound
-    event geometries. These features provide essential insights into the
-    temporal and frequency properties of the events.
-
-    Attributes
-    ----------
-    DURATION : str
-        The duration of the geometry in seconds. Applicable to all geometries.
-    LOW_FREQ : str
-        The lowest frequency of the geometry in Hz.
-    HIGH_FREQ : str
-        The highest frequency of the geometry in Hz.
-    BANDWIDTH : str
-        The bandwidth of the geometry in Hz.
-    NUM_SEGMENTS : str
-        The number of segments of the geometry. Only applicable to
-        ``MultiPoint``, ``MultiLineString``, and ``MultiPolygon`` geometries.
-    """
-
-    DURATION = "duration"
-    LOW_FREQ = "low_freq"
-    HIGH_FREQ = "high_freq"
-    BANDWIDTH = "bandwidth"
-    NUM_SEGMENTS = "num_segments"
 
 
 def _compute_time_stamp_features(
     _: geometries.TimeStamp,
 ) -> List[Feature]:
-    return [Feature(name=GeometricFeature.DURATION, value=0)]
+    return [Feature(term=terms.duration, value=0)]
 
 
 def _compute_time_interval_features(
     geometry: geometries.TimeInterval,
 ) -> List[Feature]:
     start, end = geometry.coordinates
-    return [Feature(name=GeometricFeature.DURATION, value=end - start)]
+    return [Feature(term=terms.duration, value=end - start)]
 
 
 def _compute_bounding_box_features(
@@ -94,10 +64,10 @@ def _compute_bounding_box_features(
 ) -> List[Feature]:
     start_time, low_freq, end_time, high_freq = geometry.coordinates
     return [
-        Feature(name=GeometricFeature.DURATION, value=end_time - start_time),
-        Feature(name=GeometricFeature.LOW_FREQ, value=low_freq),
-        Feature(name=GeometricFeature.HIGH_FREQ, value=high_freq),
-        Feature(name=GeometricFeature.BANDWIDTH, value=high_freq - low_freq),
+        Feature(term=terms.duration, value=end_time - start_time),
+        Feature(term=terms.low_freq, value=low_freq),
+        Feature(term=terms.high_freq, value=high_freq),
+        Feature(term=terms.bandwidth, value=high_freq - low_freq),
     ]
 
 
@@ -108,10 +78,10 @@ def _compute_point_features(
     _, low_freq, _, high_freq = geom.bounds
 
     return [
-        Feature(name=GeometricFeature.DURATION, value=0),
-        Feature(name=GeometricFeature.LOW_FREQ, value=low_freq),
-        Feature(name=GeometricFeature.HIGH_FREQ, value=high_freq),
-        Feature(name=GeometricFeature.BANDWIDTH, value=0),
+        Feature(term=terms.duration, value=0),
+        Feature(term=terms.low_freq, value=low_freq),
+        Feature(term=terms.high_freq, value=high_freq),
+        Feature(term=terms.bandwidth, value=0),
     ]
 
 
@@ -122,10 +92,10 @@ def _compute_line_string_features(
     start_time, low_freq, end_time, high_freq = geom.bounds
 
     return [
-        Feature(name=GeometricFeature.DURATION, value=end_time - start_time),
-        Feature(name=GeometricFeature.LOW_FREQ, value=low_freq),
-        Feature(name=GeometricFeature.HIGH_FREQ, value=high_freq),
-        Feature(name=GeometricFeature.BANDWIDTH, value=high_freq - low_freq),
+        Feature(term=terms.duration, value=end_time - start_time),
+        Feature(term=terms.low_freq, value=low_freq),
+        Feature(term=terms.high_freq, value=high_freq),
+        Feature(term=terms.bandwidth, value=high_freq - low_freq),
     ]
 
 
@@ -136,10 +106,10 @@ def _compute_polygon_features(
     start_time, low_freq, end_time, high_freq = geom.bounds
 
     return [
-        Feature(name=GeometricFeature.DURATION, value=end_time - start_time),
-        Feature(name=GeometricFeature.LOW_FREQ, value=low_freq),
-        Feature(name=GeometricFeature.HIGH_FREQ, value=high_freq),
-        Feature(name=GeometricFeature.BANDWIDTH, value=high_freq - low_freq),
+        Feature(term=terms.duration, value=end_time - start_time),
+        Feature(term=terms.low_freq, value=low_freq),
+        Feature(term=terms.high_freq, value=high_freq),
+        Feature(term=terms.bandwidth, value=high_freq - low_freq),
     ]
 
 
@@ -150,13 +120,11 @@ def _compute_multi_point_features(
     start_time, low_freq, end_time, high_freq = geom.bounds
 
     return [
-        Feature(name=GeometricFeature.DURATION, value=end_time - start_time),
-        Feature(name=GeometricFeature.LOW_FREQ, value=low_freq),
-        Feature(name=GeometricFeature.HIGH_FREQ, value=high_freq),
-        Feature(name=GeometricFeature.BANDWIDTH, value=high_freq - low_freq),
-        Feature(
-            name=GeometricFeature.NUM_SEGMENTS, value=len(geometry.coordinates)
-        ),
+        Feature(term=terms.duration, value=end_time - start_time),
+        Feature(term=terms.low_freq, value=low_freq),
+        Feature(term=terms.high_freq, value=high_freq),
+        Feature(term=terms.bandwidth, value=high_freq - low_freq),
+        Feature(term=terms.num_segments, value=len(geom.coords)),
     ]
 
 
@@ -167,13 +135,11 @@ def _compute_multi_linestring_features(
     start_time, low_freq, end_time, high_freq = geom.bounds
 
     return [
-        Feature(name=GeometricFeature.DURATION, value=end_time - start_time),
-        Feature(name=GeometricFeature.LOW_FREQ, value=low_freq),
-        Feature(name=GeometricFeature.HIGH_FREQ, value=high_freq),
-        Feature(name=GeometricFeature.BANDWIDTH, value=high_freq - low_freq),
-        Feature(
-            name=GeometricFeature.NUM_SEGMENTS, value=len(geometry.coordinates)
-        ),
+        Feature(term=terms.duration, value=end_time - start_time),
+        Feature(term=terms.low_freq, value=low_freq),
+        Feature(term=terms.high_freq, value=high_freq),
+        Feature(term=terms.bandwidth, value=high_freq - low_freq),
+        Feature(term=terms.num_segments, value=len(geom.coords)),
     ]
 
 
@@ -184,13 +150,11 @@ def _compute_multi_polygon_features(
     start_time, low_freq, end_time, high_freq = geom.bounds
 
     return [
-        Feature(name=GeometricFeature.DURATION, value=end_time - start_time),
-        Feature(name=GeometricFeature.LOW_FREQ, value=low_freq),
-        Feature(name=GeometricFeature.HIGH_FREQ, value=high_freq),
-        Feature(name=GeometricFeature.BANDWIDTH, value=high_freq - low_freq),
-        Feature(
-            name=GeometricFeature.NUM_SEGMENTS, value=len(geometry.coordinates)
-        ),
+        Feature(term=terms.duration, value=end_time - start_time),
+        Feature(term=terms.low_freq, value=low_freq),
+        Feature(term=terms.high_freq, value=high_freq),
+        Feature(term=terms.bandwidth, value=high_freq - low_freq),
+        Feature(term=terms.num_segments, value=len(geom.coords)),
     ]
 
 

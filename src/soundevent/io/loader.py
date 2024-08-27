@@ -4,18 +4,12 @@ This module provides a flexible `load` function to load different types of sound
 event data.
 """
 
-import sys
-from typing import Dict, Optional, overload
+from typing import Dict, Literal, Optional, overload
 
 from soundevent import data
 from soundevent.io import aoef
 from soundevent.io.formats import infer_format
 from soundevent.io.types import DataCollections, DataType, Loader
-
-if sys.version_info >= (3, 8):
-    from typing import Literal
-else:
-    from typing_extensions import Literal  # pragma: no cover
 
 __all__ = [
     "load",

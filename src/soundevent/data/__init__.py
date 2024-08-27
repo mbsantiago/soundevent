@@ -46,6 +46,7 @@ from soundevent.data.sound_event_annotations import SoundEventAnnotation
 from soundevent.data.sound_event_predictions import SoundEventPrediction
 from soundevent.data.sound_events import SoundEvent
 from soundevent.data.tags import Tag, find_tag
+from soundevent.data.terms import Term
 from soundevent.data.users import User
 
 __all__ = [
@@ -88,6 +89,7 @@ __all__ = [
     "SoundEventPrediction",
     "StatusBadge",
     "Tag",
+    "Term",
     "Time",
     "TimeInterval",
     "TimeStamp",

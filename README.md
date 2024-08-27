@@ -4,7 +4,7 @@
 [![PyPI version](https://badge.fury.io/py/soundevent.svg)](https://badge.fury.io/py/soundevent)
 ![tests](https://github.com/mbsantiago/soundevent/actions/workflows/test.yml/badge.svg)
 [![docs](https://github.com/mbsantiago/soundevent/actions/workflows/docs.yml/badge.svg)](https://mbsantiago.github.io/soundevent/)
-![Python 3.8 +](https://img.shields.io/badge/python->=_3.8-blue.svg)
+![Python 3.9 +](https://img.shields.io/badge/python->=_3.9-blue.svg)
 ![Static Badge](https://img.shields.io/badge/formatting-black-black)
 [![codecov](https://codecov.io/gh/mbsantiago/soundevent/branch/main/graph/badge.svg?token=42kVE87avA)](https://codecov.io/gh/mbsantiago/soundevent)
 

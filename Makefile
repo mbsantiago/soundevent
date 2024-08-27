@@ -111,5 +111,4 @@ docs:             ## Build the documentation.
 .PHONY: docs-serve
 docs-serve:             ## Build the documentation and watch for changes.
 	@echo "building documentation ..."
-	URL="http://localhost:8000/soundevent/"; xdg-open $$URL || sensible-browser $$URL || x-www-browser $$URL || gnome-open $$URL
-	@$(ENV_PREFIX)mkdocs serve
+	@$(ENV_PREFIX)mkdocs serve --open

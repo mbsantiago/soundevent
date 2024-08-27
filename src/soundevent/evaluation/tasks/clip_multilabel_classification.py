@@ -11,17 +11,20 @@ from soundevent.evaluation.encoding import (
     prediction_encoding,
 )
 from soundevent.evaluation.tasks.common import iterate_over_valid_clips
+from soundevent.terms import metrics as terms
 
 __all__ = [
     "clip_multilabel_classification",
 ]
 
-EXAMPLE_METRICS: Sequence[metrics.Metric] = (
-    metrics.jaccard,
-    metrics.average_precision,
+EXAMPLE_METRICS: Sequence[tuple[data.Term, metrics.Metric]] = (
+    (terms.jaccard_index, metrics.jaccard),
+    (terms.average_precision, metrics.average_precision),
 )
 
-RUN_METRICS: Sequence[metrics.Metric] = (metrics.mean_average_precision,)
+RUN_METRICS: Sequence[tuple[data.Term, metrics.Metric]] = (
+    (terms.mean_average_precision, metrics.mean_average_precision),
+)
 
 
 def clip_multilabel_classification(
@@ -100,13 +103,13 @@ def _compute_overall_metrics(
     """Compute evaluation metrics based on true classes and predicted scores."""
     return [
         data.Feature(
-            name=metric.__name__,
+            term=term,
             value=metric(
                 true_classes,
                 predicted_classes_scores,
             ),
         )
-        for metric in RUN_METRICS
+        for term, metric in RUN_METRICS
     ]
 
 
@@ -148,10 +151,10 @@ def _evaluate_clip(
         predictions=clip_predictions,
         metrics=[
             data.Feature(
-                name=metric.__name__,
+                term=term,
                 value=metric(true_class, predicted_class_scores),
             )
-            for metric in EXAMPLE_METRICS
+            for term, metric in EXAMPLE_METRICS
         ],
         score=metrics.multilabel_example_score(
             true_class,

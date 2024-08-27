@@ -17,7 +17,7 @@ def save(
     obj: DataCollections,
     path: data.PathLike,
     audio_dir: Optional[data.PathLike] = None,
-    format: str = "aoef",
+    format: Optional[str] = "aoef",
     **kwargs,
 ) -> None:
     """Save a data object to a file.

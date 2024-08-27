@@ -45,6 +45,8 @@ from typing import Optional, Sequence
 
 from pydantic import BaseModel
 
+from soundevent.data.terms import Term
+
 __all__ = [
     "Feature",
     "find_feature",
@@ -77,17 +79,18 @@ class Feature(BaseModel):
         characteristics.
     """
 
-    name: str
+    term: Term
     value: float
 
     def __hash__(self):
         """Hash the Feature object."""
-        return hash((self.name, self.value))
+        return hash((self.term, self.value))
 
 
 def find_feature(
     features: Sequence[Feature],
-    name: str,
+    term: Optional[Term] = None,
+    label: Optional[str] = None,
     default: Optional[Feature] = None,
 ) -> Optional[Feature]:
     """Find a feature by its name.
@@ -119,7 +122,16 @@ def find_feature(
     If there are multiple features with the same name, the first one is
     returned.
     """
-    return next(
-        (f for f in features if f.name == name),
-        default,
-    )
+    if term is not None:
+        return next(
+            (f for f in features if f.term == term),
+            default,
+        )
+
+    if label is not None:
+        return next(
+            (f for f in features if f.term.label == label),
+            default,
+        )
+
+    raise ValueError("Either 'term' or 'label' must be provided.")

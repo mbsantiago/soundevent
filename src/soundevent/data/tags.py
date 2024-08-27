@@ -47,9 +47,12 @@ enabling advanced search, filtering, and analysis of audio recordings and
 associated objects within the soundevent package.
 """
 
-from typing import Optional, Sequence
+from collections.abc import Sequence
+from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+
+from soundevent.data.terms import Term
 
 __all__ = ["Tag", "find_tag"]
 
@@ -75,48 +78,75 @@ class Tag(BaseModel):
         values based on project requirements.
     """
 
-    key: str
-    value: str
+    term: Term = Field(
+        title="Term",
+        description="The standardised term associated with the tag.",
+        repr=False,
+    )
+
+    value: str = Field(
+        title="Value",
+        description="The value associated with the tag.",
+        repr=True,
+    )
 
     def __hash__(self):
         """Hash the Tag object."""
-        return hash((self.key, self.value))
+        return hash((self.term, self.value))
 
 
 def find_tag(
     tags: Sequence[Tag],
-    key: str,
+    term: Optional[Term] = None,
+    label: Optional[str] = None,
     default: Optional[Tag] = None,
 ) -> Optional[Tag]:
     """Find a tag by its key.
 
-    This function searches for a tag with the given key within the provided
-    sequence of tags. If the tag is found, its corresponding Tag object is
-    returned. If not found, and a default Tag object is provided, the default
-    tag is returned. If neither the tag is found nor a default tag is provided,
-    None is returned.
+    This function searches for a tag with the given term or term label within
+    the provided sequence of tags. If the tag is found, its corresponding Tag
+    object is returned. If not found, and a default Tag object is provided, the
+    default tag is returned. If neither the tag is found nor a default tag is
+    provided, None is returned.
 
     Parameters
     ----------
     tags
         The sequence of Tag objects to search within.
-    key
-        The key of the tag to search for.
+    term
+        The term object to search for.
+    label
+        The label of the term to search for.
     default
         The default Tag object to return if the tag is not found. Defaults to
         None.
 
     Returns
     -------
-    tag : Optional[Tag]
+    tag
         The Tag object if found, or the default Tag object if provided. Returns
         None if the tag is not found and no default is provided.
 
     Notes
     -----
-    If there are multiple tags with the same key, the first one is returned.
+    If there are multiple tags with the same term or term label, the first one
+    is returned.
+
+    Raises
+    ------
+    ValueError
+        If neither the term nor the label is provided.
     """
-    return next(
-        (f for f in tags if f.key == key),
-        default,
-    )
+    if term is not None:
+        return next(
+            (t for t in tags if t.term == term),
+            default,
+        )
+
+    if label is not None:
+        return next(
+            (t for t in tags if t.term.label == label),
+            default,
+        )
+
+    raise ValueError("Either 'term' or 'label' must be provided.")

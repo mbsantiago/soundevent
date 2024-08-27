@@ -115,13 +115,15 @@ def test_evaluated_clips_contain_true_class_probability(
     )
 
     true_class_prob_0 = data.find_feature(
-        evaluation.clip_evaluations[0].metrics, name="true_class_probability"
+        evaluation.clip_evaluations[0].metrics,
+        label="True Class Probability",
     )
     assert true_class_prob_0 is not None
     assert math.isclose(true_class_prob_0.value, 0.9, rel_tol=1e-6)
 
     true_class_prob_1 = data.find_feature(
-        evaluation.clip_evaluations[1].metrics, name="true_class_probability"
+        evaluation.clip_evaluations[1].metrics,
+        label="True Class Probability",
     )
     assert true_class_prob_1 is not None
     assert math.isclose(true_class_prob_1.value, 0.1, rel_tol=1e-6)
@@ -139,7 +141,7 @@ def test_evaluation_has_accuracy(
         tags=evaluation_tags,
     )
 
-    accuracy = data.find_feature(evaluation.metrics, name="accuracy")
+    accuracy = data.find_feature(evaluation.metrics, label="Accuracy")
     assert accuracy is not None
     assert math.isclose(accuracy.value, 0.5, rel_tol=1e-6)
 
@@ -157,7 +159,7 @@ def test_evaluation_has_balanced_accuracy(
     )
 
     balanced_accuracy = data.find_feature(
-        evaluation.metrics, name="balanced_accuracy"
+        evaluation.metrics, label="Balanced Accuracy"
     )
     assert balanced_accuracy is not None
     assert math.isclose(balanced_accuracy.value, 0.5, rel_tol=1e-6)
@@ -176,7 +178,7 @@ def test_evaluation_has_top_3_accuracy(
     )
 
     top_3_accuracy = data.find_feature(
-        evaluation.metrics, name="top_3_accuracy"
+        evaluation.metrics, label="Top 3 Accuracy"
     )
     assert top_3_accuracy is not None
     assert math.isclose(top_3_accuracy.value, 1.0, rel_tol=1e-6)

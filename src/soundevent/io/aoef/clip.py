@@ -33,7 +33,7 @@ class ClipAdapter(DataAdapter[data.Clip, ClipObject, UUID, UUID]):
             end_time=obj.end_time,
             uuid=obj.uuid,
             features=(
-                {feature.name: feature.value for feature in obj.features}
+                {feature.term.label: feature.value for feature in obj.features}
                 if obj.features
                 else None
             ),

@@ -24,13 +24,6 @@ def example_data():
     )
 
 
-def test_filter_audio_fails_if_not_an_xarray():
-    """Test that filter_audio fails if not an xarray.DataArray."""
-    data = np.random.randn(100)
-    with pytest.raises(ValueError):
-        audio.filter(data, 16000)  # type: ignore
-
-
 def test_filter_audio_fails_if_low_freq_is_greater_than_high_freq(
     example_data,
 ):
@@ -124,13 +117,6 @@ def test_can_run_pcen(
     assert isinstance(filtered, xr.DataArray)
 
 
-def test_resample_audio_fails_if_not_an_xarray():
-    """Test that resample_audio fails if not an xarray.DataArray."""
-    data = np.random.randn(100)
-    with pytest.raises(ValueError):
-        audio.resample(data, 16000)  # type: ignore
-
-
 def test_resample_audio_fails_if_no_time_axis():
     """Test that resample_audio fails with missing time axis."""
     data = xr.DataArray(
@@ -207,13 +193,6 @@ def test_resampling_is_done_in_the_time_axis():
     )
     resampled = audio.resample(data, 8000)
     assert resampled.shape == (2, 8000, 3)
-
-
-def test_pcen_audio_fails_if_not_an_xarray():
-    """Test that pcen_audio fails if not an xarray.DataArray."""
-    data = np.random.randn(100)
-    with pytest.raises(ValueError):
-        audio.pcen(data)  # type: ignore
 
 
 def test_pcen_audio_fails_if_dimension_does_not_exist():

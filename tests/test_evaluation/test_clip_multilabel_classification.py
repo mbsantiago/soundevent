@@ -4,7 +4,7 @@ from typing import List
 
 import pytest
 
-from soundevent import data
+from soundevent import data, terms
 from soundevent.evaluation import clip_multilabel_classification
 
 
@@ -110,7 +110,7 @@ def test_each_evaluated_example_has_jaccard_metric(
         tags=evaluation_tags,
     )
     for example in evaluation.clip_evaluations:
-        metric = data.find_feature(example.metrics, "jaccard")
+        metric = data.find_feature(example.metrics, term=terms.jaccard_index)
         assert metric is not None
 
 
@@ -126,7 +126,9 @@ def test_each_evaluated_example_has_average_precision(
         tags=evaluation_tags,
     )
     for example in evaluation.clip_evaluations:
-        metric = data.find_feature(example.metrics, "average_precision")
+        metric = data.find_feature(
+            example.metrics, term=terms.average_precision
+        )
         assert metric is not None
 
 
@@ -155,5 +157,8 @@ def test_evaluation_has_global_mean_average_precision(
         clip_annotations=annotation_set.clip_annotations,
         tags=evaluation_tags,
     )
-    metric = data.find_feature(evaluation.metrics, "mean_average_precision")
+    metric = data.find_feature(
+        evaluation.metrics,
+        term=terms.mean_average_precision,
+    )
     assert metric is not None
