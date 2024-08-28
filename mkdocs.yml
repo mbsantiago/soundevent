@@ -20,6 +20,7 @@ nav:
       - geometry: reference/geometry.md
       - evaluation: reference/evaluation.md
       - plot: reference/plot.md
+      - terms: reference/terms.md
   - Contributing: CONTRIBUTING.md
   - Code of Conduct: CODE_OF_CONDUCT.md
 theme:

@@ -28,7 +28,9 @@ erDiagram
 [**Terms**][soundevent.data.Term] ensure everyone's on the same page.
 Inconsistent naming like "species" vs. "Species" wastes time.
 **Terms** provide a controlled vocabulary for common properties used in annotations and descriptions.
-We've chosen terms from established vocabularies like Darwin Core and Audiovisual Core, aligning you with best practices.
+
+We've selected terms from established vocabularies like [Darwin Core](https://dwc.tdwg.org/list/) and [Audiovisual Core](https://ac.tdwg.org/termlist/), aligning your work with best practices.
+Take a look here for the [terms][soundevent.terms] defined in soundevent.
 
 ## Tags
 

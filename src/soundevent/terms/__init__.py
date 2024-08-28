@@ -1,3 +1,11 @@
+"""Terms module.
+
+This module provides pre-defined [`Term`][soundevent.data.Term] objects for
+working with soundevent data. These terms are aligned with established metadata
+standards whenever possible, promoting consistency and interoperability across
+projects.
+"""
+
 from soundevent.terms.metrics import (
     accuracy,
     average_precision,
