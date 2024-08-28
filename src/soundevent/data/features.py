@@ -41,10 +41,13 @@ characteristics across a collection of sound events, and
 conducting statistical analyses on the annotated dataset.
 """
 
-from typing import Optional, Sequence
+import warnings
+from collections.abc import Sequence
+from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, model_validator
 
+from soundevent.data.compat import key_from_term, term_from_key
 from soundevent.data.terms import Term
 
 __all__ = [
@@ -80,11 +83,38 @@ class Feature(BaseModel):
     """
 
     term: Term
+
     value: float
 
     def __hash__(self):
         """Hash the Feature object."""
         return hash((self.term, self.value))
+
+    @property
+    def name(self) -> str:
+        """Return the name of the feature."""
+        warnings.warn(
+            "The 'name' attribute is deprecated. Use 'term' instead.",
+            DeprecationWarning,
+            stacklevel=1,
+        )
+        return key_from_term(self.term)
+
+    @model_validator(mode="before")
+    @classmethod
+    def handle_deprecated_name(cls, values):
+        if "name" in values:
+            warnings.warn(
+                "The 'name' field is deprecated. Please use 'term' instead.",
+                DeprecationWarning,
+                stacklevel=1,
+            )
+
+            if "term" not in values:
+                values["term"] = term_from_key(values["name"])
+
+            del values["name"]
+        return values
 
 
 def find_feature(

@@ -54,7 +54,10 @@ class MatchAdapter(DataAdapter[data.Match, MatchObject, UUID, UUID]):
             affinity=obj.affinity,
             score=obj.score,
             metrics=(
-                {metrics.name: metrics.value for metrics in obj.metrics}
+                {
+                    data.key_from_term(metrics.term): metrics.value
+                    for metrics in obj.metrics
+                }
                 if obj.metrics
                 else None
             ),
@@ -80,7 +83,7 @@ class MatchAdapter(DataAdapter[data.Match, MatchObject, UUID, UUID]):
             score=obj.score,
             metrics=[
                 data.Feature(
-                    name=name,
+                    term=data.term_from_key(name),
                     value=value,
                 )
                 for name, value in (obj.metrics or {}).items()

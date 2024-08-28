@@ -4,7 +4,25 @@ from typing import Callable, List
 
 import pytest
 
+from tests.conftest import get_random_string
+
 from soundevent import data
+
+
+@pytest.fixture
+def random_tags():
+    """Generate a random list of tags for testing."""
+
+    def factory(n=10):
+        return [
+            data.Tag(
+                term=data.term_from_key(get_random_string(10)),
+                value=get_random_string(10),
+            )
+            for _ in range(n)
+        ]
+
+    return factory
 
 
 @pytest.fixture
@@ -36,7 +54,10 @@ def recording(
         tags=tags,
         notes=[note],
         features=[
-            data.Feature(name="MaxAmp", value=23.3),
+            data.Feature(
+                term=data.term_from_key("MaxAmp"),
+                value=23.3,
+            ),
         ],
     )
 
@@ -61,7 +82,7 @@ def time_expanded_recording(
         tags=tags,
         notes=[note],
         features=[
-            data.Feature(name="MaxAmp", value=23.3),
+            data.Feature(term=data.term_from_key("MaxAmp"), value=23.3),
         ],
     )
 
@@ -90,7 +111,7 @@ def sequence(
         uuid=sound_event.uuid,
         sound_events=[sound_event],
         features=[
-            data.Feature(name="Duration", value=23.3),
+            data.Feature(term=data.term_from_key("duration"), value=23.3),
         ],
     )
 
@@ -104,8 +125,8 @@ def clip(
         start_time=0.0,
         end_time=1.0,
         features=[
-            data.Feature(name="MaxAmp", value=23.3),
-            data.Feature(name="SNR", value=8),
+            data.Feature(term=data.term_from_key("MaxAmp"), value=23.3),
+            data.Feature(term=data.term_from_key("SNR"), value=8),
         ],
     )
 
@@ -260,8 +281,8 @@ def clip_predictions(
         sound_events=[sound_event_prediction],
         tags=predicted_tags[1:],
         features=[
-            data.Feature(name="VGGish1", value=23.3),
-            data.Feature(name="VGGish2", value=-32.7),
+            data.Feature(term=data.term_from_key("VGGish1"), value=23.3),
+            data.Feature(term=data.term_from_key("VGGish2"), value=-32.7),
         ],
         sequences=[sequence_prediction],
     )
@@ -300,7 +321,7 @@ def match(
         score=0.4,
         metrics=[
             data.Feature(
-                name="cross_entropy",
+                term=data.term_from_key("accuracy"),
                 value=0.5,
             ),
         ],
@@ -319,11 +340,11 @@ def clip_evaluation(
         matches=[match],
         metrics=[
             data.Feature(
-                name="Accuracy",
+                term=data.term_from_key("accuracy"),
                 value=0.5,
             ),
             data.Feature(
-                name="F1",
+                term=data.term_from_key("f1_score"),
                 value=0.5,
             ),
         ],
@@ -339,11 +360,11 @@ def evaluation(
         evaluation_task="Classification",
         metrics=[
             data.Feature(
-                name="Accuracy",
+                term=data.term_from_key("accuracy"),
                 value=0.5,
             ),
             data.Feature(
-                name="F1",
+                term=data.term_from_key("f1_score"),
                 value=0.5,
             ),
         ],

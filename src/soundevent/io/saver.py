@@ -5,7 +5,7 @@ sound event data. Data can be saved in formats compatible with the
 `soundevent.io.load` function.
 """
 
-from typing import Dict, Optional
+from typing import Optional
 
 from soundevent import data
 from soundevent.io.aoef import save as aoef_save
@@ -59,6 +59,4 @@ def save(
     return saver(obj, path, audio_dir, **kwargs)
 
 
-SAVERS: Dict[str, Saver] = {
-    "aoef": aoef_save,
-}
+SAVERS: dict[str, Saver] = {"aoef": aoef_save}

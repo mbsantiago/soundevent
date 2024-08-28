@@ -124,7 +124,7 @@ def _compute_multi_point_features(
         Feature(term=terms.low_freq, value=low_freq),
         Feature(term=terms.high_freq, value=high_freq),
         Feature(term=terms.bandwidth, value=high_freq - low_freq),
-        Feature(term=terms.num_segments, value=len(geom.coords)),
+        Feature(term=terms.num_segments, value=len(geom.geoms)),
     ]
 
 
@@ -139,7 +139,7 @@ def _compute_multi_linestring_features(
         Feature(term=terms.low_freq, value=low_freq),
         Feature(term=terms.high_freq, value=high_freq),
         Feature(term=terms.bandwidth, value=high_freq - low_freq),
-        Feature(term=terms.num_segments, value=len(geom.coords)),
+        Feature(term=terms.num_segments, value=len(geom.geoms)),
     ]
 
 
@@ -154,7 +154,7 @@ def _compute_multi_polygon_features(
         Feature(term=terms.low_freq, value=low_freq),
         Feature(term=terms.high_freq, value=high_freq),
         Feature(term=terms.bandwidth, value=high_freq - low_freq),
-        Feature(term=terms.num_segments, value=len(geom.coords)),
+        Feature(term=terms.num_segments, value=len(geom.geoms)),
     ]
 
 

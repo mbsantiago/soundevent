@@ -104,7 +104,7 @@ def label_to_tags(
     if key is None:
         key = fallback
 
-    return [data.Tag(key=key, value=label)]
+    return [data.Tag(term=data.term_from_key(key), value=label)]
 
 
 def label_from_tag(
@@ -161,7 +161,7 @@ def label_from_tag(
     if value_only:
         return tag.value
 
-    return f"{tag.key}{separator}{tag.value}"
+    return f"{data.key_from_term(tag.term)}{separator}{tag.value}"
 
 
 def label_from_tags(
@@ -230,7 +230,10 @@ def label_from_tags(
         return empty_label
 
     if select_by_key is not None:
-        tag = next((t for t in tags if t.key == select_by_key), None)
+        tag = next(
+            (t for t in tags if data.key_from_term(t.term) == select_by_key),
+            None,
+        )
 
         if tag is None:
             return empty_label

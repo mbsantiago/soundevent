@@ -3,7 +3,7 @@
 from typing import Callable, Dict
 
 from soundevent.data import PathLike
-from soundevent.io.aoef import is_json
+from soundevent.io.utils import is_json
 
 __all__ = [
     "infer_format",

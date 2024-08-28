@@ -57,7 +57,10 @@ class ClipEvaluationAdapter(
                 else None
             ),
             metrics=(
-                {metrics.name: metrics.value for metrics in obj.metrics}
+                {
+                    data.key_from_term(metrics.term): metrics.value
+                    for metrics in obj.metrics
+                }
                 if obj.metrics
                 else None
             ),
@@ -93,7 +96,7 @@ class ClipEvaluationAdapter(
             predictions=predictions,
             matches=matches,
             metrics=[
-                data.Feature(name=name, value=value)
+                data.Feature(term=data.term_from_key(name), value=value)
                 for name, value in (obj.metrics or {}).items()
             ],
             score=obj.score,

@@ -83,7 +83,10 @@ class RecordingAdapter(
             longitude=obj.longitude,
             tags=tag_ids if tag_ids else None,
             features=(
-                {feature.name: feature.value for feature in obj.features}
+                {
+                    data.key_from_term(feature.term): feature.value
+                    for feature in obj.features
+                }
                 if obj.features
                 else None
             ),
@@ -131,7 +134,7 @@ class RecordingAdapter(
             tags=tags,
             features=[
                 data.Feature(
-                    name=name,
+                    term=data.term_from_key(name),
                     value=value,
                 )
                 for name, value in (obj.features or {}).items()

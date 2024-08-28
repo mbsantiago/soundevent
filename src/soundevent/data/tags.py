@@ -47,11 +47,13 @@ enabling advanced search, filtering, and analysis of audio recordings and
 associated objects within the soundevent package.
 """
 
+import warnings
 from collections.abc import Sequence
 from typing import Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from soundevent.data.compat import key_from_term, term_from_key
 from soundevent.data.terms import Term
 
 __all__ = ["Tag", "find_tag"]
@@ -78,6 +80,8 @@ class Tag(BaseModel):
         values based on project requirements.
     """
 
+    model_config = ConfigDict(extra="allow")
+
     term: Term = Field(
         title="Term",
         description="The standardised term associated with the tag.",
@@ -93,6 +97,32 @@ class Tag(BaseModel):
     def __hash__(self):
         """Hash the Tag object."""
         return hash((self.term, self.value))
+
+    @property
+    def key(self) -> str:
+        """Return the key of the tag."""
+        warnings.warn(
+            "The 'key' attribute is deprecated. Use 'term' instead.",
+            DeprecationWarning,
+            stacklevel=1,
+        )
+        return key_from_term(self.term)
+
+    @model_validator(mode="before")
+    @classmethod
+    def handle_deprecated_key(cls, values):
+        if "key" in values:
+            warnings.warn(
+                "The 'key' field is deprecated. Please use 'term' instead.",
+                DeprecationWarning,
+                stacklevel=1,
+            )
+
+            if "term" not in values:
+                values["term"] = term_from_key(values["key"])
+
+            del values["key"]
+        return values
 
 
 def find_tag(

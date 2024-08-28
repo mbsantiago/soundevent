@@ -1,10 +1,9 @@
 """Terms module.
 
-Soundevent uses a specialized object to refer to specific standardised terms.
-Using standardised terms ensures it's easier to interpret tags and features as
-well as sharing data with others. It makes it much clearer how to incorporate
-with existing corpus of data.
-
+Soundevent uses specialized objects to refer to standardized terms.
+Standardized terms make it easier to interpret tags and features,
+and facilitate data sharing. This clarity helps integrate with
+existing data corpora.
 """
 
 from typing import Optional
@@ -27,6 +26,9 @@ class Term(BaseModel):
         title="Label",
         description="The human-readable label assigned to the term.",
         repr=True,
+        json_schema_extra={
+            "$id": "https://www.w3.org/TR/rdf-schema/#ch_label"
+        },
     )
 
     definition: str = Field(
@@ -91,6 +93,9 @@ class Term(BaseModel):
         title="Subproperty Of",
         description="A property of which the described term is a sub-property.",
         repr=False,
+        json_schema_extra={
+            "$id": "https://www.w3.org/TR/rdf-schema/#ch_subpropertyof"
+        },
     )
 
     superclass_of: Optional[str] = Field(
@@ -107,6 +112,9 @@ class Term(BaseModel):
         title="Subclass Of",
         description="A class of which the described term is a sub-class.",
         repr=False,
+        json_schema_extra={
+            "$id": "https://www.w3.org/TR/rdf-schema/#ch_subclassof"
+        },
     )
 
     domain: Optional[str] = Field(
@@ -116,6 +124,9 @@ class Term(BaseModel):
             "A class of which a resource described by the term is an instance."
         ),
         repr=False,
+        json_schema_extra={
+            "$id": "https://www.w3.org/TR/rdf-schema/#ch_domain"
+        },
     )
 
     domain_includes: Optional[str] = Field(
@@ -134,6 +145,9 @@ class Term(BaseModel):
         description=(
             "A class of which a value described by the term is an instance."
         ),
+        json_schema_extra={
+            "$id": "https://www.w3.org/TR/rdf-schema/#ch_range"
+        },
         repr=False,
     )
 

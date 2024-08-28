@@ -167,6 +167,22 @@ def random_tags(random_terms):
 
 
 @pytest.fixture
+def random_features(random_terms):
+    """Generate a random list of features for testing."""
+
+    def factory(n=10):
+        return [
+            data.Feature(
+                term=term,
+                value=random.random(),
+            )
+            for term in random_terms(n)
+        ]
+
+    return factory
+
+
+@pytest.fixture
 def random_clips(random_wav):
     """Generate a random list of clips for testing."""
 
