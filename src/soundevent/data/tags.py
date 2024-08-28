@@ -1,50 +1,24 @@
 """Tags.
 
-Tags are a powerful mechanism for attaching additional information and metadata
-to various objects within the `soundevent` package. They offer flexibility and
-enable users to add contextual details to recordings, clips, and sound events.
-
-## Purpose and Use
-
-Tags serve the purpose of providing special meaning and enhancing the
-organization and filtering capabilities of the package. They can be applied to
-different entities to provide valuable insights and facilitate efficient data
-management and analysis.
+Tags attach metadata to objects (recordings, clips, sound events) in the
+soundevent package, enhancing organization and filtering.
 
 ## Structure
 
-Each tag is defined as a key-value pair. The key plays a crucial role in
-grouping tags into coherent categories, aiding in the organization and
-filtering of tags within the application. There are no restrictions on what can
-be used as a key or value, empowering users to select tags that best suit their
-project requirements.
+Each tag comprises a value (string) and a term. The term provides context and
+meaning, often drawn from controlled vocabularies (e.g., "ac:duration" from the
+Audiovisual Core). This ensures standard, clear tag meanings.
 
 ## Usage Examples
 
-Recording Tags: Tags can be attached to recordings to provide additional
-information about the recording context. For example, they can indicate the
-vegetation type of the recording site, the recording device used, or the
-specific recording protocol employed. These tags enable users to organize and
-locate specific recordings more easily.
+**Recording Tags**: Provide context (e.g., vegetation type, recording device,
+protocol).
 
-Clip Tags: Tags can be attached to recording clips to highlight various aspects
-of the acoustic content. They can be used to list the species present within a
-clip, indicate noise levels, or classify the clip's soundscape into a specific
-category. Clip tags provide valuable metadata and aid in analyzing and
-categorizing the audio content.
+**Clip Tags**: Highlight acoustic content (e.g., species present, noise levels,
+soundscape category).
 
-Sound Event Tags: Tags can also be attached to individual sound events within a
-recording. These tags offer a detailed description of the sound event and
-provide additional metadata. For instance, they can indicate the species
-responsible for the sound, which is crucial for species identification and
-analysis. Tags can also describe the behavior exhibited by the sound emitter,
-such as mating, territorial, or alarm calls. Furthermore, tags can identify
-specific syllables within a larger vocalization, facilitating granular analysis
-and vocalization classification.
-
-By utilizing tags, users can enrich their data with relevant information,
-enabling advanced search, filtering, and analysis of audio recordings and
-associated objects within the soundevent package.
+**Sound Event Tags**: Describe individual sounds (e.g., species, behavior,
+specific syllables).
 """
 
 import warnings
@@ -62,22 +36,19 @@ __all__ = ["Tag", "find_tag"]
 class Tag(BaseModel):
     """Tag Class.
 
-    Tags are essential elements in annotating and categorizing various
-    components within bioacoustic research. Each tag consists of a key-value
-    pair, where the key serves as a unique identifier for grouping tags into
-    meaningful categories. Tags play a crucial role in organizing, filtering,
-    and interpreting data within the application.
+    Tags annotate and categorize bioacoustic research components. Each tag is a
+    `term-value` pair. The `term` provides context and enables categorization.
 
     Attributes
     ----------
-    key
-        The key of the tag, serving as a label or category identifier. It helps
-        in organizing tags into coherent groups, enhancing the manageability of
-        annotations.
+    term
+        The standardized term associated with the tag, providing context and meaning.
     value
-        The value associated with the tag, providing specific information or
-        characteristics related to the key. Users have the flexibility to assign
-        values based on project requirements.
+        The value associated with the tag, offering specific information.
+
+    Notes
+    -----
+    The `key` attribute is deprecated. Use `term` instead.
     """
 
     model_config = ConfigDict(extra="allow")

@@ -3,7 +3,7 @@
 This module provides functions for converting between **Crowsetta** labels and
 `soundevent` tags. Crowsetta labels are represented as strings, while
 soundevent tags are instances of a custom class
-[`data.Tag`][soundevent.data.Tag], which contains a key-value pair rather than
+[`data.Tag`][soundevent.data.Tag], which contains a term-value pair rather than
 a single string. The conversion functions provided in this module facilitate
 the conversion of labels to tags and vice versa, and they allow users to
 customize the conversion process using various options.
@@ -30,58 +30,55 @@ def label_to_tags(
     label: str,
     tag_fn: Optional[LabelToTagFn] = None,
     tag_mapping: Optional[LabelToTagMap] = None,
+    term_mapping: Optional[Dict[str, data.Term]] = None,
     key_mapping: Optional[Dict[str, str]] = None,
     key: Optional[str] = None,
+    term: Optional[data.Term] = None,
     fallback: str = "crowsetta",
     empty_labels: Sequence[str] = (EMPTY_LABEL,),
 ) -> List[data.Tag]:
-    """Convert a `crowsetta` label to a list of `soundevent` tags.
-
-    This function facilitates the conversion of a **Crowsetta** label to a list
-    of `soundevent` tags. Users can customize the conversion process using the
-    following options:
-
-    1. If the label matches any of the `empty_labels`, the function returns
-    an empty list of tags.
-    2. If a mapping function (`tag_fn` argument) is provided, it will be
-    used to directly convert the label to a list of tags. If the function
-    returns a single tag instead of a list, it is automatically wrapped in
-    a list.
-    3. If a mapping dictionary (`tag_mapping` argument) is provided, the
-    function will attempt to look up the list of tags for the label in the
-    mapping. If found, it returns the list of tags; otherwise, it proceeds
-    to the next option.
-    4. If a mapping dictionary (`key_mapping` argument) is provided, the
-    function will try to look up the key for the label in the mapping.
-    If found, it uses the key; otherwise, it proceeds to the next option.
-    5. If the `key` argument is provided, it will be used as the key for
-    the tag. If `key` is not provided, the `fallback` argument will be used
-    as the key.
+    """Convert a crowsetta label to a list of soundevent tags.
 
     Parameters
     ----------
     label
-        The Crowsetta label to convert to a list of tags.
+        The Crowsetta label to convert.
     tag_fn
-        A function to convert labels to a list of tags. If a single tag is
-        returned, it is automatically wrapped in a list.
+        A function to directly convert labels to a list of tags.
     tag_mapping
         A dictionary mapping labels to lists of tags or a single tag.
+    term_mapping
+        A dictionary mapping labels directly to `soundevent.data.Term` objects
     key_mapping
-        A dictionary mapping labels to keys.
+        A dictionary mapping labels to keys (deprecated, use `term_mapping`
+        instead).
     key
-        The key to use for the tag. If not provided, the `fallback` argument
-        will be used.
+        The key to use for the tag (deprecated, use `term` instead).
+    term
+        The `soundevent.data.Term` to use for the tag
     fallback
-        The key to use if no other key is provided, by default "crowsetta".
+        The key to use if no other key is provided (deprecated, use `term`
+        instead).
     empty_labels
-        A sequence of labels to be considered as empty, resulting in an empty
-        list of tags.
+        Labels considered empty, resulting in an empty list of tags.
 
     Returns
     -------
     List[data.Tag]
         The list of soundevent tags corresponding to the Crowsetta label.
+
+    Notes
+    -----
+    This is the default conversion process:
+
+    1. If `label` is in `empty_labels`, return an empty list.
+    2. If `tag_fn` is provided, use it to convert the label.
+    3. If `term_mapping` is provided and the label is found, use the corresponding term.
+    4. If `tag_mapping` is provided and the label is found, return the corresponding tags.
+    5. If `key_mapping` is provided and the label is found, use the corresponding key (deprecated).
+    6. If `key` is provided, use it (deprecated). Otherwise, use `fallback` (deprecated).
+    7. If `term` is not yet set, derive it from the `key` (deprecated).
+    8. Return a list containing a single `Tag` with the determined `term` and the original `label` as the `value`.
     """
     if label in empty_labels:
         return []
@@ -93,18 +90,25 @@ def label_to_tags(
         except ValueError:
             pass
 
-    if tag_mapping is not None:
+    if term_mapping is not None:
+        if label in term_mapping:
+            term = term_mapping[label]
+
+    if term is None and tag_mapping is not None:
         if label in tag_mapping:
             tags = tag_mapping[label]
             return tags if isinstance(tags, list) else [tags]
 
-    if key_mapping is not None:
+    if term is None and key_mapping is not None:
         key = key_mapping.get(label)
 
     if key is None:
         key = fallback
 
-    return [data.Tag(term=data.term_from_key(key), value=label)]
+    if term is None:
+        term = data.term_from_key(key)
+
+    return [data.Tag(term=term, value=label)]
 
 
 def label_from_tag(
