@@ -124,7 +124,7 @@ def test_can_recover_tasks_with_predicted_tags(
                 clip=clip,
                 tags=[
                     data.Tag(
-                        key="species",
+                        term=data.term_from_key("species"),
                         value="Myotis lucifugus",
                     ),
                 ],
@@ -143,8 +143,10 @@ def test_can_recover_tasks_with_predicted_tags(
     recovered = io.load(path, type="annotation_project")
 
     # Assert
-    assert recovered.model_dump() == annotation_project.model_dump()
-    assert recovered.clip_annotations[0].tags[0].key == "species"
+    assert recovered == annotation_project
+    assert recovered.clip_annotations[0].tags[0].term == data.term_from_key(
+        "species"
+    )
     assert recovered.clip_annotations[0].tags[0].value == "Myotis lucifugus"
 
 
@@ -334,7 +336,7 @@ def test_can_recover_task_annotation_with_tags(
                         sound_event=sound_event,
                         tags=[
                             data.Tag(
-                                key="species",
+                                term=data.term_from_key("species"),
                                 value="test_species",
                             )
                         ],
@@ -352,9 +354,9 @@ def test_can_recover_task_annotation_with_tags(
 
     # Assert
     assert recovered == annotation_project
-    assert (
-        recovered.clip_annotations[0].sound_events[0].tags[0].key == "species"
-    )
+    assert recovered.clip_annotations[0].sound_events[0].tags[
+        0
+    ].term == data.term_from_key("species")
     assert (
         recovered.clip_annotations[0].sound_events[0].tags[0].value
         == "test_species"
@@ -481,6 +483,7 @@ def test_can_recover_sound_event_features(
 ):
     """Test that sound event features can be recovered."""
     # Arrange
+    term = data.term_from_key("duration")
     annotation_project = data.AnnotationProject(
         name="test_project",
         clip_annotations=[
@@ -492,10 +495,7 @@ def test_can_recover_sound_event_features(
                             recording=clip.recording,
                             geometry=bounding_box,
                             features=[
-                                data.Feature(
-                                    name="duration",
-                                    value=1.0,
-                                ),
+                                data.Feature(term=term, value=1.0),
                             ],
                         )
                     )
@@ -511,12 +511,12 @@ def test_can_recover_sound_event_features(
     recovered = io.load(path, type="annotation_project")
 
     # Assert
-    assert recovered == annotation_project
+    assert recovered.model_dump() == annotation_project.model_dump()
     assert (
         recovered.clip_annotations[0]
         .sound_events[0]
         .sound_event.features[0]
-        .name
+        .term.label
         == "duration"
     )
     assert (

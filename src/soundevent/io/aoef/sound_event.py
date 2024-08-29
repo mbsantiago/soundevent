@@ -37,7 +37,10 @@ class SoundEventAdapter(
             uuid=obj.uuid,
             recording=self.recording_adapter.to_aoef(obj.recording).uuid,
             features=(
-                {feature.name: feature.value for feature in obj.features}
+                {
+                    data.key_from_term(feature.term): feature.value
+                    for feature in obj.features
+                }
                 if obj.features
                 else None
             ),
@@ -58,7 +61,7 @@ class SoundEventAdapter(
             recording=recording,
             features=[
                 data.Feature(
-                    name=name,
+                    term=data.term_from_key(name),
                     value=value,
                 )
                 for name, value in (obj.features or {}).items()

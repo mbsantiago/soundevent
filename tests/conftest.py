@@ -2,9 +2,8 @@
 
 import random
 import string
-import sys
 from pathlib import Path
-from typing import Optional
+from typing import Callable, Optional
 from uuid import uuid4
 
 import numpy as np
@@ -12,10 +11,6 @@ import pytest
 import soundfile as sf
 
 from soundevent import data
-
-if sys.version_info < (3, 9):
-    # NOTE: Crowsetta is not supported in Python 3.8
-    collect_ignore_glob = ["test_io/test_crowsetta/*.py"]  # pragma: no cover
 
 
 def get_random_string(length):
@@ -54,6 +49,23 @@ def note(user: data.User) -> data.Note:
         message="test_note",
         created_by=user,
     )
+
+
+@pytest.fixture
+def random_terms() -> Callable[[int], list[data.Term]]:
+    """Return a random term."""
+
+    def factory(n=1):
+        return [
+            data.Term(
+                name=get_random_string(10),
+                label=get_random_string(10),
+                definition=get_random_string(10),
+            )
+            for _ in range(n)
+        ]
+
+    return factory
 
 
 @pytest.fixture
@@ -139,16 +151,32 @@ def sound_event_prediction(
 
 
 @pytest.fixture
-def random_tags():
+def random_tags(random_terms):
     """Generate a random list of tags for testing."""
 
     def factory(n=10):
         return [
             data.Tag(
-                key=get_random_string(10),
+                term=term,
                 value=get_random_string(10),
             )
-            for _ in range(n)
+            for term in random_terms(n)
+        ]
+
+    return factory
+
+
+@pytest.fixture
+def random_features(random_terms):
+    """Generate a random list of features for testing."""
+
+    def factory(n=10):
+        return [
+            data.Feature(
+                term=term,
+                value=random.random(),
+            )
+            for term in random_terms(n)
         ]
 
     return factory

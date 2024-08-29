@@ -1,16 +1,10 @@
 """Tag Encoder Module."""
 
-import sys
-from typing import Optional, Sequence
+from typing import Optional, Protocol, Sequence
 
 import numpy as np
 
 from soundevent import data
-
-if sys.version_info >= (3, 8):
-    from typing import Protocol
-else:
-    from typing_extensions import Protocol  # pragma: no cover
 
 __all__ = [
     "classification_encoding",
@@ -87,11 +81,13 @@ class SimpleEncoder(Encoder):
             A list of tags to be encoded.
         """
         self._tags = tags
-        self._mapping = {(tag.key, tag.value): i for i, tag in enumerate(tags)}
+        self._mapping = {
+            (tag.term, tag.value): i for i, tag in enumerate(tags)
+        }
         self.num_classes = len(tags)
 
     def encode(self, tag: data.Tag) -> Optional[int]:
-        return self._mapping.get((tag.key, tag.value))
+        return self._mapping.get((tag.term, tag.value))
 
     def decode(self, index: int) -> data.Tag:
         return self._tags[index]

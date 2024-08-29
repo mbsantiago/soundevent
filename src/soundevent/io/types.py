@@ -1,14 +1,8 @@
 """Submodule of io module containing type definitions."""
 
-import sys
-from typing import Generic, Optional, TypeVar, Union
+from typing import Generic, Literal, Optional, Protocol, TypeVar, Union
 
 from soundevent import data
-
-if sys.version_info < (3, 8):
-    from typing_extensions import Literal, Protocol  # pragma: no cover
-else:
-    from typing import Literal, Protocol
 
 __all__ = [
     "Saver",

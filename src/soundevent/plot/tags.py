@@ -75,7 +75,7 @@ def add_tags_legend(
     for tag in color_mapper._tags:
         color = color_mapper.get_color(tag)
         handles.append(ax.scatter([], [], color=color))
-        labels.append(f"{tag.key}: {tag.value}")
+        labels.append(f"{tag.term.label}: {tag.value}")
 
     ax.legend(handles, labels, loc="upper right")
 

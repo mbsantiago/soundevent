@@ -106,9 +106,6 @@ def filter(
         If neither low_freq nor high_freq is specified, or if both
         are specified and low_freq > high_freq.
     """
-    if not isinstance(audio, xr.DataArray):
-        raise ValueError("Audio must be an xarray.DataArray")
-
     if dim not in audio.dims:
         raise ValueError(f"Audio must have a {dim} dimension")
 
@@ -177,9 +174,6 @@ def resample(
         it does not have a "samplerate" attribute, or if it does not have a
         "time" dimension.
     """
-    if not isinstance(array, xr.DataArray):
-        raise ValueError("Audio must be an xarray.DataArray")
-
     if dim not in array.dims:
         raise ValueError(f"Audio must have a {dim} dimension")
 
@@ -279,9 +273,6 @@ def pcen(
     Signal Processing (ICASSP) (pp. 5670-5674). IEEE.
 
     """
-    if not isinstance(array, xr.DataArray):
-        raise ValueError("Spectrogram must be an xarray.DataArray")
-
     if dim not in array.dims:
         raise ValueError(f"Spectrogram must have a {dim} dimension")
 

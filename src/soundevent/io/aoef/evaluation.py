@@ -190,7 +190,7 @@ class EvaluationAdapter:
             clip_evaluations=self.clip_evaluation_adapter.values(),
             metrics=(
                 {
-                    metric.name: metric.value
+                    data.key_from_term(metric.term): metric.value
                     for metric in obj.metrics
                     if metric.value is not None
                 }
@@ -261,7 +261,7 @@ class EvaluationAdapter:
             clip_evaluations=evaluated_clips,
             score=obj.score,
             metrics=[
-                data.Feature(name=name, value=value)
+                data.Feature(term=data.term_from_key(name), value=value)
                 for name, value in (obj.metrics or {}).items()
             ],
         )

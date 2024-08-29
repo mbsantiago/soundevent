@@ -11,6 +11,7 @@ from soundevent.data.clip_annotations import ClipAnnotation
 from soundevent.data.clip_evaluations import ClipEvaluation
 from soundevent.data.clip_predictions import ClipPrediction
 from soundevent.data.clips import Clip
+from soundevent.data.compat import key_from_term, term_from_key
 from soundevent.data.datasets import Dataset
 from soundevent.data.evaluation_sets import EvaluationSet
 from soundevent.data.evaluations import Evaluation
@@ -46,6 +47,7 @@ from soundevent.data.sound_event_annotations import SoundEventAnnotation
 from soundevent.data.sound_event_predictions import SoundEventPrediction
 from soundevent.data.sound_events import SoundEvent
 from soundevent.data.tags import Tag, find_tag
+from soundevent.data.terms import Term
 from soundevent.data.users import User
 
 __all__ = [
@@ -88,6 +90,7 @@ __all__ = [
     "SoundEventPrediction",
     "StatusBadge",
     "Tag",
+    "Term",
     "Time",
     "TimeInterval",
     "TimeStamp",
@@ -95,4 +98,6 @@ __all__ = [
     "find_feature",
     "find_tag",
     "geometry_validate",
+    "key_from_term",
+    "term_from_key",
 ]

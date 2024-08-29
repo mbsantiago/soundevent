@@ -26,6 +26,7 @@ risk of errors and inconsistencies.
 """
 
 import datetime
+import warnings
 from pathlib import Path
 from typing import Any, Dict, Optional, Set, TypeVar, Union
 
@@ -44,9 +45,9 @@ from .prediction_set import PredictionSetAdapter, PredictionSetObject
 from .recording_set import RecordingSetAdapter, RecordingSetObject
 from soundevent import data
 from soundevent.io.types import DataCollections, DataType
+from soundevent.io.utils import is_json
 
 __all__ = [
-    "is_json",
     "load",
     "save",
     "to_aeof",
@@ -99,12 +100,6 @@ class AOEFObject(BaseModel):
         PredictionSetObject,
         RecordingSetObject,
     ] = Field(discriminator="collection_type")
-
-
-def is_json(path: data.PathLike) -> bool:
-    """Check if a file is a JSON file."""
-    path = Path(path)
-    return path.suffix == ".json"
 
 
 def to_aeof(
@@ -179,6 +174,13 @@ def save(
 ) -> None:
     """Save an AOEF object to a JSON file."""
     path = Path(path)
+
+    warnings.warn(
+        "The AOEF format is deprecated and will be removed in a future release. "
+        "Please use the datapackage format instead.",
+        DeprecationWarning,
+        stacklevel=1,
+    )
 
     if not path.parent.exists():
         path.parent.mkdir(parents=True)

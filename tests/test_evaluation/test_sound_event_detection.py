@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from soundevent import data, io
+from soundevent import data, io, terms
 from soundevent.evaluation import sound_event_detection
 
 TEST_DATA = Path(__file__).parent.parent / "data"
@@ -34,10 +34,10 @@ def test_can_evaluate_nips_data():
 
     # check that all metrics are present
     assert len(evaluation.metrics) == 4
-    metric_names = {metric.name for metric in evaluation.metrics}
+    metric_names = {metric.term for metric in evaluation.metrics}
     assert metric_names == {
-        "balanced_accuracy",
-        "accuracy",
-        "top_3_accuracy",
-        "mean_average_precision",
+        terms.balanced_accuracy,
+        terms.accuracy,
+        terms.top_3_accuracy,
+        terms.mean_average_precision,
     }

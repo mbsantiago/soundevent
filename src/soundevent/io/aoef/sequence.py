@@ -44,7 +44,10 @@ class SequenceAdapter(DataAdapter[data.Sequence, SequenceObject, UUID, UUID]):
             sound_events=sound_events,
             parent=parent,
             features=(
-                {feature.name: feature.value for feature in obj.features}
+                {
+                    data.key_from_term(feature.term): feature.value
+                    for feature in obj.features
+                }
                 if obj.features
                 else None
             ),
@@ -67,7 +70,7 @@ class SequenceAdapter(DataAdapter[data.Sequence, SequenceObject, UUID, UUID]):
             parent=self.from_id(obj.parent) if obj.parent else None,
             features=[
                 data.Feature(
-                    name=name,
+                    term=data.term_from_key(name),
                     value=value,
                 )
                 for name, value in (obj.features or {}).items()

@@ -53,16 +53,10 @@ location and extent of sound events within a recording.
 """
 
 import json
-import sys
 from abc import ABC
-from typing import Dict, List, Type, Union
+from typing import Dict, List, Literal, Type, Union
 
 from pydantic import BaseModel, Field, ValidationError, field_validator
-
-if sys.version_info >= (3, 8):
-    from typing import Literal
-else:
-    from typing_extensions import Literal
 
 __all__ = [
     "BoundingBox",

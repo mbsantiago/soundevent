@@ -20,6 +20,7 @@ nav:
       - geometry: reference/geometry.md
       - evaluation: reference/evaluation.md
       - plot: reference/plot.md
+      - terms: reference/terms.md
   - Contributing: CONTRIBUTING.md
   - Code of Conduct: CODE_OF_CONDUCT.md
 theme:
@@ -123,12 +124,12 @@ markdown_extensions:
   - pymdownx.arithmatex:
       generic: true
 extra_javascript:
-  - javascripts/jquery-3.3.1.min.js
-  - javascripts/jquery.json-viewer.js
-  - javascripts/json-viewer.js
-  - optionalConfig.js
-  - https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js
-  - extra-loader.js
+  # - javascripts/jquery-3.3.1.min.js
+  # - javascripts/jquery.json-viewer.js
+  # - javascripts/json-viewer.js
+  # - optionalConfig.js
+  # - https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js
+  # - extra-loader.js
   - javascripts/katex.js
   - https://unpkg.com/katex@0/dist/katex.min.js
   - https://unpkg.com/katex@0/dist/contrib/auto-render.min.js

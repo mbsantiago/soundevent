@@ -18,10 +18,4 @@ def test_evaluation_is_recovered(
     recovered = io.load(path, audio_dir=audio_dir, type="evaluation")
 
     # Assert
-    assert recovered.model_dump(
-        exclude_none=True,
-        exclude_defaults=True,
-    ) == evaluation.model_dump(
-        exclude_none=True,
-        exclude_defaults=True,
-    )
+    assert recovered == evaluation

@@ -20,19 +20,19 @@ class TagAdapter(DataAdapter[data.Tag, TagObject, Tuple[str, str], int]):  # typ
     def assemble_aoef(self, obj: data.Tag, obj_id: int) -> TagObject:
         return TagObject(
             id=obj_id,
-            key=obj.key,
+            key=data.key_from_term(obj.term),
             value=obj.value,
         )
 
     def assemble_soundevent(self, obj: TagObject) -> data.Tag:
         return data.Tag(
-            key=obj.key,
+            term=data.term_from_key(obj.key),
             value=obj.value,
         )
 
     @classmethod
     def _get_soundevent_key(cls, obj: data.Tag) -> Tuple[str, str]:
-        return (obj.key, obj.value)
+        return (data.key_from_term(obj.term), obj.value)
 
     @classmethod
     def _get_aoef_key(cls, obj: TagObject) -> int:

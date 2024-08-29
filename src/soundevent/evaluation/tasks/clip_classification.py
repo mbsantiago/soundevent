@@ -11,17 +11,20 @@ from soundevent.evaluation.encoding import (
     prediction_encoding,
 )
 from soundevent.evaluation.tasks.common import iterate_over_valid_clips
+from soundevent.terms import metrics as terms
 
 __all__ = [
     "clip_classification",
 ]
 
-EXAMPLE_METRICS = (metrics.true_class_probability,)
+EXAMPLE_METRICS = (
+    (terms.true_class_probability, metrics.true_class_probability),
+)
 
 RUN_METRICS = (
-    metrics.balanced_accuracy,
-    metrics.accuracy,
-    metrics.top_3_accuracy,
+    (terms.balanced_accuracy, metrics.balanced_accuracy),
+    (terms.accuracy, metrics.accuracy),
+    (terms.top_3_accuracy, metrics.top_3_accuracy),
 )
 
 
@@ -91,13 +94,13 @@ def _compute_overall_metrics(true_classes, predicted_classes_scores):
     """Compute evaluation metrics based on true classes and predicted scores."""
     evaluation_metrics = [
         data.Feature(
-            name=metric.__name__,
+            term=term,
             value=metric(
                 y_true=true_classes,
                 y_score=predicted_classes_scores,
             ),
         )
-        for metric in RUN_METRICS
+        for term, metric in RUN_METRICS
     ]
     return evaluation_metrics
 
@@ -106,7 +109,7 @@ def _evaluate_example(
     clip_annotations: data.ClipAnnotation,
     clip_predictions: data.ClipPrediction,
     encoder: Encoder,
-    metrics: Sequence[metrics.Metric],
+    metrics: Sequence[tuple[data.Term, metrics.Metric]],
     scoring_fn: metrics.Metric,
 ):
     """Evaluate a single example.
@@ -149,10 +152,10 @@ def _evaluate_example(
         predictions=clip_predictions,
         metrics=[
             data.Feature(
-                name=metric.__name__,
+                term=term,
                 value=metric(true_class, predicted_class_scores),
             )
-            for metric in metrics
+            for term, metric in metrics
         ],
         score=scoring_fn(true_class, predicted_class_scores),
     )

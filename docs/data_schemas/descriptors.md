@@ -1,22 +1,16 @@
 # Data Description
 
-Let's delve into **users**, **tags**, **features**, and **notes** – the tools
-that add depth to our bioacoustic research. Categorical tags, numerical
-features, and freeform notes bring an extra layer of understanding to our
-research objects, while user information provides adequate attribution
-to the contribution of all involved.
+Let's explore **users**, **terms**, **tags**, **features**, and **notes** – essential tools for enriching bioacoustic research.
+Controlled vocabularies (terms), categorical tags, numerical features, and free-form notes provide deeper context and insights into your research objects.
+User information ensures proper attribution for everyone involved.
 
 ## Users
 
-Collaboration is at the heart of most bioacoustic analyses, involving data
-collectors, annotators, reviewers, administrators, developers, and researchers.
-To ensure proper attribution of work, soundevent introduces a
-[**Users**][soundevent.data.User] data schema, holding minimal information about
-each individual involved. The **User** object can optionally include a _name_,
-_email_, _username_ (a commonly known alias), and _institution_. Recognizing the
-sensitivity of this information, it's important to ensure that individuals are
-comfortable sharing these details. If privacy concerns persist, User objects can
-be omitted altogether.
+Bioacoustic analysis often involves collaboration between data collectors, annotators, reviewers, administrators, developers, and researchers.
+To acknowledge contributions, soundevent introduces a [**Users**][soundevent.data.User] data schema, storing basic information about each individual.
+The **User** object can optionally include _name_, _email_, _username_ and _institution_.
+It's crucial to respect privacy and ensure individuals are comfortable sharing this information.
+If concerns remain, User objects can be omitted entirely.
 
 ```mermaid
 erDiagram
@@ -29,31 +23,35 @@ erDiagram
     }
 ```
 
+## Terms
+
+[**Terms**][soundevent.data.Term] ensure everyone's on the same page.
+Inconsistent naming like "species" vs. "Species" wastes time.
+**Terms** provide a controlled vocabulary for common properties used in annotations and descriptions.
+
+We've selected terms from established vocabularies like [Darwin Core](https://dwc.tdwg.org/list/) and [Audiovisual Core](https://ac.tdwg.org/termlist/), aligning your work with best practices.
+Take a look here for the [terms][soundevent.terms] defined in soundevent.
+
 ## Tags
 
-[**Tags**][soundevent.data.Tag] within the `soundevent` package are like
-categorical variables that add specific meaning to the objects they adorn—be it
-recordings, clips, or sound events. Serving as informative labels, **Tags**
-offer a way to organize and contextualize data.
+[**Tags**][soundevent.data.Tag] are informative labels within the `soundevent` package.
+They add meaning to recordings, clips, or sound events, helping organize and contextualize data.
 
-A **Tag** comprises two essential components: a _key_ and a _value_, both in the
-form of simple text. While in many computational contexts, a **Tag** might be
-considered just a text, we find it exceptionally beneficial to introduce a
-_"namespace"_—the _key_—for each tag. This _key_ refines the meaning of the
-**Tag** and establishes the context in which it is employed.
+A **Tag** has two parts: a _term_ and a _value_.
+The term acts as a namespace, refining the Tag's meaning and context.
 
 ```mermaid
 erDiagram
-    Tag{
-        string key
+    Tag {
         string value
     }
+    Term
+    Tag ||--o| Term: term
 ```
 
-The beauty lies in the flexibility offered – there are no restrictions on what
-can be employed as a _key_ or _value_. This flexibility accommodates
-project-specific requirements, allowing researchers to tailor **Tags** to their
-unique needs and objectives.
+You have the flexibility to use a term or not.
+We strongly recommend it, but it's not mandatory.
+This adaptability allows you to tailor Tags to your specific project needs.
 
 ??? Note "What is a namespace?"
 
@@ -72,42 +70,28 @@ unique needs and objectives.
 
 ## Features
 
-[**Features**][soundevent.data.Feature] serve as numerical descriptions,
-providing valuable information to the objects they enhance. They can encompass a
-range of nature – from measurements of environmental sensors to attributes of
-individuals creating a sound, even extending to abstract features extracted by
-general-purpose deep learning models. When multiple **Features** accompany sound
-events, clips, or recordings, they become tools for understanding similarities
-and differences, allowing comparison and visualization in feature space.
-**Features** play a pivotal role in outlier identification, gaining insights
-into characteristic distribution, and enabling statistical analyses.
+[**Features**][soundevent.data.Feature] are numerical descriptions.
+They can include measurements from environmental sensors, attributes of sound-producing individuals, or even abstract features extracted by deep learning models.
+**Features** enable comparison, visualization, outlier identification, understanding characteristic distributions, and statistical analysis.
 
-A **Feature** comprises a textual _name_ and a floating _value_. In
-`soundevent`, lists of **Features** can be attached to various objects without
-restrictions on the name or value. This flexibility allows for tailoring
-features to specific project needs
+A **Feature** consists of a **Term** and a numerical _value_.
 
 ```mermaid
 erDiagram
     Feature {
-        string name
         float value
     }
+    Term
+    Feature ||--o| Term: term
 ```
 
 ## Notes
 
-[**Notes**][soundevent.data.Note] serve as textual companions, allowing
-communication among researchers and providing nuanced context to the objects
-they accompany. Whether conveying vital information, engaging in discussions
-about specific aspects of the attached objects, or flagging potential data
-issues, **Notes** play an indispensable role in promoting collaboration and
-enriching the overall understanding of audio data.
+[**Notes**] are free-form textual additions, facilitating communication and providing context.
+They can convey information, enable discussions, or flag data issues.
 
-These textual _messages_, varying in length, also capture essential details such
-as the note's _creator_ and the _time of creation_, ensuring proper recognition.
-Beyond their informative role, **Notes** can be marked as _issues_ when
-highlighting significant points requiring external review.
+**Notes** can have any length and include the note's _creator_ and _time of creation_.
+Notes can also be marked as issues to highlight points needing review.
 
 ```mermaid
 erDiagram
