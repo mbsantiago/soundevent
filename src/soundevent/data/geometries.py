@@ -397,7 +397,7 @@ class LineString(BaseGeometry):
         start_time = v[0][0]
         end_time = v[-1][0]
         if start_time > end_time:
-            raise ValueError("The line must be ordered by time.")
+            return v[::-1]
         return v
 
 
@@ -549,14 +549,12 @@ class BoundingBox(BaseGeometry):
             )
 
         if start_time > end_time:
-            raise ValueError("The start time must be before the end time.")
+            start_time, end_time = end_time, start_time
 
         if low_freq > high_freq:
-            raise ValueError(
-                "The start frequency must be before the end frequency."
-            )
+            low_freq, high_freq = high_freq, low_freq
 
-        return v
+        return [start_time, low_freq, end_time, high_freq]
 
 
 class MultiPoint(BaseGeometry):

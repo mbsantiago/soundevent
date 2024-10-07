@@ -46,3 +46,10 @@ genus = Term(
     label="Genus",
     definition="The full scientific name of the genus in which the dwc:Taxon is classified.",
 )
+
+taxonomic_class = Term(
+    uri="http://rs.tdwg.org/dwc/terms/class",
+    name="dwc:class",
+    label="Class",
+    definition="The full scientific name of the class in which the dwc:Taxon is classified.",
+)

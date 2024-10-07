@@ -26,7 +26,6 @@ risk of errors and inconsistencies.
 """
 
 import datetime
-import warnings
 from pathlib import Path
 from typing import Any, Dict, Optional, Set, TypeVar, Union
 
@@ -174,13 +173,6 @@ def save(
 ) -> None:
     """Save an AOEF object to a JSON file."""
     path = Path(path)
-
-    warnings.warn(
-        "The AOEF format is deprecated and will be removed in a future release. "
-        "Please use the datapackage format instead.",
-        DeprecationWarning,
-        stacklevel=1,
-    )
 
     if not path.parent.exists():
         path.parent.mkdir(parents=True)

@@ -89,8 +89,8 @@ class Feature(BaseModel):
 
 def find_feature(
     features: Sequence[Feature],
-    term: Optional[Term] = None,
     label: Optional[str] = None,
+    term: Optional[Term] = None,
     default: Optional[Feature] = None,
 ) -> Optional[Feature]:
     """Find a feature by its name.

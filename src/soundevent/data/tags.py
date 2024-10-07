@@ -25,7 +25,7 @@ import warnings
 from collections.abc import Sequence
 from typing import Optional
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, Field, model_validator
 
 from soundevent.data.compat import key_from_term, term_from_key
 from soundevent.data.terms import Term
@@ -51,12 +51,10 @@ class Tag(BaseModel):
     The `key` attribute is deprecated. Use `term` instead.
     """
 
-    model_config = ConfigDict(extra="allow")
-
     term: Term = Field(
         title="Term",
         description="The standardised term associated with the tag.",
-        repr=False,
+        repr=True,
     )
 
     value: str = Field(
@@ -86,7 +84,7 @@ class Tag(BaseModel):
             warnings.warn(
                 "The 'key' field is deprecated. Please use 'term' instead.",
                 DeprecationWarning,
-                stacklevel=1,
+                stacklevel=2,
             )
 
             if "term" not in values:
@@ -98,8 +96,8 @@ class Tag(BaseModel):
 
 def find_tag(
     tags: Sequence[Tag],
-    term: Optional[Term] = None,
     label: Optional[str] = None,
+    term: Optional[Term] = None,
     default: Optional[Tag] = None,
 ) -> Optional[Tag]:
     """Find a tag by its key.

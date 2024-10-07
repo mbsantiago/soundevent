@@ -23,6 +23,7 @@ class Term(BaseModel):
     # Minimal set of attributes according to the DCMI Metadata Terms
 
     label: str = Field(
+        serialization_alias="rdfs:label",
         title="Label",
         description="The human-readable label assigned to the term.",
         repr=True,
@@ -32,6 +33,7 @@ class Term(BaseModel):
     )
 
     definition: str = Field(
+        serialization_alias="skos:definition",
         title="Definition",
         description=(
             "The type of term: property, class, datatype, or "
@@ -53,6 +55,7 @@ class Term(BaseModel):
     )
 
     uri: Optional[str] = Field(
+        serialization_alias="dcterms:URI",
         default=None,
         title="URI",
         repr=False,
@@ -63,6 +66,7 @@ class Term(BaseModel):
     )
 
     type_of_term: str = Field(
+        serialization_alias="dcterms:type",
         default="property",
         alias="type",
         title="Type",
@@ -74,22 +78,30 @@ class Term(BaseModel):
     # Additional attributes according to the DCMI Metadata
 
     comment: Optional[str] = Field(
+        serialization_alias="rdfs:comment",
         default=None,
         title="Comment",
         description="Additional information about the term or its application.",
         repr=False,
+        json_schema_extra={
+            "$id": "https://www.w3.org/TR/rdf-schema/#ch_comment"
+        },
     )
 
     see: Optional[str] = Field(
         default=None,
+        serialization_alias="rdsf:seeAlso",
         title="See",
         description="Authoritative documentation related to the term.",
         repr=False,
+        json_schema_extra={
+            "$id": "https://www.dublincore.org/specifications/dublin-core/dcmi-terms/dublin_core_terms.ttl"
+        },
     )
 
     subproperty_of: Optional[str] = Field(
         default=None,
-        serialization_alias="subpropertyOf",
+        serialization_alias="rdfs:subpropertyOf",
         title="Subproperty Of",
         description="A property of which the described term is a sub-property.",
         repr=False,
@@ -98,17 +110,9 @@ class Term(BaseModel):
         },
     )
 
-    superclass_of: Optional[str] = Field(
-        default=None,
-        serialization_alias="superclassOf",
-        title="Superclass Of",
-        description="A class of which the described term is a super-class.",
-        repr=False,
-    )
-
     subclass_of: Optional[str] = Field(
         default=None,
-        serialization_alias="subclassOf",
+        serialization_alias="rdfs:subclassOf",
         title="Subclass Of",
         description="A class of which the described term is a sub-class.",
         repr=False,
@@ -119,6 +123,7 @@ class Term(BaseModel):
 
     domain: Optional[str] = Field(
         default=None,
+        serialization_alias="rdfs:domain",
         title="Domain",
         description=(
             "A class of which a resource described by the term is an instance."
@@ -131,7 +136,7 @@ class Term(BaseModel):
 
     domain_includes: Optional[str] = Field(
         default=None,
-        serialization_alias="domainIncludes",
+        serialization_alias="dcam:domainIncludes",
         title="Domain Includes",
         description=("A suggested class for subjects of this property."),
         repr=False,
@@ -140,6 +145,7 @@ class Term(BaseModel):
 
     term_range: Optional[str] = Field(
         default=None,
+        serialization_alias="rdfs:range",
         alias="range",
         title="Range",
         description=(
@@ -153,7 +159,7 @@ class Term(BaseModel):
 
     range_includes: Optional[str] = Field(
         default=None,
-        serialization_alias="rangeIncludes",
+        serialization_alias="dcam:rangeIncludes",
         title="Range Includes",
         description="A suggested class for values of this property.",
         repr=False,
@@ -162,7 +168,7 @@ class Term(BaseModel):
 
     member_of: Optional[str] = Field(
         default=None,
-        serialization_alias="memberOf",
+        serialization_alias="dcam:memberOf",
         title="Member Of",
         description="A collection of which the described term is a member.",
         repr=False,
@@ -179,14 +185,18 @@ class Term(BaseModel):
 
     equivalent_property: Optional[str] = Field(
         default=None,
-        serialization_alias="equivalentProperty",
+        serialization_alias="owl:equivalentProperty",
         title="Equivalent Property",
         description="A property to which the described term is equivalent.",
         repr=False,
+        json_schema_extra={
+            "$id": "https://www.w3.org/TR/owl-ref/#equivalentProperty-def"
+        },
     )
 
     description: Optional[str] = Field(
         default=None,
+        serialization_alias="dcterms:description",
         title="Description",
         description="An account of the resource.",
         repr=False,
@@ -195,7 +205,7 @@ class Term(BaseModel):
 
     scope_note: Optional[str] = Field(
         default=None,
-        serialization_alias="scopeNote",
+        serialization_alias="skos:scopeNote",
         title="Scope Note",
         description=(
             "A note that helps to clarify the meaning and/or the "
@@ -203,7 +213,7 @@ class Term(BaseModel):
         ),
         repr=False,
         json_schema_extra={
-            "$id": "https://www.w3.org/2012/09/odrl/semantic/draft/doco/skos_scopeNote.html"
+            "$id": "https://www.w3.org/2012/09/odrl/semantic/draft/doco/skos_scopeNote"
         },
     )
 
