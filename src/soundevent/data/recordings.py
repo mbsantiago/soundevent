@@ -185,7 +185,7 @@ class Recording(BaseModel):
     date: Optional[datetime.date] = Field(
         default=None,
         repr=False,
-        deprecated=True,
+        deprecated=False,
     )
     """The date on which the recording was made. 
 
@@ -195,7 +195,7 @@ class Recording(BaseModel):
     time: Optional[datetime.time] = Field(
         default=None,
         repr=False,
-        deprecated=True,
+        deprecated=False,
     )
     """The time at which the recording was made. 
 

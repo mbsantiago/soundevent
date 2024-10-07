@@ -288,14 +288,16 @@ def test_invalid_bounding_box_fails():
     with pytest.raises(ValueError):
         data.BoundingBox(coordinates=[0, -200, 0, 1])
 
-    with pytest.raises(ValueError):
-        data.BoundingBox(coordinates=[1, 0, 0, 1])
 
-    with pytest.raises(ValueError):
-        data.BoundingBox(coordinates=[0, 1, 1, 0])
+def test_fixes_invalid_bbox():
+    box = data.BoundingBox(coordinates=[1, 0, 0, 1])
+    assert box.coordinates == [0, 0, 1, 1]
 
-    with pytest.raises(ValueError):
-        data.BoundingBox(coordinates=[1, 1, 0, 0])
+    box = data.BoundingBox(coordinates=[0, 1, 1, 0])
+    assert box.coordinates == [0, 0, 1, 1]
+
+    box = data.BoundingBox(coordinates=[1, 1, 0, 0])
+    assert box.coordinates == [0, 0, 1, 1]
 
 
 def test_invalid_point():
@@ -323,6 +325,6 @@ def test_invalid_linestring():
     with pytest.raises(ValueError):
         data.LineString(coordinates=[[0, 1], [2, -200]])
 
-    # Time is not sorted
-    with pytest.raises(ValueError):
-        data.LineString(coordinates=[[1, 1], [0.5, 1], [0, 1]])
+def test_fixes_linestring_order():
+    linestring = data.LineString(coordinates=[[1, 1], [0.5, 1], [0, 1]])
+    assert linestring.coordinates == [[0, 1], [0.5, 1], [1, 1]]
