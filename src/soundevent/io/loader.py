@@ -17,7 +17,7 @@ __all__ = [
 
 
 @overload
-def load(
+def load(  # type: ignore
     path: data.PathLike,
     audio_dir: Optional[data.PathLike] = None,
     format: Optional[str] = "aoef",
@@ -27,7 +27,7 @@ def load(
 
 
 @overload
-def load(
+def load(  # type: ignore
     path: data.PathLike,
     audio_dir: Optional[data.PathLike] = None,
     format: Optional[str] = "aoef",
@@ -37,7 +37,7 @@ def load(
 
 
 @overload
-def load(
+def load(  # type: ignore
     path: data.PathLike,
     audio_dir: Optional[data.PathLike] = None,
     format: Optional[str] = "aoef",
@@ -47,7 +47,7 @@ def load(
 
 
 @overload
-def load(
+def load(  # type: ignore
     path: data.PathLike,
     audio_dir: Optional[data.PathLike] = None,
     format: Optional[str] = "aoef",
@@ -57,7 +57,7 @@ def load(
 
 
 @overload
-def load(
+def load(  # type: ignore
     path: data.PathLike,
     audio_dir: Optional[data.PathLike] = None,
     format: Optional[str] = "aoef",
@@ -67,7 +67,7 @@ def load(
 
 
 @overload
-def load(
+def load(  # type: ignore
     path: data.PathLike,
     audio_dir: Optional[data.PathLike] = None,
     format: Optional[str] = "aoef",
@@ -77,7 +77,7 @@ def load(
 
 
 @overload
-def load(
+def load(  # type: ignore
     path: data.PathLike,
     audio_dir: Optional[data.PathLike] = None,
     format: Optional[str] = "aoef",
@@ -87,7 +87,7 @@ def load(
 
 
 @overload
-def load(
+def load(  # type: ignore
     path: data.PathLike,
     audio_dir: Optional[data.PathLike] = None,
     format: Optional[str] = "aoef",
@@ -101,7 +101,7 @@ def load(
     audio_dir: Optional[data.PathLike] = None,
     format: Optional[str] = "aoef",
     type: Optional[DataType] = None,  # type: ignore
-) -> DataCollections:  # type: ignore
+) -> DataCollections:
     """Load data from a file.
 
     Parameters
