@@ -98,8 +98,8 @@ class Tag(BaseModel):
 
 def find_tag(
     tags: Sequence[Tag],
-    term: Optional[Term] = None,
     label: Optional[str] = None,
+    term: Optional[Term] = None,
     default: Optional[Tag] = None,
 ) -> Optional[Tag]:
     """Find a tag by its key.
