@@ -212,9 +212,18 @@ def mean_average_precision(
     for each class.
     """
     y_true = np.array(y_true).astype(np.float32)
+
+    # Remove examples with no class
     no_class = np.isnan(y_true)
     y_true = y_true[~no_class]
     y_score = y_score[~no_class]
+
+    if y_true.ndim == 1 and y_score.ndim == 2:
+        # NOTE: In case the y_true input is one-dimensional (i.e. there
+        # is a single correct class per example), we need to convert the
+        # the input into a one-hot encoded matrix.
+        num_classes = y_score.shape[1]
+        y_true = np.eye(num_classes)[y_true.astype(np.int32)]
 
     return metrics.average_precision_score(  # type: ignore
         y_true=y_true,
