@@ -59,9 +59,9 @@ class Sequence(BaseModel):
 
     Attributes
     ----------
-    id
+    uuid
         A unique identifier for the sequence.
-    sound_event
+    sound_events
         A list of sound events within the sequence.
     features
         A list of features associated with the sequence, offering quantitative

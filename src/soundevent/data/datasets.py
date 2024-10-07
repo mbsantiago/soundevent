@@ -11,6 +11,7 @@ __all__ = ["Dataset"]
 
 class Dataset(RecordingSet):
     name: str
+
     description: Optional[str] = None
 
     @classmethod
