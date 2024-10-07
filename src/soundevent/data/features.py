@@ -24,7 +24,7 @@ import warnings
 from collections.abc import Sequence
 from typing import Optional
 
-from pydantic import BaseModel, ConfigDict, model_validator
+from pydantic import BaseModel, model_validator
 
 from soundevent.data.compat import key_from_term, term_from_key
 from soundevent.data.terms import Term

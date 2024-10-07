@@ -325,6 +325,7 @@ def test_invalid_linestring():
     with pytest.raises(ValueError):
         data.LineString(coordinates=[[0, 1], [2, -200]])
 
+
 def test_fixes_linestring_order():
     linestring = data.LineString(coordinates=[[1, 1], [0.5, 1], [0, 1]])
     assert linestring.coordinates == [[0, 1], [0.5, 1], [1, 1]]
