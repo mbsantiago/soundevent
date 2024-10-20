@@ -22,6 +22,7 @@ from soundevent.arrays.dimensions import (
     set_dim_attrs,
 )
 from soundevent.arrays.operations import (
+    adjust_dim_range,
     crop_dim,
     extend_dim,
     normalize,
@@ -49,4 +50,5 @@ __all__ = [
     "set_dim_attrs",
     "set_value_at_pos",
     "to_db",
+    "adjust_dim_range",
 ]

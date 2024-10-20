@@ -23,6 +23,7 @@ __all__ = [
     "offset",
     "scale",
     "set_value_at_pos",
+    "adjust_dim_range",
 ]
 
 
@@ -565,3 +566,98 @@ def to_db(
         coords=arr.coords,
         attrs=attrs,
     )
+
+
+def adjust_dim_range(
+    array: xr.DataArray,
+    dim: str,
+    start: Optional[float] = None,
+    stop: Optional[float] = None,
+    fill_value: float = 0,
+) -> xr.DataArray:
+    """Adjust the range of a specified dimension in an xarray DataArray.
+
+    This function modifies the range of a given dimension (`dim`) in an
+    xarray DataArray to match a desired range defined by `start` and
+    `stop`. It ensures that the adjusted dimension aligns with these
+    bounds while considering the original step size of the dimension.
+
+    Parameters
+    ----------
+    array : xr.DataArray
+        The input xarray DataArray to be adjusted.
+    dim : str
+        The name of the dimension to be adjusted.
+    start : float, optional
+        The desired starting value for the dimension. If None (default),
+        the starting value is not adjusted.
+    stop : float, optional
+        The desired stopping value for the dimension. If None (default),
+        the stopping value is not adjusted.
+    fill_value : float, optional
+        The value to fill for missing data in the extended range. Defaults
+        to 0.
+
+    Returns
+    -------
+    xr.DataArray
+        The adjusted xarray DataArray with the modified dimension range.
+
+    Raises
+    ------
+    ValueError
+        - If both `start` and `stop` are None.
+        - If `start` is greater than or equal to `stop`.
+
+    Notes
+    -----
+    The function utilizes `crop_dim` and `extend_dim` to modify the
+    specified dimension. It calculates adjusted bounds to ensure the
+    modified dimension aligns with the desired range while preserving
+    the original step size as much as possible.
+    """
+    if start is None and stop is None:
+        raise ValueError("At least one of start and stop must be specified.")
+
+    if start is not None and stop is not None and start >= stop:
+        raise ValueError("start must be less than stop.")
+
+    step = get_dim_step(array, dim)
+
+    if start is not None:
+        target_start = np.floor(start / step) * step
+        spec_start = array.coords[dim].min()
+        if spec_start < start:
+            array = crop_dim(
+                array,
+                dim,
+                start=target_start,
+            )
+        elif spec_start > start:
+            array = extend_dim(
+                array,
+                dim,
+                start=target_start,
+                fill_value=fill_value,
+            )
+
+    if stop is not None:
+        target_stop = np.floor(stop / step) * step
+        spec_stop = array.coords[dim].max()
+        if spec_stop < stop:
+            array = extend_dim(
+                array,
+                dim,
+                stop=target_stop,
+                fill_value=fill_value,
+                right_closed=True,
+            )
+        elif spec_stop > stop:
+            array = crop_dim(
+                array,
+                dim,
+                stop=target_stop,
+                right_closed=True,
+            )
+
+    return array
