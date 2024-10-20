@@ -20,6 +20,9 @@ from soundevent.geometry.operations import (
     buffer_geometry,
     compute_bounds,
     get_geometry_point,
+    group_sound_events,
+    have_frequency_overlap,
+    intervals_overlap,
     is_in_clip,
     rasterize,
 )
@@ -31,6 +34,10 @@ __all__ = [
     "geometry_to_html",
     "geometry_to_shapely",
     "get_geometry_point",
-    "rasterize",
+    "group_sound_events",
+    "have_frequency_overlap",
+    "have_frequency_overlap",
+    "intervals_overlap",
     "is_in_clip",
+    "rasterize",
 ]

@@ -1,13 +1,26 @@
 """Functions that handle SoundEvent geometries."""
 
 import json
-from typing import Any, List, Literal, Optional, Tuple, Union
+from collections import defaultdict
+from itertools import combinations
+from typing import (
+    Any,
+    Callable,
+    List,
+    Literal,
+    Optional,
+    Sequence,
+    Tuple,
+    Union,
+)
 
 import numpy as np
 import shapely
 import xarray as xr
 from numpy.typing import DTypeLike
 from rasterio import features
+from scipy import sparse
+from scipy.sparse.csgraph import connected_components
 
 from soundevent import data
 from soundevent.arrays import (
@@ -20,9 +33,13 @@ from soundevent.geometry.conversion import geometry_to_shapely
 __all__ = [
     "buffer_geometry",
     "compute_bounds",
-    "rasterize",
     "get_geometry_point",
+    "group_sound_events",
+    "have_frequency_overlap",
+    "have_temporal_overlap",
+    "intervals_overlap",
     "is_in_clip",
+    "rasterize",
 ]
 
 
@@ -703,4 +720,102 @@ def have_frequency_overlap(
         (low_freq_2, high_freq_2),
         min_absolute_overlap=min_absolute_overlap,
         min_relative_overlap=min_relative_overlap,
+    )
+
+
+def group_sound_events(
+    sound_events: Sequence[data.SoundEvent],
+    comparison_fn: Callable[[data.SoundEvent, data.SoundEvent], bool],
+) -> list[data.Sequence]:
+    """Group sound events into sequences based on a pairwise comparison.
+
+    This function takes a sequence of `data.SoundEvent` objects and a
+    comparison function. It applies the comparison function to all pairs
+    of sound events to determine their similarity. Sound events that are
+    deemed similar are grouped together into `data.Sequence` objects.
+
+    The comparison function should take two `data.SoundEvent` objects as
+    input and return True if they are considered similar, and False
+    otherwise.
+
+    Parameters
+    ----------
+    sound_events : Sequence[data.SoundEvent]
+        A sequence of `data.SoundEvent` objects to be grouped.
+    comparison_fn : Callable[[data.SoundEvent, data.SoundEvent], bool]
+        A function that compares two `data.SoundEvent` objects and
+        returns True if they should be grouped together, False otherwise.
+
+    Returns
+    -------
+    list[data.Sequence]
+        A list of `data.Sequence` objects, where each sequence contains
+        a group of similar sound events.
+
+    Notes
+    -----
+    This function groups sound events based on **transitive similarity**. While
+    it uses pairwise comparisons, the final groups (sequences) can include
+    sound events that aren't directly similar according to your
+    `comparison_fn`. Think of it like a chain:  sound event A is similar to B,
+    B is similar to C, but A might not be similar to C directly. They all end
+    up in the same group because of their connections through B. Technically,
+    this works by finding the connected components in a graph where the sound
+    events are nodes, and the edges represent similarity based on your
+    `comparison_fn`.
+
+    Examples
+    --------
+    >>> # Define a comparison function based on temporal overlap
+    >>> def compare_sound_events(se1, se2):
+    ...     return have_temporal_overlap(
+    ...         se1.geometry, se2.geometry, min_absolute_overlap=0.5
+    ...     )
+    >>> # Group sound events with the comparison function
+    >>> sequences = group_sound_events(
+    ...     sound_events, compare_sound_events
+    ... )
+    """
+    similarity_matrix = _compute_similarity_matrix(
+        sound_events,
+        comparison_fn,
+    )
+    _, labels = connected_components(similarity_matrix)
+
+    sequences = defaultdict(data.Sequence)
+    for sound_event, label in zip(sound_events, labels):
+        sequence = sequences[label]
+        sequence.sound_events.append(sound_event)
+
+    return list(sequences.values())
+
+
+def _compute_similarity_matrix(
+    sound_events: Sequence[data.SoundEvent],
+    comparison_fn: Callable[[data.SoundEvent, data.SoundEvent], bool],
+) -> sparse.coo_array:
+    """Compute the similarity matrix for sound events.
+
+    This helper function generates a sparse similarity matrix
+    representing the pairwise similarity between sound events based on
+    the provided comparison function.
+    """
+    col = []
+    row = []
+    values = []
+    for (index1, se1), (index2, se2) in combinations(
+        enumerate(sound_events), 2
+    ):
+        if not comparison_fn(se1, se2):
+            continue
+
+        col.extend([index1, index2])
+        row.extend([index2, index1])
+        values.extend([1, 1])
+
+    rows = len(sound_events)
+    return sparse.coo_array(
+        (values, (col, row)),
+        shape=(rows, rows),
+        dtype=np.int8,
     )
