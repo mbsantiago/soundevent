@@ -1,7 +1,7 @@
 """Functions that handle SoundEvent geometries."""
 
 import json
-from typing import Any, List, Literal, Tuple, Union
+from typing import Any, List, Literal, Optional, Tuple, Union
 
 import numpy as np
 import shapely
@@ -510,3 +510,197 @@ def is_in_clip(
         return False
 
     return True
+
+
+def intervals_overlap(
+    interval1: tuple[float, float],
+    interval2: tuple[float, float],
+    min_absolute_overlap: Optional[float] = None,
+    min_relative_overlap: Optional[float] = None,
+):
+    """Check if two intervals overlap.
+
+    This function determines whether two intervals, represented as tuples of
+    (start, stop) values, have any overlap. It optionally allows specifying a
+    minimum required overlap, either in absolute terms or relative to the
+    smaller interval.
+
+    Parameters
+    ----------
+    interval1 : tuple[float, float]
+        The first interval, as a tuple (start, stop).
+    interval2 : tuple[float, float]
+        The second interval, as a tuple (start, stop).
+    min_absolute_overlap : float, optional
+        The minimum required absolute overlap. Defaults to None, meaning
+        any overlap is sufficient.
+    min_relative_overlap : float, optional
+        The minimum required relative overlap (between 0 and 1). Defaults
+        to None.
+
+    Returns
+    -------
+    bool
+        True if the intervals overlap with the specified minimum overlap,
+        False otherwise.
+
+    Raises
+    ------
+    ValueError
+        - If both `min_absolute_overlap` and `min_relative_overlap` are
+        provided.
+        - If `min_relative_overlap` is not in the range [0, 1].
+
+    Examples
+    --------
+    >>> intervals_overlap((1.0, 3.0), (2.0, 4.0))
+    True
+    >>> intervals_overlap(
+    ...     (1.0, 3.0),
+    ...     (2.0, 4.0),
+    ...     min_absolute_overlap=0.5,
+    ... )
+    True
+    >>> intervals_overlap(
+    ...     (1.0, 3.0),
+    ...     (2.0, 4.0),
+    ...     min_absolute_overlap=1.5,
+    ... )
+    False
+    >>> intervals_overlap(
+    ...     (1.0, 3.0),
+    ...     (2.0, 4.0),
+    ...     min_relative_overlap=0.25,
+    ... )
+    True
+    >>> intervals_overlap(
+    ...     (1.0, 3.0),
+    ...     (2.0, 4.0),
+    ...     min_relative_overlap=0.75,
+    ... )
+    False
+    """
+    if min_absolute_overlap is not None and min_relative_overlap is not None:
+        raise ValueError(
+            "Only one of min_absolute_overlap or "
+            "min_relative_overlap can be provided."
+        )
+
+    start1, stop1 = interval1
+    start2, stop2 = interval2
+    start = max(start1, start2)
+    stop = min(stop1, stop2)
+
+    overlap = 0
+    if min_absolute_overlap is not None:
+        overlap = min_absolute_overlap
+
+    if min_relative_overlap is not None:
+        if min_relative_overlap < 0 or min_relative_overlap > 1:
+            raise ValueError("The minimum relative overlap must be in [0, 1].")
+
+        min_width = min(
+            stop1 - start1,
+            stop2 - start2,
+        )
+        overlap = min_relative_overlap * min_width
+
+    return stop - start >= overlap
+
+
+def have_temporal_overlap(
+    geom1: data.Geometry,
+    geom2: data.Geometry,
+    min_absolute_overlap: Optional[float] = None,
+    min_relative_overlap: Optional[float] = None,
+) -> bool:
+    """Check if two geometries have temporal overlap.
+
+    This function determines whether two geometry objects have any time
+    overlap, optionally considering a minimum required overlap, either in
+    absolute terms (seconds) or relative to the shorter duration of the
+    two geometries.
+
+    Parameters
+    ----------
+    geom1 : data.Geometry
+        The first geometry object.
+    geom2 : data.Geometry
+        The second geometry object.
+    min_absolute_overlap : float, optional
+        The minimum required absolute overlap in seconds. Defaults to None,
+        meaning any overlap is sufficient.
+    min_relative_overlap : float, optional
+        The minimum required relative overlap (between 0 and 1). Defaults
+        to None.
+
+    Returns
+    -------
+    bool
+        True if the geometries overlap with the specified minimum overlap,
+        False otherwise.
+
+    Raises
+    ------
+    ValueError
+        - If both `min_absolute_overlap` and `min_relative_overlap` are
+        provided.
+        - If `min_relative_overlap` is not in the range [0, 1].
+    """
+    start_time_1, _, end_time_1, _ = compute_bounds(geom1)
+    start_time_2, _, end_time_2, _ = compute_bounds(geom2)
+    return intervals_overlap(
+        (start_time_1, end_time_1),
+        (start_time_2, end_time_2),
+        min_absolute_overlap=min_absolute_overlap,
+        min_relative_overlap=min_relative_overlap,
+    )
+
+
+def have_frequency_overlap(
+    geom1: data.Geometry,
+    geom2: data.Geometry,
+    min_absolute_overlap: Optional[float] = None,
+    min_relative_overlap: Optional[float] = None,
+) -> bool:
+    """Check if two geometries have frequency overlap.
+
+    This function determines whether two geometry objects have any frequency
+    overlap, optionally considering a minimum required overlap, either in
+    absolute terms (Hz) or relative to the smaller frequency range of the
+    two geometries.
+
+    Parameters
+    ----------
+    geom1 : data.Geometry
+        The first geometry object.
+    geom2 : data.Geometry
+        The second geometry object.
+    min_absolute_overlap : float, optional
+        The minimum required absolute overlap in Hz. Defaults to None,
+        meaning any overlap is sufficient.
+    min_relative_overlap : float, optional
+        The minimum required relative overlap (between 0 and 1). Defaults
+        to None.
+
+    Returns
+    -------
+    bool
+        True if the geometries overlap with the specified minimum overlap,
+        False otherwise.
+
+    Raises
+    ------
+    ValueError
+        - If both `min_absolute_overlap` and `min_relative_overlap` are
+        provided.
+        - If `min_relative_overlap` is not in the range [0, 1].
+    """
+    _, low_freq_1, _, high_freq_1 = compute_bounds(geom1)
+    _, low_freq_2, _, high_freq_2 = compute_bounds(geom2)
+    return intervals_overlap(
+        (low_freq_1, high_freq_1),
+        (low_freq_2, high_freq_2),
+        min_absolute_overlap=min_absolute_overlap,
+        min_relative_overlap=min_relative_overlap,
+    )
