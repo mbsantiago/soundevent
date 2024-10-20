@@ -20,6 +20,7 @@ from soundevent.geometry.operations import (
     buffer_geometry,
     compute_bounds,
     get_geometry_point,
+    is_in_clip,
     rasterize,
 )
 
@@ -31,4 +32,5 @@ __all__ = [
     "geometry_to_shapely",
     "get_geometry_point",
     "rasterize",
+    "is_in_clip",
 ]

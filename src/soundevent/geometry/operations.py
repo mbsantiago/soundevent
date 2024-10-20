@@ -20,6 +20,9 @@ from soundevent.geometry.conversion import geometry_to_shapely
 __all__ = [
     "buffer_geometry",
     "compute_bounds",
+    "rasterize",
+    "get_geometry_point",
+    "is_in_clip",
 ]
 
 
@@ -452,3 +455,58 @@ def get_geometry_point(
     }[y]
 
     return time_pos, freq_pos
+
+
+def is_in_clip(
+    geometry: data.Geometry,
+    clip: data.Clip,
+    minimum_overlap: float = 0,
+) -> bool:
+    """Check if a geometry lies within a clip, considering a minimum overlap.
+
+    This function determines whether a given geometry falls within the
+    time boundaries of a clip. It takes into account a `minimum_overlap`
+    parameter, which specifies the minimum required temporal overlap
+    (in seconds) between the geometry and the clip for the geometry to be
+    considered inside the clip.
+
+    Parameters
+    ----------
+    geometry
+        The geometry object to be checked.
+    clip
+        The clip object to check against.
+    minimum_overlap
+        The minimum required overlap between the geometry and the clip
+        in seconds. Defaults to 0, meaning any overlap is sufficient.
+
+    Returns
+    -------
+    bool
+        True if the geometry is within the clip with the specified 
+        minimum overlap, False otherwise.
+
+    Raises
+    ------
+    ValueError
+        If the `minimum_overlap` is negative.
+
+    Examples
+    --------
+    >>> from soundevent import data
+    >>> geometry = data.Geometry(...)
+    >>> clip = data.Clip(start_time=0.0, end_time=5.0, ...)
+    >>> is_in_clip(geometry, clip, minimum_overlap=0.5)
+    True
+    """
+    if minimum_overlap < 0:
+        raise ValueError("The minimum overlap must be non-negative.")
+
+    start_time, _, end_time, _ = compute_bounds(geometry)
+
+    if (end_time <= clip.start_time + minimum_overlap) or (
+        start_time >= clip.end_time - minimum_overlap
+    ):
+        return False
+
+    return True

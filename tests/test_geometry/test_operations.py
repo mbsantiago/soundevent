@@ -13,6 +13,7 @@ from soundevent.geometry.operations import (
     buffer_geometry,
     compute_bounds,
     get_geometry_point,
+    is_in_clip,
     rasterize,
 )
 
@@ -360,3 +361,40 @@ def test_get_geometry_point_fails_with_unexpected_position():
 
     with pytest.raises(ValueError):
         get_geometry_point(geom, position="unexpected")  # type: ignore
+
+
+def test_is_in_clip_fully_inside(recording: data.Recording):
+    geometry = data.TimeInterval(coordinates=[1.0, 2.0])
+    clip = data.Clip(start_time=0.0, end_time=5.0, recording=recording)
+    assert is_in_clip(geometry, clip)
+
+
+def test_is_in_clip_partially_inside(recording: data.Recording):
+    geometry = data.TimeInterval(coordinates=[4.0, 6.0])
+    clip = data.Clip(start_time=0.0, end_time=5.0, recording=recording)
+    assert is_in_clip(geometry, clip)
+    assert not is_in_clip(geometry, clip, minimum_overlap=1.0)
+    assert is_in_clip(geometry, clip, minimum_overlap=0.5)
+
+
+def test_is_in_clip_outside(recording: data.Recording):
+    geometry = data.TimeInterval(coordinates=[6.0, 8.0])
+    clip = data.Clip(start_time=0.0, end_time=5.0, recording=recording)
+    assert not is_in_clip(geometry, clip)
+
+
+def test_is_in_clip_edge_cases(recording: data.Recording):
+    clip = data.Clip(start_time=1.0, end_time=5.0, recording=recording)
+
+    geometry = data.TimeInterval(coordinates=[0.0, 1.0])
+    assert not is_in_clip(geometry, clip)
+
+    geometry = data.TimeInterval(coordinates=[5.0, 6.0])
+    assert not is_in_clip(geometry, clip)
+
+
+def test_is_in_clip_invalid_input(recording: data.Recording):
+    geometry = data.TimeInterval(coordinates=[1.0, 3.0])
+    clip = data.Clip(start_time=0.0, end_time=5.0, recording=recording)
+    with pytest.raises(ValueError):
+        is_in_clip(geometry, clip, minimum_overlap=-1.0)
