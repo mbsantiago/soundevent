@@ -13,6 +13,8 @@ from soundevent.geometry.operations import (
     buffer_geometry,
     compute_bounds,
     get_geometry_point,
+    have_frequency_overlap,
+    have_temporal_overlap,
     is_in_clip,
     rasterize,
 )
@@ -398,3 +400,76 @@ def test_is_in_clip_invalid_input(recording: data.Recording):
     clip = data.Clip(start_time=0.0, end_time=5.0, recording=recording)
     with pytest.raises(ValueError):
         is_in_clip(geometry, clip, minimum_overlap=-1.0)
+
+
+def test_have_temporal_overlap_full_overlap():
+    geom1 = data.TimeInterval(coordinates=[1.0, 3.0])
+    geom2 = data.TimeInterval(coordinates=[0.0, 4.0])
+    assert have_temporal_overlap(geom1, geom2)
+
+
+def test_have_temporal_overlap_partial_overlap():
+    geom1 = data.TimeInterval(coordinates=[1.0, 3.0])
+    geom2 = data.TimeInterval(coordinates=[2.0, 4.0])
+    assert have_temporal_overlap(geom1, geom2)
+    assert have_temporal_overlap(geom1, geom2, min_absolute_overlap=0.5)
+    assert not have_temporal_overlap(geom1, geom2, min_absolute_overlap=1.5)
+    assert have_temporal_overlap(geom1, geom2, min_relative_overlap=0.25)
+    assert not have_temporal_overlap(geom1, geom2, min_relative_overlap=0.75)
+
+
+def test_have_temporal_overlap_no_overlap():
+    geom1 = data.TimeInterval(coordinates=[1.0, 3.0])
+    geom2 = data.TimeInterval(coordinates=[4.0, 5.0])
+    assert not have_temporal_overlap(geom1, geom2)
+
+
+def test_have_temporal_overlap_invalid_input():
+    geom1 = data.TimeInterval(coordinates=[1.0, 3.0])
+    geom2 = data.TimeInterval(coordinates=[2.0, 4.0])
+    with pytest.raises(ValueError):
+        have_temporal_overlap(
+            geom1,
+            geom2,
+            min_absolute_overlap=1.0,
+            min_relative_overlap=0.5,
+        )
+    with pytest.raises(ValueError):
+        have_temporal_overlap(geom1, geom2, min_relative_overlap=-0.5)
+    with pytest.raises(ValueError):
+        have_temporal_overlap(geom1, geom2, min_relative_overlap=1.5)
+
+
+def test_have_frequency_overlap_full_overlap():
+    geom1 = data.BoundingBox(coordinates=[0, 100, 1, 200])
+    geom2 = data.BoundingBox(coordinates=[2, 50, 3, 400])
+    assert have_frequency_overlap(geom1, geom2)
+
+
+def test_have_frequency_overlap_partial_overlap():
+    geom1 = data.BoundingBox(coordinates=[0, 100, 1, 200])
+    geom2 = data.BoundingBox(coordinates=[2, 150, 3, 250])
+    assert have_frequency_overlap(geom1, geom2)
+    assert have_frequency_overlap(geom1, geom2, min_absolute_overlap=25)
+    assert not have_frequency_overlap(geom1, geom2, min_absolute_overlap=75)
+    assert have_frequency_overlap(geom1, geom2, min_relative_overlap=0.25)
+    assert not have_frequency_overlap(geom1, geom2, min_relative_overlap=0.75)
+
+
+def test_have_frequency_overlap_no_overlap():
+    geom1 = data.BoundingBox(coordinates=[0, 100, 1, 200])
+    geom2 = data.BoundingBox(coordinates=[2, 300, 3, 400])
+    assert not have_frequency_overlap(geom1, geom2)
+
+
+def test_have_frequency_overlap_invalid_input():
+    geom1 = data.BoundingBox(coordinates=[0, 100, 1, 200])
+    geom2 = data.BoundingBox(coordinates=[2, 150, 3, 250])
+    with pytest.raises(ValueError):
+        have_frequency_overlap(
+            geom1, geom2, min_absolute_overlap=50, min_relative_overlap=0.5
+        )
+    with pytest.raises(ValueError):
+        have_frequency_overlap(geom1, geom2, min_relative_overlap=-0.5)
+    with pytest.raises(ValueError):
+        have_frequency_overlap(geom1, geom2, min_relative_overlap=1.5)
