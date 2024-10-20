@@ -1884,19 +1884,6 @@ wheels = [
 ]
 
 [[package]]
-name = "pytest-testmon"
-version = "2.1.1"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "coverage" },
-    { name = "pytest" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/26/57/ef7c8a41ca806c3f8052653abc306ceb44dd4a5e090bf5d1faf1f432be9f/pytest-testmon-2.1.1.tar.gz", hash = "sha256:8ebe2c3de42d99306ee54cd4536fed0fc48346a954420da904b18e8d59b5da98", size = 20481 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/03/3e/f62aefad1f5b3291029a3754af70efc3212b8303f83a9bd2d0b1d44b90e4/pytest_testmon-2.1.1-py3-none-any.whl", hash = "sha256:8271ca47bc8c80760c4fc7fd7895ea786b111bbb31f13eeea879a6fd11fe2226", size = 22672 },
-]
-
-[[package]]
 name = "pytest-watch"
 version = "4.2.0"
 source = { registry = "https://pypi.org/simple" }
@@ -2417,7 +2404,7 @@ wheels = [
 
 [[package]]
 name = "soundevent"
-version = "2.1.1"
+version = "2.2.0"
 source = { editable = "." }
 dependencies = [
     { name = "email-validator" },
@@ -2478,7 +2465,6 @@ dev = [
     { name = "pyright" },
     { name = "pytest" },
     { name = "pytest-coverage" },
-    { name = "pytest-testmon" },
     { name = "pytest-watch" },
     { name = "pytest-xdist" },
     { name = "ruff" },
@@ -2525,7 +2511,6 @@ dev = [
     { name = "pyright", specifier = ">=1.1.366" },
     { name = "pytest", specifier = ">=7.4.0" },
     { name = "pytest-coverage", specifier = ">=0.0" },
-    { name = "pytest-testmon", specifier = ">=2.1.1" },
     { name = "pytest-watch", specifier = ">=4.2.0" },
     { name = "pytest-xdist", specifier = ">=3.6.1" },
     { name = "ruff", specifier = ">=0.0.276" },
