@@ -14,6 +14,7 @@ nav:
   - User Guide: generated/gallery
   - Reference:
       - data: reference/data.md
+      - operations: reference/operations.md
       - io: reference/io.md
       - arrays: reference/arrays.md
       - audio: reference/audio.md
