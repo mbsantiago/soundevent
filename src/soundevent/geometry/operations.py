@@ -483,7 +483,7 @@ def is_in_clip(
     Returns
     -------
     bool
-        True if the geometry is within the clip with the specified 
+        True if the geometry is within the clip with the specified
         minimum overlap, False otherwise.
 
     Raises
