@@ -441,3 +441,103 @@ def test_to_db_validates_arguments():
 
     with pytest.raises(ValueError):
         ops.to_db(data, ref=-1)
+
+
+def test_adjust_dim_range_raises_if_no_start_or_stop():
+    array = xr.DataArray(
+        np.arange(10), dims=["x"], coords={"x": np.arange(10)}
+    )
+    with pytest.raises(ValueError):
+        ops.adjust_dim_range(array, dim="x")
+
+
+def test_adjust_dim_range_crop_start():
+    array = xr.DataArray(
+        np.arange(10),
+        dims=["x"],
+        coords={"x": np.arange(10)},
+    )
+    result = ops.adjust_dim_range(array, dim="x", start=2.5)
+    expected = xr.DataArray(
+        np.arange(2, 10),
+        dims=["x"],
+        coords={"x": np.arange(2, 10)},
+    )
+    xr.testing.assert_identical(result, expected)
+
+
+def test_adjust_dim_range_crop_stop():
+    array = xr.DataArray(
+        np.arange(10),
+        dims=["x"],
+        coords={"x": np.arange(10)},
+    )
+    result = ops.adjust_dim_range(array, dim="x", stop=7.5)
+    expected = xr.DataArray(
+        np.arange(8),
+        dims=["x"],
+        coords={"x": np.arange(8)},
+    )
+    xr.testing.assert_equal(result, expected)
+
+
+def test_adjust_dim_range_extend_start():
+    array = xr.DataArray(
+        np.arange(10), dims=["x"], coords={"x": np.arange(10)}
+    )
+    result = ops.adjust_dim_range(array, dim="x", start=-2.5, fill_value=-1)
+    expected = xr.DataArray(
+        np.concatenate([[-1, -1, -1], np.arange(10)]),
+        dims=["x"],
+        coords={"x": np.arange(-3, 10)},
+    )
+    xr.testing.assert_equal(result, expected)
+
+
+def test_adjust_dim_range_extend_stop():
+    array = xr.DataArray(
+        np.arange(10), dims=["x"], coords={"x": np.arange(10)}
+    )
+    result = ops.adjust_dim_range(array, dim="x", stop=12.5, fill_value=-1)
+    expected = xr.DataArray(
+        np.concatenate([np.arange(10), [-1, -1, -1]]),
+        dims=["x"],
+        coords={"x": np.arange(13)},
+    )
+    xr.testing.assert_equal(result, expected)
+
+
+def test_adjust_dim_range_both_start_stop():
+    array = xr.DataArray(
+        np.arange(10), dims=["x"], coords={"x": np.arange(10)}
+    )
+    result = ops.adjust_dim_range(array, dim="x", start=2.5, stop=7.5)
+    expected = xr.DataArray(
+        np.arange(2, 8), dims=["x"], coords={"x": np.arange(2, 8)}
+    )
+    xr.testing.assert_equal(result, expected)
+
+
+def test_adjust_dim_range_with_non_exact_range():
+    array = xr.DataArray(
+        np.arange(10),
+        dims=["x"],
+        coords={"x": np.linspace(0, 1, 10, endpoint=False)},
+    )
+    result = ops.adjust_dim_range(array, dim="x", start=0.35, stop=0.67)
+    expected = xr.DataArray(
+        np.array([3, 4, 5, 6]),
+        dims=["x"],
+        coords={"x": np.array([0.3, 0.4, 0.5, 0.6])},
+    )
+    xr.testing.assert_allclose(result, expected)
+
+
+def test_adjust_dim_range_invalid_input():
+    array = xr.DataArray(
+        np.arange(10), dims=["x"], coords={"x": np.arange(10)}
+    )
+    with pytest.raises(ValueError):
+        ops.adjust_dim_range(array, dim="x", start=5.0, stop=2.0)
+    with pytest.raises(ValueError):
+        ops.adjust_dim_range(array, dim="x", start=None, stop=None)
