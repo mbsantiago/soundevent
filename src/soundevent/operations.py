@@ -89,13 +89,15 @@ def segment_clip(
     num_segments = math.floor(clip.duration / hop)
     for i in range(num_segments):
         start_time = clip.start_time + i * hop
-        end_time = min(start_time + duration, clip.end_time)
+        end_time = start_time + duration
 
         if start_time >= clip.end_time:
             break
 
-        if end_time >= clip.end_time and not include_incomplete:
+        if end_time > clip.end_time and not include_incomplete:
             break
+
+        end_time = min(end_time, clip.end_time)
 
         yield data.Clip(
             uuid=uuid.uuid5(

@@ -11,11 +11,13 @@ def test_segment_clip_no_hop(recording: data.Recording):
         recording=recording,
     )
     segments = list(segment_clip(clip, duration=2.0))
-    assert len(segments) == 5
-    for i, segment in enumerate(segments):
-        assert segment.start_time == i * 2.0
-        assert segment.end_time == (i + 1) * 2.0
-        assert segment.duration == 2.0
+    assert [(s.start_time, s.end_time) for s in segments] == [
+        (0, 2),
+        (2, 4),
+        (4, 6),
+        (6, 8),
+        (8, 10),
+    ]
 
 
 def test_segment_clip_with_hop(recording: data.Recording):
@@ -25,11 +27,17 @@ def test_segment_clip_with_hop(recording: data.Recording):
         recording=recording,
     )
     segments = list(segment_clip(clip, duration=2.0, hop=1.0))
-    assert len(segments) == 9
-    for i, segment in enumerate(segments):
-        assert segment.start_time == i * 1.0
-        assert segment.end_time == i * 1.0 + 2.0
-        assert segment.duration == 2.0
+    assert [(s.start_time, s.end_time) for s in segments] == [
+        (0, 2),
+        (1, 3),
+        (2, 4),
+        (3, 5),
+        (4, 6),
+        (5, 7),
+        (6, 8),
+        (7, 9),
+        (8, 10),
+    ]
 
 
 def test_segment_clip_include_incomplete(recording: data.Recording):
@@ -41,7 +49,6 @@ def test_segment_clip_include_incomplete(recording: data.Recording):
     segments = list(
         segment_clip(clip, duration=3.0, hop=2.0, include_incomplete=True)
     )
-    assert len(segments) == 5
     assert [(s.start_time, s.end_time) for s in segments] == [
         (0, 3),
         (2, 5),
