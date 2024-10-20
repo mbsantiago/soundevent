@@ -13,6 +13,7 @@ from soundevent.geometry.operations import (
     buffer_geometry,
     compute_bounds,
     get_geometry_point,
+    group_sound_events,
     have_frequency_overlap,
     have_temporal_overlap,
     is_in_clip,
@@ -473,3 +474,107 @@ def test_have_frequency_overlap_invalid_input():
         have_frequency_overlap(geom1, geom2, min_relative_overlap=-0.5)
     with pytest.raises(ValueError):
         have_frequency_overlap(geom1, geom2, min_relative_overlap=1.5)
+
+
+def test_group_sound_events_no_events():
+    sound_events: list[data.SoundEvent] = []
+    sequences = group_sound_events(sound_events, lambda se1, se2: se1 == se2)
+    assert sequences == []
+
+
+def test_group_sound_events_all_similar(recording: data.Recording):
+    sound_events = [
+        data.SoundEvent(
+            recording=recording,
+            geometry=data.TimeInterval(coordinates=[1, 2]),
+        ),
+        data.SoundEvent(
+            recording=recording,
+            geometry=data.TimeInterval(coordinates=[2, 3]),
+        ),
+        data.SoundEvent(
+            recording=recording,
+            geometry=data.TimeInterval(coordinates=[3, 4]),
+        ),
+    ]
+    sequences = group_sound_events(sound_events, lambda se1, se2: True)
+    assert len(sequences) == 1
+    assert len(sequences[0].sound_events) == 3
+
+
+def test_group_sound_events_no_similar(recording: data.Recording):
+    sound_events = [
+        data.SoundEvent(
+            recording=recording,
+            geometry=data.TimeInterval(coordinates=[1, 2]),
+        ),
+        data.SoundEvent(
+            recording=recording,
+            geometry=data.TimeInterval(coordinates=[2, 3]),
+        ),
+        data.SoundEvent(
+            recording=recording,
+            geometry=data.TimeInterval(coordinates=[3, 4]),
+        ),
+    ]
+    sequences = group_sound_events(sound_events, lambda se1, se2: False)
+    assert len(sequences) == 3
+    for sequence in sequences:
+        assert len(sequence.sound_events) == 1
+
+
+def test_group_sound_events_some_similar(recording: data.Recording):
+    sound_events = [
+        data.SoundEvent(
+            recording=recording,
+            geometry=data.TimeInterval(coordinates=[1, 2]),
+        ),
+        data.SoundEvent(
+            recording=recording,
+            geometry=data.TimeInterval(coordinates=[3, 4]),
+        ),
+        data.SoundEvent(
+            recording=recording,
+            geometry=data.TimeInterval(coordinates=[3, 5]),
+        ),
+    ]
+
+    def comparison_fn(se1: data.SoundEvent, se2: data.SoundEvent):
+        if se1.geometry is None or se2.geometry is None:
+            return False
+        return have_temporal_overlap(se1.geometry, se2.geometry)
+
+    sequences = group_sound_events(sound_events, comparison_fn)
+    assert len(sequences) == 2
+    assert any(
+        len(sequence.sound_events) == 2 for sequence in sequences
+    )  # Group of 2 similar events
+    assert any(
+        len(sequence.sound_events) == 1 for sequence in sequences
+    )  # The remaining event
+
+
+def test_group_sound_events_transitive_similarity(recording: data.Recording):
+    sound_events = [
+        data.SoundEvent(
+            recording=recording,
+            geometry=data.TimeInterval(coordinates=[1, 3]),
+        ),
+        data.SoundEvent(
+            recording=recording,
+            geometry=data.TimeInterval(coordinates=[2, 5]),
+        ),
+        data.SoundEvent(
+            recording=recording,
+            geometry=data.TimeInterval(coordinates=[4, 6]),
+        ),
+    ]
+
+    def comparison_fn(se1: data.SoundEvent, se2: data.SoundEvent):
+        if se1.geometry is None or se2.geometry is None:
+            return False
+        return have_temporal_overlap(se1.geometry, se2.geometry)
+
+    sequences = group_sound_events(sound_events, comparison_fn)
+    assert len(sequences) == 1
+    assert len(sequences[0].sound_events) == 3  # All in the same group
