@@ -541,3 +541,135 @@ def test_adjust_dim_range_invalid_input():
         ops.adjust_dim_range(array, dim="x", start=5.0, stop=2.0)
     with pytest.raises(ValueError):
         ops.adjust_dim_range(array, dim="x", start=None, stop=None)
+
+
+def test_adjust_dim_width_when_width_is_shorter():
+    array = xr.DataArray(
+        np.arange(10),
+        dims=["x"],
+        coords={"x": np.arange(10)},
+    )
+
+    result = ops.adjust_dim_width(array, dim="x", width=5, position="start")
+    expected = xr.DataArray(
+        np.arange(5), dims=["x"], coords={"x": np.arange(5)}
+    )
+    xr.testing.assert_equal(result, expected)
+
+    result = ops.adjust_dim_width(array, dim="x", width=5, position="center")
+    expected = xr.DataArray(
+        np.arange(3, 8), dims=["x"], coords={"x": np.arange(3, 8)}
+    )
+    xr.testing.assert_equal(result, expected)
+
+    result = ops.adjust_dim_width(array, dim="x", width=5, position="end")
+    expected = xr.DataArray(
+        np.arange(5, 10), dims=["x"], coords={"x": np.arange(5, 10)}
+    )
+    xr.testing.assert_equal(result, expected)
+
+
+def test_adjust_dim_with_is_a_noop_when_width_is_same():
+    array = xr.DataArray(
+        np.arange(10),
+        dims=["x"],
+        coords={"x": np.arange(10)},
+    )
+    result = ops.adjust_dim_width(array, dim="x", width=10, position="start")
+    xr.testing.assert_equal(result, array)
+    result = ops.adjust_dim_width(array, dim="x", width=10, position="center")
+    xr.testing.assert_equal(result, array)
+    result = ops.adjust_dim_width(array, dim="x", width=10, position="end")
+    xr.testing.assert_equal(result, array)
+
+
+def test_adjust_dim_width_fails_if_position_is_invalid():
+    array = xr.DataArray(
+        np.arange(10),
+        dims=["x"],
+        coords={"x": np.arange(10)},
+    )
+
+    with pytest.raises(ValueError):
+        ops.adjust_dim_width(array, dim="x", width=5, position="top")  # type: ignore
+
+
+def test_adjust_dim_width_when_width_is_longer():
+    array = xr.DataArray(
+        np.arange(10),
+        dims=["x"],
+        coords={"x": np.arange(10)},
+    )
+    result = ops.adjust_dim_width(array, dim="x", width=15, position="start")
+    expected = xr.DataArray(
+        np.concatenate([np.arange(10), np.zeros(5)]),
+        dims=["x"],
+        coords={"x": np.arange(0, 15)},
+    )
+    xr.testing.assert_equal(result, expected)
+
+    result = ops.adjust_dim_width(array, dim="x", width=15, position="center")
+    expected = xr.DataArray(
+        np.concatenate([np.zeros(2), np.arange(10), np.zeros(3)]),
+        dims=["x"],
+        coords={"x": np.arange(-2, 13)},
+    )
+    xr.testing.assert_equal(result, expected)
+
+    result = ops.adjust_dim_width(array, dim="x", width=15, position="end")
+    expected = xr.DataArray(
+        np.concatenate([np.zeros(5), np.arange(10)]),
+        dims=["x"],
+        coords={"x": np.arange(-5, 10)},
+    )
+    xr.testing.assert_equal(result, expected)
+
+
+def test_that_extend_dim_width_fails_if_width_is_less_than_current():
+    array = xr.DataArray(
+        np.arange(10),
+        dims=["x"],
+        coords={"x": np.arange(10)},
+    )
+    with pytest.raises(ValueError):
+        ops.extend_dim_width(array, dim="x", width=2)
+
+
+def test_that_crop_dim_width_fails_if_width_is_larger_than_current():
+    array = xr.DataArray(
+        np.arange(10),
+        dims=["x"],
+        coords={"x": np.arange(10)},
+    )
+    with pytest.raises(ValueError):
+        ops.crop_dim_width(array, dim="x", width=20)
+
+
+def test_extend_dim_width_fails_if_position_is_invalid():
+    array = xr.DataArray(
+        np.arange(10),
+        dims=["x"],
+        coords={"x": np.arange(10)},
+    )
+    with pytest.raises(ValueError):
+        ops.extend_dim_width(array, dim="x", width=15, position="top")  # type: ignore
+
+
+def test_that_crop_dim_width_fails_if_position_is_invalid():
+    array = xr.DataArray(
+        np.arange(10),
+        dims=["x"],
+        coords={"x": np.arange(10)},
+    )
+    with pytest.raises(ValueError):
+        ops.crop_dim_width(array, dim="x", width=5, position="top")  # type: ignore
+
+
+def test_adjust_dim_width_fails_if_width_is_too_short():
+    array = xr.DataArray(
+        np.arange(10),
+        dims=["x"],
+        coords={"x": np.arange(10)},
+    )
+    with pytest.raises(ValueError):
+        ops.adjust_dim_width(array, dim="x", width=0, position="start")

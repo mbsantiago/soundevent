@@ -1,6 +1,6 @@
 """Module for manipulation of xarray.DataArray objects."""
 
-from typing import Any, Callable, List, Optional, Union
+from typing import Any, Callable, List, Literal, Optional, Union
 
 import numpy as np
 import xarray as xr
@@ -24,6 +24,10 @@ __all__ = [
     "scale",
     "set_value_at_pos",
     "adjust_dim_range",
+    "resize",
+    "crop_dim_width",
+    "extend_dim_width",
+    "adjust_dim_width",
 ]
 
 
@@ -661,3 +665,281 @@ def adjust_dim_range(
             )
 
     return array
+
+
+Position = Literal["start", "center", "end"]
+
+
+def crop_dim_width(
+    array: xr.DataArray,
+    dim: str,
+    width: int,
+    position: Position = "start",
+) -> xr.DataArray:
+    """Crops an xarray DataArray along a specified dimension to a given width.
+
+    Parameters
+    ----------
+    array : xr.DataArray
+        The DataArray to be cropped.
+    dim : str
+        The name of the dimension to crop.
+    width : int
+        The desired width of the dimension after cropping.
+    position : {'start', 'end', 'center'}, default: 'start'
+        The position from which to crop.
+        - 'start': Crop from the beginning of the dimension.
+        - 'end': Crop from the end of the dimension.
+        - 'center': Crop from the center of the dimension.
+
+    Returns
+    -------
+    xr.DataArray
+        The cropped DataArray.
+
+    Raises
+    ------
+    ValueError
+        If the new width is greater than or equal to the current width,
+        or if the position is invalid.
+
+    Examples
+    --------
+    >>> import xarray as xr
+    >>> import numpy as np
+    >>> array = xr.DataArray(np.arange(10), dims="x")
+    >>> crop_dim_width(array, "x", 5, position="start")
+    <xarray.DataArray (x: 5)>
+    array([0, 1, 2, 3, 4])
+    Coordinates:
+      * x        (x) int64 0 1 2 3 4
+    >>> crop_dim_width(array, "x", 3, position="end")
+    <xarray.DataArray (x: 3)>
+    array([7, 8, 9])
+    Coordinates:
+      * x        (x) int64 7 8 9
+    >>> crop_dim_width(array, "x", 4, position="center")
+    <xarray.DataArray (x: 4)>
+    array([3, 4, 5, 6])
+    Coordinates:
+      * x        (x) int64 3 4 5 6
+    """
+    if width >= array.sizes[dim]:
+        raise ValueError("New width must be less than current width.")
+
+    if position == "start":
+        coords = array.coords[dim].data[:width]
+    elif position == "end":
+        coords = array.coords[dim].data[-width:]
+    elif position == "center":
+        start = max(0, array.sizes[dim] // 2 - width // 2)
+        coords = array.coords[dim].data[start : start + width]
+    else:
+        raise ValueError(f"Invalid position: {position}")  # type: ignore
+
+    return array.sel({dim: coords})
+
+
+def extend_dim_width(
+    array: xr.DataArray,
+    dim: str,
+    width: int,
+    fill_value: float = 0,
+    position: Position = "start",
+) -> xr.DataArray:
+    """Extend an xarray DataArray along a specified dimension to a given width.
+
+    Parameters
+    ----------
+    array : xr.DataArray
+        The DataArray to be extended.
+    dim : str
+        The name of the dimension to extend.
+    width : int
+        The desired width of the dimension after extension.
+    fill_value : float, default: 0
+        The value to fill the extended region with.
+    position : {'start', 'end', 'center'}, default: 'start'
+        The position at which to extend. Imagine placing the original array
+        within a larger array of the desired width. This parameter controls
+        where the original array is placed within this larger array:
+
+        - 'start': Keep the start position of the original array, and extend
+          towards the end of the larger array.
+        - 'end': Keep the end position of the original array, and extend
+          towards the start of the larger array.
+        - 'center': Extend at both ends of the original array, keeping it
+          centered within the larger array.
+
+    Returns
+    -------
+    xr.DataArray
+        The extended DataArray.
+
+    Raises
+    ------
+    ValueError
+        If the new width is less than or equal to the current width,
+        or if the position is invalid.
+
+    Examples
+    --------
+    >>> import xarray as xr
+    >>> import numpy as np
+    >>> array = xr.DataArray(np.arange(5), dims="x")
+    >>> extend_dim_width(array, "x", 8, position="start")
+    <xarray.DataArray (x: 8)>
+    array([0., 1., 2., 3., 4., 0., 0., 0.])
+    Coordinates:
+      * x        (x) float64 0.0 1.0 2.0 3.0 4.0 5.0 6.0 7.0
+    >>> extend_dim_width(array, "x", 7, position="end")
+    <xarray.DataArray (x: 7)>
+    array([0., 0., 0., 1., 2., 3., 4.])
+    Coordinates:
+      * x        (x) int64 -2 -1  0  1  2  3  4
+    >>> extend_dim_width(array, "x", 9, position="center")
+    <xarray.DataArray (x: 9)>
+    array([0., 0., 0., 1., 2., 3., 4., 0., 0.])
+    Coordinates:
+      * x        (x) float64 -2.0 -1.0 0.0 1.0 2.0 3.0 4.0 5.0 6.0
+    """
+    coords = array.coords[dim].data
+    step = get_dim_step(array, dim)
+
+    current_width = len(coords)
+    current_start = coords[0]
+    current_end = coords[-1]
+
+    if current_width >= width:
+        raise ValueError("New width must be greater than current width.")
+
+    if position == "start":
+        extra_width = width - current_width
+        new_coords = np.arange(
+            current_end + step,
+            current_end + step + extra_width * step,
+            step,
+            dtype=coords.dtype,
+        )
+        coords = np.concatenate([coords, new_coords])
+
+    elif position == "end":
+        extra_width = width - current_width
+        new_coords = np.arange(
+            current_start - step,
+            current_start - step - extra_width * step,
+            -step,
+            dtype=coords.dtype,
+        )[::-1]
+        coords = np.concatenate([new_coords, coords])
+
+    elif position == "center":
+        extra_width = width - current_width
+        extra_start = extra_width // 2
+        extra_end = extra_width - extra_start
+
+        new_coords_start = np.arange(
+            current_start - step,
+            current_start - step - extra_start * step,
+            -step,
+            dtype=coords.dtype,
+        )[::-1]
+
+        new_coords_end = np.arange(
+            current_end + step,
+            current_end + step + extra_end * step,
+            step,
+            dtype=coords.dtype,
+        )
+
+        coords = np.concatenate([new_coords_start, coords, new_coords_end])
+
+    else:
+        raise ValueError(f"Invalid position: {position}")
+
+    return array.reindex(
+        {dim: coords},
+        fill_value=fill_value,  # type: ignore
+    )
+
+
+def adjust_dim_width(
+    array: xr.DataArray,
+    dim: str,
+    width: int,
+    fill_value: float = 0,
+    position: Position = "start",
+) -> xr.DataArray:
+    """Adjust the width of an xarray DataArray along a specified dimension.
+
+    This function effectively places the original array within a larger or
+    smaller array of the desired width (`width`), cropping or extending it as
+    needed. The `position` parameter controls where the original array is
+    placed within this other array:
+
+    - 'start': Places the input array at the start, cropping or extending
+      towards the end.
+    - 'end': Places the input array at the end, cropping or extending
+      towards the start.
+    - 'center': Places the input array at the center, cropping or extending
+      at both ends.
+
+    Parameters
+    ----------
+    array : xr.DataArray
+        The DataArray to be adjusted.
+    dim : str
+        The name of the dimension to adjust.
+    width : int
+        The desired width of the dimension.
+    fill_value : float, default: 0
+        The value to fill the extended region with, if extending.
+    position : {'start', 'end', 'center'}, default: 'start'
+        The position from which to crop or at which to extend.
+        - 'start': Crop/extend at the beginning of the dimension.
+        - 'end': Crop/extend at the end of the dimension.
+        - 'center': Crop/extend at the center of the dimension.
+
+    Returns
+    -------
+    xr.DataArray
+        The adjusted DataArray.
+
+    Raises
+    ------
+    ValueError
+        If the width is less than 1.
+
+    Examples
+    --------
+    >>> import xarray as xr
+    >>> import numpy as np
+    >>> array = xr.DataArray(np.arange(10), dims="x")
+    >>> adjust_dim_width(array, "x", 5, position="start")
+    <xarray.DataArray (x: 5)>
+    array([0, 1, 2, 3, 4])
+    Coordinates:
+      * x        (x) int64 0 1 2 3 4
+    >>> adjust_dim_width(array, "x", 12, position="end")
+    <xarray.DataArray (x: 12)>
+    array([0., 0., 0., 1., 2., 3., 4., 5., 6., 7., 8., 9.])
+    Coordinates:
+      * x        (x) float64 -2.0 -1.0 0.0 1.0 2.0 3.0 ... 6.0 7.0 8.0 9.0 10.0
+    """
+    if width < 1:
+        raise ValueError("Width must be greater than or equal to 1.")
+
+    current_width = array.sizes[dim]
+    if width == current_width:
+        return array
+
+    if width < current_width:
+        return crop_dim_width(array, dim, width, position=position)
+
+    return extend_dim_width(
+        array,
+        dim,
+        width,
+        fill_value=fill_value,
+        position=position,
+    )
