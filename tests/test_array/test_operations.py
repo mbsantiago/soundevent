@@ -663,3 +663,13 @@ def test_that_crop_dim_width_fails_if_position_is_invalid():
     )
     with pytest.raises(ValueError):
         ops.crop_dim_width(array, dim="x", width=5, position="top")  # type: ignore
+
+
+def test_adjust_dim_width_fails_if_width_is_too_short():
+    array = xr.DataArray(
+        np.arange(10),
+        dims=["x"],
+        coords={"x": np.arange(10)},
+    )
+    with pytest.raises(ValueError):
+        ops.adjust_dim_width(array, dim="x", width=0, position="start")
