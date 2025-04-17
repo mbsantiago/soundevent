@@ -31,7 +31,7 @@ class EvaluationSetAdapter(AnnotationSetAdapter):
             sequence_annotations=self.sequence_annotations_adapter.values(),
             clip_annotations=annotation_set.clip_annotations,
             created_on=obj.created_on,
-            name=obj.name,
+            name=obj.name or "Evaluation Set",
             description=obj.description,
             evaluation_tags=(
                 [

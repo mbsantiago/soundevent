@@ -34,7 +34,7 @@ from soundevent.data.geometries import (
     geometry_validate,
 )
 from soundevent.data.matches import Match
-from soundevent.data.model_runs import ModelRun
+from soundevent.data.model_runs import Model, ModelInfo, ModelRun
 from soundevent.data.notes import Note
 from soundevent.data.predicted_tags import PredictedTag
 from soundevent.data.prediction_sets import PredictionSet
@@ -70,6 +70,8 @@ __all__ = [
     "LineString",
     "MAX_FREQUENCY",
     "Match",
+    "Model",
+    "ModelInfo",
     "ModelRun",
     "MultiLineString",
     "MultiPoint",

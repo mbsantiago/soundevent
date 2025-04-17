@@ -1,6 +1,6 @@
 """Evaluation Sets."""
 
-from typing import Optional, Sequence
+from typing import Sequence
 
 from pydantic import Field
 
@@ -15,6 +15,4 @@ __all__ = [
 class EvaluationSet(AnnotationSet):
     """Evaluation Set Class."""
 
-    name: str
-    description: Optional[str] = None
     evaluation_tags: Sequence[Tag] = Field(default_factory=list)
