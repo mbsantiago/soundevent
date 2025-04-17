@@ -1,4 +1,5 @@
 version = 1
+revision = 1
 requires-python = ">=3.9"
 resolution-markers = [
     "python_full_version < '3.11'",
@@ -255,7 +256,7 @@ name = "click"
 version = "8.1.7"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "colorama", marker = "platform_system == 'Windows'" },
+    { name = "colorama", marker = "sys_platform == 'win32'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/96/d3/f04c7bfcf5c1862a2a5b845c6b2b360488cf47af55dfa79c98f6a6bf98b5/click-8.1.7.tar.gz", hash = "sha256:ca9853ad459e787e2192211578cc907e7594e294c7ccc834310722b41b9ca6de", size = 336121 }
 wheels = [
@@ -815,7 +816,7 @@ name = "ipykernel"
 version = "6.29.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "appnope", marker = "platform_system == 'Darwin'" },
+    { name = "appnope", marker = "sys_platform == 'darwin'" },
     { name = "comm" },
     { name = "debugpy" },
     { name = "ipython" },
@@ -1187,7 +1188,7 @@ version = "1.6.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
-    { name = "colorama", marker = "platform_system == 'Windows'" },
+    { name = "colorama", marker = "sys_platform == 'win32'" },
     { name = "ghp-import" },
     { name = "importlib-metadata", marker = "python_full_version < '3.10'" },
     { name = "jinja2" },
@@ -2404,7 +2405,7 @@ wheels = [
 
 [[package]]
 name = "soundevent"
-version = "2.2.0"
+version = "2.3.0"
 source = { editable = "." }
 dependencies = [
     { name = "email-validator" },
@@ -2448,7 +2449,7 @@ plot = [
     { name = "matplotlib" },
 ]
 
-[package.dependency-groups]
+[package.dev-dependencies]
 dev = [
     { name = "coverage", extra = ["toml"] },
     { name = "html5lib" },
@@ -2493,8 +2494,9 @@ requires-dist = [
     { name = "xarray", marker = "extra == 'audio'", specifier = ">=0.20.2" },
     { name = "xarray", marker = "extra == 'geometry'", specifier = ">=2023.1.0" },
 ]
+provides-extras = ["plot", "audio", "evaluation", "geometry", "crowsetta", "all"]
 
-[package.metadata.dependency-groups]
+[package.metadata.requires-dev]
 dev = [
     { name = "coverage", extras = ["toml"], specifier = ">=7.3.2" },
     { name = "html5lib", specifier = ">=1.1" },
@@ -2612,7 +2614,7 @@ name = "tqdm"
 version = "4.66.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "colorama", marker = "platform_system == 'Windows'" },
+    { name = "colorama", marker = "sys_platform == 'win32'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/58/83/6ba9844a41128c62e810fddddd72473201f3eacde02046066142a2d96cc5/tqdm-4.66.5.tar.gz", hash = "sha256:e1020aef2e5096702d8a025ac7d16b1577279c9d63f8375b63083e9a5f0fcbad", size = 169504 }
 wheels = [
