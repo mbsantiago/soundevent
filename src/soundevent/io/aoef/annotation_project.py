@@ -60,7 +60,7 @@ class AnnotationProjectAdapter(AnnotationSetAdapter):
             sequence_annotations=self.sequence_annotations_adapter.values(),
             clip_annotations=annotation_set.clip_annotations,
             created_on=obj.created_on,
-            name=obj.name,
+            name=obj.name or "Annotation Project",
             description=obj.description,
             instructions=obj.instructions,
             project_tags=project_tags if project_tags else None,
