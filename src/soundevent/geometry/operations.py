@@ -446,11 +446,11 @@ def get_geometry_point(
 
     if position == "centroid":
         shp_geom = geometry_to_shapely(geometry)
-        return shp_geom.centroid.coords[0]
+        return shp_geom.centroid.coords[0]  # type: ignore
 
     if position == "point_on_surface":
         shp_geom = geometry_to_shapely(geometry)
-        return shapely.point_on_surface(shp_geom).coords[0]
+        return shapely.point_on_surface(shp_geom).coords[0]  # type: ignore
 
     start_time, low_freq, end_time, high_freq = compute_bounds(geometry)
 
