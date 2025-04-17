@@ -29,7 +29,6 @@ def test_accessing_model_run_version_directly_is_deprecated(
     model_run: data.ModelRun,
     model_run_adapter: ModelRunAdapter,
 ):
-    """Test that a model run is recovered."""
     aoef = model_run_adapter.to_aoef(model_run)
 
     with pytest.deprecated_call():
@@ -43,7 +42,6 @@ def test_changing_version_to_model_run_object_is_deprecated(
     model_run: data.ModelRun,
     model_run_adapter: ModelRunAdapter,
 ):
-    """Test that a model run is recovered."""
     aoef = model_run_adapter.to_aoef(model_run)
 
     with pytest.deprecated_call():
@@ -51,3 +49,38 @@ def test_changing_version_to_model_run_object_is_deprecated(
 
     assert aoef.model is not None
     assert aoef.model.version == "1.0.0"
+
+
+def test_version_is_none_if_no_model_info(
+    model_run: data.ModelRun,
+    model_run_adapter: ModelRunAdapter,
+):
+    """Test that a model run can't get version if no model info."""
+    aoef = model_run_adapter.to_aoef(model_run)
+    aoef = aoef.model_copy(update={"model": None})
+    assert aoef.version is None
+
+
+def test_cant_set_model_version_if_no_model_info(
+    model_run: data.ModelRun,
+    model_run_adapter: ModelRunAdapter,
+):
+    """Test that a model run can't set version if no model info."""
+    aoef = model_run_adapter.to_aoef(model_run)
+    aoef = aoef.model_copy(update={"model": None})
+
+    with pytest.raises(ValueError):
+        aoef.version = "1.0.0"
+
+
+def test_can_create_model_run_with_format_1_and_no_version(
+    model_run: data.ModelRun,
+    model_run_adapter: ModelRunAdapter,
+):
+    """Test that a model run can't be created with old format."""
+    aoef = model_run_adapter.to_aoef(model_run)
+    data = aoef.model_dump()
+    data.pop("model")
+    data.pop("version")
+    model_run_object = ModelRunObject(**data)
+    assert model_run_object.model is None
