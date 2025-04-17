@@ -30,7 +30,7 @@ def _get_filter(
 
     if low_freq is None:
         # Low pass filter
-        return signal.butter( # type: ignore
+        return signal.butter(  # type: ignore
             order,
             high_freq,
             btype="lowpass",
