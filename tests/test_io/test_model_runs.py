@@ -4,6 +4,9 @@ import datetime
 import json
 from pathlib import Path
 
+import pytest
+from pydantic import ValidationError
+
 from soundevent import data, io
 
 
@@ -306,3 +309,64 @@ def test_can_recover_predicted_sound_event_with_predicted_tags(
     )
     assert recovered.clip_predictions[0].sound_events[0].tags[0].score == 0.9
     assert model_run == recovered
+
+
+def test_model_run_version_field_is_deprecated():
+    """Test that the version field is deprecated."""
+    # Act
+    with pytest.deprecated_call():
+        model_run = data.ModelRun(  # type: ignore
+            description="test_description",
+            name="test_model_run",
+            version="1.0.0",  # type: ignore
+        )
+
+    # Assert
+    assert model_run.model.version == "1.0.0"
+
+
+def test_changing_model_run_version_is_deprecated():
+    """Test that changing the version field is deprecated."""
+    # Arrange
+    model_run = data.ModelRun(
+        description="test_description",
+        name="test_model_run",
+        model=data.Model(
+            info=data.ModelInfo(name="test_model"),
+            version="1.0.0",
+        ),
+    )
+
+    # Act
+    with pytest.deprecated_call():
+        model_run.version = "2.0.0"  # type: ignore
+
+    # Assert
+    assert model_run.model.version == "2.0.0"
+
+
+def test_can_create_model_run_with_version():
+    """Test that a model run can be created with a version."""
+    # Arrange
+    model_run = data.ModelRun.model_validate(
+        {
+            "description": "test_description",
+            "name": "test_model_run",
+            "version": "1.0.0",
+        }
+    )
+
+    # Assert
+    assert model_run.model.version == "1.0.0"
+
+
+def test_create_model_run_without_version_will_fail():
+    """Test that a model run cannot be created without a version."""
+    # Act
+    with pytest.raises(ValidationError):
+        data.ModelRun.model_validate(
+            {
+                "description": "test_description",
+                "name": "test_model_run",
+            }
+        )
