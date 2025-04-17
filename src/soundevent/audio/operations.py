@@ -30,7 +30,7 @@ def _get_filter(
 
     if low_freq is None:
         # Low pass filter
-        return signal.butter(
+        return signal.butter( # type: ignore
             order,
             high_freq,
             btype="lowpass",
@@ -40,7 +40,7 @@ def _get_filter(
 
     if high_freq is None:
         # High pass filter
-        return signal.butter(
+        return signal.butter(  # type: ignore
             order,
             low_freq,
             btype="highpass",
@@ -52,7 +52,7 @@ def _get_filter(
         raise ValueError("low_freq must be less than high_freq.")
 
     # Band pass filter
-    return signal.butter(
+    return signal.butter(  # type: ignore
         order,
         [low_freq, high_freq],
         btype="bandpass",
