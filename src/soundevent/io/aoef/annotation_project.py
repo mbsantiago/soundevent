@@ -11,8 +11,6 @@ class AnnotationProjectObject(AnnotationSetObject):
     """Schema definition for an annotation project object in AOEF format."""
 
     collection_type: ColType = "annotation_project"  # type: ignore
-    name: str
-    description: Optional[str] = None
     instructions: Optional[str] = None
     project_tags: Optional[List[int]] = None
     tasks: Optional[List[AnnotationTaskObject]] = None
@@ -85,8 +83,6 @@ class AnnotationProjectAdapter(AnnotationSetAdapter):
                 if value is not None
             },
             tasks=tasks,
-            name=obj.name,
-            description=obj.description,
             instructions=obj.instructions,
             annotation_tags=[
                 tag

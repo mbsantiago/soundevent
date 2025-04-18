@@ -15,8 +15,6 @@ class ModelInfoObject(BaseModel):
 
 class ModelRunObject(PredictionSetObject):
     collection_type: Literal["model_run"] = "model_run"  # type: ignore
-    name: str
-    description: Optional[str] = None
     model: Optional[ModelInfoObject] = None
 
     @computed_field

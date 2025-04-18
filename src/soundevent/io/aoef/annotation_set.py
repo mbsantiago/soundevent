@@ -25,6 +25,8 @@ from soundevent import data
 
 class AnnotationSetObject(BaseModel):
     uuid: UUID
+    name: Optional[str] = None
+    description: Optional[str] = None
     collection_type: Literal["annotation_set"] = "annotation_set"
     users: Optional[List[UserObject]] = None
     tags: Optional[List[TagObject]] = None
@@ -122,6 +124,8 @@ class AnnotationSetAdapter:
             sequence_annotations=self.sequence_annotations_adapter.values(),
             clip_annotations=annotated_clips,
             created_on=obj.created_on,
+            name=obj.name,
+            description=obj.description,
         )
 
     def to_soundevent(
@@ -163,6 +167,8 @@ class AnnotationSetAdapter:
 
         return data.AnnotationSet(
             uuid=obj.uuid or uuid4(),
+            name=obj.name,
+            description=obj.description,
             clip_annotations=annotated_clips,
             created_on=obj.created_on or datetime.datetime.now(),
         )

@@ -8,8 +8,6 @@ class EvaluationSetObject(AnnotationSetObject):
     """Schema definition for an evaluation set object in AOEF format."""
 
     collection_type: Literal["evaluation_set"] = "evaluation_set"  # type: ignore
-    name: str
-    description: Optional[str] = None
     evaluation_tags: Optional[List[int]] = None
 
 
@@ -54,8 +52,6 @@ class EvaluationSetAdapter(AnnotationSetAdapter):
                 for field, value in annotation_set
                 if value is not None
             },
-            name=obj.name,
-            description=obj.description,
             evaluation_tags=[
                 tag
                 for tag_id in obj.evaluation_tags or []

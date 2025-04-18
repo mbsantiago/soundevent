@@ -25,6 +25,8 @@ from soundevent import data
 
 class PredictionSetObject(BaseModel):
     uuid: UUID
+    name: Optional[str] = None
+    description: Optional[str] = None
     created_on: Optional[datetime.datetime] = None
     collection_type: Literal["prediction_set"] = "prediction_set"
     users: Optional[List[UserObject]] = None
@@ -105,6 +107,8 @@ class PredictionSetAdapter:
 
         return PredictionSetObject(
             uuid=obj.uuid,
+            name=obj.name,
+            description=obj.description,
             created_on=obj.created_on,
             users=self.user_adapter.values(),
             tags=self.tag_adapter.values(),
@@ -149,6 +153,8 @@ class PredictionSetAdapter:
 
         return data.PredictionSet(
             uuid=obj.uuid or uuid4(),
+            name=obj.name,
+            description=obj.description,
             clip_predictions=clip_predictions,
             created_on=obj.created_on or datetime.datetime.now(),
         )
