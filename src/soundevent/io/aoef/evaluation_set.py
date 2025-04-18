@@ -8,8 +8,6 @@ class EvaluationSetObject(AnnotationSetObject):
     """Schema definition for an evaluation set object in AOEF format."""
 
     collection_type: Literal["evaluation_set"] = "evaluation_set"  # type: ignore
-    name: str
-    description: Optional[str] = None
     evaluation_tags: Optional[List[int]] = None
 
 
