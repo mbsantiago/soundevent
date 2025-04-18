@@ -83,8 +83,6 @@ class AnnotationProjectAdapter(AnnotationSetAdapter):
                 if value is not None
             },
             tasks=tasks,
-            name=obj.name,
-            description=obj.description,
             instructions=obj.instructions,
             annotation_tags=[
                 tag

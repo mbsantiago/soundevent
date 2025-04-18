@@ -52,8 +52,6 @@ class EvaluationSetAdapter(AnnotationSetAdapter):
                 for field, value in annotation_set
                 if value is not None
             },
-            name=obj.name,
-            description=obj.description,
             evaluation_tags=[
                 tag
                 for tag_id in obj.evaluation_tags or []
