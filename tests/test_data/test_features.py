@@ -91,3 +91,17 @@ def test_find_feature_value_raises_error_if_requested_and_not_found():
         data.find_feature_value(
             example_features, name="non-existent", raises=True
         )
+
+
+def test_find_feature_fails_if_no_criteria_provided():
+    with pytest.raises(ValueError):
+        data.find_feature(example_features)
+
+
+def test_find_feature_fails_if_multiple_criteria_provided():
+    with pytest.raises(ValueError):
+        data.find_feature(
+            example_features,
+            term_label="Upper frequency bound",
+            term_name="ac:freqHigh",
+        )

@@ -92,3 +92,17 @@ def test_find_tag_value_returns_default_if_not_found():
 def test_find_tag_value_raises_error_if_requested_and_not_found():
     with pytest.raises(ValueError):
         data.find_tag_value(example_tags, key="non-existent", raises=True)
+
+
+def test_find_tag_fails_if_no_criteria_provided():
+    with pytest.raises(ValueError):
+        data.find_tag(example_tags)
+
+
+def test_find_tag_fails_if_multiple_criteria_provided():
+    with pytest.raises(ValueError):
+        data.find_tag(
+            example_tags,
+            term_label="Scientific Taxon Name",
+            term_name="dwc:scientificName",
+        )
