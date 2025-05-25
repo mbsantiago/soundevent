@@ -467,8 +467,7 @@ class Polygon(BaseGeometry):
 
                 if frequency < 0 or frequency > MAX_FREQUENCY:
                     raise ValueError(
-                        f"The frequency must be between 0 and "
-                        f"{MAX_FREQUENCY}."
+                        f"The frequency must be between 0 and {MAX_FREQUENCY}."
                     )
 
         return v

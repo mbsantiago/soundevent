@@ -248,4 +248,6 @@ def test_can_compute_psd_spectrogram(sample_wave):
     )
 
     assert spectrogram.attrs["units"] == "V**2/Hz"
-    assert spectrogram.attrs["long_name"] == "Power Spectral Density Spectrogram"
+    assert (
+        spectrogram.attrs["long_name"] == "Power Spectral Density Spectrogram"
+    )

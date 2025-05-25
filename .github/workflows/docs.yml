@@ -1,33 +1,32 @@
 name: Make docs
-
 on:
   push:
     branches:
       - main
-
 permissions:
   contents: write
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - uses: awalsh128/cache-apt-pkgs-action@latest
+        if: ${{ matrix.os == 'ubuntu-latest' }}
         with:
-          python-version: 3.11
-      - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
-      - name: Install soundevent
-        run: |
-          sudo apt-get update && sudo apt-get install libsndfile1
-          python -m pip install --upgrade pip
-          python -m pip install ".[all]"
-      - uses: actions/cache@v3
+          packages: libsndfile1
+          version: 1.0
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install the project
+        run: uv sync --locked --all-extras --dev
+      - name: Restore mkdocs cache
+        uses: actions/cache@v3
         with:
           key: mkdocs-material-${{ env.cache_id }}
           path: .cache
           restore-keys: |
             mkdocs-material-
-      - run:
-          pip install mkdocs-material "mkdocstrings[python]" mkdocs-gallery memory_profiler Pillow
-      - run: mkdocs gh-deploy --force
+      - name: Build and deploy to GitHub pages
+        run: mkdocs gh-deploy --force
