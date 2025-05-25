@@ -35,4 +35,4 @@ jobs:
       - name: Make run all code checks
         run: uv run just check
       - name: Run tests
-        run: uv run just test
+        run: uv run just test-all
