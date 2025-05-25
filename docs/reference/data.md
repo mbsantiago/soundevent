@@ -34,6 +34,10 @@
         - Match
         - ClipEvaluation
         - Evaluation
+        - find_tag
+        - find_tag_value
+        - find_feature
+        - find_feature_value
 
 ## Geometries
 
