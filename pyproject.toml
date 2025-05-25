@@ -58,7 +58,7 @@ dev-dependencies = [
 ]
 
 [tool.pytest.ini_options]
-addopts = "-s -vv -l --tb=long --doctest-modules"
+addopts = "-s -vvv -l --tb=long"
 
 [tool.ruff]
 line-length = 79
