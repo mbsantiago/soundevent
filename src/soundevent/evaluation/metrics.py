@@ -142,7 +142,7 @@ def jaccard(
 
     labels = np.arange(y_true.shape[1])
 
-    return metrics.jaccard_score(
+    return metrics.jaccard_score(  # type: ignore
         y_true=y_true,
         y_pred=y_score > threshold,
         labels=labels,
