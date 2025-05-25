@@ -123,10 +123,10 @@ def shapely_to_html(geometry: shapely.Geometry) -> str:
 
     return (
         f'<div style="{style}">'
-        f'{axis_label(start_time, left=True, axis="time")}'
-        f'{axis_label(end_time, left=False, axis="time")}'
-        f'{axis_label(low_freq, top=False, axis="freq")}'
-        f'{axis_label(high_freq, top=True, axis="freq")}'
+        f"{axis_label(start_time, left=True, axis='time')}"
+        f"{axis_label(end_time, left=False, axis='time')}"
+        f"{axis_label(low_freq, top=False, axis='freq')}"
+        f"{axis_label(high_freq, top=True, axis='freq')}"
         f"{transformed}"
         "</div>"
     )
