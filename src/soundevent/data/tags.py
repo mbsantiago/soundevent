@@ -314,11 +314,11 @@ def find_tag_value(
     >>> tag1 = Tag(term=t1, value="guitar")
     >>> tag2 = Tag(term=t2, value="park")
     >>> tag_list = [tag1, tag2]
-    >>> # Find value by term name (defaults to term label if no name)
-    >>> find_tag_value(tag_list, term_name="Acoustic Scene")
+    >>> # Find value by term name
+    >>> find_tag_value(tag_list, term_name="tau2019:scene")
     'park'
     >>> # Find value by key
-    >>> find_tag_value(tag_list, key="inst:gtr")
+    >>> find_tag_value(tag_list, key="Instrument Type")
     'guitar'
     >>> # No match, return default
     >>> find_tag_value(

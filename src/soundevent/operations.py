@@ -58,10 +58,17 @@ def segment_clip(
     Examples
     --------
     >>> from soundevent import data
+    >>> from pathlib import Path
+    >>> recording = data.Recording(
+    ...     path=Path("example.wav"),
+    ...     samplerate=44100,
+    ...     channels=1,
+    ...     duration=60,
+    ... )
     >>> clip = data.Clip(
     ...     start_time=0.0,
     ...     end_time=10.0,
-    ...     recording="...",
+    ...     recording=recording,
     ... )
     >>> segments = segment_clip(clip, duration=2.0, hop=1.0)
     >>> for segment in segments:

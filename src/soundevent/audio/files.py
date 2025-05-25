@@ -160,13 +160,13 @@ def get_audio_files(
 
     Get all audio files in a directory recursively:
     >>> for file in get_audio_files("path/to/directory"):
-    ...     print(file)
+    ...     print(file)  # doctest: +SKIP
 
     Get all audio files in a directory without recursion:
     >>> for file in get_audio_files(
     ...     "path/to/directory", recursive=False
     ... ):
-    ...     print(file)
+    ...     print(file)  # doctest: +SKIP
     """
     path = Path(path)
 
