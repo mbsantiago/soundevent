@@ -17,7 +17,7 @@ jobs:
       - uses: awalsh128/cache-apt-pkgs-action@latest
         if: ${{ matrix.os == 'ubuntu-latest' }}
         with:
-          packages: libsndfil1
+          packages: libsndfile1
           version: 1.0
       - name: Install uv
         uses: astral-sh/setup-uv@v5
