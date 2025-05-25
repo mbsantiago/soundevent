@@ -22,7 +22,7 @@ specific syllables).
 """
 
 import warnings
-from collections.abc import Sequence
+from collections.abc import Iterable
 from typing import Optional
 
 from pydantic import BaseModel, Field, model_validator
@@ -30,7 +30,7 @@ from pydantic import BaseModel, Field, model_validator
 from soundevent.data.compat import key_from_term, term_from_key
 from soundevent.data.terms import Term
 
-__all__ = ["Tag", "find_tag"]
+__all__ = ["Tag", "find_tag", "find_tag_value"]
 
 
 class Tag(BaseModel):
@@ -95,10 +95,14 @@ class Tag(BaseModel):
 
 
 def find_tag(
-    tags: Sequence[Tag],
-    label: Optional[str] = None,
+    tags: Iterable[Tag],
     term: Optional[Term] = None,
+    term_name: Optional[str] = None,
+    term_label: Optional[str] = None,
+    label: Optional[str] = None,
+    key: Optional[str] = None,
     default: Optional[Tag] = None,
+    raises: bool = False,
 ) -> Optional[Tag]:
     """Find a tag by its key.
 
@@ -130,22 +134,80 @@ def find_tag(
     -----
     If there are multiple tags with the same term or term label, the first one
     is returned.
+    if label is not None:
+        warnings.warn(
+            "The `label` argument has been deprecated, please use `term_label` instead.",
+            category=DeprecationWarning,
+            stacklevel=2,
+        )
+        term_label = label
 
+    num_args = sum(
+        [
+            term is not None,
+            key is not None,
+            term_name is not None,
+            term_label is not None,
+        ]
+    )
+
+    if num_args == 0:
+        raise ValueError(
+            "Either term, key, term_name or term_label must be provided."
+        )
+
+    if num_args > 1:
+        raise ValueError(
+            "At most one of term, key, term_name, term_label can be provided. If you used `label` argument this was copied over to `term_label` and could be causing this error."
+        )
+
+    ret = None
+
+    if key is not None:
+        ret = next((tag for tag in tags if tag.key == key), None)
+
+    if term is not None:
+        ret = next((tag for tag in tags if tag.term == term), None)
+
+    if term_label is not None:
+        ret = next((tag for tag in tags if tag.term.label == term_label), None)
+
+    if term_name is not None:
+        ret = next((tag for tag in tags if tag.term.name == term_name), None)
+
+    if ret is not None:
+        return ret
+
+    if raises:
+        raise ValueError("No tag found matching the criteria.")
+
+    return default
+
+
+def find_tag_value(
+    tags: Iterable[Tag],
+    key: Optional[str] = None,
+    term: Optional[Term] = None,
+    term_name: Optional[str] = None,
+    term_label: Optional[str] = None,
+    default: Optional[str] = None,
+    raises: bool = False,
+) -> Optional[str]:
     Raises
     ------
     ValueError
         If neither the term nor the label is provided.
     """
-    if term is not None:
-        return next(
-            (t for t in tags if t.term == term),
-            default,
-        )
+    tag = find_tag(
+        tags,
+        key=key,
+        term=term,
+        term_name=term_name,
+        term_label=term_label,
+        raises=raises,
+    )
 
-    if label is not None:
-        return next(
-            (t for t in tags if t.term.label == label),
-            default,
-        )
+    if tag is not None:
+        return tag.value
 
-    raise ValueError("Either 'term' or 'label' must be provided.")
+    return default
