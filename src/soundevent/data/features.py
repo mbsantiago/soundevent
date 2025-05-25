@@ -98,34 +98,98 @@ def find_feature(
     default: Optional[Feature] = None,
     raises: bool = False,
 ) -> Optional[Feature]:
-    """Find a feature by its name.
+    """Find the first matching feature based on a single criterion.
 
-    This function searches for a feature with the given name within the
-    provided sequence of features. If the feature is found, its corresponding
-    Feature object is returned. If not found, and a default Feature object is
-    provided, the default feature is returned. If neither the feature is found
-    nor a default feature is provided, None is returned.
+    Searches an iterable of Feature objects and returns the first one that
+    matches the *single* specified search criterion. Users must provide
+    exactly one search method: feature name, Term object, Term name, or
+    Term label.
 
     Parameters
     ----------
     features
-        The sequence of Feature objects to search within.
+        A sequence of Feature objects to search within.
+    term
+        The Term object associated with the feature to search for.
+    term_name
+        The name of the Term associated with the feature to search for.
+    term_label
+        The label of the Term associated with the feature to search for.
     name
         The name of the feature to search for.
+    label
+        (Deprecated) The label of the term to search for. Use `term_label`
+        instead. If used, it counts as providing `term_label`.
     default
-        The default Feature object to return if the feature is not found.
-        Defaults to None.
+        A default Feature object to return if no matching feature is
+        found. Defaults to None.
+    raises
+        If True, raises a ValueError if no matching feature is found and
+        no default is provided. Defaults to False.
 
     Returns
     -------
-    feature: Optional[Feature]
-        The Feature object if found, or the default Feature object if provided.
-        Returns None if the feature is not found and no default is provided.
+    Optional[Feature]
+        The first matching Feature object found, or the `default` value
+        if no match is found (and `raises` is False). Returns None if no
+        match is found and no `default` is provided.
+
+    Raises
+    ------
+    ValueError
+        If none of `name`, `term`, `term_name`, or `term_label` are
+        provided.
+    ValueError
+        If more than one of `name`, `term`, `term_name`, or `term_label`
+        are provided.
+    ValueError
+        If `raises` is True and no matching feature is found.
 
     Notes
     -----
-    If there are multiple features with the same name, the first one is
-    returned.
+    - Only *one* search criterion (`name`, `term`, `term_name`, or
+      `term_label`) can be provided per call.
+    - If multiple features match the chosen criterion, the first one
+      encountered in the `features` sequence is returned.
+    - The `label` parameter is deprecated. Use `term_label`.
+
+    Examples
+    --------
+    >>> t_energy = Term(
+    ...     name="energy",
+    ...     label="Signal Energy",
+    ...     definition="Total energy (J) contained in the audio signal",
+    ... )
+    >>> t_pitch = Term(
+    ...     name="pitch",
+    ...     label="Fundamental Frequency",
+    ...     definition="Frequency that contains the highest concentration of energy.",
+    ... )
+    >>> feat1 = Feature(value=0.85, term=t_energy)
+    >>> feat2 = Feature(value=440.0, term=t_pitch)
+    >>> feat_list = [feat1, feat2]
+    >>> # Find by feature name (defaults to term label if does not exist)
+    >>> find_feature(
+    ...     feat_list, name="Fundamental Frequency"
+    ... ) is feat2
+    True
+    >>> # Find by term name
+    >>> find_feature(feat_list, term_name="energy") is feat1
+    True
+    >>> # Find by term label
+    >>> find_feature(
+    ...     feat_list, term_label="Fundamental Frequency"
+    ... ) is feat2
+    True
+    >>> # No match, return default
+    >>> find_feature(feat_list, name="zcr", default=feat1) is feat1
+    True
+    >>> # No match, raises error
+    >>> try:
+    ...     find_feature(feat_list, name="zcr", raises=True)
+    ... except ValueError as e:
+    ...     print(e)
+    No feature found matching the criteria.
     """
     if label is not None:
         warnings.warn(
@@ -203,17 +267,83 @@ def find_feature_value(
     term_name: Optional[str] = None,
     term_label: Optional[str] = None,
     name: Optional[str] = None,
-    label: Optional[str] = None,
     default: Optional[float] = None,
     raises: bool = False,
 ) -> Optional[float]:
+    """Find the value of the first matching feature.
+
+    Searches a sequence of [Feature][soundevent.data.Feature] objects using
+    [`find_feature`][soundevent.data.find_feature] and returns the float
+    `value` attribute of the first matching feature found.
+
+    Parameters
+    ----------
+    features
+        A sequence of Feature objects to search within.
+    term
+        The Term object to search for.
+    term_name
+        The name of the Term to search for.
+    term_label
+        The label of the Term to search for.
+    name
+        The name of the feature to search for.
+    default
+        A default float value to return if no matching feature is found.
+        Defaults to None.
+    raises
+        If True, raises a ValueError if no matching feature is found and
+        no default is provided. Defaults to False.
+
+    Returns
+    -------
+    Optional[float]
+        The float `value` of the matching Feature object, or the `default`
+        value if no match is found (and `raises` is False). Returns None
+        if no match is found and no `default` is provided.
+
+    Raises
+    ------
+    ValueError
+        If `raises` is True and no feature is found, or if multiple search
+        criteria are provided (via `find_feature`).
+
+    See Also
+    --------
+    [find_feature][soundevent.data.find_feature] : The underlying function used
+        to find the Feature object.
+
+    Examples
+    --------
+    >>> t_energy = Term(
+    ...     name="energy",
+    ...     label="Signal Energy",
+    ...     definition="Total energy (J) contained in the audio signal",
+    ... )
+    >>> t_pitch = Term(
+    ...     name="pitch",
+    ...     label="Fundamental Frequency",
+    ...     definition="Frequency that contains the highest concentration of energy.",
+    ... )
+    >>> feat1 = Feature(value=0.85, term=t_energy)
+    >>> feat2 = Feature(value=440.0, term=t_pitch, name="f0")
+    >>> feat_list = [feat1, feat2]
+    >>> # Find value by name
+    >>> find_feature_value(feat_list, name="f0")
+    440.0
+    >>> # Find value by term name
+    >>> find_feature_value(feat_list, term_name="energy")
+    0.85
+    >>> # No match, return default
+    >>> find_feature_value(feat_list, name="zcr", default=0.0)
+    0.0
+    """
     feat = find_feature(
         features,
         term=term,
         term_name=term_name,
         term_label=term_label,
         name=name,
-        label=label,
         raises=raises,
     )
 
