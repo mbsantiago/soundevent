@@ -32,6 +32,7 @@ from soundevent.data.terms import Term
 __all__ = [
     "Feature",
     "find_feature",
+    "find_feature_value",
 ]
 
 
@@ -89,9 +90,13 @@ class Feature(BaseModel):
 
 def find_feature(
     features: Sequence[Feature],
-    label: Optional[str] = None,
     term: Optional[Term] = None,
+    term_name: Optional[str] = None,
+    term_label: Optional[str] = None,
+    name: Optional[str] = None,
+    label: Optional[str] = None,
     default: Optional[Feature] = None,
+    raises: bool = False,
 ) -> Optional[Feature]:
     """Find a feature by its name.
 
@@ -122,16 +127,97 @@ def find_feature(
     If there are multiple features with the same name, the first one is
     returned.
     """
-    if term is not None:
-        return next(
-            (f for f in features if f.term == term),
-            default,
-        )
-
     if label is not None:
-        return next(
-            (f for f in features if f.term.label == label),
-            default,
+        warnings.warn(
+            "The `label` argument has been deprecated, please use `term_label` instead.",
+            category=DeprecationWarning,
+            stacklevel=2,
+        )
+        term_label = label
+
+    num_args = sum(
+        [
+            term is not None,
+            name is not None,
+            term_name is not None,
+            term_label is not None,
+        ]
+    )
+
+    if num_args == 0:
+        raise ValueError(
+            "Either term, name, term_name or term_label must be provided."
         )
 
-    raise ValueError("Either 'term' or 'label' must be provided.")
+    if num_args > 1:
+        raise ValueError(
+            "At most one of term, name, term_name, term_label can be"
+            " provided. If you used `label` argument this was copied"
+            " over to `term_label` and could be causing this error."
+        )
+
+    ret = None
+
+    if name is not None:
+        ret = next(
+            (feature for feature in features if feature.name == name), None
+        )
+
+    if term is not None:
+        ret = next(
+            (feature for feature in features if feature.term == term), None
+        )
+
+    if term_label is not None:
+        ret = next(
+            (
+                feature
+                for feature in features
+                if feature.term.label == term_label
+            ),
+            None,
+        )
+
+    if term_name is not None:
+        ret = next(
+            (
+                feature
+                for feature in features
+                if feature.term.name == term_name
+            ),
+            None,
+        )
+
+    if ret is not None:
+        return ret
+
+    if raises:
+        raise ValueError("No feature found matching the criteria.")
+
+    return default
+
+
+def find_feature_value(
+    features: Sequence[Feature],
+    term: Optional[Term] = None,
+    term_name: Optional[str] = None,
+    term_label: Optional[str] = None,
+    name: Optional[str] = None,
+    label: Optional[str] = None,
+    default: Optional[float] = None,
+    raises: bool = False,
+) -> Optional[float]:
+    feat = find_feature(
+        features,
+        term=term,
+        term_name=term_name,
+        term_label=term_label,
+        name=name,
+        label=label,
+        raises=raises,
+    )
+
+    if feat is not None:
+        return feat.value
+
+    return default
