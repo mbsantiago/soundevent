@@ -15,7 +15,7 @@ from soundevent.data.compat import key_from_term, term_from_key
 from soundevent.data.datasets import Dataset
 from soundevent.data.evaluation_sets import EvaluationSet
 from soundevent.data.evaluations import Evaluation
-from soundevent.data.features import Feature, find_feature
+from soundevent.data.features import Feature, find_feature, find_feature_value
 from soundevent.data.geometries import (
     MAX_FREQUENCY,
     BoundingBox,
@@ -46,7 +46,7 @@ from soundevent.data.sequences import Sequence
 from soundevent.data.sound_event_annotations import SoundEventAnnotation
 from soundevent.data.sound_event_predictions import SoundEventPrediction
 from soundevent.data.sound_events import SoundEvent
-from soundevent.data.tags import Tag, find_tag
+from soundevent.data.tags import Tag, find_tag, find_tag_value
 from soundevent.data.terms import Term
 from soundevent.data.users import User
 
@@ -98,7 +98,9 @@ __all__ = [
     "TimeStamp",
     "User",
     "find_feature",
+    "find_feature_value",
     "find_tag",
+    "find_tag_value",
     "geometry_validate",
     "key_from_term",
     "term_from_key",

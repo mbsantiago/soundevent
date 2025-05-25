@@ -7,7 +7,7 @@ Welcome to the data schemas tour with the `soundevent` package! In this overview
 `soundevent` provides tools to attach essential information to various objects in bioacoustic analysis:
 
 - [Users](descriptors.md#users): Keeping reference of everyone's contribution.
-- [Terms](descriptors#terms): Standardized vocabularies ensure consistent language.
+- [Terms](descriptors.md#terms): Standardized vocabularies ensure consistent language.
 - [Tags](descriptors.md#tags): Attaching semantic context to objects.
 - [Features](descriptors.md#features): Numerical descriptors capturing continuously varying attributes.
 - [Notes](descriptors.md#notes): User-written free-text annotations.

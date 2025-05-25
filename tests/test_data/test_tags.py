@@ -43,3 +43,66 @@ def test_shows_deprecation_warning_when_using_key():
         key = tag.key
 
     assert key == terms.scientific_name.label
+
+
+example_tags = [
+    data.Tag(key="key1", value="value1"),  # type: ignore
+    data.Tag(key="key2", value="value2"),  # type: ignore
+    data.Tag(key="key3", value="value3"),  # type: ignore
+    data.Tag(key="key4", value="value4"),  # type: ignore
+    data.Tag(key="key5", value="value5"),  # type: ignore
+    data.Tag(term=terms.scientific_name, value="species"),
+]
+
+
+def test_can_find_tag_value_by_key():
+    value = data.find_tag_value(example_tags, key="key3")
+    assert value == "value3"
+
+
+def test_can_find_tag_value_by_term():
+    value = data.find_tag_value(example_tags, term=terms.scientific_name)
+    assert value == "species"
+
+
+def test_can_find_tag_by_term_name():
+    value = data.find_tag_value(example_tags, term_name="dwc:scientificName")
+    assert value == "species"
+
+
+def test_can_find_tag_value_by_term_label():
+    value = data.find_tag_value(
+        example_tags, term_label="Scientific Taxon Name"
+    )
+    assert value == "species"
+
+
+def test_find_tag_value_returns_none_if_not_found():
+    value = data.find_tag_value(example_tags, key="non-existent")
+    assert value is None
+
+
+def test_find_tag_value_returns_default_if_not_found():
+    value = data.find_tag_value(
+        example_tags, key="non-existent", default="test"
+    )
+    assert value == "test"
+
+
+def test_find_tag_value_raises_error_if_requested_and_not_found():
+    with pytest.raises(ValueError):
+        data.find_tag_value(example_tags, key="non-existent", raises=True)
+
+
+def test_find_tag_fails_if_no_criteria_provided():
+    with pytest.raises(ValueError):
+        data.find_tag(example_tags)
+
+
+def test_find_tag_fails_if_multiple_criteria_provided():
+    with pytest.raises(ValueError):
+        data.find_tag(
+            example_tags,
+            term_label="Scientific Taxon Name",
+            term_name="dwc:scientificName",
+        )
