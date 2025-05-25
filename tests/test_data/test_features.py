@@ -40,3 +40,54 @@ def test_shows_deprecation_warning_when_using_key():
         name = feature.name
 
     assert name == terms.duration.label
+
+
+example_features = [
+    data.Feature(name="name1", value=1),  # type: ignore
+    data.Feature(name="name2", value=2),  # type: ignore
+    data.Feature(name="name3", value=3),  # type: ignore
+    data.Feature(name="name4", value=4),  # type: ignore
+    data.Feature(name="name5", value=5),  # type: ignore
+    data.Feature(term=terms.high_freq, value=6),
+]
+
+
+def test_can_find_feature_value_by_name():
+    value = data.find_feature_value(example_features, name="name3")
+    assert value == 3
+
+
+def test_can_find_feature_value_by_term():
+    value = data.find_feature_value(example_features, term=terms.high_freq)
+    assert value == 6
+
+
+def test_can_find_feature_by_term_name():
+    value = data.find_feature_value(example_features, term_name="ac:freqHigh")
+    assert value == 6
+
+
+def test_can_find_feature_value_by_term_label():
+    value = data.find_feature_value(
+        example_features, term_label="Upper frequency bound"
+    )
+    assert value == 6
+
+
+def test_find_feature_value_returns_none_if_not_found():
+    value = data.find_feature_value(example_features, name="non-existent")
+    assert value is None
+
+
+def test_find_feature_value_returns_default_if_not_found():
+    value = data.find_feature_value(
+        example_features, name="non-existent", default=42
+    )
+    assert value == 42
+
+
+def test_find_feature_value_raises_error_if_requested_and_not_found():
+    with pytest.raises(ValueError):
+        data.find_feature_value(
+            example_features, name="non-existent", raises=True
+        )
