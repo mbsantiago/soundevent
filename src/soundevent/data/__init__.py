@@ -46,7 +46,7 @@ from soundevent.data.sequences import Sequence
 from soundevent.data.sound_event_annotations import SoundEventAnnotation
 from soundevent.data.sound_event_predictions import SoundEventPrediction
 from soundevent.data.sound_events import SoundEvent
-from soundevent.data.tags import Tag, find_tag
+from soundevent.data.tags import Tag, find_tag, find_tag_value
 from soundevent.data.terms import Term
 from soundevent.data.users import User
 
@@ -99,6 +99,7 @@ __all__ = [
     "User",
     "find_feature",
     "find_tag",
+    "find_tag_value",
     "geometry_validate",
     "key_from_term",
     "term_from_key",
