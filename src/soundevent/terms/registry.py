@@ -1,3 +1,12 @@
+"""Provides tools for managing and accessing standardized Term objects.
+
+This module introduces the `TermRegistry`, a specialized collection designed
+to store and retrieve `Term` objects using unique keys. It facilitates
+consistency in terminology across projects by providing a central, searchable
+repository for standardized terms. It also defines custom exceptions for
+registry-specific error handling.
+"""
+
 from collections.abc import Callable, MutableMapping
 from functools import partial
 from typing import Dict, Optional
