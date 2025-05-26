@@ -25,6 +25,11 @@ from soundevent.terms.metrics import (
     top_3_accuracy,
     true_class_probability,
 )
+from soundevent.terms.registry import (
+    MultipleTermsFoundError,
+    TermNotFoundError,
+    TermRegistry,
+)
 from soundevent.terms.roi import (
     bandwidth,
     duration,
@@ -76,4 +81,7 @@ __all__ = [
     "taxonomic_class",
     "top_3_accuracy",
     "true_class_probability",
+    "MultipleTermsFoundError",
+    "TermNotFoundError",
+    "TermRegistry",
 ]
