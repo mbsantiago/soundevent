@@ -206,7 +206,7 @@ class TermRegistry(MutableMapping[str, Term]):
         key = key or term.name
         self[key] = term
 
-    def get(self, key: str, default: Optional[Term] = None) -> Optional[Term]:
+    def get(self, key: str, default: Optional[Term] = None) -> Optional[Term]:  # type: ignore
         """Retrieve a term by key, returning a default if not found.
 
         Mimics `dict.get()`. Returns `None` by default if the key is not
