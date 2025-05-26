@@ -58,6 +58,20 @@ def test_term_registry_add_term_term():
     assert registry["test_key"] is test_term
 
 
+def test_term_registry_set_term_key():
+    registry = TermRegistry()
+    registry["test_key"] = test_term
+    assert "test_key" in registry
+    assert len(registry) == 1
+    assert registry["test_key"] is test_term
+
+
+def test_term_registry_set_term_fails_if_not_term():
+    registry = TermRegistry()
+    with pytest.raises(TypeError):
+        registry["test"] = "not a term"  # type: ignore
+
+
 def test_term_registry_delete_term():
     registry = TermRegistry()
     registry.add_term(key="test_key", term=test_term)
@@ -154,7 +168,7 @@ def test_term_registry_add_term_duplicate_term():
 def test_term_registry_get_term_not_found():
     registry = TermRegistry()
 
-    with pytest.raises(KeyError):
+    with pytest.raises(KeyError, match="Key='non_existent_key"):
         registry["non_existent_key"]
 
 
@@ -173,7 +187,7 @@ def test_term_registry_can_get_by_label(
 def test_term_registry_get_by_label_fails_if_not_found(
     example_registry: TermRegistry,
 ):
-    with pytest.raises(TermNotFoundError):
+    with pytest.raises(TermNotFoundError, match="Criteria={label='UnLabel'}"):
         example_registry.get_by(label="UnLabel")
 
 
@@ -184,7 +198,10 @@ def test_term_registry_fails_if_multiple_matches():
     registry.add_term(term=term1, key="key1")
     registry.add_term(term=term2, key="key2")
 
-    with pytest.raises(MultipleTermsFoundError):
+    with pytest.raises(
+        MultipleTermsFoundError,
+        match="Found 2 terms matching",
+    ):
         registry.get_by(label="Test")
 
 
@@ -198,7 +215,7 @@ def test_term_registry_can_get_by_name(
 def test_term_registry_get_by_name_fails_if_not_found(
     example_registry: TermRegistry,
 ):
-    with pytest.raises(TermNotFoundError):
+    with pytest.raises(TermNotFoundError, match="Criteria={name='test3'}"):
         example_registry.get_by(name="test3")
 
 
@@ -223,6 +240,13 @@ def test_term_registry_get_by_fails_if_by_not_provided(
 ):
     with pytest.raises(ValueError):
         example_registry.get_by()
+
+
+def test_term_registry_get_by_fails_with_multiple_criteria(
+    example_registry: TermRegistry,
+):
+    with pytest.raises(ValueError):
+        example_registry.get_by(name="test", label="Animal")
 
 
 def test_term_registry_can_find_by_name(
@@ -343,3 +367,10 @@ def test_term_registry_find_without_criteria_returns_all_terms(
     retrieved = example_registry.find()
     assert isinstance(retrieved, list)
     assert set(retrieved) == {term1, term2}
+
+
+def test_term_registry_find_fails_if_query_and_criteria_are_provided(
+    example_registry: TermRegistry,
+):
+    with pytest.raises(ValueError):
+        example_registry.find(q="test", name="Test")

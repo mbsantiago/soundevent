@@ -55,7 +55,7 @@ class TermNotFoundError(KeyError, TermRegistryError):
             )
             return f"{message}: Criteria={{{crit_str}}}"
 
-        return message
+        return message  # pragma: no cover
 
 
 class MultipleTermsFoundError(LookupError, TermRegistryError):
@@ -419,7 +419,7 @@ def _query_term_field(
     value = getattr(term, field, None)
 
     if value is None:
-        return False
+        return False  # pragma: no cover
 
     if ignore_case:
         return query.lower() in value.lower()
