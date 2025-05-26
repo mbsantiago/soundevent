@@ -1,8 +1,8 @@
 import pytest
 
-from soundevent.data.terms import (
+from soundevent.data.terms import Term
+from soundevent.terms.registry import (
     MultipleTermsFoundError,
-    Term,
     TermNotFoundError,
     TermRegistry,
 )
