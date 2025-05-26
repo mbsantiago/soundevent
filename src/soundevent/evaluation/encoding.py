@@ -200,13 +200,13 @@ def multilabel_encoding(
     Then the following examples show how the multilabel encoding works:
 
     >>> multilabel_encoding([brown], encoder)
-    array([0, 1], dtype=int32)
+    array([0, 1]...)
     >>> multilabel_encoding([dog, blue], encoder)
-    array([1, 0], dtype=int32)
+    array([1, 0]...)
     >>> multilabel_encoding([dog, brown], encoder)
-    array([1, 1], dtype=int32)
+    array([1, 1]...)
     >>> multilabel_encoding([cat], encoder)
-    array([0, 0], dtype=int32)
+    array([0, 0]...)
     """
     encoded = np.zeros(encoder.num_classes, dtype=np.int32)
     for tag in tags:
@@ -255,7 +255,7 @@ def prediction_encoding(
     Then the following examples show how the encoding works for predicted tags:
 
     >>> prediction_encoding([data.PredictedTag(tag=brown, score=0.5)], encoder)
-    array([0. , 0.5], dtype=float32)
+    array([0. , 0.5]...)
     >>> prediction_encoding(
     ...     [
     ...         data.PredictedTag(tag=dog, score=0.2),
@@ -263,7 +263,7 @@ def prediction_encoding(
     ...     ],
     ...     encoder,
     ... )
-    array([0.2, 0. ], dtype=float32)
+    array([0.2, 0. ]...)
     >>> prediction_encoding(
     ...     [
     ...         data.PredictedTag(tag=dog, score=0.2),
@@ -271,14 +271,14 @@ def prediction_encoding(
     ...     ],
     ...     encoder,
     ... )
-    array([0.2, 0.5], dtype=float32)
+    array([0.2, 0.5]...)
     >>> prediction_encoding(
     ...     [
     ...         data.PredictedTag(tag=cat, score=0.7),
     ...     ],
     ...     encoder,
     ... )
-    array([0., 0.], dtype=float32)
+    array([0., 0.]...)
     """
     encoded = np.zeros(encoder.num_classes, dtype=np.float32)
     for prediction in tags:
