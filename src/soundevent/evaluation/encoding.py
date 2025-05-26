@@ -254,9 +254,7 @@ def prediction_encoding(
 
     Then the following examples show how the encoding works for predicted tags:
 
-    >>> prediction_encoding(
-    ...     [data.PredictedTag(tag=brown, score=0.5)], encoder
-    ... )
+    >>> prediction_encoding([data.PredictedTag(tag=brown, score=0.5)], encoder)
     array([0. , 0.5], dtype=float32)
     >>> prediction_encoding(
     ...     [

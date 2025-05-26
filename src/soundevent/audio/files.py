@@ -163,9 +163,7 @@ def get_audio_files(
     ...     print(file)  # doctest: +SKIP
 
     Get all audio files in a directory without recursion:
-    >>> for file in get_audio_files(
-    ...     "path/to/directory", recursive=False
-    ... ):
+    >>> for file in get_audio_files("path/to/directory", recursive=False):
     ...     print(file)  # doctest: +SKIP
     """
     path = Path(path)

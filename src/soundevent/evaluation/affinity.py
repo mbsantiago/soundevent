@@ -73,12 +73,8 @@ def compute_affinity(
 
     Examples
     --------
-    >>> geometry1 = data.BoundingBox(
-    ...     coordinates=[0.4, 2000, 0.6, 8000]
-    ... )
-    >>> geometry2 = data.BoundingBox(
-    ...     coordinates=[0.5, 5000, 0.7, 6000]
-    ... )
+    >>> geometry1 = data.BoundingBox(coordinates=[0.4, 2000, 0.6, 8000])
+    >>> geometry2 = data.BoundingBox(coordinates=[0.5, 5000, 0.7, 6000])
     >>> affinity = compute_affinity(
     ...     geometry1,
     ...     geometry2,

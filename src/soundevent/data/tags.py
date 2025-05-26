@@ -186,9 +186,7 @@ def find_tag(
     >>> find_tag(tag_list, key="Instrument Type") is tag1
     True
     >>> # No match, return default
-    >>> find_tag(
-    ...     tag_list, term_name="weather", default=tag1
-    ... ) is tag1
+    >>> find_tag(tag_list, term_name="weather", default=tag1) is tag1
     True
     >>> # No match, return None
     >>> find_tag(tag_list, term_name="weather") is None
@@ -321,9 +319,7 @@ def find_tag_value(
     >>> find_tag_value(tag_list, key="Instrument Type")
     'guitar'
     >>> # No match, return default
-    >>> find_tag_value(
-    ...     tag_list, term_name="weather", default="unknown"
-    ... )
+    >>> find_tag_value(tag_list, term_name="weather", default="unknown")
     'unknown'
     """
     tag = find_tag(

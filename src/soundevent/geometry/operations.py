@@ -519,9 +519,7 @@ def is_in_clip(
     ...     channels=1,
     ... )
     >>> geometry = data.BoundingBox(coordinates=[4, 600, 4.8, 1200])
-    >>> clip = data.Clip(
-    ...     start_time=0.0, end_time=5.0, recording=recording
-    ... )
+    >>> clip = data.Clip(start_time=0.0, end_time=5.0, recording=recording)
     >>> is_in_clip(geometry, clip, minimum_overlap=0.5)
     True
     """
@@ -785,21 +783,15 @@ def group_sound_events(
     ... )
     >>> sound_events = [
     ...     data.SoundEvent(
-    ...         geometry=data.BoundingBox(
-    ...             coordinates=[0, 1000, 1, 2000]
-    ...         ),
+    ...         geometry=data.BoundingBox(coordinates=[0, 1000, 1, 2000]),
     ...         recording=recording,
     ...     ),
     ...     data.SoundEvent(
-    ...         geometry=data.BoundingBox(
-    ...             coordinates=[0.8, 800, 1.2, 1600]
-    ...         ),
+    ...         geometry=data.BoundingBox(coordinates=[0.8, 800, 1.2, 1600]),
     ...         recording=recording,
     ...     ),
     ...     data.SoundEvent(
-    ...         geometry=data.BoundingBox(
-    ...             coordinates=[8, 900, 9.3, 1500]
-    ...         ),
+    ...         geometry=data.BoundingBox(coordinates=[8, 900, 9.3, 1500]),
     ...         recording=recording,
     ...     ),
     ... ]
@@ -809,9 +801,7 @@ def group_sound_events(
     ...         se1.geometry, se2.geometry, min_absolute_overlap=0.5
     ...     )
     >>> # Group sound events with the comparison function
-    >>> sequences = group_sound_events(
-    ...     sound_events, compare_sound_events
-    ... )
+    >>> sequences = group_sound_events(sound_events, compare_sound_events)
     """
     similarity_matrix = _compute_similarity_matrix(
         sound_events,
