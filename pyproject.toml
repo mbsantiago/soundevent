@@ -59,6 +59,7 @@ dev-dependencies = [
 
 [tool.pytest.ini_options]
 addopts = "-s -vvv -l --tb=long"
+doctest_optionflags = "NORMALIZE_WHITESPACE ELLIPSIS"
 
 [tool.ruff]
 line-length = 79
