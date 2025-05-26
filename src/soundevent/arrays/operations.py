@@ -282,31 +282,40 @@ def set_value_at_pos(
     >>> array = xr.DataArray(data, coords=coords, dims=("x", "y"))
 
     Setting a single value:
-    >>> array = set_value_at_position(array, 1, x=1, y=1)
+    >>> array = set_value_at_pos(array, 1, x=1, y=1)
     >>> print(array)
-    <xarray.DataArray (x: 3, y: 3)>
+    <xarray.DataArray (x: 3, y: 3)> Size: ...
     array([[0., 0., 0.],
            [0., 1., 0.],
            [0., 0., 0.]])
+    Coordinates:
+      * x        (x) ... 0 1 2
+      * y        (y) ... 0 1 2
 
     Setting a value at an approximate position:
     >>> array = xr.DataArray(data, coords=coords, dims=("x", "y"))
-    >>> array = set_value_at_position(array, 1, x=1.5, y=1.5)
+    >>> array = set_value_at_pos(array, 1, x=1.5, y=1.5)
     >>> print(array)
-    <xarray.DataArray (x: 3, y: 3)>
+    <xarray.DataArray (x: 3, y: 3)> Size: ...
     array([[0., 0., 0.],
            [0., 1., 0.],
            [0., 0., 0.]])
+    Coordinates:
+      * x        (x) ... 0 1 2
+      * y        (y) ... 0 1 2
 
     Setting a multi-dimensional value:
     >>> array = xr.DataArray(data, coords=coords, dims=("x", "y"))
     >>> value = np.array([1, 2, 3])
-    >>> array = set_value_at_position(array, value, x=1)
+    >>> array = set_value_at_pos(array, value, x=1)
     >>> print(array)
-    <xarray.DataArray (x: 3, y: 3)>
+    <xarray.DataArray (x: 3, y: 3)> Size: ...
     array([[0., 0., 0.],
            [1., 2., 3.],
            [0., 0., 0.]])
+    Coordinates:
+      * x        (x) ... 0 1 2
+      * y        (y) ... 0 1 2
     """
     indexer: List[Union[slice, int]] = [slice(None) for _ in range(array.ndim)]
 
@@ -707,22 +716,24 @@ def crop_dim_width(
     --------
     >>> import xarray as xr
     >>> import numpy as np
-    >>> array = xr.DataArray(np.arange(10), dims="x")
+    >>> array = xr.DataArray(
+    ...     np.arange(10), dims="x", coords={"x": np.arange(10)}
+    ... )
     >>> crop_dim_width(array, "x", 5, position="start")
-    <xarray.DataArray (x: 5)>
+    <xarray.DataArray (x: 5)> Size: ...
     array([0, 1, 2, 3, 4])
     Coordinates:
-      * x        (x) int64 0 1 2 3 4
+      * x        (x) ... 0 1 2 3 4
     >>> crop_dim_width(array, "x", 3, position="end")
-    <xarray.DataArray (x: 3)>
+    <xarray.DataArray (x: 3)> Size: ...
     array([7, 8, 9])
     Coordinates:
-      * x        (x) int64 7 8 9
+      * x        (x) ... 7 8 9
     >>> crop_dim_width(array, "x", 4, position="center")
-    <xarray.DataArray (x: 4)>
+    <xarray.DataArray (x: 4)> Size: ...
     array([3, 4, 5, 6])
     Coordinates:
-      * x        (x) int64 3 4 5 6
+      * x        (x) ... 3 4 5 6
     """
     if width >= array.sizes[dim]:
         raise ValueError("New width must be less than current width.")
@@ -786,22 +797,24 @@ def extend_dim_width(
     --------
     >>> import xarray as xr
     >>> import numpy as np
-    >>> array = xr.DataArray(np.arange(5), dims="x")
-    >>> extend_dim_width(array, "x", 8, position="start")
-    <xarray.DataArray (x: 8)>
-    array([0., 1., 2., 3., 4., 0., 0., 0.])
+    >>> array = xr.DataArray(
+    ...     np.arange(5), dims="x", coords={"x": np.arange(5)}
+    ... )
+    >>> extend_dim_width(array, dim="x", width=8, position="start")
+    <xarray.DataArray (x: 8)> Size: ...
+    array([0, 1, 2, 3, 4, 0, 0, 0])
     Coordinates:
-      * x        (x) float64 0.0 1.0 2.0 3.0 4.0 5.0 6.0 7.0
-    >>> extend_dim_width(array, "x", 7, position="end")
-    <xarray.DataArray (x: 7)>
-    array([0., 0., 0., 1., 2., 3., 4.])
+      * x        (x) ... 0 1 2 3 4 5 6 7
+    >>> extend_dim_width(array, dim="x", width=7, position="end")
+    <xarray.DataArray (x: 7)> Size: ...
+    array([0, 0, 0, 1, 2, 3, 4])
     Coordinates:
-      * x        (x) int64 -2 -1  0  1  2  3  4
-    >>> extend_dim_width(array, "x", 9, position="center")
-    <xarray.DataArray (x: 9)>
-    array([0., 0., 0., 1., 2., 3., 4., 0., 0.])
+      * x        (x) ... -2 -1 0 1 2 3 4
+    >>> extend_dim_width(array, dim="x", width=9, position="center")
+    <xarray.DataArray (x: 9)> Size: ...
+    array([0, 0, 0, 1, 2, 3, 4, 0, 0])
     Coordinates:
-      * x        (x) float64 -2.0 -1.0 0.0 1.0 2.0 3.0 4.0 5.0 6.0
+      * x        (x) ... -2 -1 0 1 2 3 4 5 6
     """
     coords = array.coords[dim].data
     step = get_dim_step(array, dim)
@@ -914,17 +927,21 @@ def adjust_dim_width(
     --------
     >>> import xarray as xr
     >>> import numpy as np
-    >>> array = xr.DataArray(np.arange(10), dims="x")
+    >>> array = xr.DataArray(
+    ...     np.arange(10),
+    ...     dims="x",
+    ...     coords={"x": np.arange(10)},
+    ... )
     >>> adjust_dim_width(array, "x", 5, position="start")
-    <xarray.DataArray (x: 5)>
+    <xarray.DataArray (x: 5)> Size: ...
     array([0, 1, 2, 3, 4])
     Coordinates:
-      * x        (x) int64 0 1 2 3 4
+      * x        (x) ... 0 1 2 3 4
     >>> adjust_dim_width(array, "x", 12, position="end")
-    <xarray.DataArray (x: 12)>
-    array([0., 0., 0., 1., 2., 3., 4., 5., 6., 7., 8., 9.])
+    <xarray.DataArray (x: 12)> Size: ...
+    array([0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
     Coordinates:
-      * x        (x) float64 -2.0 -1.0 0.0 1.0 2.0 3.0 ... 6.0 7.0 8.0 9.0 10.0
+      * x        (x) ... -2 -1 0 1 2 3 4 5 6 7 8 9
     """
     if width < 1:
         raise ValueError("Width must be greater than or equal to 1.")

@@ -24,15 +24,12 @@ Examples
 --------
 To compute the features of a bounding box:
 
->>> from soundevent import data, features, terms
+>>> from soundevent import data, terms
 >>> geometry = data.BoundingBox(
 ...     coordinates=(0, 0, 1, 1000),
 ... )
->>> features.compute_geometric_features(geometry)
-[Feature(term=terms.duration, value=1),
-    Feature(terms=terms.low_freq, value=0),
-    Feature(terms=terms.high_freq, value=1000),
-    Feature(terms=terms.bandwidth, value=1000)]
+>>> compute_geometric_features(geometry)
+[Feature(term=Term(label='Media Duration'), value=1.0), Feature(term=Term(label='Lower frequency bound'), value=0.0), Feature(term=Term(label='Upper frequency bound'), value=1000.0), Feature(term=Term(label='Bandwidth'), value=1000.0)]
 """
 
 from typing import Any, Callable, Dict, List

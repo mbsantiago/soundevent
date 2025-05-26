@@ -73,16 +73,16 @@ def compute_affinity(
 
     Examples
     --------
-    >>> geometry1 = data.Geometry(...)  # Define the first geometry
-    >>> geometry2 = data.Geometry(...)  # Define the second geometry
+    >>> geometry1 = data.BoundingBox(coordinates=[0.4, 2000, 0.6, 8000])
+    >>> geometry2 = data.BoundingBox(coordinates=[0.5, 5000, 0.7, 6000])
     >>> affinity = compute_affinity(
     ...     geometry1,
     ...     geometry2,
     ...     time_buffer=0.02,
     ...     freq_buffer=150,
     ... )
-    >>> affinity
-    0.75
+    >>> print(round(affinity, 3))
+    0.077
     """
     geometry1 = _prepare_geometry(geometry1, time_buffer, freq_buffer)
     geometry2 = _prepare_geometry(geometry2, time_buffer, freq_buffer)

@@ -154,7 +154,6 @@ def classification_encoding(
     >>> classification_encoding([dog, brown], encoder)
     0
     >>> classification_encoding([cat], encoder)
-    None
     """
     for tag in tags:
         encoded = encoder.encode(tag)
@@ -201,13 +200,13 @@ def multilabel_encoding(
     Then the following examples show how the multilabel encoding works:
 
     >>> multilabel_encoding([brown], encoder)
-    array([0, 1])
+    array([0, 1]...)
     >>> multilabel_encoding([dog, blue], encoder)
-    array([1, 0])
+    array([1, 0]...)
     >>> multilabel_encoding([dog, brown], encoder)
-    array([1, 1])
-    >>> classification_encoding([cat], encoder)
-    array([0, 0])
+    array([1, 1]...)
+    >>> multilabel_encoding([cat], encoder)
+    array([0, 0]...)
     """
     encoded = np.zeros(encoder.num_classes, dtype=np.int32)
     for tag in tags:
@@ -255,33 +254,31 @@ def prediction_encoding(
 
     Then the following examples show how the encoding works for predicted tags:
 
+    >>> prediction_encoding([data.PredictedTag(tag=brown, score=0.5)], encoder)
+    array([0. , 0.5]...)
     >>> prediction_encoding(
-    ...     [data.PredictedTag(tag=brown, score=0.5)], encoder
-    ... )
-    array([0, 0.5])
-    >>> multilabel_encoding(
     ...     [
     ...         data.PredictedTag(tag=dog, score=0.2),
     ...         data.PredictedTag(tag=blue, score=0.9),
     ...     ],
     ...     encoder,
     ... )
-    array([0.2, 0])
-    >>> multilabel_encoding(
+    array([0.2, 0. ]...)
+    >>> prediction_encoding(
     ...     [
     ...         data.PredictedTag(tag=dog, score=0.2),
     ...         data.PredictedTag(tag=brown, score=0.5),
     ...     ],
     ...     encoder,
     ... )
-    array([0.2, 0.5])
-    >>> classification_encoding(
+    array([0.2, 0.5]...)
+    >>> prediction_encoding(
     ...     [
     ...         data.PredictedTag(tag=cat, score=0.7),
     ...     ],
     ...     encoder,
     ... )
-    array([0, 0])
+    array([0., 0.]...)
     """
     encoded = np.zeros(encoder.num_classes, dtype=np.float32)
     for prediction in tags:

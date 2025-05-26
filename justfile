@@ -95,12 +95,29 @@ check: check-lint check-format check-types
 # Run tests with pytest-watch for continuous testing with coverage
 test-watch:
     @echo "Running tests with pytest-watch (auto-reloads on changes)..."
-    ptw --runner "coverage run --source={{SRC_DIR}} -m pytest -l --tb=long {{TEST_DIR}}" {{SRC_DIR}} {{TEST_DIR}}
+    ptw --runner "coverage run --source={{SRC_DIR}} -m pytest {{TEST_DIR}}" {{SRC_DIR}} {{TEST_DIR}}
 
-# Run all unit tests in the test directory with pytest
-test:
+# Run tests using tox
+test-tox:
+    @echo "Running tox..."
+    tox
+
+# Run the main unit test suite with pytest
+test-suite:
     @echo "Running unit tests in '{{TEST_DIR}}'..."
-    pytest -s -vvv -l --tb=long --maxfail=1 {{TEST_DIR}}
+    pytest {{TEST_DIR}}
+
+# Run tests embedded within the source code's docstrings
+test-docstrings:
+    @echo "Running docstring tests in '{{SRC_DIR}}'..."
+    pytest --doctest-modules {{SRC_DIR}}
+
+# Run both unit tests and docstring tests
+test-all: test-suite test-docstrings
+    @echo "All tests (unit and docstrings) completed."
+
+# Common alias for running the main test suite
+alias test := test-suite
 
 # --- Coverage ---
 
@@ -132,12 +149,6 @@ coverage-serve: coverage-html
 # Common alias to generate coverage and open the report
 coverage: coverage-open
 
-# --- Tox ---
-
-# Run tests using tox
-tox:
-    @echo "Running tox..."
-    tox
 
 # --- Cleaning ---
 
