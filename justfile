@@ -113,8 +113,9 @@ test-docstrings:
     pytest --doctest-modules {{SRC_DIR}}
 
 # Run both unit tests and docstring tests
-test-all: test-suite test-docstrings
-    @echo "All tests (unit and docstrings) completed."
+test-all:
+    @echo "Running all tests"
+    pytest --doctest-modules {{SRC_DIR}} {{TEST_DIR}}
 
 # Common alias for running the main test suite
 alias test := test-suite
@@ -124,7 +125,7 @@ alias test := test-suite
 # Run tests and generate coverage data for the source directory
 coverage-run:
     @echo "Running tests with coverage for '{{SRC_DIR}}'..."
-    coverage run --source={{SRC_DIR}} -m pytest {{TEST_DIR}}
+    coverage run --source={{SRC_DIR}} -m pytest --doctest-modules {{TEST_DIR}} {{SRC_DIR}}
 
 # Generate HTML coverage report from existing coverage data
 coverage-html: coverage-run
