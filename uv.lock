@@ -2996,7 +2996,7 @@ dev = [
     { name = "ipykernel", specifier = ">=6.29.4" },
     { name = "isort", specifier = ">=5.11.5" },
     { name = "memory-profiler", specifier = ">=0.61.0" },
-    { name = "mkdocs", specifier = ">=1.2.4" },
+    { name = "mkdocs", specifier = ">=1.6.0" },
     { name = "mkdocs-gallery", specifier = ">=0.7.8" },
     { name = "mkdocs-material", specifier = ">=9.1.18" },
     { name = "mkdocstrings", extras = ["python"], specifier = ">=0.22.0" },
