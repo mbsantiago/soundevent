@@ -77,7 +77,7 @@ def test_term_registry_delete_term():
     registry.add_term(key="test_key", term=test_term)
 
     del registry["test_key"]
-    assert "test_term" not in registry
+    assert "test_key" not in registry
     assert len(registry) == 0
 
 
@@ -86,7 +86,7 @@ def test_term_registry_remove_term():
     registry.add_term(key="test_key", term=test_term)
 
     registry.remove("test_key")
-    assert "test_term" not in registry
+    assert "test_key" not in registry
     assert len(registry) == 0
 
 
@@ -168,7 +168,7 @@ def test_term_registry_add_term_duplicate_term():
 def test_term_registry_get_term_not_found():
     registry = TermRegistry()
 
-    with pytest.raises(KeyError, match="Key='non_existent_key"):
+    with pytest.raises(KeyError, match="Key='non_existent_key'"):
         registry["non_existent_key"]
 
 

@@ -181,7 +181,14 @@ class TermRegistry(MutableMapping[str, Term]):
         KeyError
             If no term is found with the given key.
         """
-        del self._terms[key]
+        try:
+            del self._terms[key]
+        except KeyError as err:
+            raise TermNotFoundError(
+                "No term found for key "
+                f"'{key}'. Available keys: {', '.join(self._terms.keys())}",
+                key=key,
+            ) from err
 
     def add_term(
         self,
@@ -248,7 +255,7 @@ class TermRegistry(MutableMapping[str, Term]):
         KeyError
             If no term is found with the given key.
         """
-        del self._terms[key]
+        self.__delitem__(key)
 
     def get_by(
         self,
