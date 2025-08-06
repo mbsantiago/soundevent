@@ -19,6 +19,7 @@ def match_geometries(
     target: Sequence[Geometry],
     time_buffer: float = 0.01,
     freq_buffer: float = 100,
+    affinity_threshold: float = 0,
 ) -> Iterable[Tuple[Optional[int], Optional[int], float]]:
     """Match geometries.
 
@@ -65,7 +66,12 @@ def match_geometries(
             # If the source or target match is None, the affinity is 0.
             affinity = float(cost_matrix[match1, match2])
 
-        yield match1, match2, affinity
+        # If it does not meet the threshold they should not be paired
+        if affinity <= affinity_threshold:
+            yield match1, None, 0
+            yield None, match2, 0
+        else:
+            yield match1, match2, affinity
 
 
 def _select_matches(
