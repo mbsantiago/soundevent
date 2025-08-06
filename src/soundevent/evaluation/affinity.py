@@ -24,12 +24,30 @@ def compute_affinity(
     time_buffer: float = 0.01,
     freq_buffer: float = 100,
 ) -> float:
-    """Compute the geometric affinity between two geometries.
+    r"""Compute the geometric affinity between two geometries.
 
-    This function calculates the geometric similarity between two input
-    geometries in the context of time-frequency space. The geometric affinity
-    metric indicates how similar the two geometries are, with a value ranging
-    from 0 (no similarity) to 1 (perfect similarity).
+    This function calculates the geometric similarity between two geometries,
+    which is a measure of how much they overlap. The affinity is computed as
+    the Intersection over Union (IoU).
+
+    **Intersection over Union (IoU)**
+
+    IoU is a standard metric for comparing the similarity between two shapes.
+    It is calculated as the ratio of the area of the overlap between the two
+    geometries to the area of their combined shape.
+
+    .. math:: 
+
+        \text{IoU} = \frac{\text{Area of Overlap}}{\text{Area of Union}}
+
+    An IoU of 1 means the geometries are identical, while an IoU of 0 means
+    they do not overlap at all. This is particularly useful in bioacoustics
+    for comparing annotations or predictions of sound events in a
+    time-frequency representation (spectrogram).
+
+    To account for small variations in annotations, a buffer can be added to
+    each geometry before computing the IoU. This is controlled by the
+    `time_buffer` and `freq_buffer` parameters.
 
     Parameters
     ----------
@@ -38,29 +56,20 @@ def compute_affinity(
     geometry2
         The second geometry to be compared.
     time_buffer
-        Time buffer for geometric preparation. Default is 0.01.
+        Time buffer in seconds added to each geometry. Default is 0.01.
     freq_buffer
-        Frequency buffer for geometric preparation. Default is 100.
+        Frequency buffer in Hertz added to each geometry. Default is 100.
 
     Returns
     -------
-    affinity: float
-        A metric indicating the geometric similarity between the input
-        geometries.
-
-        - 0: The geometries have no overlap
-        - 1: The geometries perfectly overlap.
-
-        The value is a ratio of the intersection area to the union area of the
-        two geometries.
+    affinity : float
+        The Intersection over Union (IoU) score, a value between 0 and 1
+        indicating the degree of overlap.
 
     Notes
     -----
-    - 0 or 1-dimensional geometries are buffered to 2-dimensional using
-    the specified time and frequency buffers.
     - If either input geometry is of a time-based type, a specialized
     time-based affinity calculation is performed.
-    - The function utilizes the Shapely library for geometric operations.
 
     Examples
     --------
