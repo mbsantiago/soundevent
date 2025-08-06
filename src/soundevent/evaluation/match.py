@@ -19,30 +19,59 @@ def match_geometries(
     target: Sequence[Geometry],
     time_buffer: float = 0.01,
     freq_buffer: float = 100,
+    affinity_threshold: float = 0,
 ) -> Iterable[Tuple[Optional[int], Optional[int], float]]:
-    """Match geometries.
+    """Match geometries between a source and a target sequence.
 
-    This function matches geometries from a source and target sequence.
-    The geometries are matched based on their affinity, which is computed
-    using the compute_affinity function. The final matches are then
-    selected to maximize the total affinity between the source and target
-    geometries.
+    The matching is performed by first computing an affinity matrix between
+    all pairs of source and target geometries. The affinity is a measure of
+    similarity, calculated as the Intersection over Union (IoU). For more
+    details on how affinity is computed, see
+    [`soundevent.evaluation.affinity.compute_affinity`][soundevent.evaluation.affinity.compute_affinity].
+
+    The affinity calculation is influenced by the `time_buffer` and
+    `freq_buffer` parameters, which add a buffer to each geometry before
+    comparison. This can help account for small variations in annotations.
+
+    Once the affinity matrix is computed, the Hungarian algorithm (via
+    `scipy.optimize.linear_sum_assignment`) is used to find an optimal
+    assignment of source to target geometries that maximizes the total
+    affinity.
+
+    Finally, matches with an affinity below `affinity_threshold` are
+    discarded and considered as unmatched.
 
     Parameters
     ----------
     source : Sequence[Geometry]
-        Source geometries.
+        The source geometries to match.
     target : Sequence[Geometry]
-        Target geometries.
+        The target geometries to match.
+    time_buffer : float, optional
+        A buffer in seconds added to each geometry when computing affinity.
+        See
+        [`soundevent.evaluation.affinity.compute_affinity`][soundevent.evaluation.affinity.compute_affinity]
+        for more details. Defaults to 0.01.
+    freq_buffer : float, optional
+        A buffer in Hertz added to each geometry when computing affinity.
+        See
+        [`soundevent.evaluation.affinity.compute_affinity`][soundevent.evaluation.affinity.compute_affinity]
+        for more details. Defaults to 100.
+    affinity_threshold : float, optional
+        The minimum affinity (IoU) for a pair of geometries to be
+        considered a match. Pairs with affinity below this value are
+        considered unmatched, by default 0.
 
     Returns
     -------
-    Sequence[Tuple[Optional[int], Optional[int], float]]
-        A sequence of matches. Each match is a tuple of the source index,
-        target index and affinity. If a source geometry is not matched to
-        any target geometry, the target index is None. If a target geometry
-        is not matched to any source geometry, the source index is None.
-        Every source and target geometry is matched exactly once.
+    Iterable[Tuple[Optional[int], Optional[int], float]]
+        An iterable of matching results. Each source and target geometry is
+        accounted for exactly once in the output. Each tuple can be one of:
+
+        - ``(source_index, target_index, affinity)``: A successful match
+          between a source and a target geometry with an affinity score.
+        - ``(source_index, None, 0)``: An unmatched source geometry.
+        - ``(None, target_index, 0)``: An unmatched target geometry.
     """
     # Compute the affinity between all pairs of geometries.
     cost_matrix = np.zeros(shape=(len(source), len(target)))
@@ -60,17 +89,43 @@ def match_geometries(
     matches = _select_matches(cost_matrix)
 
     for match1, match2 in matches:
-        affinity = 0.0
-        if match1 is not None and match2 is not None:
-            # If the source or target match is None, the affinity is 0.
-            affinity = float(cost_matrix[match1, match2])
+        # If none were matched then affinity is 0
+        if match1 is None or match2 is None:
+            yield match1, match2, 0
+            continue
 
-        yield match1, match2, affinity
+        affinity = float(cost_matrix[match1, match2])
+
+        # If it does not meet the threshold they should not be paired
+        if affinity <= affinity_threshold:
+            yield match1, None, 0
+            yield None, match2, 0
+        else:
+            yield match1, match2, affinity
 
 
 def _select_matches(
     cost_matrix: np.ndarray,
 ) -> Iterable[Tuple[Optional[int], Optional[int]]]:
+    """Select matches from a cost matrix.
+
+    This function uses the Hungarian algorithm to find the optimal assignment of
+    rows to columns that maximizes the sum of the costs. It then yields the
+    matched pairs, as well as any unmatched rows and columns.
+
+    Parameters
+    ----------
+    cost_matrix : np.ndarray
+        The cost matrix.
+
+    Returns
+    -------
+    Iterable[Tuple[Optional[int], Optional[int]]]
+        An iterable of matches. Each match is a tuple of the row index and
+        column index. If a row is not matched to any column, the column index
+        is None. If a column is not matched to any row, the row index is
+        None.
+    """
     rows = set(range(cost_matrix.shape[0]))
     cols = set(range(cost_matrix.shape[1]))
 

@@ -60,6 +60,10 @@ dev-dependencies = [
 [tool.pytest.ini_options]
 addopts = "-s -vvv -l --tb=long"
 doctest_optionflags = "NORMALIZE_WHITESPACE ELLIPSIS"
+filterwarnings = [
+    "ignore::UserWarning",
+    "ignore::DeprecationWarning",
+]
 
 [tool.ruff]
 line-length = 79
