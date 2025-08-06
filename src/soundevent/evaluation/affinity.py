@@ -18,15 +18,6 @@ TIME_GEOMETRY_TYPES = {
 }
 
 
-BUFFER_GEOMETRY_TYPES = {
-    data.TimeStamp.geom_type(),
-    data.Point.geom_type(),
-    data.MultiPoint.geom_type(),
-    data.LineString.geom_type(),
-    data.MultiLineString.geom_type(),
-}
-
-
 def compute_affinity(
     geometry1: data.Geometry,
     geometry2: data.Geometry,
@@ -131,11 +122,8 @@ def _prepare_geometry(
     time_buffer: float = 0.01,
     freq_buffer: float = 100,
 ) -> data.Geometry:
-    if geometry.type in BUFFER_GEOMETRY_TYPES:
-        return buffer_geometry(
-            geometry,
-            time_buffer=time_buffer,
-            freq_buffer=freq_buffer,
-        )
-
-    return geometry
+    return buffer_geometry(
+        geometry,
+        time_buffer=time_buffer,
+        freq_buffer=freq_buffer,
+    )
