@@ -131,7 +131,13 @@ def test_best_affinity_is_selected_multiple_targets():
     target = data.BoundingBox(coordinates=[4, 4, 8, 8])
     option1 = data.BoundingBox(coordinates=[3, 3, 5, 5])
     option2 = data.BoundingBox(coordinates=[5, 5, 9, 9])
-    matches = list(match_geometries([target], [option1, option2]))
+    matches = list(
+        match_geometries(
+            [target],
+            [option1, option2],
+            affinity_threshold=0,
+        )
+    )
 
     assert len(matches) == 2
 

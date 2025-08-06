@@ -89,10 +89,12 @@ def match_geometries(
     matches = _select_matches(cost_matrix)
 
     for match1, match2 in matches:
-        affinity = 0.0
-        if match1 is not None and match2 is not None:
-            # If the source or target match is None, the affinity is 0.
-            affinity = float(cost_matrix[match1, match2])
+        # If none were matched then affinity is 0
+        if match1 is None or match2 is None:
+            yield match1, match2, 0
+            continue
+
+        affinity = float(cost_matrix[match1, match2])
 
         # If it does not meet the threshold they should not be paired
         if affinity <= affinity_threshold:
