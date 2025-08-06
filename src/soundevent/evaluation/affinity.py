@@ -36,7 +36,7 @@ def compute_affinity(
     It is calculated as the ratio of the area of the overlap between the two
     geometries to the area of their combined shape.
 
-    .. math:: 
+    .. math::
 
         \text{IoU} = \frac{\text{Area of Overlap}}{\text{Area of Union}}
 
