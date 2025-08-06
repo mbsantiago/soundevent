@@ -145,3 +145,49 @@ def test_best_affinity_is_selected_multiple_targets():
     assert source_index is None
     assert target_index == 0
     assert affinity == 0
+
+
+def test_geometries_with_zero_affinity_are_not_matched():
+    target = data.BoundingBox(coordinates=[4, 4, 8, 8])
+    option = data.BoundingBox(coordinates=[10, 4, 14, 8])
+
+    matches = list(match_geometries([target], [option]))
+
+    assert len(matches) == 2
+    assert all(affinity == 0 for _, _, affinity in matches)
+
+
+def test_affinity_threshold_can_be_modified():
+    # Two 4x4 geometries with 2x4 overlap and 6x4 union.
+    # IOU should be 1/3
+    target = data.BoundingBox(coordinates=[4, 4, 8, 8])
+    option = data.BoundingBox(coordinates=[6, 4, 10, 8])
+
+    # Should match with low IOU
+    matches = list(
+        match_geometries(
+            [target],
+            [option],
+            time_buffer=0,
+            freq_buffer=0,
+            affinity_threshold=0.25,
+        )
+    )
+    assert len(matches) == 1
+    source_index, target_index, affinity = matches[0]
+    assert source_index is not None
+    assert target_index is not None
+    assert affinity == 1 / 3
+
+    # Should not match with high IOU
+    matches = list(
+        match_geometries(
+            [target],
+            [option],
+            time_buffer=0,
+            freq_buffer=0,
+            affinity_threshold=0.5,
+        )
+    )
+    assert len(matches) == 2
+    assert all(affinity == 0 for _, _, affinity in matches)
