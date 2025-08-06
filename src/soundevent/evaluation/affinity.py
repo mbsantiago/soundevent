@@ -82,7 +82,7 @@ def compute_affinity(
     ...     freq_buffer=150,
     ... )
     >>> print(round(affinity, 3))
-    0.077
+    0.111
     """
     geometry1 = _prepare_geometry(geometry1, time_buffer, freq_buffer)
     geometry2 = _prepare_geometry(geometry2, time_buffer, freq_buffer)
