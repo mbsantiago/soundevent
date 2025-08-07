@@ -1,3 +1,3 @@
 """Set version number for package."""
 
-__version__ = "2.6.4"
+__version__ = "2.6.5"
