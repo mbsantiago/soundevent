@@ -25,7 +25,43 @@ def plot_prediction(
     color: Optional[str] = None,
     **kwargs,
 ) -> Axes:
-    """Plot an annotation."""
+    """Plot a sound event prediction on a spectrogram.
+
+    This function plots the geometry of the sound event and its associated
+    tags. The transparency of the geometry is determined by the prediction
+    score and the `max_alpha` parameter. The transparency of the tags is
+    directly controlled by the prediction score of each tag.
+
+    Parameters
+    ----------
+    prediction
+        The sound event prediction to plot.
+    ax
+        The matplotlib axes to plot on. If None, a new one is created.
+    position
+        The position of the tags relative to the geometry.
+    color_mapper
+        A `TagColorMapper` instance to map tags to colors. If None, a new
+        one is created.
+    time_offset
+        The time offset for positioning the tags.
+    freq_offset
+        The frequency offset for positioning the tags.
+    max_alpha
+        The maximum transparency of the plotted geometry, scaled by the
+        prediction score.
+    color
+        The color of the geometry. If None, the color is determined by the
+        color mapper.
+    **kwargs
+        Additional keyword arguments passed to `create_axes` and
+        `plot_geometry`.
+
+    Returns
+    -------
+    Axes
+        The matplotlib axes with the prediction plotted.
+    """
     geometry = prediction.sound_event.geometry
 
     if geometry is None:
@@ -73,7 +109,42 @@ def plot_predictions(
     color: Optional[str] = None,
     **kwargs,
 ):
-    """Plot an prediction."""
+    """Plot a collection of sound event predictions on a spectrogram.
+
+    This function iterates through a collection of sound event predictions
+    and plots each one on the provided matplotlib axes.
+
+    Parameters
+    ----------
+    predictions
+        An iterable of `SoundEventPrediction` objects to plot.
+    ax
+        The matplotlib axes to plot on. If None, a new one is created.
+    position
+        The position of the tags relative to the geometry.
+    color_mapper
+        A `TagColorMapper` instance to map tags to colors. If None, a new
+        one is created.
+    time_offset
+        The time offset for positioning the tags.
+    freq_offset
+        The frequency offset for positioning the tags.
+    legend
+        Whether to add a legend for the tags.
+    max_alpha
+        The maximum transparency of the plotted geometries, scaled by the
+        prediction score.
+    color
+        The color of the geometries. If None, the color is determined by
+        the color mapper.
+    **kwargs
+        Additional keyword arguments passed to `plot_prediction`.
+
+    Returns
+    -------
+    Axes
+        The matplotlib axes with the predictions plotted.
+    """
     if ax is None:
         ax = create_axes(**kwargs)
 

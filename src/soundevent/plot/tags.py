@@ -47,9 +47,33 @@ def plot_tag(
     color: str,
     ax: Optional[Axes] = None,
     size: int = 10,
+    alpha: float = 1,
     **kwargs,
 ) -> Axes:
-    """Plot a tag."""
+    """Plot a tag as a dot on a spectrogram.
+
+    Parameters
+    ----------
+    time
+        Time coordinate of the tag.
+    frequency
+        Frequency coordinate of the tag.
+    color
+        Color of the tag.
+    ax
+        Axes to plot on. If None, a new one is created.
+    size
+        Size of the tag marker.
+    alpha
+        Transparency of the tag marker.
+    **kwargs
+        Keyword arguments passed to `create_axes`.
+
+    Returns
+    -------
+    Axes
+        Axes with the tag plotted.
+    """
     if ax is None:
         ax = create_axes(**kwargs)
 
@@ -59,6 +83,7 @@ def plot_tag(
         marker="o",
         color=color,
         s=size,
+        alpha=alpha,
     )
 
     return ax
