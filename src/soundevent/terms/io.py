@@ -122,6 +122,13 @@ def _load_from_json(path: PathLike) -> TermSet:
     raise ValueError("Invalid JSON format for terms.")
 
 
+def _normalise_value(value: Optional[str]) -> Optional[str]:
+    if value is None:
+        return value
+
+    return value.strip()
+
+
 def _load_from_csv(path: PathLike) -> TermSet:
     """Load a list of terms from a CSV file."""
     with open(path, "r", newline="") as f:
@@ -132,8 +139,8 @@ def _load_from_csv(path: PathLike) -> TermSet:
     aliases = {}
 
     for index, row in enumerate(rows):
-        alias = row.pop("alias", None).strip()
-        term_name = row["name"].strip()
+        alias = _normalise_value(row.pop("alias", None))
+        term_name = _normalise_value(row.get("name"))
 
         if alias and term_name:
             aliases[alias] = term_name
