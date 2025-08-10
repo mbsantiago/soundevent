@@ -167,7 +167,7 @@ def find_tag(
     >>> # Find by term label
     >>> find_tag(tag_list, term_label="Instrument Type") is tag1
     True
-    >>> # Find by key (if tag does not have a key will default to its name)
+    >>> # Find by key (uses the term name)
     >>> find_tag(tag_list, key="instrument") is tag1
     True
     >>> # No match, return default

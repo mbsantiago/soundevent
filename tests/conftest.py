@@ -50,7 +50,7 @@ def note(user: data.User) -> data.Note:
 
 
 @pytest.fixture(autouse=True)
-def global_registry(doctest_namespace) -> terms.TermRegistry:
+def global_registry() -> terms.TermRegistry:
     """Set a clean global term registry for each test."""
     registry = terms.TermRegistry()
     terms.set_global_term_registry(registry)

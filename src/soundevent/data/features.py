@@ -311,9 +311,9 @@ def find_feature_value(
     ...     definition="Frequency that contains the highest concentration of energy.",
     ... )
     >>> feat1 = Feature(value=0.85, term=t_energy)
-    >>> feat2 = Feature(value=440.0, term=t_pitch, name="f0")
+    >>> feat2 = Feature(value=440.0, term=t_pitch)
     >>> feat_list = [feat1, feat2]
-    >>> # Find value by name (defaults to label if name not provided)
+    >>> # Find value by name (uses the term name)
     >>> find_feature_value(feat_list, name="pitch")
     440.0
     >>> # Find value by term name
