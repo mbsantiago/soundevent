@@ -45,10 +45,6 @@ class Tag(BaseModel):
         The standardized term associated with the tag, providing context and meaning.
     value
         The value associated with the tag, offering specific information.
-
-    Notes
-    -----
-    The `key` attribute is deprecated. Use `term` instead.
     """
 
     term: Term = Field(
@@ -70,23 +66,12 @@ class Tag(BaseModel):
     @property
     def key(self) -> str:
         """Return the key of the tag."""
-        warnings.warn(
-            "The 'key' attribute is deprecated. Use 'term' instead.",
-            DeprecationWarning,
-            stacklevel=1,
-        )
         return key_from_term(self.term)
 
     @model_validator(mode="before")
     @classmethod
-    def handle_deprecated_key(cls, values):
+    def handle_key(cls, values):
         if "key" in values:
-            warnings.warn(
-                "The 'key' field is deprecated. Please use 'term' instead.",
-                DeprecationWarning,
-                stacklevel=2,
-            )
-
             if "term" not in values:
                 values["term"] = term_from_key(values["key"])
 

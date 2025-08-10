@@ -25,12 +25,19 @@ def term_from_key(key: str) -> Term:
     data formats.
 
     """
+    from soundevent.terms import get_term
+
+    term = get_term(key)
+
+    if term is not None:
+        return term
+
     return Term(
         label=key,
-        name=f"soundevent:{key}",
+        name=key,
         definition="Unknown",
     )
 
 
 def key_from_term(term: Term) -> str:
-    return term.label
+    return term.name

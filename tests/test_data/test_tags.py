@@ -5,6 +5,12 @@ import pytest
 from soundevent import data, terms
 
 
+@pytest.fixture(autouse=True)
+def term_registry():
+    term_registry = terms.TermRegistry()
+    terms.set_global_term_registry(term_registry)
+
+
 def test_tags_are_hashable():
     """Test that tags are hashable."""
     tag = data.Tag(
@@ -31,18 +37,13 @@ def test_can_create_tag_without_term_and_with_key():
     tag = data.Tag(key="key", value="value")  # type: ignore
     assert isinstance(tag.term, data.Term)
     assert tag.term.label == "key"
-    assert tag.term.name == "soundevent:key"
+    assert tag.term.name == "key"
 
 
-def test_shows_deprecation_warning_when_using_key():
-    with pytest.warns(DeprecationWarning):
-        tag = data.Tag(key="key", value="value")  # type: ignore
-
-    tag = data.Tag(term=terms.scientific_name, value="Myotis myotis")
-    with pytest.warns(DeprecationWarning):
-        key = tag.key
-
-    assert key == terms.scientific_name.label
+def test_tag_gets_correct_term_if_using_key():
+    terms.add_term(terms.scientific_name, key="species")
+    tag = data.Tag(key="species", value="Myotis myotis")  # type: ignore
+    assert tag.term == terms.scientific_name
 
 
 example_tags = [
