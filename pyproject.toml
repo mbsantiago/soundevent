@@ -55,6 +55,7 @@ dev-dependencies = [
   "pytest-xdist>=3.6.1",
   "ipykernel>=6.29.4",
   "rust-just>=1.40.0",
+  "pytest-env>=1.1.5",
 ]
 
 [tool.pytest.ini_options]
@@ -66,6 +67,9 @@ filterwarnings = [
     "ignore::DeprecationWarning",
     "ignore::SyntaxWarning",
 ]
+
+[tool.pytest_env]
+SOUNDEVENT_LOAD_TERM_PLUGINS = 0
 
 [tool.ruff]
 line-length = 79
