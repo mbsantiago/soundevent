@@ -105,7 +105,9 @@ def test_plugins_loaded_successfully(monkeypatch, mock_entry_point):
     mock_ep1 = mock_entry_point("plugin_a", mock_term_set_1)
     mock_ep2 = mock_entry_point("plugin_b", mock_term_set_2)
 
-    with patch("soundevent.terms.plugins.entry_points") as mock_entry_points:
+    with patch(
+        "soundevent.terms.plugins.discover_plugins"
+    ) as mock_entry_points:
         mock_entry_points.return_value = [mock_ep1, mock_ep2]
         mock_register_term_set = MagicMock()
 
@@ -150,7 +152,9 @@ def test_plugin_loading_failure(monkeypatch, mock_entry_point, caplog):
         side_effect=Exception("Simulated plugin error")
     )
 
-    with patch("soundevent.terms.plugins.entry_points") as mock_entry_points:
+    with patch(
+        "soundevent.terms.plugins.discover_plugins"
+    ) as mock_entry_points:
         mock_entry_points.return_value = [mock_ep_ok, mock_ep_fail]
         mock_register_term_set = MagicMock()
         with patch(
@@ -191,7 +195,9 @@ def test_discover_only_runs_once(monkeypatch, mock_entry_point):
     )
     mock_ep = mock_entry_point("plugin_once", mock_term_set)
 
-    with patch("soundevent.terms.plugins.entry_points") as mock_entry_points:
+    with patch(
+        "soundevent.terms.plugins.discover_plugins"
+    ) as mock_entry_points:
         mock_entry_points.return_value = [mock_ep]
         mock_register_term_set = MagicMock()
         with patch(
@@ -223,7 +229,9 @@ def test_uses_global_registry_by_default(
     )
     mock_ep = mock_entry_point("plugin_global", mock_term_set)
 
-    with patch("soundevent.terms.plugins.entry_points") as mock_entry_points:
+    with patch(
+        "soundevent.terms.plugins.discover_plugins"
+    ) as mock_entry_points:
         mock_entry_points.return_value = [mock_ep]
         mock_register_term_set = MagicMock()
         with patch(
@@ -273,7 +281,9 @@ def test_loaded_terms_are_available(
     )
     mock_ep = mock_entry_point("plugin_global", mock_term_set)
 
-    with patch("soundevent.terms.plugins.entry_points") as mock_entry_points:
+    with patch(
+        "soundevent.terms.plugins.discover_plugins"
+    ) as mock_entry_points:
         mock_entry_points.return_value = [mock_ep]
 
         assert not has_term("plugin:global")

@@ -98,6 +98,30 @@ def plugins_enabled() -> bool:
     return env not in ("false", "0", "no")
 
 
+def discover_plugins():
+    try:
+        # Python 3.10+ recommended API
+        eps = entry_points()
+
+        if hasattr(eps, "select"):
+            return eps.select(group="soundevent.terms")
+
+        # Some backports may return a mapping
+        if isinstance(eps, dict):
+            return eps.get("soundevent.terms", [])
+
+        # Fallback: filter sequence by group attribute
+        return [
+            ep
+            for ep in eps
+            if getattr(ep, "group", None) == "soundevent.terms"
+        ]
+
+    except TypeError:
+        # Older API supporting the `group=` kwarg
+        return list(entry_points(group="soundevent.terms"))
+
+
 def discover_and_load_plugins(term_registry: Optional[TermRegistry] = None):
     """Discover and load term sets from installed plugins.
 
@@ -129,7 +153,7 @@ def discover_and_load_plugins(term_registry: Optional[TermRegistry] = None):
     if term_registry is None:
         term_registry = get_global_term_registry()
 
-    discovered_plugins = entry_points(group="soundevent.terms")  # type: ignore
+    discovered_plugins = discover_plugins()
 
     if not discovered_plugins:
         _plugins_status["loaded"] = True
