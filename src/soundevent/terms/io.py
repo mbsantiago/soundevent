@@ -81,7 +81,7 @@ import json
 from pathlib import Path
 from typing import Callable, Dict, List, Literal, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ValidationError
 
 from soundevent.data import PathLike, Term
 from soundevent.terms.api import add_term, get_global_term_registry
@@ -150,7 +150,7 @@ def load_term_set_from_csv(path: PathLike) -> TermSet:
         term_data = {k: v.strip() for k, v in row.items() if v != ""}
         try:
             terms.append(Term(**term_data))
-        except ValueError as err:
+        except ValidationError as err:
             raise ValueError(
                 f"Invalid term at CSV row {index}: {err}"
             ) from err

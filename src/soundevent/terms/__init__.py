@@ -93,6 +93,7 @@ from soundevent.terms.library import (
     top_3_accuracy,
     true_class_probability,
 )
+from soundevent.terms.plugins import discover_and_load_plugins
 from soundevent.terms.registry import (
     MultipleTermsFoundError,
     TermNotFoundError,
@@ -144,3 +145,5 @@ __all__ = [
     "top_3_accuracy",
     "true_class_probability",
 ]
+
+discover_and_load_plugins()
