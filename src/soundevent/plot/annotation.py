@@ -26,7 +26,38 @@ def plot_annotation(
     color: Optional[str] = None,
     **kwargs,
 ) -> Axes:
-    """Plot an annotation."""
+    """Plot a sound event annotation on a spectrogram.
+
+    This function plots the geometry of the sound event and its associated
+    tags.
+
+    Parameters
+    ----------
+    annotation
+        The sound event annotation to plot.
+    ax
+        The matplotlib axes to plot on. If None, a new one is created.
+    position
+        The position of the tags relative to the geometry.
+    color_mapper
+        A `TagColorMapper` instance to map tags to colors. If None, a new
+        one is created.
+    time_offset
+        The time offset for positioning the tags.
+    freq_offset
+        The frequency offset for positioning the tags.
+    color
+        The color of the geometry. If None, the color is determined by the
+        color mapper.
+    **kwargs
+        Additional keyword arguments passed to `create_axes` and
+        `plot_geometry`.
+
+    Returns
+    -------
+    Axes
+        The matplotlib axes with the annotation plotted.
+    """
     geometry = annotation.sound_event.geometry
 
     if geometry is None:
@@ -66,7 +97,39 @@ def plot_annotations(
     color: Optional[str] = None,
     **kwargs,
 ):
-    """Plot an annotation."""
+    """Plot a collection of sound event annotations on a spectrogram.
+
+    This function iterates through a collection of sound event annotations
+    and plots each one on the provided matplotlib axes.
+
+    Parameters
+    ----------
+    annotations
+        An iterable of `SoundEventAnnotation` objects to plot.
+    ax
+        The matplotlib axes to plot on. If None, a new one is created.
+    position
+        The position of the tags relative to the geometry.
+    color_mapper
+        A `TagColorMapper` instance to map tags to colors. If None, a new
+        one is created.
+    time_offset
+        The time offset for positioning the tags.
+    freq_offset
+        The frequency offset for positioning the tags.
+    legend
+        Whether to add a legend for the tags.
+    color
+        The color of the geometries. If None, the color is determined by
+        the color mapper.
+    **kwargs
+        Additional keyword arguments passed to `plot_annotation`.
+
+    Returns
+    -------
+    Axes
+        The matplotlib axes with the annotations plotted.
+    """
     if ax is None:
         ax = create_axes(**kwargs)
 
