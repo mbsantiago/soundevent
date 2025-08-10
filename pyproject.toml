@@ -64,6 +64,7 @@ filterwarnings = [
     "error",
     "ignore::UserWarning",
     "ignore::DeprecationWarning",
+    "ignore::SyntaxWarning",
 ]
 
 [tool.ruff]
