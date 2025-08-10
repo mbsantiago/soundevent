@@ -4,6 +4,7 @@ from soundevent.data.terms import Term
 from soundevent.terms.registry import (
     MultipleTermsFoundError,
     TermNotFoundError,
+    TermOverrideError,
     TermRegistry,
 )
 
@@ -161,8 +162,31 @@ def test_term_registry_add_term_duplicate_term():
     registry = TermRegistry()
     registry.add_term(key="test_key", term=test_term)
 
-    with pytest.raises(KeyError):
+    with pytest.raises(TermOverrideError):
         registry.add_term(key="test_key", term=test_term)
+
+
+def test_add_term_override_with_force(
+    example_registry: TermRegistry, term1: Term
+):
+    """Test that add_term can override a term with force=True."""
+    new_term = Term(name="new", label="New", definition="New term.")
+
+    # Check that we cannot override by default
+    with pytest.raises(
+        TermOverrideError,
+        match="Cannot override existing term",
+    ) as excinfo:
+        example_registry.add_term(new_term, key="key1")
+
+    assert excinfo.value.key == "key1"
+    assert excinfo.value.term == term1
+
+    # Now, use force=True to override
+    example_registry.add_term(new_term, key="key1", force=True)
+
+    # Check that the term has been overridden
+    assert example_registry["key1"] is new_term
 
 
 def test_term_registry_get_term_not_found():

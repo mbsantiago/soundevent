@@ -14,15 +14,53 @@ from typing import Dict, Optional
 from soundevent.data import Term
 
 __all__ = [
-    "TermRegistryError",
-    "TermNotFoundError",
     "MultipleTermsFoundError",
+    "TermNotFoundError",
+    "TermOverrideError",
     "TermRegistry",
+    "TermRegistryError",
 ]
 
 
 class TermRegistryError(Exception):
     """Base exception for all TermRegistry related errors."""
+
+
+class TermOverrideError(KeyError, TermRegistryError):
+    """Raised when attempting to override an existing term.
+
+    This error occurs when adding a term to the registry with a key that
+    already exists, and the operation is not forced.
+
+    Attributes
+    ----------
+    key : Optional[str]
+        The key that caused the override error.
+    term : Optional[Term]
+        The existing term associated with the key.
+    """
+
+    def __init__(
+        self,
+        message: str,
+        key: Optional[str] = None,
+        term: Optional[Term] = None,
+    ):
+        super().__init__(message)
+        self.key = key
+        self.term = term
+
+    def __str__(self) -> str:
+        """Return a user-friendly string representation of the error."""
+        message = self.args[0]
+        details = []
+        if self.key:
+            details.append(f"key='{self.key}'")
+        if self.term:
+            details.append(f"existing_term={self.term!r}")
+        if details:
+            return f"{message} ({', '.join(details)})"
+        return message
 
 
 class TermNotFoundError(KeyError, TermRegistryError):
@@ -164,7 +202,11 @@ class TermRegistry(MutableMapping[str, Term]):
             raise TypeError("Value must be a Term object.")
 
         if key in self._terms:
-            raise KeyError(f"A term with the key '{key}' already exists.")
+            raise TermOverrideError(
+                "Cannot override existing term",
+                key=key,
+                term=self[key],
+            )
 
         self._terms[key] = term
 
@@ -194,6 +236,7 @@ class TermRegistry(MutableMapping[str, Term]):
         self,
         term: Term,
         key: Optional[str] = None,
+        force: bool = False,
     ) -> None:
         """Register a term, optionally defaulting the key to `term.name`.
 
@@ -204,14 +247,28 @@ class TermRegistry(MutableMapping[str, Term]):
         key : Optional[str], optional
             The key to use for registration. If None, `term.name` is used.
             Defaults to None.
+        force : bool, default=False
+            If True, allows overriding an existing term with the same key.
+            If False, raises `TermOverrideError` if the key already exists.
 
         Raises
         ------
-        KeyError
-            If the chosen key already exists.
+        TermOverrideError
+            If `force` is False and a term with the same key already exists.
         """
         key = key or term.name
-        self[key] = term
+
+        if not isinstance(term, Term):
+            raise TypeError("Value must be a Term object.")
+
+        if key in self and not force:
+            raise TermOverrideError(
+                "Cannot override existing term",
+                key=key,
+                term=self[key],
+            )
+
+        self._terms[key] = term
 
     def get(self, key: str, default: Optional[Term] = None) -> Optional[Term]:  # type: ignore
         """Retrieve a term by key, returning a default if not found.
