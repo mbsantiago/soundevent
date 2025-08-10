@@ -5,6 +5,12 @@ import pytest
 from soundevent import data, terms
 
 
+@pytest.fixture(autouse=True)
+def term_registry():
+    term_registry = terms.TermRegistry()
+    terms.set_global_term_registry(term_registry)
+
+
 def test_features_are_hashable():
     """Test that features are hashable."""
     tag = data.Feature(term=terms.duration, value=10)
@@ -28,18 +34,13 @@ def test_can_create_feature_without_term_and_with_key():
     feature = data.Feature(name="name", value=10)  # type: ignore
     assert isinstance(feature.term, data.Term)
     assert feature.term.label == "name"
-    assert feature.term.name == "soundevent:name"
+    assert feature.term.name == "name"
 
 
-def test_shows_deprecation_warning_when_using_key():
-    with pytest.warns(DeprecationWarning):
-        feature = data.Feature(name="key", value=10)  # type: ignore
-
-    feature = data.Feature(term=terms.duration, value=50)
-    with pytest.warns(DeprecationWarning):
-        name = feature.name
-
-    assert name == terms.duration.label
+def test_feature_is_created_with_correct_term_when_using_name():
+    terms.add_term(terms.f1_score, key="f1")
+    feature = data.Feature(name="f1", value=23.1)  # type: ignore
+    assert feature.term == terms.f1_score
 
 
 example_features = [

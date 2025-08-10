@@ -10,7 +10,7 @@ import numpy as np
 import pytest
 import soundfile as sf
 
-from soundevent import data
+from soundevent import data, terms
 
 
 def get_random_string(length):
@@ -37,9 +37,7 @@ def write_random_wav(
 @pytest.fixture
 def user() -> data.User:
     """Return a user."""
-    return data.User(
-        name="test_user",
-    )
+    return data.User(name="test_user")
 
 
 @pytest.fixture
@@ -49,6 +47,14 @@ def note(user: data.User) -> data.Note:
         message="test_note",
         created_by=user,
     )
+
+
+@pytest.fixture(autouse=True)
+def global_registry() -> terms.TermRegistry:
+    """Set a clean global term registry for each test."""
+    registry = terms.TermRegistry()
+    terms.set_global_term_registry(registry)
+    return registry
 
 
 @pytest.fixture

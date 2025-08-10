@@ -11,10 +11,10 @@ class User(BaseModel):
 
     uuid: UUID = Field(default_factory=uuid4, repr=False)
 
-    username: Optional[str] = Field(None, repr=True)
+    username: Optional[str] = Field(default=None, repr=True)
 
-    email: Optional[EmailStr] = Field(None, repr=False)
+    email: Optional[EmailStr] = Field(default=None, repr=False)
 
-    name: Optional[str] = Field(None, repr=True)
+    name: Optional[str] = Field(default=None, repr=True)
 
-    institution: Optional[str] = Field(None, repr=False)
+    institution: Optional[str] = Field(default=None, repr=False)

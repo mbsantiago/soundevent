@@ -4,7 +4,7 @@ from typing import List, Optional, Sequence, Tuple
 
 import numpy as np
 
-from soundevent import data
+from soundevent import data, terms
 from soundevent.evaluation import metrics
 from soundevent.evaluation.encoding import (
     Encoder,
@@ -13,7 +13,6 @@ from soundevent.evaluation.encoding import (
     prediction_encoding,
 )
 from soundevent.evaluation.tasks.common import iterate_over_valid_clips
-from soundevent.terms import metrics as terms
 
 __all__ = [
     "sound_event_classification",
@@ -27,8 +26,8 @@ EXAMPLE_METRICS: Sequence[tuple[data.Term, metrics.Metric]] = ()
 
 RUN_METRICS: Sequence[tuple[data.Term, metrics.Metric]] = (
     (terms.balanced_accuracy, metrics.balanced_accuracy),
-    (terms.balanced_accuracy, metrics.accuracy),
-    (terms.balanced_accuracy, metrics.top_3_accuracy),
+    (terms.accuracy, metrics.accuracy),
+    (terms.top_3_accuracy, metrics.top_3_accuracy),
 )
 
 
@@ -134,9 +133,8 @@ def _evaluate_clip(
         predicted_classes_scores.append(predicted_classes)
         matches.append(match)
 
-    score = np.mean(
-        [match.score for match in matches if match.score is not None]
-    )
+    non_none_scores = [m.score for m in matches if m.score is not None]
+    score = float(np.mean(non_none_scores)) if non_none_scores else 0.0
 
     return (
         true_classes,

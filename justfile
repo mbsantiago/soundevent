@@ -200,7 +200,7 @@ docs-open: docs-build
 # Serve the documentation locally with live reload on http://localhost:8001
 docs-serve:
     @echo "Serving documentation with MkDocs at http://localhost:8001 (live reload). Press Ctrl+C to stop."
-    mkdocs serve --dev-addr localhost:8001 --site-dir {{DOCS_BUILD_DIR}}
+    mkdocs serve --dev-addr localhost:8001 --open --watch {{DOCS_SRC_DIR}} --watch {{SRC_DIR}}
 
 # Common alias to build and open the documentation
 docs: docs-open

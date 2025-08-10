@@ -39,7 +39,7 @@ dev-dependencies = [
   "pytest>=7.4.0",
   "coverage[toml]>=7.3.2",
   "pytest-coverage>=0.0",
-  "mkdocs>=1.2.4",
+  "mkdocs>=1.6.0",
   "importlib-metadata>=4.3",
   "ruff>=0.0.276",
   "mkdocs-material>=9.1.18",
@@ -55,15 +55,21 @@ dev-dependencies = [
   "pytest-xdist>=3.6.1",
   "ipykernel>=6.29.4",
   "rust-just>=1.40.0",
+  "pytest-env>=1.1.5",
 ]
 
 [tool.pytest.ini_options]
 addopts = "-s -vvv -l --tb=long"
 doctest_optionflags = "NORMALIZE_WHITESPACE ELLIPSIS"
 filterwarnings = [
+    "error",
     "ignore::UserWarning",
     "ignore::DeprecationWarning",
+    "ignore::SyntaxWarning",
 ]
+
+[tool.pytest_env]
+SOUNDEVENT_LOAD_TERM_PLUGINS = 0
 
 [tool.ruff]
 line-length = 79

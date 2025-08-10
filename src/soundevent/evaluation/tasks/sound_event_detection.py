@@ -4,7 +4,7 @@ from typing import Optional, Sequence
 
 import numpy as np
 
-from soundevent import data
+from soundevent import data, terms
 from soundevent.evaluation import metrics
 from soundevent.evaluation.encoding import (
     Encoder,
@@ -14,7 +14,6 @@ from soundevent.evaluation.encoding import (
 )
 from soundevent.evaluation.match import match_geometries
 from soundevent.evaluation.tasks.common import iterate_over_valid_clips
-from soundevent.terms import metrics as terms
 
 __all__ = [
     "sound_event_detection",

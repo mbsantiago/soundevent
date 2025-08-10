@@ -45,10 +45,6 @@ class Tag(BaseModel):
         The standardized term associated with the tag, providing context and meaning.
     value
         The value associated with the tag, offering specific information.
-
-    Notes
-    -----
-    The `key` attribute is deprecated. Use `term` instead.
     """
 
     term: Term = Field(
@@ -70,23 +66,12 @@ class Tag(BaseModel):
     @property
     def key(self) -> str:
         """Return the key of the tag."""
-        warnings.warn(
-            "The 'key' attribute is deprecated. Use 'term' instead.",
-            DeprecationWarning,
-            stacklevel=1,
-        )
         return key_from_term(self.term)
 
     @model_validator(mode="before")
     @classmethod
-    def handle_deprecated_key(cls, values):
+    def handle_key(cls, values):
         if "key" in values:
-            warnings.warn(
-                "The 'key' field is deprecated. Please use 'term' instead.",
-                DeprecationWarning,
-                stacklevel=2,
-            )
-
             if "term" not in values:
                 values["term"] = term_from_key(values["key"])
 
@@ -182,8 +167,8 @@ def find_tag(
     >>> # Find by term label
     >>> find_tag(tag_list, term_label="Instrument Type") is tag1
     True
-    >>> # Find by key (if tag does not have a key will default to its label)
-    >>> find_tag(tag_list, key="Instrument Type") is tag1
+    >>> # Find by key (uses the term name)
+    >>> find_tag(tag_list, key="instrument") is tag1
     True
     >>> # No match, return default
     >>> find_tag(tag_list, term_name="weather", default=tag1) is tag1
@@ -316,8 +301,11 @@ def find_tag_value(
     >>> find_tag_value(tag_list, term_name="tau2019:scene")
     'park'
     >>> # Find value by key
-    >>> find_tag_value(tag_list, key="Instrument Type")
+    >>> find_tag_value(tag_list, key="instrument")
     'guitar'
+    >>> # Find value by term label
+    >>> find_tag_value(tag_list, term_label="Acoustic Scene")
+    'park'
     >>> # No match, return default
     >>> find_tag_value(tag_list, term_name="weather", default="unknown")
     'unknown'
