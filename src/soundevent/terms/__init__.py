@@ -12,8 +12,9 @@ This module provides three main features:
 
 1.  **Pre-defined Terms**: A collection of standard terms for common concepts
     in bioacoustics (e.g., `scientific_name`, `f1_score`).
-2.  **Global API**: A set of functions (`find_term`, `add_term`, etc.) for
-    managing terms in a global registry.
+2.  **Global API**: A set of functions (`find_term`, `add_term`, `register_term_set`, etc.) for
+    managing terms in a global registry. `add_terms_from_file` is a convenience function
+    that loads terms from a file and then registers them using `register_term_set`.
 3.  **`TermRegistry` Class**: The underlying class for creating and managing
     custom term collections.
 
@@ -61,6 +62,7 @@ from soundevent.terms.api import (
 from soundevent.terms.io import (
     add_terms_from_file,
     load_term_from_file,
+    register_term_set,
 )
 from soundevent.terms.library import (
     accuracy,
@@ -131,6 +133,7 @@ __all__ = [
     "mean_average_precision",
     "num_segments",
     "order",
+    "register_term_set",
     "remove_term",
     "scientific_name",
     "set_global_term_registry",

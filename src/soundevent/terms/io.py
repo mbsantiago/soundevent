@@ -94,6 +94,7 @@ from soundevent.terms.registry import (
 __all__ = [
     "load_term_from_file",
     "add_terms_from_file",
+    "register_term_set",
 ]
 
 
@@ -207,6 +208,93 @@ def load_term_from_file(
     return loader(path)
 
 
+def register_term_set(
+    term_set: TermSet,
+    term_registry: Optional[TermRegistry] = None,
+    override_existing: bool = False,
+    ignore_overrides: bool = True,
+    ignore_missing_key: bool = True,
+):
+    """Register a collection of terms and their aliases to a registry.
+
+    This function takes a `TermSet` object, which contains a list of `Term`
+    objects and an optional dictionary of aliases, and registers them to
+    the specified `TermRegistry`. It provides flexible options for handling
+    conflicts such as existing terms or aliases, and references to non-existent
+    terms.
+
+    Parameters
+    ----------
+    term_set : TermSet
+        A `TermSet` object containing the terms and aliases to be registered.
+    term_registry : Optional[TermRegistry], default=None
+        The registry to add the terms to. If None, the global
+        registry is used.
+    override_existing : bool, default=False
+        If True, existing terms or aliases with the same key will be
+        overwritten. Defaults to False.
+    ignore_overrides : bool, default=True
+        If True, and `override_existing` is False, any term or alias that
+        already exists in the registry will be skipped without raising an
+        error. If False, a `TermOverrideError` will be raised. Defaults to True.
+    ignore_missing_key : bool, default=True
+        If True, any alias in the `term_set` that refers to a non-existent
+        term (i.e., a term not found in the registry after all terms from
+        `term_set` have been processed) will be skipped. If False, a
+        `TermNotFoundError` will be raised. Defaults to True.
+
+    Raises
+    ------
+    TermOverrideError
+        If `override_existing` is False, `ignore_overrides` is False,
+        and a term or alias being registered already exists in the registry.
+    TermNotFoundError
+        If `ignore_missing_key` is False and an alias in the `term_set`
+        referring to a term name that is not found in the registry.
+    """
+    if term_registry is None:
+        term_registry = get_global_term_registry()
+
+    for term in term_set.terms:
+        try:
+            add_term(
+                term, term_registry=term_registry, force=override_existing
+            )
+        except TermOverrideError as err:
+            if not ignore_overrides:
+                raise err
+            continue
+
+    for alias, term_name in term_set.aliases.items():
+        try:
+            term = term_registry[term_name]
+        except KeyError as err:
+            if not ignore_missing_key:
+                raise TermNotFoundError(
+                    f"Cannot create alias '{alias}': the target term "
+                    f"'{term_name}' was not found in the registry.",
+                    key=term_name,
+                ) from err
+            continue
+
+        try:
+            add_term(
+                term,
+                key=alias,
+                term_registry=term_registry,
+                force=override_existing,
+            )
+        except TermOverrideError as err:
+            if not ignore_overrides:
+                raise TermOverrideError(
+                    f"Cannot create alias '{alias}': a term with this key "
+                    f"already exists in the registry.",
+                    key=alias,
+                    term=err.term,
+                ) from err
+            continue
+
+
 def add_terms_from_file(
     path: PathLike,
     term_registry: Optional[TermRegistry] = None,
@@ -263,44 +351,10 @@ def add_terms_from_file(
     """
     term_set = load_term_from_file(path, format=format)
 
-    if term_registry is None:
-        term_registry = get_global_term_registry()
-
-    for term in term_set.terms:
-        try:
-            add_term(
-                term, term_registry=term_registry, force=override_existing
-            )
-        except TermOverrideError as err:
-            if not ignore_overrides:
-                raise err
-            continue
-
-    for alias, term_name in term_set.aliases.items():
-        try:
-            term = term_registry[term_name]
-        except KeyError as err:
-            if not ignore_missing_key:
-                raise TermNotFoundError(
-                    f"Cannot create alias '{alias}': the target term "
-                    f"'{term_name}' was not found in the registry.",
-                    key=term_name,
-                ) from err
-            continue
-
-        try:
-            add_term(
-                term,
-                key=alias,
-                term_registry=term_registry,
-                force=override_existing,
-            )
-        except TermOverrideError as err:
-            if not ignore_overrides:
-                raise TermOverrideError(
-                    f"Cannot create alias '{alias}': a term with this key "
-                    f"already exists in the registry.",
-                    key=alias,
-                    term=err.term,
-                ) from err
-            continue
+    register_term_set(
+        term_set,
+        term_registry=term_registry,
+        override_existing=override_existing,
+        ignore_overrides=ignore_overrides,
+        ignore_missing_key=ignore_missing_key,
+    )
