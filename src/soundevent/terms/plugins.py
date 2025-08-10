@@ -73,12 +73,12 @@ __all__ = [
     "discover_and_load_plugins",
 ]
 
-_plugins_loaded = False
+
+_plugins_status = {"loaded": False}
 
 
 def plugins_loaded() -> bool:
-    global _plugins_loaded
-    return _plugins_loaded
+    return _plugins_status["loaded"]
 
 
 def plugins_enabled() -> bool:
@@ -123,9 +123,7 @@ def discover_and_load_plugins(term_registry: Optional[TermRegistry] = None):
     if not plugins_enabled():
         return
 
-    global _plugins_loaded
-
-    if _plugins_loaded:
+    if plugins_loaded():
         return
 
     if term_registry is None:
@@ -134,7 +132,7 @@ def discover_and_load_plugins(term_registry: Optional[TermRegistry] = None):
     discovered_plugins = entry_points(group="soundevent.terms")  # type: ignore
 
     if not discovered_plugins:
-        _plugins_loaded = True
+        _plugins_status["loaded"] = True
         return
 
     logging.debug(f"Found {len(discovered_plugins)} soundevent term plugins.")
@@ -152,4 +150,4 @@ def discover_and_load_plugins(term_registry: Optional[TermRegistry] = None):
                 f"Failed to load terms from plugin: '{entry_point.name}'"
             )
 
-    _plugins_loaded = True
+    _plugins_status["loaded"] = True
