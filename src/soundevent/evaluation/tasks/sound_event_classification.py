@@ -26,8 +26,8 @@ EXAMPLE_METRICS: Sequence[tuple[data.Term, metrics.Metric]] = ()
 
 RUN_METRICS: Sequence[tuple[data.Term, metrics.Metric]] = (
     (terms.balanced_accuracy, metrics.balanced_accuracy),
-    (terms.balanced_accuracy, metrics.accuracy),
-    (terms.balanced_accuracy, metrics.top_3_accuracy),
+    (terms.accuracy, metrics.accuracy),
+    (terms.top_3_accuracy, metrics.top_3_accuracy),
 )
 
 
