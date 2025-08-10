@@ -285,4 +285,3 @@ def test_loaded_terms_are_available(
         assert has_term("test")
         assert get_term("plugin:global") == mock_term_set.terms[0]
         assert get_term("plugin:global") == get_term("test")
-

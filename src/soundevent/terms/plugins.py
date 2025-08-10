@@ -153,4 +153,3 @@ def discover_and_load_plugins(term_registry: Optional[TermRegistry] = None):
             )
 
     _plugins_loaded = True
-
