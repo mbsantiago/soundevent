@@ -58,6 +58,9 @@ from soundevent.terms.api import (
     remove_term,
     set_global_term_registry,
 )
+from soundevent.terms.io import (
+    add_terms_from_file,
+    load_term_from_file,
 )
 from soundevent.terms.library import (
     accuracy,
@@ -101,6 +104,7 @@ __all__ = [
     "TermRegistry",
     "accuracy",
     "add_term",
+    "add_terms_from_file",
     "alternative",
     "average_precision",
     "balanced_accuracy",
@@ -121,6 +125,7 @@ __all__ = [
     "has_term",
     "high_freq",
     "jaccard_index",
+    "load_term_from_file",
     "location_id",
     "low_freq",
     "mean_average_precision",
