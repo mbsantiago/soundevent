@@ -10,7 +10,6 @@ from soundevent.terms.api import (
     get_global_term_registry,
     get_term,
     has_term,
-    set_global_term_registry,
 )
 from soundevent.terms.io import (
     TermSet,
