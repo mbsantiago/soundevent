@@ -2,24 +2,33 @@
 
 This module provides tools for creating and managing standardized terms.
 
-In the soundevent ecosystem, metadata is stored in `Tag` objects, which are
-pairs of a `Term` and a `value`. The `Term` provides a standardized
-definition that gives context and meaning to the `value`. For example, the
-`Term` `scientific_name` gives meaning to the `value` `"Turdus migratorius"`.
-Using standardized terms makes data understandable, shareable, and interoperable.
+In the soundevent ecosystem, metadata is stored in [`Tag`][soundevent.data.Tag]
+objects, which are pairs of a [`Term`][soundevent.data.Term] and a `value`. The
+[`Term`][soundevent.data.Term] provides a standardized definition that gives
+context and meaning to the `value`. For example, the
+[`Term`][soundevent.data.Term] `scientific_name` gives meaning to the `value`
+`"Turdus migratorius"`. Using standardized terms makes data understandable,
+shareable, and interoperable.
 
 This module provides three main features:
 
 1.  **Pre-defined Terms**: A collection of standard terms for common concepts
-    in bioacoustics (e.g., `scientific_name`, `f1_score`).
-2.  **Global API**: A set of functions (`find_term`, `add_term`, `register_term_set`, etc.) for
-    managing terms in a global registry. `add_terms_from_file` is a convenience function
-    that loads terms from a file and then registers them using `register_term_set`.
-3.  **`TermRegistry` Class**: The underlying class for creating and managing
-    custom term collections.
+    in bioacoustics (e.g.,
+    [`scientific_name`][soundevent.terms.scientific_name],
+    [`f1_score`][soundevent.terms.f1_score]).
+2.  **Global API**: A set of functions
+    ([`find_term`][soundevent.terms.find_term],
+    [`add_term`][soundevent.terms.add_term],
+    [`add_term`][soundevent.terms.get_term], etc.
+    ) for
+    managing terms in a global registry.
+    [`add_terms_from_file`][soundevent.terms.add_terms_from_file] is a
+    convenience function that loads terms from a file and then registers them.
+3.  **[`TermRegistry`][soundevent.terms.TermRegistry] Class**: The underlying
+    class for creating and managing custom term collections.
 
-Example
--------
+Examples
+--------
 >>> from soundevent.data import Tag, Term
 >>> from soundevent.terms import scientific_name, add_term, find_term
 >>>
