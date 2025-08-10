@@ -74,6 +74,9 @@ __all__ = [
 ]
 
 
+logger = logging.getLogger(__name__)
+
+
 _plugins_status = {"loaded": False}
 
 
@@ -159,18 +162,18 @@ def discover_and_load_plugins(term_registry: Optional[TermRegistry] = None):
         _plugins_status["loaded"] = True
         return
 
-    logging.debug(f"Found {len(discovered_plugins)} soundevent term plugins.")
+    logger.debug(f"Found {len(discovered_plugins)} soundevent term plugins.")
 
     for entry_point in discovered_plugins:
         try:
-            logging.debug(f"Loading terms from plugin: '{entry_point.name}'")
+            logger.debug(f"Loading terms from plugin: '{entry_point.name}'")
 
             load_func = entry_point.load()
 
             term_set = load_func()
             register_term_set(term_set, term_registry=term_registry)
         except Exception:
-            logging.exception(
+            logger.exception(
                 f"Failed to load terms from plugin: '{entry_point.name}'"
             )
 
