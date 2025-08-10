@@ -2,7 +2,7 @@ from typing import List, Sequence, Tuple
 
 import numpy as np
 
-from soundevent import data
+from soundevent import data, terms
 from soundevent.evaluation import metrics
 from soundevent.evaluation.encoding import (
     Encoder,
@@ -11,7 +11,6 @@ from soundevent.evaluation.encoding import (
     prediction_encoding,
 )
 from soundevent.evaluation.tasks.common import iterate_over_valid_clips
-from soundevent.terms import metrics as terms
 
 __all__ = [
     "clip_multilabel_classification",
