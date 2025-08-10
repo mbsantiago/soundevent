@@ -41,14 +41,6 @@ def term2() -> Term:
     )
 
 
-@pytest.fixture(autouse=True)
-def global_registry() -> TermRegistry:
-    """Set a clean global term registry for each test."""
-    registry = TermRegistry()
-    set_global_term_registry(registry)
-    return registry
-
-
 def test_get_global_term_registry(global_registry: TermRegistry):
     """Test that the global registry can be retrieved."""
     assert get_global_term_registry() is global_registry

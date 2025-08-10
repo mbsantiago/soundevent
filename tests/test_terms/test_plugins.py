@@ -4,7 +4,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 from soundevent.data import Term
-from soundevent.terms.api import get_term, has_term, set_global_term_registry
+from soundevent.terms.api import get_term, has_term
 from soundevent.terms.io import TermSet
 from soundevent.terms.plugins import (
     _plugins_status,
@@ -18,13 +18,6 @@ from soundevent.terms.registry import TermRegistry
 @pytest.fixture(autouse=True)
 def setup():
     _plugins_status["loaded"] = False
-
-
-@pytest.fixture(autouse=True)
-def simple_term_registry() -> TermRegistry:
-    term_registry = TermRegistry()
-    set_global_term_registry(term_registry)
-    return term_registry
 
 
 @pytest.fixture

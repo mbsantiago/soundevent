@@ -158,7 +158,7 @@ def find_feature(
     >>> feat2 = Feature(value=440.0, term=t_pitch)
     >>> feat_list = [feat1, feat2]
     >>> # Find by feature name (defaults to term label if does not exist)
-    >>> find_feature(feat_list, name="Fundamental Frequency") is feat2
+    >>> find_feature(feat_list, name="pitch") is feat2
     True
     >>> # Find by term name
     >>> find_feature(feat_list, term_name="energy") is feat1
@@ -314,7 +314,7 @@ def find_feature_value(
     >>> feat2 = Feature(value=440.0, term=t_pitch, name="f0")
     >>> feat_list = [feat1, feat2]
     >>> # Find value by name (defaults to label if name not provided)
-    >>> find_feature_value(feat_list, name="Fundamental Frequency")
+    >>> find_feature_value(feat_list, name="pitch")
     440.0
     >>> # Find value by term name
     >>> find_feature_value(feat_list, term_name="energy")

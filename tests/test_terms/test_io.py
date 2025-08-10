@@ -163,13 +163,6 @@ def term_set_with_aliases(sample_term_1: Term, sample_term_2: Term) -> TermSet:
     )
 
 
-@pytest.fixture(autouse=True)
-def term_registry_fixture() -> TermRegistry:
-    registry = TermRegistry()
-    set_global_term_registry(registry)
-    return registry
-
-
 def test_load_from_json_simple_list(
     term_json_file_simple_list: Path,
     sample_term_1: Term,

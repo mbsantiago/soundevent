@@ -167,8 +167,8 @@ def find_tag(
     >>> # Find by term label
     >>> find_tag(tag_list, term_label="Instrument Type") is tag1
     True
-    >>> # Find by key (if tag does not have a key will default to its label)
-    >>> find_tag(tag_list, key="Instrument Type") is tag1
+    >>> # Find by key (if tag does not have a key will default to its name)
+    >>> find_tag(tag_list, key="instrument") is tag1
     True
     >>> # No match, return default
     >>> find_tag(tag_list, term_name="weather", default=tag1) is tag1
@@ -301,8 +301,11 @@ def find_tag_value(
     >>> find_tag_value(tag_list, term_name="tau2019:scene")
     'park'
     >>> # Find value by key
-    >>> find_tag_value(tag_list, key="Instrument Type")
+    >>> find_tag_value(tag_list, key="instrument")
     'guitar'
+    >>> # Find value by term label
+    >>> find_tag_value(tag_list, term_label="Acoustic Scene")
+    'park'
     >>> # No match, return default
     >>> find_tag_value(tag_list, term_name="weather", default="unknown")
     'unknown'
