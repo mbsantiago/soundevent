@@ -124,23 +124,28 @@ def _load_from_json(path: PathLike) -> TermSet:
 
 def _load_from_csv(path: PathLike) -> TermSet:
     """Load a list of terms from a CSV file."""
-    with open(path, "r") as f:
+    with open(path, "r", newline="") as f:
         reader = csv.DictReader(f)
         rows = list(reader)
 
     terms = []
     aliases = {}
 
-    for row in rows:
-        alias = row.pop("alias", None)
-        term_name = row.get("name")
+    for index, row in enumerate(rows):
+        alias = row.pop("alias", None).strip()
+        term_name = row["name"].strip()
 
         if alias and term_name:
             aliases[alias] = term_name
 
         # Remove empty fields so Pydantic uses the model's defaults
-        term_data = {k: v for k, v in row.items() if v != ""}
-        terms.append(Term(**term_data))
+        term_data = {k: v.strip() for k, v in row.items() if v != ""}
+        try:
+            terms.append(Term(**term_data))
+        except ValueError as err:
+            raise ValueError(
+                f"Invalid term at CSV row {index}: {err}"
+            ) from err
 
     return TermSet(terms=terms, aliases=aliases)
 
