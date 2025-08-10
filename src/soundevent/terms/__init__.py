@@ -60,8 +60,9 @@ from soundevent.terms.api import (
     set_global_term_registry,
 )
 from soundevent.terms.io import (
+    TermSet,
     add_terms_from_file,
-    load_term_from_file,
+    load_term_set_from_file,
     register_term_set,
 )
 from soundevent.terms.library import (
@@ -104,6 +105,7 @@ __all__ = [
     "TermNotFoundError",
     "TermOverrideError",
     "TermRegistry",
+    "TermSet",
     "accuracy",
     "add_term",
     "add_terms_from_file",
@@ -127,7 +129,7 @@ __all__ = [
     "has_term",
     "high_freq",
     "jaccard_index",
-    "load_term_from_file",
+    "load_term_set_from_file",
     "location_id",
     "low_freq",
     "mean_average_precision",

@@ -115,28 +115,26 @@ def _evaluate_example(
 
     Parameters
     ----------
-    example
-        The evaluation example to evaluate.
-    processed_clip
-        The clip that was processed by the model and contains the predictions
-        for the evaluation example.
+    clip_annotations
+        Ground-truth clip annotations.
+    clip_predictions
+        Model predictions for the clip.
     encoder
-        The encoder used to encode the tags into integer encoded classes.
-    num_classes
-        Total number of classes.
+        Tag encoder used to map tags into class indices.
     metrics
-        Sequence of metrics to use for evaluation.
+        Sequence of (term, metric_fn) used for per-example metrics.
     scoring_fn
-        The scoring function to use for evaluation.
+        Function that computes the example score from ``y_true`` and
+        ``y_score``.
 
     Returns
     -------
     true_class
-        The true class of the example.
+        The true class index for the example.
     predicted_class_scores
-        The predicted class scores of the example.
+        The predicted class scores for all classes.
     evaluated
-        The evaluated example.
+        The ClipEvaluation for this example (metrics and score included).
     """
     true_class = classification_encoding(
         tags=clip_annotations.tags,

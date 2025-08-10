@@ -92,9 +92,10 @@ from soundevent.terms.registry import (
 )
 
 __all__ = [
-    "load_term_from_file",
+    "load_term_set_from_file",
     "add_terms_from_file",
     "register_term_set",
+    "TermSet",
 ]
 
 
@@ -108,7 +109,7 @@ class TermSet(BaseModel):
     """A mapping from a custom key to a term name."""
 
 
-def _load_from_json(path: PathLike) -> TermSet:
+def load_term_set_from_json(path: PathLike) -> TermSet:
     """Load a list of terms from a JSON file."""
     with open(path, "r") as f:
         data = json.load(f)
@@ -129,7 +130,7 @@ def _normalise_value(value: Optional[str]) -> Optional[str]:
     return value.strip()
 
 
-def _load_from_csv(path: PathLike) -> TermSet:
+def load_term_set_from_csv(path: PathLike) -> TermSet:
     """Load a list of terms from a CSV file."""
     with open(path, "r", newline="") as f:
         reader = csv.DictReader(f)
@@ -160,12 +161,12 @@ def _load_from_csv(path: PathLike) -> TermSet:
 TermFormat = Literal["json", "csv"]
 
 TERM_LOADERS: Dict[TermFormat, Callable[[PathLike], TermSet]] = {
-    "json": _load_from_json,
-    "csv": _load_from_csv,
+    "json": load_term_set_from_json,
+    "csv": load_term_set_from_csv,
 }
 
 
-def _infer_format(path: PathLike) -> TermFormat:
+def infer_term_set_format(path: PathLike) -> TermFormat:
     """Infer the file format from the file extension."""
     suffix = Path(path).suffix.lower()
 
@@ -177,7 +178,7 @@ def _infer_format(path: PathLike) -> TermFormat:
     raise ValueError(f"Could not infer format for file: {path}")
 
 
-def load_term_from_file(
+def load_term_set_from_file(
     path: PathLike,
     format: Optional[TermFormat] = None,
 ) -> TermSet:
@@ -211,7 +212,7 @@ def load_term_from_file(
     supported JSON and CSV file structures.
     """
     if format is None:
-        format = _infer_format(path)
+        format = infer_term_set_format(path)
 
     loader = TERM_LOADERS.get(format)
     if loader is None:
@@ -361,7 +362,7 @@ def add_terms_from_file(
     See [soundevent.terms.io][] for detailed information on the
     supported JSON and CSV file structures.
     """
-    term_set = load_term_from_file(path, format=format)
+    term_set = load_term_set_from_file(path, format=format)
 
     register_term_set(
         term_set,

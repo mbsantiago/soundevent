@@ -14,11 +14,11 @@ from soundevent.terms.api import (
 )
 from soundevent.terms.io import (
     TermSet,
-    _infer_format,
-    _load_from_csv,
-    _load_from_json,
     add_terms_from_file,
-    load_term_from_file,
+    infer_term_set_format,
+    load_term_set_from_csv,
+    load_term_set_from_file,
+    load_term_set_from_json,
     register_term_set,
 )
 from soundevent.terms.registry import (
@@ -175,19 +175,19 @@ def test_load_from_json_simple_list(
     sample_term_1: Term,
     sample_term_2: Term,
 ):
-    term_set = _load_from_json(term_json_file_simple_list)
+    term_set = load_term_set_from_json(term_json_file_simple_list)
     assert len(term_set.terms) == 2
     assert term_set.terms[0] == sample_term_1
     assert term_set.terms[1] == sample_term_2
     assert not term_set.aliases
 
 
-def test_load_from_json_structured_object(
+def testload_term_set_from_json_structured_object(
     term_json_file_structured: Path,
     sample_term_1: Term,
     sample_term_2: Term,
 ):
-    term_set = _load_from_json(term_json_file_structured)
+    term_set = load_term_set_from_json(term_json_file_structured)
     assert len(term_set.terms) == 2
     assert term_set.terms[0] == sample_term_1
     assert term_set.terms[1] == sample_term_2
@@ -197,27 +197,27 @@ def test_load_from_json_structured_object(
     }
 
 
-def test_load_from_json_invalid_format_raises_error(
+def testload_term_set_from_json_invalid_format_raises_error(
     term_json_file_invalid: Path,
 ):
     with pytest.raises(ValueError):
-        _load_from_json(term_json_file_invalid)
+        load_term_set_from_json(term_json_file_invalid)
 
 
-def test_load_from_csv_no_aliases(
+def testload_term_set_from_csv_no_aliases(
     term_csv_file_no_aliases: Path, sample_term_1: Term, sample_term_2: Term
 ):
-    term_set = _load_from_csv(term_csv_file_no_aliases)
+    term_set = load_term_set_from_csv(term_csv_file_no_aliases)
     assert len(term_set.terms) == 2
     assert term_set.terms[0] == sample_term_1
     assert term_set.terms[1] == sample_term_2
     assert not term_set.aliases
 
 
-def test_load_from_csv_with_aliases(
+def testload_term_set_from_csv_with_aliases(
     term_csv_file_with_aliases: Path, sample_term_1: Term, sample_term_2: Term
 ):
-    term_set = _load_from_csv(term_csv_file_with_aliases)
+    term_set = load_term_set_from_csv(term_csv_file_with_aliases)
     assert len(term_set.terms) == 2
     assert term_set.terms[0] == sample_term_1
     assert term_set.terms[1] == sample_term_2
@@ -227,40 +227,40 @@ def test_load_from_csv_with_aliases(
     }
 
 
-def test_load_from_csv_empty_fields(term_csv_file_empty_fields: Path):
-    term_set = _load_from_csv(term_csv_file_empty_fields)
+def testload_term_set_from_csv_empty_fields(term_csv_file_empty_fields: Path):
+    term_set = load_term_set_from_csv(term_csv_file_empty_fields)
     assert len(term_set.terms) == 2
     assert term_set.terms[0].uri == "http://example.com/scientificName"
     assert term_set.terms[1].uri is None
 
 
-def test_load_from_csv_missing_name_field_raises_error(
+def testload_term_set_from_csv_missing_name_field_raises_error(
     term_csv_file_missing_name: Path,
 ):
     with pytest.raises(ValueError):
-        _load_from_csv(term_csv_file_missing_name)
+        load_term_set_from_csv(term_csv_file_missing_name)
 
 
-def test_infer_format_json(tmp_path: Path):
+def testinfer_term_set_format_json(tmp_path: Path):
     file_path = tmp_path / "test.json"
     file_path.touch()
-    assert _infer_format(file_path) == "json"
+    assert infer_term_set_format(file_path) == "json"
 
 
-def test_infer_format_csv(tmp_path: Path):
+def testinfer_term_set_format_csv(tmp_path: Path):
     file_path = tmp_path / "test.csv"
     file_path.touch()
-    assert _infer_format(file_path) == "csv"
+    assert infer_term_set_format(file_path) == "csv"
 
 
-def test_infer_format_unknown_extension_raises_error(tmp_path: Path):
+def testinfer_term_set_format_unknown_extension_raises_error(tmp_path: Path):
     file_path = tmp_path / "test.txt"
     file_path.touch()
     with pytest.raises(ValueError):
-        _infer_format(file_path)
+        infer_term_set_format(file_path)
 
 
-def test_load_term_from_file_explicit_format(
+def test_load_term_set_from_file_explicit_format(
     tmp_path: Path,
     term_json_file_simple_list: Path,
     sample_term_1: Term,
@@ -268,34 +268,43 @@ def test_load_term_from_file_explicit_format(
     path = tmp_path / "file_with_weird_extension.notjson"
     shutil.copy(term_json_file_simple_list, path)
 
-    term_set = load_term_from_file(path, format="json")
+    term_set = load_term_set_from_file(path, format="json")
     assert len(term_set.terms) == 2
     assert term_set.terms[0] == sample_term_1
 
 
-def test_load_term_from_file_inferred_format(
+def test_load_term_set_from_file_inferred_format(
     term_csv_file_no_aliases: Path,
     sample_term_1: Term,
 ):
-    term_set = load_term_from_file(term_csv_file_no_aliases)
+    term_set = load_term_set_from_file(term_csv_file_no_aliases)
     assert len(term_set.terms) == 2
     assert term_set.terms[0] == sample_term_1
 
 
-def test_load_term_from_file_unsupported_explicit_format_raises_error(
+def test_load_term_set_from_file_explicit_format_mismatch_raises_error(
+    term_csv_file_no_aliases: Path,
+):
+    with pytest.raises(ValueError):
+        load_term_set_from_file(term_csv_file_no_aliases, format="json")
+
+
+def test_load_term_set_from_file_unsupported_explicit_format_raises_error(
     term_json_file_simple_list: Path,
 ):
     with pytest.raises(ValueError):
-        load_term_from_file(
+        load_term_set_from_file(
             term_json_file_simple_list,
             format="xml",  # type: ignore
         )
 
 
-def test_load_term_from_file_non_existent_file_raises_error(tmp_path: Path):
+def test_load_term_set_from_file_non_existent_file_raises_error(
+    tmp_path: Path,
+):
     non_existent_file = tmp_path / "non_existent.json"
     with pytest.raises(FileNotFoundError):
-        load_term_from_file(non_existent_file)
+        load_term_set_from_file(non_existent_file)
 
 
 def test_register_term_set_to_global_registry(
@@ -487,3 +496,4 @@ def test_add_terms_from_file_json_and_csv_integration(
     add_terms_from_file(term_csv_file_with_aliases)
     assert get_term("scientificName")
     assert get_term("species")
+    assert get_term("species") == get_term("scientificName")

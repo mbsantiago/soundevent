@@ -133,9 +133,8 @@ def _evaluate_clip(
         predicted_classes_scores.append(predicted_classes)
         matches.append(match)
 
-    score = np.mean(
-        [match.score for match in matches if match.score is not None]
-    )
+    non_none_scores = [m.score for m in matches if m.score is not None]
+    score = float(np.mean(non_none_scores)) if non_none_scores else 0.0
 
     return (
         true_classes,
