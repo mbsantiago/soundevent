@@ -30,7 +30,7 @@ Example
 >>> tags.append(species_tag)
 >>>
 >>> print(f"{tags[0].term.label}: {tags[0].value}")
-Scientific Name: Turdus migratorius
+Scientific Taxon Name: Turdus migratorius
 >>>
 >>> # Create and use a custom term for a new Tag
 >>> add_term(
@@ -80,6 +80,7 @@ from soundevent.terms.metrics import (
 from soundevent.terms.registry import (
     MultipleTermsFoundError,
     TermNotFoundError,
+    TermOverrideError,
     TermRegistry,
 )
 from soundevent.terms.roi import (
@@ -110,6 +111,7 @@ __all__ = [
     "MultipleTermsFoundError",
     "TermNotFoundError",
     "TermRegistry",
+    "TermOverrideError",
     "accuracy",
     "add_term",
     "alternative",
