@@ -585,7 +585,7 @@ def compute_interval_overlap(
     start2, stop2 = interval2
     start = max(start1, start2)
     stop = min(stop1, stop2)
-    return max(stop - start, 0)
+    return float(max(stop - start, 0))
 
 
 def intervals_overlap(
