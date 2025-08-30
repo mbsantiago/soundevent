@@ -557,6 +557,30 @@ def compute_interval_overlap(
     interval1: tuple[float, float],
     interval2: tuple[float, float],
 ) -> float:
+    """Compute the length of the overlap between two intervals.
+
+    Parameters
+    ----------
+    interval1
+        The first interval, as a tuple (start, stop).
+    interval2
+        The second interval, as a tuple (start, stop).
+
+    Returns
+    -------
+    float
+        The length of the overlap between the two intervals. If there is
+        no overlap, the function returns 0.
+
+    Examples
+    --------
+    >>> compute_interval_overlap((0, 2), (1, 3))
+    1.0
+    >>> compute_interval_overlap((0, 1), (1, 2))
+    0.0
+    >>> compute_interval_overlap((0, 1), (2, 3))
+    0.0
+    """
     start1, stop1 = interval1
     start2, stop2 = interval2
     start = max(start1, start2)
@@ -573,9 +597,11 @@ def intervals_overlap(
     """Check if two intervals overlap.
 
     This function determines whether two intervals, represented as tuples of
-    (start, stop) values, have any overlap. It optionally allows specifying a
-    minimum required overlap, either in absolute terms or relative to the
-    smaller interval.
+    (start, stop) values, overlap. An overlap is considered to occur if the
+    length of the intersection of the two intervals is strictly greater than a
+    specified threshold.
+
+    By default, touching intervals are not considered overlapping.
 
     Parameters
     ----------
@@ -584,11 +610,13 @@ def intervals_overlap(
     interval2 : tuple[float, float]
         The second interval, as a tuple (start, stop).
     min_absolute_overlap : float, optional
-        The minimum required absolute overlap. Defaults to 0, meaning
-        any overlap is sufficient.
+        The minimum required absolute overlap. The overlap must be strictly
+        greater than this value. Defaults to 0.
     min_relative_overlap : float, optional
-        The minimum required relative overlap (between 0 and 1). Defaults
-        to None.
+        The minimum required relative overlap with respect to the shorter
+        of the two intervals. The overlap must be strictly greater than
+        the computed threshold. The value must be in the range [0, 1].
+        Defaults to None.
 
     Returns
     -------
@@ -599,38 +627,9 @@ def intervals_overlap(
     Raises
     ------
     ValueError
-        - If both `min_absolute_overlap` and `min_relative_overlap` are
+        - If both `min_absolute_overlap > 0` and `min_relative_overlap` are
         provided.
         - If `min_relative_overlap` is not in the range [0, 1].
-
-    Examples
-    --------
-    >>> intervals_overlap((1.0, 3.0), (2.0, 4.0))
-    True
-    >>> intervals_overlap(
-    ...     (1.0, 3.0),
-    ...     (2.0, 4.0),
-    ...     min_absolute_overlap=0.5,
-    ... )
-    True
-    >>> intervals_overlap(
-    ...     (1.0, 3.0),
-    ...     (2.0, 4.0),
-    ...     min_absolute_overlap=1.5,
-    ... )
-    False
-    >>> intervals_overlap(
-    ...     (1.0, 3.0),
-    ...     (2.0, 4.0),
-    ...     min_relative_overlap=0.25,
-    ... )
-    True
-    >>> intervals_overlap(
-    ...     (1.0, 3.0),
-    ...     (2.0, 4.0),
-    ...     min_relative_overlap=0.75,
-    ... )
-    False
     """
     if min_absolute_overlap > 0 and min_relative_overlap is not None:
         raise ValueError(
@@ -643,12 +642,18 @@ def intervals_overlap(
         return False
 
     if min_relative_overlap is not None:
-        if min_relative_overlap < 0 or min_relative_overlap > 1:
+        if not 0 <= min_relative_overlap <= 1:
             raise ValueError("The minimum relative overlap must be in [0, 1].")
 
-        proportion1 = overlap / (interval1[1] - interval2[0])
-        proportion2 = overlap / (interval2[1] - interval2[0])
-        return min(proportion1, proportion2) > min_relative_overlap
+        width1 = interval1[1] - interval1[0]
+        width2 = interval2[1] - interval2[0]
+
+        if width1 == 0 or width2 == 0:
+            return False
+
+        min_width = min(width1, width2)
+        required_overlap = min_relative_overlap * min_width
+        return overlap > required_overlap
 
     return overlap > min_absolute_overlap
 
