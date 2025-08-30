@@ -12,10 +12,12 @@ from soundevent.data.geometries import BaseGeometry
 from soundevent.geometry.operations import (
     buffer_geometry,
     compute_bounds,
+    compute_interval_overlap,
     get_geometry_point,
     group_sound_events,
     have_frequency_overlap,
     have_temporal_overlap,
+    intervals_overlap,
     is_in_clip,
     rasterize,
 )
@@ -401,6 +403,75 @@ def test_is_in_clip_invalid_input(recording: data.Recording):
     clip = data.Clip(start_time=0.0, end_time=5.0, recording=recording)
     with pytest.raises(ValueError):
         is_in_clip(geometry, clip, minimum_overlap=-1.0)
+
+
+def test_compute_interval_overlap():
+    """Test the computation of overlap between two intervals."""
+    # No overlap
+    assert compute_interval_overlap((0, 1), (2, 3)) == 0
+    assert compute_interval_overlap((2, 3), (0, 1)) == 0
+
+    # Partial overlap
+    assert compute_interval_overlap((0, 2), (1, 3)) == 1
+    assert compute_interval_overlap((1, 3), (0, 2)) == 1
+
+    # Full overlap
+    assert compute_interval_overlap((0, 4), (1, 3)) == 2
+    assert compute_interval_overlap((1, 3), (0, 4)) == 2
+
+    # Touching intervals
+    assert compute_interval_overlap((0, 1), (1, 2)) == 0
+    assert compute_interval_overlap((1, 2), (0, 1)) == 0
+
+    # Identical intervals
+    assert compute_interval_overlap((0, 1), (0, 1)) == 1
+
+    # Zero-length intervals
+    assert compute_interval_overlap((0, 0), (0, 0)) == 0
+    assert compute_interval_overlap((0, 0), (1, 1)) == 0
+
+    # Raises error if intervals are invalid
+    with pytest.raises(ValueError):
+        compute_interval_overlap((1, 0), (0, 1))
+
+    with pytest.raises(ValueError):
+        compute_interval_overlap((0, 1), (1, 0))
+
+
+def test_intervals_overlap():
+    """Test the intervals_overlap function."""
+    # No overlap
+    assert not intervals_overlap((0, 1), (2, 3))
+
+    # Partial overlap
+    assert intervals_overlap((0, 2), (1, 3))
+
+    # Full overlap
+    assert intervals_overlap((0, 4), (1, 3))
+
+    # Touching intervals
+    assert not intervals_overlap((0, 1), (1, 2))
+
+    # Identical intervals
+    assert intervals_overlap((0, 1), (0, 1))
+
+    # Absolute overlap
+    assert intervals_overlap((0, 2), (1, 3), min_absolute_overlap=0.5)
+    assert not intervals_overlap((0, 2), (1, 3), min_absolute_overlap=1.5)
+
+    # Relative overlap
+    assert intervals_overlap((0, 2), (1, 3), min_relative_overlap=0.25)
+    assert not intervals_overlap((0, 2), (1, 3), min_relative_overlap=0.75)
+
+    # Invalid input
+    with pytest.raises(ValueError):
+        intervals_overlap(
+            (0, 2), (1, 3), min_absolute_overlap=1, min_relative_overlap=0.5
+        )
+    with pytest.raises(ValueError):
+        intervals_overlap((0, 2), (1, 3), min_relative_overlap=-0.5)
+    with pytest.raises(ValueError):
+        intervals_overlap((0, 2), (1, 3), min_relative_overlap=1.5)
 
 
 def test_have_temporal_overlap_full_overlap():
