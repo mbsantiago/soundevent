@@ -647,10 +647,6 @@ def intervals_overlap(
 
         width1 = interval1[1] - interval1[0]
         width2 = interval2[1] - interval2[0]
-
-        if width1 == 0 or width2 == 0:
-            return False
-
         min_width = min(width1, width2)
         required_overlap = min_relative_overlap * min_width
         return overlap > required_overlap
