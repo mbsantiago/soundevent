@@ -545,12 +545,11 @@ def is_in_clip(
 
     start_time, _, end_time, _ = compute_bounds(geometry)
 
-    if (end_time <= clip.start_time + minimum_overlap) or (
-        start_time >= clip.end_time - minimum_overlap
-    ):
-        return False
-
-    return True
+    overlap = compute_interval_overlap(
+        (start_time, end_time),
+        (clip.start_time, clip.end_time),
+    )
+    return overlap > minimum_overlap
 
 
 def compute_interval_overlap(
@@ -570,7 +569,12 @@ def compute_interval_overlap(
     -------
     float
         The length of the overlap between the two intervals. If there is
-        no overlap, the function returns 0.
+        no overlap, the function returns 0.0.
+
+    Raises
+    ------
+    ValueError
+        If intervals are not well-formed, i.e. start is greater than stop.
 
     Examples
     --------
@@ -585,6 +589,10 @@ def compute_interval_overlap(
     start2, stop2 = interval2
     start = max(start1, start2)
     stop = min(stop1, stop2)
+
+    if stop1 < start1 or stop2 < start2:
+        raise ValueError("Intervals must be well-formed: start <= stop.")
+
     return float(max(stop - start, 0))
 
 
@@ -674,8 +682,9 @@ def have_temporal_overlap(
     geom2 : data.Geometry
         The second geometry object.
     min_absolute_overlap : float, optional
-        The minimum required absolute overlap in seconds. Defaults to None,
-        meaning any overlap is sufficient.
+        The minimum required absolute overlap in seconds.  Defaults to 0,
+        meaning any positive overlap is sufficient (touching intervals are not
+        considered overlapping).
     min_relative_overlap : float, optional
         The minimum required relative overlap (between 0 and 1). Defaults
         to None.
@@ -689,7 +698,7 @@ def have_temporal_overlap(
     Raises
     ------
     ValueError
-        - If both `min_absolute_overlap` and `min_relative_overlap` are
+        - If both `min_absolute_overlap` (> 0) and `min_relative_overlap` are
         provided.
         - If `min_relative_overlap` is not in the range [0, 1].
     """
@@ -723,8 +732,9 @@ def have_frequency_overlap(
     geom2 : data.Geometry
         The second geometry object.
     min_absolute_overlap : float, optional
-        The minimum required absolute overlap in Hz. Defaults to None,
-        meaning any overlap is sufficient.
+        The minimum required absolute overlap in Hz. Defaults to 0,
+        meaning any positive overlap is sufficient (touching intervals are not
+        considered overlapping).
     min_relative_overlap : float, optional
         The minimum required relative overlap (between 0 and 1). Defaults
         to None.
@@ -738,7 +748,7 @@ def have_frequency_overlap(
     Raises
     ------
     ValueError
-        - If both `min_absolute_overlap` and `min_relative_overlap` are
+        - If both `min_absolute_overlap` (> 0) and `min_relative_overlap` are
         provided.
         - If `min_relative_overlap` is not in the range [0, 1].
     """

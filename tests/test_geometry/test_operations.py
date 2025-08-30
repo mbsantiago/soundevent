@@ -430,6 +430,13 @@ def test_compute_interval_overlap():
     assert compute_interval_overlap((0, 0), (0, 0)) == 0
     assert compute_interval_overlap((0, 0), (1, 1)) == 0
 
+    # Raises error if intervals are invalid
+    with pytest.raises(ValueError):
+        compute_interval_overlap((1, 0), (0, 1))
+
+    with pytest.raises(ValueError):
+        compute_interval_overlap((0, 1), (1, 0))
+
 
 def test_intervals_overlap():
     """Test the intervals_overlap function."""
