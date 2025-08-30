@@ -39,6 +39,7 @@ __all__ = [
     "group_sound_events",
     "have_frequency_overlap",
     "have_temporal_overlap",
+    "compute_interval_overlap",
     "intervals_overlap",
     "is_in_clip",
     "rasterize",
@@ -543,26 +544,71 @@ def is_in_clip(
 
     start_time, _, end_time, _ = compute_bounds(geometry)
 
-    if (end_time <= clip.start_time + minimum_overlap) or (
-        start_time >= clip.end_time - minimum_overlap
-    ):
-        return False
+    overlap = compute_interval_overlap(
+        (start_time, end_time),
+        (clip.start_time, clip.end_time),
+    )
+    return overlap > minimum_overlap
 
-    return True
+
+def compute_interval_overlap(
+    interval1: tuple[float, float],
+    interval2: tuple[float, float],
+) -> float:
+    """Compute the length of the overlap between two intervals.
+
+    Parameters
+    ----------
+    interval1
+        The first interval, as a tuple (start, stop).
+    interval2
+        The second interval, as a tuple (start, stop).
+
+    Returns
+    -------
+    float
+        The length of the overlap between the two intervals. If there is
+        no overlap, the function returns 0.0.
+
+    Raises
+    ------
+    ValueError
+        If intervals are not well-formed, i.e. start is greater than stop.
+
+    Examples
+    --------
+    >>> compute_interval_overlap((0, 2), (1, 3))
+    1.0
+    >>> compute_interval_overlap((0, 1), (1, 2))
+    0.0
+    >>> compute_interval_overlap((0, 1), (2, 3))
+    0.0
+    """
+    start1, stop1 = interval1
+    start2, stop2 = interval2
+    start = max(start1, start2)
+    stop = min(stop1, stop2)
+
+    if stop1 < start1 or stop2 < start2:
+        raise ValueError("Intervals must be well-formed: start <= stop.")
+
+    return float(max(stop - start, 0))
 
 
 def intervals_overlap(
     interval1: tuple[float, float],
     interval2: tuple[float, float],
-    min_absolute_overlap: Optional[float] = None,
     min_relative_overlap: Optional[float] = None,
+    min_absolute_overlap: float = 0,
 ):
     """Check if two intervals overlap.
 
     This function determines whether two intervals, represented as tuples of
-    (start, stop) values, have any overlap. It optionally allows specifying a
-    minimum required overlap, either in absolute terms or relative to the
-    smaller interval.
+    (start, stop) values, overlap. An overlap is considered to occur if the
+    length of the intersection of the two intervals is strictly greater than a
+    specified threshold.
+
+    By default, touching intervals are not considered overlapping.
 
     Parameters
     ----------
@@ -571,11 +617,13 @@ def intervals_overlap(
     interval2 : tuple[float, float]
         The second interval, as a tuple (start, stop).
     min_absolute_overlap : float, optional
-        The minimum required absolute overlap. Defaults to None, meaning
-        any overlap is sufficient.
+        The minimum required absolute overlap. The overlap must be strictly
+        greater than this value. Defaults to 0.
     min_relative_overlap : float, optional
-        The minimum required relative overlap (between 0 and 1). Defaults
-        to None.
+        The minimum required relative overlap with respect to the shorter
+        of the two intervals. The overlap must be strictly greater than
+        the computed threshold. The value must be in the range [0, 1].
+        Defaults to None.
 
     Returns
     -------
@@ -586,71 +634,37 @@ def intervals_overlap(
     Raises
     ------
     ValueError
-        - If both `min_absolute_overlap` and `min_relative_overlap` are
+        - If both `min_absolute_overlap > 0` and `min_relative_overlap` are
         provided.
         - If `min_relative_overlap` is not in the range [0, 1].
-
-    Examples
-    --------
-    >>> intervals_overlap((1.0, 3.0), (2.0, 4.0))
-    True
-    >>> intervals_overlap(
-    ...     (1.0, 3.0),
-    ...     (2.0, 4.0),
-    ...     min_absolute_overlap=0.5,
-    ... )
-    True
-    >>> intervals_overlap(
-    ...     (1.0, 3.0),
-    ...     (2.0, 4.0),
-    ...     min_absolute_overlap=1.5,
-    ... )
-    False
-    >>> intervals_overlap(
-    ...     (1.0, 3.0),
-    ...     (2.0, 4.0),
-    ...     min_relative_overlap=0.25,
-    ... )
-    True
-    >>> intervals_overlap(
-    ...     (1.0, 3.0),
-    ...     (2.0, 4.0),
-    ...     min_relative_overlap=0.75,
-    ... )
-    False
     """
-    if min_absolute_overlap is not None and min_relative_overlap is not None:
+    if min_absolute_overlap > 0 and min_relative_overlap is not None:
         raise ValueError(
-            "Only one of min_absolute_overlap or "
-            "min_relative_overlap can be provided."
+            "Only one of min_absolute_overlap or min_relative_overlap can be specified"
         )
 
-    start1, stop1 = interval1
-    start2, stop2 = interval2
-    start = max(start1, start2)
-    stop = min(stop1, stop2)
+    overlap = compute_interval_overlap(interval1, interval2)
 
-    overlap = 0
-    if min_absolute_overlap is not None:
-        overlap = min_absolute_overlap
+    if overlap == 0:
+        return False
 
     if min_relative_overlap is not None:
-        if min_relative_overlap < 0 or min_relative_overlap > 1:
+        if not 0 <= min_relative_overlap <= 1:
             raise ValueError("The minimum relative overlap must be in [0, 1].")
 
-        min_width = min(
-            stop1 - start1,
-            stop2 - start2,
-        )
-        overlap = min_relative_overlap * min_width
+        width1 = interval1[1] - interval1[0]
+        width2 = interval2[1] - interval2[0]
+        min_width = min(width1, width2)
+        required_overlap = min_relative_overlap * min_width
+        return overlap > required_overlap
 
-    return stop - start >= overlap
+    return overlap > min_absolute_overlap
 
 
 def have_temporal_overlap(
     geom1: data.Geometry,
     geom2: data.Geometry,
-    min_absolute_overlap: Optional[float] = None,
+    min_absolute_overlap: float = 0,
     min_relative_overlap: Optional[float] = None,
 ) -> bool:
     """Check if two geometries have temporal overlap.
@@ -667,8 +681,9 @@ def have_temporal_overlap(
     geom2 : data.Geometry
         The second geometry object.
     min_absolute_overlap : float, optional
-        The minimum required absolute overlap in seconds. Defaults to None,
-        meaning any overlap is sufficient.
+        The minimum required absolute overlap in seconds.  Defaults to 0,
+        meaning any positive overlap is sufficient (touching intervals are not
+        considered overlapping).
     min_relative_overlap : float, optional
         The minimum required relative overlap (between 0 and 1). Defaults
         to None.
@@ -682,7 +697,7 @@ def have_temporal_overlap(
     Raises
     ------
     ValueError
-        - If both `min_absolute_overlap` and `min_relative_overlap` are
+        - If both `min_absolute_overlap` (> 0) and `min_relative_overlap` are
         provided.
         - If `min_relative_overlap` is not in the range [0, 1].
     """
@@ -699,7 +714,7 @@ def have_temporal_overlap(
 def have_frequency_overlap(
     geom1: data.Geometry,
     geom2: data.Geometry,
-    min_absolute_overlap: Optional[float] = None,
+    min_absolute_overlap: float = 0,
     min_relative_overlap: Optional[float] = None,
 ) -> bool:
     """Check if two geometries have frequency overlap.
@@ -716,8 +731,9 @@ def have_frequency_overlap(
     geom2 : data.Geometry
         The second geometry object.
     min_absolute_overlap : float, optional
-        The minimum required absolute overlap in Hz. Defaults to None,
-        meaning any overlap is sufficient.
+        The minimum required absolute overlap in Hz. Defaults to 0,
+        meaning any positive overlap is sufficient (touching intervals are not
+        considered overlapping).
     min_relative_overlap : float, optional
         The minimum required relative overlap (between 0 and 1). Defaults
         to None.
@@ -731,7 +747,7 @@ def have_frequency_overlap(
     Raises
     ------
     ValueError
-        - If both `min_absolute_overlap` and `min_relative_overlap` are
+        - If both `min_absolute_overlap` (> 0) and `min_relative_overlap` are
         provided.
         - If `min_relative_overlap` is not in the range [0, 1].
     """
