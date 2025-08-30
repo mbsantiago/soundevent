@@ -852,9 +852,7 @@ def test_scale_time_stamp_geometry():
 
 def test_scale_polygon_geometry():
     """Test that scale_geometry works with Polygon geometries."""
-    geom = data.Polygon(
-        coordinates=[[[10, 20], [30, 20], [20, 40], [10, 20]]]
-    )
+    geom = data.Polygon(coordinates=[[[10, 20], [30, 20], [20, 40], [10, 20]]])
 
     # Uniform scale > 1
     scaled_geom = scale_geometry(geom, time=2, freq=2)
