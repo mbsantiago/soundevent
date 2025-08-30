@@ -59,6 +59,22 @@ def compute_bounds(
         The bounds of the geometry. The bounds are returned in the
         following order: start_time, low_freq, end_time, high_freq.
     """
+    if isinstance(geometry, data.TimeStamp):
+        time = geometry.coordinates
+        return time, 0, time, data.MAX_FREQUENCY
+
+    if isinstance(geometry, data.TimeInterval):
+        start_time, end_time = geometry.coordinates
+        return start_time, 0, end_time, data.MAX_FREQUENCY
+
+    if isinstance(geometry, data.BoundingBox):
+        start_time, low_freq, end_time, high_freq = geometry.coordinates
+        return start_time, low_freq, end_time, high_freq
+
+    if isinstance(geometry, data.Point):
+        time, frequency = geometry.coordinates
+        return time, frequency, time, frequency
+
     shp_geom = geometry_to_shapely(geometry)
     return shp_geom.bounds
 
