@@ -35,14 +35,16 @@ from soundevent.geometry.conversion import (
 __all__ = [
     "buffer_geometry",
     "compute_bounds",
+    "compute_interval_overlap",
     "get_geometry_point",
     "group_sound_events",
     "have_frequency_overlap",
     "have_temporal_overlap",
-    "compute_interval_overlap",
     "intervals_overlap",
     "is_in_clip",
     "rasterize",
+    "scale_geometry",
+    "shift_geometry",
 ]
 
 
@@ -1038,6 +1040,29 @@ def scale_geometry(
     time_anchor: float = 0,
     freq_anchor: float = 0,
 ) -> data.Geometry:
+    """Scale a geometry by a given time and frequency factor.
+
+    The scaling is performed with respect to an anchor point. The formula
+    for scaling a value `val` is `(val - anchor) * factor + anchor`.
+
+    Parameters
+    ----------
+    geom
+        The geometry to scale.
+    time
+        The time factor to apply to the geometry. Defaults to 1.
+    freq
+        The frequency factor to apply to the geometry. Defaults to 1.
+    time_anchor
+        The time anchor to use for scaling, in seconds. Defaults to 0.
+    freq_anchor
+        The frequency anchor to use for scaling, in Hz. Defaults to 0.
+
+    Returns
+    -------
+    data.Geometry
+        The scaled geometry.
+    """
     if geom.type == "Point":
         return _scale_point(
             geom,

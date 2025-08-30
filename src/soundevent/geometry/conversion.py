@@ -289,6 +289,23 @@ def _shapely_polygon_to_coords(
 
 
 def shapely_to_geometry(geom: shapely.Geometry) -> data.Geometry:
+    """Convert a shapely geometry to a soundevent geometry.
+
+    Parameters
+    ----------
+    geom
+        The shapely geometry to convert.
+
+    Returns
+    -------
+    data.Geometry
+        The converted soundevent geometry.
+
+    Raises
+    ------
+    NotImplementedError
+        If the geometry type is not supported.
+    """
     if isinstance(geom, shapely.Point):
         return data.Point(coordinates=[geom.x, geom.y])
 
