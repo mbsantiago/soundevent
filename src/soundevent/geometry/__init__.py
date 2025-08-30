@@ -19,6 +19,7 @@ from soundevent.geometry.html import geometry_to_html
 from soundevent.geometry.operations import (
     buffer_geometry,
     compute_bounds,
+    compute_interval_overlap,
     get_geometry_point,
     group_sound_events,
     have_frequency_overlap,
@@ -31,6 +32,7 @@ __all__ = [
     "buffer_geometry",
     "compute_bounds",
     "compute_geometric_features",
+    "compute_interval_overlap",
     "geometry_to_html",
     "geometry_to_shapely",
     "get_geometry_point",
