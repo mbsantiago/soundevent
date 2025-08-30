@@ -13,7 +13,10 @@ truths for evaluation. The geometry module simplifies these tasks by providing
 a clear and efficient interface for handling sound event geometries.
 """
 
-from soundevent.geometry.conversion import geometry_to_shapely
+from soundevent.geometry.conversion import (
+    geometry_to_shapely,
+    shapely_to_geometry,
+)
 from soundevent.geometry.features import compute_geometric_features
 from soundevent.geometry.html import geometry_to_html
 from soundevent.geometry.operations import (
@@ -26,6 +29,8 @@ from soundevent.geometry.operations import (
     intervals_overlap,
     is_in_clip,
     rasterize,
+    scale_geometry,
+    shift_geometry,
 )
 
 __all__ = [
@@ -42,4 +47,7 @@ __all__ = [
     "intervals_overlap",
     "is_in_clip",
     "rasterize",
+    "scale_geometry",
+    "shapely_to_geometry",
+    "shift_geometry",
 ]

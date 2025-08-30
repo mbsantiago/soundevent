@@ -20,6 +20,8 @@ from soundevent.geometry.operations import (
     intervals_overlap,
     is_in_clip,
     rasterize,
+    scale_geometry,
+    shift_geometry,
 )
 
 
@@ -649,3 +651,228 @@ def test_group_sound_events_transitive_similarity(recording: data.Recording):
     sequences = group_sound_events(sound_events, comparison_fn)
     assert len(sequences) == 1
     assert len(sequences[0].sound_events) == 3  # All in the same group
+
+
+def test_shift_point_geometry():
+    """Test that shift_geometry works with Point geometries."""
+    geom = data.Point(coordinates=[1, 2])
+    shifted_geom = shift_geometry(geom, time=1, freq=2)
+    assert shifted_geom == data.Point(coordinates=[2, 4])
+
+    shifted_geom = shift_geometry(geom, time=-1, freq=-1)
+    assert shifted_geom == data.Point(coordinates=[0, 1])
+
+    shifted_geom = shift_geometry(geom, time=0, freq=0)
+    assert shifted_geom == geom
+
+    shifted_geom = shift_geometry(geom, time=1)
+    assert shifted_geom == data.Point(coordinates=[2, 2])
+
+    shifted_geom = shift_geometry(geom, freq=1)
+    assert shifted_geom == data.Point(coordinates=[1, 3])
+
+
+def test_shift_bounding_box_geometry():
+    """Test that shift_geometry works with BoundingBox geometries."""
+    geom = data.BoundingBox(coordinates=[1, 2, 3, 4])
+    shifted_geom = shift_geometry(geom, time=1, freq=2)
+    assert shifted_geom == data.BoundingBox(coordinates=[2, 4, 4, 6])
+
+    shifted_geom = shift_geometry(geom, time=-1, freq=-1)
+    assert shifted_geom == data.BoundingBox(coordinates=[0, 1, 2, 3])
+
+    shifted_geom = shift_geometry(geom, time=0, freq=0)
+    assert shifted_geom == geom
+
+    shifted_geom = shift_geometry(geom, time=1)
+    assert shifted_geom == data.BoundingBox(coordinates=[2, 2, 4, 4])
+
+    shifted_geom = shift_geometry(geom, freq=1)
+    assert shifted_geom == data.BoundingBox(coordinates=[1, 3, 3, 5])
+
+
+def test_shift_time_interval_geometry():
+    """Test that shift_geometry works with TimeInterval geometries."""
+    geom = data.TimeInterval(coordinates=[1, 2])
+    shifted_geom = shift_geometry(geom, time=1)
+    assert shifted_geom == data.TimeInterval(coordinates=[2, 3])
+
+    shifted_geom = shift_geometry(geom, time=-1)
+    assert shifted_geom == data.TimeInterval(coordinates=[0, 1])
+
+    shifted_geom = shift_geometry(geom, time=0)
+    assert shifted_geom == geom
+
+    # Freq shift should have no effect
+    shifted_geom = shift_geometry(geom, freq=1)
+    assert shifted_geom == geom
+
+
+def test_shift_time_stamp_geometry():
+    """Test that shift_geometry works with TimeStamp geometries."""
+    geom = data.TimeStamp(coordinates=2)
+    shifted_geom = shift_geometry(geom, time=1)
+    assert shifted_geom == data.TimeStamp(coordinates=3)
+
+    shifted_geom = shift_geometry(geom, time=-1)
+    assert shifted_geom == data.TimeStamp(coordinates=1)
+
+    shifted_geom = shift_geometry(geom, time=0)
+    assert shifted_geom == geom
+
+    # Freq shift should have no effect
+    shifted_geom = shift_geometry(geom, freq=1)
+    assert shifted_geom == geom
+
+
+def test_shift_polygon_geometry():
+    """Test that shift_geometry works with Polygon geometries."""
+    geom = data.Polygon(coordinates=[[[1, 2], [3, 4], [5, 6], [1, 2]]])
+    shifted_geom = shift_geometry(geom, time=1, freq=2)
+    assert shifted_geom == data.Polygon(
+        coordinates=[[[2, 4], [4, 6], [6, 8], [2, 4]]]
+    )
+
+
+def test_shift_linestring_geometry():
+    """Test that shift_geometry works with LineString geometries."""
+    geom = data.LineString(coordinates=[[1, 2], [3, 4]])
+    shifted_geom = shift_geometry(geom, time=-1, freq=-2)
+    assert shifted_geom == data.LineString(coordinates=[[0, 0], [2, 2]])
+
+
+def test_scale_point_geometry():
+    """Test that scale_geometry works with Point geometries."""
+    geom = data.Point(coordinates=[10, 20])
+
+    # Scale > 1
+    scaled_geom = scale_geometry(geom, time=2, freq=3)
+    assert scaled_geom == data.Point(coordinates=[20, 60])
+
+    # Scale < 1
+    scaled_geom = scale_geometry(geom, time=0.5, freq=0.25)
+    assert scaled_geom == data.Point(coordinates=[5, 5])
+
+    # Scale == 1
+    scaled_geom = scale_geometry(geom, time=1, freq=1)
+    assert scaled_geom == geom
+
+    # Scale with anchor
+    scaled_geom = scale_geometry(
+        geom, time=2, freq=2, time_anchor=10, freq_anchor=20
+    )
+    assert scaled_geom == data.Point(coordinates=[10, 20])
+
+    scaled_geom = scale_geometry(
+        geom, time=2, freq=2, time_anchor=0, freq_anchor=0
+    )
+    assert scaled_geom == data.Point(coordinates=[20, 40])
+
+    # Scale only time
+    scaled_geom = scale_geometry(geom, time=2)
+    assert scaled_geom == data.Point(coordinates=[20, 20])
+
+    # Scale only freq
+    scaled_geom = scale_geometry(geom, freq=2)
+    assert scaled_geom == data.Point(coordinates=[10, 40])
+
+
+def test_scale_bounding_box_geometry():
+    """Test that scale_geometry works with BoundingBox geometries."""
+    geom = data.BoundingBox(coordinates=[10, 20, 30, 40])
+
+    # Scale > 1
+    scaled_geom = scale_geometry(geom, time=2, freq=3)
+    assert scaled_geom == data.BoundingBox(coordinates=[20, 60, 60, 120])
+
+    # Scale < 1
+    scaled_geom = scale_geometry(geom, time=0.5, freq=0.5)
+    assert scaled_geom == data.BoundingBox(coordinates=[5, 10, 15, 20])
+
+    # Scale with anchor at origin
+    scaled_geom = scale_geometry(
+        geom, time=2, freq=2, time_anchor=0, freq_anchor=0
+    )
+    assert scaled_geom == data.BoundingBox(coordinates=[20, 40, 60, 80])
+
+    # Scale with anchor at center
+    center_time = (10 + 30) / 2  # 20
+    center_freq = (20 + 40) / 2  # 30
+    scaled_geom = scale_geometry(
+        geom, time=2, freq=2, time_anchor=center_time, freq_anchor=center_freq
+    )
+    assert scaled_geom == data.BoundingBox(coordinates=[0, 10, 40, 50])
+
+    # Scale only time
+    scaled_geom = scale_geometry(geom, time=2)
+    assert scaled_geom == data.BoundingBox(coordinates=[20, 20, 60, 40])
+
+
+def test_scale_time_interval_geometry():
+    """Test that scale_geometry works with TimeInterval geometries."""
+    geom = data.TimeInterval(coordinates=[10, 20])
+
+    # Scale > 1
+    scaled_geom = scale_geometry(geom, time=2)
+    assert scaled_geom == data.TimeInterval(coordinates=[20, 40])
+
+    # Scale < 1
+    scaled_geom = scale_geometry(geom, time=0.5)
+    assert scaled_geom == data.TimeInterval(coordinates=[5, 10])
+
+    # Scale with anchor
+    scaled_geom = scale_geometry(geom, time=2, time_anchor=10)
+    assert scaled_geom == data.TimeInterval(coordinates=[10, 30])
+
+    # Freq scale should have no effect
+    scaled_geom = scale_geometry(geom, freq=2, freq_anchor=100)
+    assert scaled_geom == geom
+
+
+def test_scale_time_stamp_geometry():
+    """Test that scale_geometry works with TimeStamp geometries."""
+    geom = data.TimeStamp(coordinates=10)
+
+    # Scale > 1
+    scaled_geom = scale_geometry(geom, time=2)
+    assert scaled_geom == data.TimeStamp(coordinates=20)
+
+    # Scale < 1
+    scaled_geom = scale_geometry(geom, time=0.5)
+    assert scaled_geom == data.TimeStamp(coordinates=5)
+
+    # Scale with anchor
+    scaled_geom = scale_geometry(geom, time=2, time_anchor=10)
+    assert scaled_geom == data.TimeStamp(coordinates=10)
+
+    # Freq scale should have no effect
+    scaled_geom = scale_geometry(geom, freq=2, freq_anchor=100)
+    assert scaled_geom == geom
+
+
+def test_scale_polygon_geometry():
+    """Test that scale_geometry works with Polygon geometries."""
+    geom = data.Polygon(coordinates=[[[10, 20], [30, 20], [20, 40], [10, 20]]])
+
+    # Uniform scale > 1
+    scaled_geom = scale_geometry(geom, time=2, freq=2)
+    assert scaled_geom == data.Polygon(
+        coordinates=[[[20, 40], [60, 40], [40, 80], [20, 40]]]
+    )
+
+    # With anchor
+    scaled_geom = scale_geometry(
+        geom, time=2, freq=2, time_anchor=10, freq_anchor=20
+    )
+    assert scaled_geom == data.Polygon(
+        coordinates=[[[10, 20], [50, 20], [30, 60], [10, 20]]]
+    )
+
+
+def test_scale_multipoint_geometry():
+    """Test that scale_geometry works with MultiPoint geometries."""
+    geom = data.MultiPoint(coordinates=[[10, 20], [30, 40]])
+
+    # Different factors
+    scaled_geom = scale_geometry(geom, time=2, freq=0.5)
+    assert scaled_geom == data.MultiPoint(coordinates=[[20, 10], [60, 20]])

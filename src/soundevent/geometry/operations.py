@@ -1,6 +1,5 @@
 """Functions that handle SoundEvent geometries."""
 
-import json
 from collections import defaultdict
 from itertools import combinations
 from typing import (
@@ -28,19 +27,24 @@ from soundevent.arrays import (
     get_coord_index,
 )
 from soundevent.data import Geometry
-from soundevent.geometry.conversion import geometry_to_shapely
+from soundevent.geometry.conversion import (
+    geometry_to_shapely,
+    shapely_to_geometry,
+)
 
 __all__ = [
     "buffer_geometry",
     "compute_bounds",
+    "compute_interval_overlap",
     "get_geometry_point",
     "group_sound_events",
     "have_frequency_overlap",
     "have_temporal_overlap",
-    "compute_interval_overlap",
     "intervals_overlap",
     "is_in_clip",
     "rasterize",
+    "scale_geometry",
+    "shift_geometry",
 ]
 
 
@@ -267,10 +271,7 @@ def buffer_shapely_geometry(
         max_time + 1,
         data.MAX_FREQUENCY,
     )
-    json_data = json.loads(shapely.to_geojson(buffered))
-    if json_data["type"] == "Polygon":
-        return data.Polygon(coordinates=json_data["coordinates"])
-    return data.MultiPolygon(coordinates=json_data["coordinates"])
+    return shapely_to_geometry(buffered)
 
 
 Value = Union[float, int]
@@ -877,4 +878,227 @@ def _compute_similarity_matrix(
         (values, (col, row)),
         shape=(rows, rows),
         dtype=np.int8,
+    )
+
+
+def _shift_time_stamp(geom: data.TimeStamp, time: float = 0) -> data.TimeStamp:
+    geom_time = geom.coordinates
+    return data.TimeStamp(coordinates=geom_time + time)
+
+
+def _shift_time_interval(
+    geom: data.TimeInterval, time: float = 0
+) -> data.TimeInterval:
+    start_time, end_time = geom.coordinates
+    return data.TimeInterval(coordinates=[start_time + time, end_time + time])
+
+
+def _shift_bounding_box(
+    geom: data.BoundingBox,
+    time: float = 0,
+    freq: float = 0,
+) -> data.BoundingBox:
+    start_time, low_freq, end_time, high_freq = geom.coordinates
+    return data.BoundingBox(
+        coordinates=[
+            start_time + time,
+            low_freq + freq,
+            end_time + time,
+            high_freq + freq,
+        ]
+    )
+
+
+def _shift_point(
+    geom: data.Point,
+    time: float = 0,
+    freq: float = 0,
+) -> data.Point:
+    geom_time, geom_freq = geom.coordinates
+    return data.Point(coordinates=[geom_time + time, geom_freq + freq])
+
+
+def _shift_shapely(
+    geom: data.Geometry,
+    time: float = 0,
+    freq: float = 0,
+) -> data.Geometry:
+    shp_geom = geometry_to_shapely(geom)
+    shift = np.array([time, freq])
+    shifted = shapely.transform(
+        shp_geom,
+        lambda coords: coords + shift[None, :],
+    )
+    return shapely_to_geometry(shifted)
+
+
+def shift_geometry(
+    geom: data.Geometry,
+    time: float = 0,
+    freq: float = 0,
+) -> data.Geometry:
+    if geom.type == "Point":
+        return _shift_point(geom, time=time, freq=freq)
+
+    if geom.type == "BoundingBox":
+        return _shift_bounding_box(geom, time=time, freq=freq)
+
+    if geom.type == "TimeInterval":
+        return _shift_time_interval(geom, time=time)
+
+    if geom.type == "TimeStamp":
+        return _shift_time_stamp(geom, time=time)
+
+    return _shift_shapely(geom, time=time, freq=freq)
+
+
+def scale_value(val: float, factor: float = 1, anchor: float = 0):
+    return (val - anchor) * factor + anchor
+
+
+def _scale_time_stamp(
+    geom: data.TimeStamp,
+    time: float = 1,
+    time_anchor: float = 0,
+) -> data.TimeStamp:
+    geom_time = geom.coordinates
+    return data.TimeStamp(
+        coordinates=scale_value(geom_time, time, time_anchor)
+    )
+
+
+def _scale_time_interval(
+    geom: data.TimeInterval,
+    time: float = 1,
+    time_anchor: float = 0,
+) -> data.TimeInterval:
+    start_time, end_time = geom.coordinates
+    return data.TimeInterval(
+        coordinates=[
+            scale_value(start_time, time, time_anchor),
+            scale_value(end_time, time, time_anchor),
+        ]
+    )
+
+
+def _scale_bounding_box(
+    geom: data.BoundingBox,
+    time: float = 1,
+    freq: float = 1,
+    time_anchor: float = 0,
+    freq_anchor: float = 0,
+) -> data.BoundingBox:
+    start_time, low_freq, end_time, high_freq = geom.coordinates
+    return data.BoundingBox(
+        coordinates=[
+            scale_value(start_time, time, time_anchor),
+            scale_value(low_freq, freq, freq_anchor),
+            scale_value(end_time, time, time_anchor),
+            scale_value(high_freq, freq, freq_anchor),
+        ]
+    )
+
+
+def _scale_point(
+    geom: data.Point,
+    time: float = 1,
+    freq: float = 1,
+    time_anchor: float = 0,
+    freq_anchor: float = 0,
+) -> data.Point:
+    geom_time, geom_freq = geom.coordinates
+    return data.Point(
+        coordinates=[
+            scale_value(geom_time, time, time_anchor),
+            scale_value(geom_freq, freq, freq_anchor),
+        ]
+    )
+
+
+def _scale_shapely(
+    geom: data.Geometry,
+    time: float = 1,
+    freq: float = 1,
+    time_anchor: float = 0,
+    freq_anchor: float = 0,
+) -> data.Geometry:
+    shp_geom = geometry_to_shapely(geom)
+    factor = np.array([time, freq])
+    anchor = np.array([time_anchor, freq_anchor])
+
+    def _shift_coords(coords: np.ndarray) -> np.ndarray:
+        return (coords - anchor[None, :]) * factor[None, :] + anchor[None, :]
+
+    scaled = shapely.transform(shp_geom, _shift_coords)
+    return shapely_to_geometry(scaled)
+
+
+def scale_geometry(
+    geom: data.Geometry,
+    time: float = 1,
+    freq: float = 1,
+    time_anchor: float = 0,
+    freq_anchor: float = 0,
+) -> data.Geometry:
+    """Scale a geometry by a given time and frequency factor.
+
+    The scaling is performed with respect to an anchor point. The formula
+    for scaling a value `val` is `(val - anchor) * factor + anchor`.
+
+    Parameters
+    ----------
+    geom
+        The geometry to scale.
+    time
+        The time factor to apply to the geometry. Defaults to 1.
+    freq
+        The frequency factor to apply to the geometry. Defaults to 1.
+    time_anchor
+        The time anchor to use for scaling, in seconds. Defaults to 0.
+    freq_anchor
+        The frequency anchor to use for scaling, in Hz. Defaults to 0.
+
+    Returns
+    -------
+    data.Geometry
+        The scaled geometry.
+    """
+    if geom.type == "Point":
+        return _scale_point(
+            geom,
+            time=time,
+            freq=freq,
+            time_anchor=time_anchor,
+            freq_anchor=freq_anchor,
+        )
+
+    if geom.type == "BoundingBox":
+        return _scale_bounding_box(
+            geom,
+            time=time,
+            freq=freq,
+            time_anchor=time_anchor,
+            freq_anchor=freq_anchor,
+        )
+
+    if geom.type == "TimeInterval":
+        return _scale_time_interval(
+            geom,
+            time=time,
+            time_anchor=time_anchor,
+        )
+
+    if geom.type == "TimeStamp":
+        return _scale_time_stamp(
+            geom,
+            time=time,
+            time_anchor=time_anchor,
+        )
+
+    return _scale_shapely(
+        geom,
+        time=time,
+        freq=freq,
+        time_anchor=time_anchor,
+        freq_anchor=freq_anchor,
     )
