@@ -1,6 +1,6 @@
 """Convert Geometry objects into shapely objects and vice versa."""
 
-from typing import overload
+from typing import List, overload
 
 import shapely
 from shapely import geometry
@@ -9,6 +9,7 @@ from soundevent import data
 
 __all__ = [
     "geometry_to_shapely",
+    "shapely_to_geometry",
 ]
 
 
@@ -274,3 +275,49 @@ def geometry_to_shapely(
         return multipolygon_to_shapely(geom)
 
     raise NotImplementedError(f"Unknown geometry type: {geom.type}")
+
+
+def _shapely_polygon_to_coords(
+    geom: shapely.Polygon,
+) -> List[List[List[float]]]:
+    shell = [[point[0], point[1]] for point in geom.exterior.coords]
+    holes = [
+        [[point[0], point[1]] for point in interior.coords]
+        for interior in geom.interiors
+    ]
+    return [shell, *holes]
+
+
+def shapely_to_geometry(geom: shapely.Geometry) -> data.Geometry:
+    if isinstance(geom, shapely.Point):
+        return data.Point(coordinates=[geom.x, geom.y])
+
+    if isinstance(geom, shapely.MultiPoint):
+        return data.MultiPoint(
+            coordinates=[[point.x, point.y] for point in geom.geoms]
+        )
+
+    if isinstance(geom, shapely.LineString):
+        return data.LineString(
+            coordinates=[[point[0], point[1]] for point in geom.coords]
+        )
+
+    if isinstance(geom, shapely.MultiLineString):
+        return data.MultiLineString(
+            coordinates=[
+                [[point[0], point[1]] for point in linestring.coords]
+                for linestring in geom.geoms
+            ]
+        )
+
+    if isinstance(geom, shapely.Polygon):
+        return data.Polygon(coordinates=_shapely_polygon_to_coords(geom))
+
+    if isinstance(geom, shapely.MultiPolygon):
+        return data.MultiPolygon(
+            coordinates=[
+                _shapely_polygon_to_coords(poly) for poly in geom.geoms
+            ]
+        )
+
+    raise NotImplementedError("Unknown geometry")
