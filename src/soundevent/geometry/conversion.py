@@ -306,20 +306,20 @@ def shapely_to_geometry(geom: shapely.Geometry) -> data.Geometry:
     NotImplementedError
         If the geometry type is not supported.
     """
-    if isinstance(geom, shapely.Point):
+    if isinstance(geom, geometry.Point):
         return data.Point(coordinates=[geom.x, geom.y])
 
-    if isinstance(geom, shapely.MultiPoint):
+    if isinstance(geom, geometry.MultiPoint):
         return data.MultiPoint(
             coordinates=[[point.x, point.y] for point in geom.geoms]
         )
 
-    if isinstance(geom, shapely.LineString):
+    if isinstance(geom, geometry.LineString):
         return data.LineString(
             coordinates=[[point[0], point[1]] for point in geom.coords]
         )
 
-    if isinstance(geom, shapely.MultiLineString):
+    if isinstance(geom, geometry.MultiLineString):
         return data.MultiLineString(
             coordinates=[
                 [[point[0], point[1]] for point in linestring.coords]
@@ -327,10 +327,10 @@ def shapely_to_geometry(geom: shapely.Geometry) -> data.Geometry:
             ]
         )
 
-    if isinstance(geom, shapely.Polygon):
+    if isinstance(geom, geometry.Polygon):
         return data.Polygon(coordinates=_shapely_polygon_to_coords(geom))
 
-    if isinstance(geom, shapely.MultiPolygon):
+    if isinstance(geom, geometry.MultiPolygon):
         return data.MultiPolygon(
             coordinates=[
                 _shapely_polygon_to_coords(poly) for poly in geom.geoms
