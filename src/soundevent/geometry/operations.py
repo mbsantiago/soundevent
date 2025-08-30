@@ -59,19 +59,19 @@ def compute_bounds(
         The bounds of the geometry. The bounds are returned in the
         following order: start_time, low_freq, end_time, high_freq.
     """
-    if isinstance(geometry, data.TimeStamp):
+    if geometry.type == "TimeStamp":
         time = geometry.coordinates
         return time, 0, time, data.MAX_FREQUENCY
 
-    if isinstance(geometry, data.TimeInterval):
+    if geometry.type == "TimeInterval":
         start_time, end_time = geometry.coordinates
         return start_time, 0, end_time, data.MAX_FREQUENCY
 
-    if isinstance(geometry, data.BoundingBox):
+    if geometry.type == "BoundingBox":
         start_time, low_freq, end_time, high_freq = geometry.coordinates
         return start_time, low_freq, end_time, high_freq
 
-    if isinstance(geometry, data.Point):
+    if geometry.type == "Point":
         time, frequency = geometry.coordinates
         return time, frequency, time, frequency
 
