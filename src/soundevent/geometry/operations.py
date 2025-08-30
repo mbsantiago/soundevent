@@ -958,7 +958,7 @@ def scale_value(val: float, factor: float = 1, anchor: float = 0):
 
 def _scale_time_stamp(
     geom: data.TimeStamp,
-    time: float = 0,
+    time: float = 1,
     time_anchor: float = 0,
 ) -> data.TimeStamp:
     geom_time = geom.coordinates
@@ -969,7 +969,7 @@ def _scale_time_stamp(
 
 def _scale_time_interval(
     geom: data.TimeInterval,
-    time: float = 0,
+    time: float = 1,
     time_anchor: float = 0,
 ) -> data.TimeInterval:
     start_time, end_time = geom.coordinates
@@ -983,8 +983,8 @@ def _scale_time_interval(
 
 def _scale_bounding_box(
     geom: data.BoundingBox,
-    time: float = 0,
-    freq: float = 0,
+    time: float = 1,
+    freq: float = 1,
     time_anchor: float = 0,
     freq_anchor: float = 0,
 ) -> data.BoundingBox:
@@ -1001,10 +1001,10 @@ def _scale_bounding_box(
 
 def _scale_point(
     geom: data.Point,
-    time: float = 0,
-    freq: float = 0,
-    time_anchor: float = 1,
-    freq_anchor: float = 1,
+    time: float = 1,
+    freq: float = 1,
+    time_anchor: float = 0,
+    freq_anchor: float = 0,
 ) -> data.Point:
     geom_time, geom_freq = geom.coordinates
     return data.Point(
