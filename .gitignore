@@ -162,3 +162,5 @@ docs/generated/
 .virtual_documents
 
 **.ipynb
+
+GEMINI.md
