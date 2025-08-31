@@ -190,13 +190,6 @@ class TimeStamp(BaseGeometry):
         description="The time stamp of the sound event.",
     )
 
-    @field_validator("coordinates")
-    def _positive_times(cls, v: Time) -> Time:
-        """Validate that the time is positive."""
-        if v < 0:
-            raise ValueError("The time must be positive.")
-        return v
-
 
 class TimeInterval(BaseGeometry):
     """TimeInterval Geometry Class.
@@ -242,8 +235,7 @@ class TimeInterval(BaseGeometry):
 
         Raises
         ------
-            ValueError: If the time interval is invalid (i.e. the start time is
-                after the end time).
+            ValueError: If the time interval is invalid.
         """
         if len(v) != 2:
             raise ValueError(
@@ -251,14 +243,8 @@ class TimeInterval(BaseGeometry):
             )
 
         if v[0] > v[1]:
-            raise ValueError("The start time must be before the end time.")
-        return v
+            v[0], v[1] = v[1], v[0]
 
-    @field_validator("coordinates")
-    def _positive_times(cls, v: List[Time]) -> List[Time]:
-        """Validate that the times are positive."""
-        if any(time < 0 for time in v):
-            raise ValueError("The times must be positive.")
         return v
 
 
@@ -307,21 +293,10 @@ class Point(BaseGeometry):
 
         Raises
         ------
-            ValueError: If the coordinates are invalid (i.e. the time is
-                negative or the frequency is outside the valid range).
+            ValueError: If the coordinates are invalid.
         """
         if len(v) != 2:
             raise ValueError("The coordinates must have exactly two values.")
-
-        time, frequency = v
-
-        if time < 0:
-            raise ValueError("The time must be positive.")
-
-        if frequency < 0 or frequency > MAX_FREQUENCY:
-            raise ValueError(
-                f"The frequency must be between 0 and {MAX_FREQUENCY}."
-            )
 
         return v
 
@@ -374,20 +349,10 @@ class LineString(BaseGeometry):
 
         Raises
         ------
-            ValueError: If the coordinates are invalid (i.e. the time is
-                negative or the frequency is outside the valid range).
+            ValueError: If the coordinates are invalid.
         """
         if len(v) < 2:
             raise ValueError("The line must have at least two points.")
-
-        for time, frequency in v:
-            if time < 0:
-                raise ValueError("The time must be positive.")
-
-            if frequency < 0 or frequency > MAX_FREQUENCY:
-                raise ValueError(
-                    f"The frequency must be between 0 and {MAX_FREQUENCY}."
-                )
 
         return v
 
@@ -451,8 +416,7 @@ class Polygon(BaseGeometry):
 
         Raises
         ------
-            ValueError: If the coordinates are invalid (i.e. the time is
-                negative or the frequency is outside the valid range).
+            ValueError: If the coordinates are invalid.
         """
         if len(v) < 1:
             raise ValueError("The polygon must have at least one ring.")
@@ -460,15 +424,6 @@ class Polygon(BaseGeometry):
         for ring in v:
             if len(ring) < 3:
                 raise ValueError("The ring must have at least three points.")
-
-            for time, frequency in ring:
-                if time < 0:
-                    raise ValueError("The time must be positive.")
-
-                if frequency < 0 or frequency > MAX_FREQUENCY:
-                    raise ValueError(
-                        f"The frequency must be between 0 and {MAX_FREQUENCY}."
-                    )
 
         return v
 
@@ -521,8 +476,7 @@ class BoundingBox(BaseGeometry):
 
         Raises
         ------
-            ValueError: If the coordinates are invalid (i.e. the time is
-                negative or the frequency is outside the valid range).
+            ValueError: If the coordinates are invalid.
         """
         if len(v) != 4:
             raise ValueError(
@@ -530,22 +484,6 @@ class BoundingBox(BaseGeometry):
             )
 
         start_time, low_freq, end_time, high_freq = v
-
-        if start_time < 0:
-            raise ValueError("The start time must be positive.")
-
-        if low_freq < 0 or low_freq > MAX_FREQUENCY:
-            raise ValueError(
-                f"The start frequency must be between 0 and {MAX_FREQUENCY}."
-            )
-
-        if end_time < 0:
-            raise ValueError("The end time must be positive.")
-
-        if high_freq < 0 or high_freq > MAX_FREQUENCY:
-            raise ValueError(
-                f"The end frequency must be between 0 and {MAX_FREQUENCY}."
-            )
 
         if start_time > end_time:
             start_time, end_time = end_time, start_time
@@ -604,20 +542,10 @@ class MultiPoint(BaseGeometry):
 
         Raises
         ------
-            ValueError: If the coordinates are invalid (i.e. the time is
-                negative or the frequency is outside the valid range).
+            ValueError: If the coordinates are invalid.
         """
         if len(v) < 1:
             raise ValueError("The multipoint must have at least one point.")
-
-        for time, frequency in v:
-            if time < 0:
-                raise ValueError("The time must be positive.")
-
-            if frequency < 0 or frequency > MAX_FREQUENCY:
-                raise ValueError(
-                    f"The frequency must be between 0 and {MAX_FREQUENCY}."
-                )
 
         return v
 
@@ -673,8 +601,7 @@ class MultiLineString(BaseGeometry):
 
         Raises
         ------
-            ValueError: If the coordinates are invalid (i.e. the time is
-                negative or the frequency is outside the valid range).
+            ValueError: If the coordinates are invalid.
         """
         if len(v) < 1:
             raise ValueError("The multiline must have at least one line.")
@@ -683,15 +610,6 @@ class MultiLineString(BaseGeometry):
             if len(line) < 2:
                 raise ValueError("Each line must have at least two points.")
 
-            for time, frequency in line:
-                if time < 0:
-                    raise ValueError("The time must be positive.")
-
-                if frequency < 0 or frequency > MAX_FREQUENCY:
-                    raise ValueError(
-                        f"The frequency must be between 0 and {MAX_FREQUENCY}."
-                    )
-
         return v
 
     @field_validator("coordinates")
@@ -699,11 +617,12 @@ class MultiLineString(BaseGeometry):
         cls, v: List[List[List[float]]]
     ) -> List[List[List[float]]]:
         """Validate that each line is ordered by time."""
-        for line in v:
+        for index in range(len(v)):
+            line = v[index]
             start_time = line[0][0]
             end_time = line[-1][0]
-            if not (start_time < end_time):
-                raise ValueError("Each line must be ordered by time.")
+            if end_time < start_time:
+                v[index] = line[::-1]
         return v
 
 
@@ -758,8 +677,7 @@ class MultiPolygon(BaseGeometry):
 
         Raises
         ------
-            ValueError: If the coordinates are invalid (i.e. the time is
-                negative or the frequency is outside the valid range).
+            ValueError: If the coordinates are invalid.
         """
         if len(v) < 1:
             raise ValueError(
@@ -775,16 +693,6 @@ class MultiPolygon(BaseGeometry):
                     raise ValueError(
                         "Each ring must have at least three points."
                     )
-
-                for time, frequency in ring:
-                    if time < 0:
-                        raise ValueError("The time must be positive.")
-
-                    if frequency < 0 or frequency > MAX_FREQUENCY:
-                        raise ValueError(
-                            f"The frequency must be between 0 and "
-                            f"{MAX_FREQUENCY}."
-                        )
 
         return v
 
