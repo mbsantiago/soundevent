@@ -621,7 +621,7 @@ class MultiLineString(BaseGeometry):
             line = v[index]
             start_time = line[0][0]
             end_time = line[-1][0]
-            if not (start_time < end_time):
+            if end_time < start_time:
                 v[index] = line[::-1]
         return v
 

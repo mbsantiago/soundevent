@@ -260,9 +260,8 @@ def test_geometry_validate_fails_with_invalid_geometry():
         data.geometry_validate(obj, mode="dict")
 
 
-def test_invalid_time_interval():
-    """Test that an invalid time interval fails."""
-    # sorts time
+def test_time_interval_sorts_start_end():
+    """TimeInterval auto-sorts [start, end] when start > end."""
     geom = data.TimeInterval(coordinates=[2, 1])
     assert geom.coordinates == [1, 2]
 
@@ -283,6 +282,32 @@ def test_invalid_linestring():
     # Has to have at least two points
     with pytest.raises(ValueError):
         data.LineString(coordinates=[[0, 1]])
+
+
+def test_invalid_multipoint():
+    # Has to have at least one point
+    with pytest.raises(ValueError):
+        data.MultiPoint(coordinates=[])
+
+
+def test_invalid_polygon():
+    # Has to have at least one ring
+    with pytest.raises(ValueError):
+        data.Polygon(coordinates=[])
+
+    # Has to have at least three points
+    with pytest.raises(ValueError):
+        data.Polygon(coordinates=[[[0, 1], [2, 3]]])
+
+    # Rings need to have at least three points
+    with pytest.raises(ValueError):
+        data.Polygon(coordinates=[[[0, 1], [2, 3], [4, 0]], [[1, 1], [1, 2]]])
+
+
+def test_invalid_multiline():
+    # Has to have at least one linestring
+    with pytest.raises(ValueError):
+        data.LineString(coordinates=[])
 
 
 def test_fixes_linestring_order():
