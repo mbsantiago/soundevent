@@ -1,9 +1,43 @@
+"""Base classes for data transformations."""
 from collections.abc import Sequence
+from pathlib import Path
 
 from soundevent import data
 
 
 class TransformBase:
+    """Base class for creating data transformations.
+
+    This class implements the visitor pattern to traverse the complex hierarchy
+    of soundevent data objects. It provides `transform_*` methods for each type
+    of data object in the soundevent ecosystem.
+
+    The default implementation of each `transform_*` method returns the object
+    unchanged or, for container-like objects, recursively calls the appropriate
+    transform methods on their children and returns a new container with the
+    transformed children.
+
+    To create a custom transformation, inherit from this class and override the
+    `transform_*` method for the specific object or attribute you want to
+    modify.
+
+    Examples
+    --------
+    >>> from soundevent import data
+    >>> from soundevent.transforms.base import TransformBase
+    >>>
+    >>> class UserAnonymizer(TransformBase):
+    ...     def transform_user(self, user: data.User) -> data.User:
+    ...         return user.model_copy(update={"name": "anonymous"})
+
+    """
+
+    def transform_path(self, path: Path) -> Path:
+        return path
+
+    def transform_geometry(self, geometry: data.Geometry) -> data.Geometry:
+        return geometry
+
     def transform_user(self, user: data.User) -> data.User:
         return user
 
@@ -32,6 +66,7 @@ class TransformBase:
                 owners=[
                     self.transform_user(user) for user in recording.owners
                 ],
+                path=self.transform_path(recording.path),
                 tags=self.transform_tags(recording.tags),
                 features=self.transform_features(recording.features),
                 notes=self.transform_notes(recording.notes),
@@ -51,6 +86,9 @@ class TransformBase:
     ) -> data.SoundEvent:
         return sound_event.model_copy(
             update=dict(
+                geometry=self.transform_geometry(sound_event.geometry)
+                if sound_event.geometry is not None
+                else None,
                 recording=self.transform_recording(sound_event.recording),
                 features=self.transform_features(sound_event.features),
             )
