@@ -33,7 +33,9 @@ class PathTransform(TransformBase):
     >>> # Create a sample dataset to work with
     >>> recording = data.Recording(
     ...     path=Path("../relative/path/rec.wav"),
-    ...     duration=1, channels=1, samplerate=16000,
+    ...     duration=1,
+    ...     channels=1,
+    ...     samplerate=16000,
     ... )
     >>> dataset = data.Dataset(name="test-dataset", recordings=[recording])
     >>>
