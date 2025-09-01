@@ -147,9 +147,26 @@ class TransformBase:
             )
         )
 
+    def transform_status_badge(
+        self, status_badge: data.StatusBadge
+    ) -> data.StatusBadge:
+        return status_badge.model_copy(
+            update=dict(
+                owner=self.transform_user(status_badge.owner)
+                if status_badge.owner is not None
+                else None
+            )
+        )
+
     def transform_annotation_task(self, annotation_task: data.AnnotationTask):
         return annotation_task.model_copy(
-            update=dict(clip=self.transform_clip(annotation_task.clip))
+            update=dict(
+                clip=self.transform_clip(annotation_task.clip),
+                status_badges=[
+                    self.transform_status_badge(status_badge)
+                    for status_badge in annotation_task.status_badges
+                ],
+            )
         )
 
     def transform_recording_set(
