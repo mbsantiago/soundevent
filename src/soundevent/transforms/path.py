@@ -30,14 +30,25 @@ class PathTransform(TransformBase):
     >>> from soundevent import data
     >>> from soundevent.transforms import PathTransform
     >>>
-    >>> # Assume `dataset` is a soundevent Dataset object with some recordings
+    >>> # Create a sample dataset to work with
+    >>> recording = data.Recording(
+    ...     path=Path("../relative/path/rec.wav"),
+    ...     duration=1, channels=1, samplerate=16000,
+    ... )
+    >>> dataset = data.Dataset(name="test-dataset", recordings=[recording])
+    >>>
     >>> # Define a function to make all paths absolute
     >>> def make_absolute(path: Path) -> Path:
     ...     # This is a simplistic example, in reality you might need a base directory
     ...     return path.resolve()
+    >>>
     >>> # Create and apply the transform
     >>> path_transformer = PathTransform(transform=make_absolute)
     >>> transformed_dataset = path_transformer.transform_dataset(dataset)
+    >>>
+    >>> # Check that the path in the transformed dataset is absolute
+    >>> transformed_dataset.recordings[0].path.is_absolute()
+    True
 
     """
 

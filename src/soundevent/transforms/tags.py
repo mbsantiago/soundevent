@@ -31,23 +31,45 @@ class TagsTransform(TransformBase):
 
     Examples
     --------
+    >>> from pathlib import Path
     >>> from soundevent import data
     >>> from soundevent.transforms import TagsTransform
     >>>
-    >>> # Assume `dataset` is a soundevent Dataset object
-    >>> # Example 1: Remove a specific tag using a sequence transform
-    >>> def remove_tag(tags: Sequence[data.Tag]) -> list[data.Tag]:
-    ...     return [tag for tag in tags if tag.key != "unwanted_tag"]
-    >>> remover = TagsTransform(transform=remove_tag)
-    >>> transformed_dataset = remover.transform_dataset(dataset)
+    >>> # Create a sample recording with a misspelled species tag
+    >>> recording = data.Recording(
+    ...     path=Path("rec.wav"),
+    ...     duration=1,
+    ...     channels=1,
+    ...     samplerate=16000,
+    ...     tags=[
+    ...         data.Tag(key="species", value="Myotis mytis"),
+    ...         data.Tag(key="quality", value="good"),
+    ...     ],
+    ... )
     >>>
-    >>> # Example 2: Using the factory to rename a tag
-    >>> def rename_tag(tag: data.Tag) -> data.Tag:
-    ...     if tag.key == "old_name":
-    ...         return tag.model_copy(update={"key": "new_name"})
+    >>> # Create a transform to correct the spelling of "Myotis myotis"
+    >>> def correct_species_name(tag: data.Tag) -> data.Tag:
+    ...     if tag.key == "species" and tag.value == "Myotis mytis":
+    ...         return tag.model_copy(update={"value": "Myotis myotis"})
     ...     return tag
-    >>> renamer = TagsTransform.from_tag_transform(transform=rename_tag)
-    >>> transformed_dataset_2 = renamer.transform_dataset(dataset)
+    >>> corrector = TagsTransform.from_tag_transform(
+    ...     transform=correct_species_name
+    ... )
+    >>> transformed_recording = corrector.transform_recording(recording)
+    >>>
+    >>> # Verify that the tag value has been corrected
+    >>> species_tag = next(
+    ...     t for t in transformed_recording.tags if t.key == "species"
+    ... )
+    >>> species_tag.value
+    'Myotis myotis'
+    >>>
+    >>> # Verify that other tags are untouched
+    >>> quality_tag = next(
+    ...     t for t in transformed_recording.tags if t.key == "quality"
+    ... )
+    >>> quality_tag.value
+    'good'
 
     """
 
