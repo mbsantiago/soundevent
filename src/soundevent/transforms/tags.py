@@ -1,4 +1,5 @@
 """Transformations for tags."""
+
 from collections.abc import Callable, Sequence
 from typing import Optional
 
@@ -37,7 +38,6 @@ class TagsTransform(TransformBase):
     >>> # Example 1: Remove a specific tag using a sequence transform
     >>> def remove_tag(tags: Sequence[data.Tag]) -> list[data.Tag]:
     ...     return [tag for tag in tags if tag.key != "unwanted_tag"]
-    ...
     >>> remover = TagsTransform(transform=remove_tag)
     >>> transformed_dataset = remover.transform_dataset(dataset)
     >>>
@@ -46,7 +46,6 @@ class TagsTransform(TransformBase):
     ...     if tag.key == "old_name":
     ...         return tag.model_copy(update={"key": "new_name"})
     ...     return tag
-    ...
     >>> renamer = TagsTransform.from_tag_transform(transform=rename_tag)
     >>> transformed_dataset_2 = renamer.transform_dataset(dataset)
 

@@ -1,4 +1,5 @@
 """Base classes for data transformations."""
+
 from collections.abc import Sequence
 from pathlib import Path
 

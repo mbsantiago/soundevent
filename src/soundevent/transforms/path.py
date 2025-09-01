@@ -1,4 +1,5 @@
 """Transformations for recording paths."""
+
 from collections.abc import Callable
 from pathlib import Path
 
@@ -34,7 +35,6 @@ class PathTransform(TransformBase):
     >>> def make_absolute(path: Path) -> Path:
     ...     # This is a simplistic example, in reality you might need a base directory
     ...     return path.resolve()
-    ...
     >>> # Create and apply the transform
     >>> path_transformer = PathTransform(transform=make_absolute)
     >>> transformed_dataset = path_transformer.transform_dataset(dataset)
