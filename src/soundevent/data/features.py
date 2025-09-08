@@ -22,7 +22,7 @@ characteristic distributions, and statistical analysis.
 
 import warnings
 from collections.abc import Sequence
-from typing import Optional
+from typing import Any, Optional, overload
 
 from pydantic import BaseModel, model_validator
 
@@ -75,6 +75,15 @@ class Feature(BaseModel):
 
             del values["name"]
         return values
+
+    @overload
+    def __init__(self, /, term: Term, value: float): ...
+
+    @overload
+    def __init__(self, /, name: str, value: float): ...
+
+    def __init__(self, /, **data: Any) -> None:  # type: ignore
+        super().__init__(**data)
 
 
 def find_feature(

@@ -23,7 +23,7 @@ specific syllables).
 
 import warnings
 from collections.abc import Iterable
-from typing import Optional
+from typing import Any, Optional, overload
 
 from pydantic import BaseModel, Field, model_validator
 
@@ -77,6 +77,15 @@ class Tag(BaseModel):
 
             del values["key"]
         return values
+
+    @overload
+    def __init__(self, /, term: Term, value: str): ...
+
+    @overload
+    def __init__(self, /, key: str, value: str): ...
+
+    def __init__(self, /, **data: Any) -> None:  # type: ignore
+        super().__init__(**data)
 
 
 def find_tag(

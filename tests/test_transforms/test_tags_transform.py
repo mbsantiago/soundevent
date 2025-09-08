@@ -7,7 +7,7 @@ from soundevent.transforms import TagsTransform
 
 def test_tags_transform_with_sequence_fn_remove_tag():
     # Given
-    tags = [data.Tag(key="a", value="1"), data.Tag(key="b", value="2")]  # type: ignore
+    tags = [data.Tag(key="a", value="1"), data.Tag(key="b", value="2")]
     recording = data.Recording(
         path=Path("rec.wav"),
         duration=1,
@@ -31,7 +31,7 @@ def test_tags_transform_with_sequence_fn_remove_tag():
 
 def test_tags_transform_from_tag_transform_modify_tag():
     # Given
-    tags = [data.Tag(key="a", value="1"), data.Tag(key="b", value="2")]  # type: ignore
+    tags = [data.Tag(key="a", value="1"), data.Tag(key="b", value="2")]
     recording = data.Recording(
         path=Path("rec.wav"),
         duration=1,
@@ -52,13 +52,13 @@ def test_tags_transform_from_tag_transform_modify_tag():
 
     # Then
     assert len(transformed_recording.tags) == 2
-    assert data.Tag(key="a", value="99") in transformed_recording.tags  # type: ignore
-    assert data.Tag(key="b", value="2") in transformed_recording.tags  # type: ignore
+    assert data.Tag(key="a", value="99") in transformed_recording.tags
+    assert data.Tag(key="b", value="2") in transformed_recording.tags
 
 
 def test_tags_transform_from_tag_transform_remove_tag():
     # Given
-    tags = [data.Tag(key="a", value="1"), data.Tag(key="b", value="2")]  # type: ignore
+    tags = [data.Tag(key="a", value="1"), data.Tag(key="b", value="2")]
     recording = data.Recording(
         path=Path("rec.wav"),
         duration=1,
@@ -95,7 +95,7 @@ def test_tags_transform_is_applied_to_clip_annotation_tags():
             start_time=0,
             end_time=1,
         ),
-        tags=[data.Tag(key="a", value="c"), data.Tag(key="b", value="d")],  # type: ignore
+        tags=[data.Tag(key="a", value="c"), data.Tag(key="b", value="d")],
     )
 
     def remove_a(tag: data.Tag) -> Optional[data.Tag]:
