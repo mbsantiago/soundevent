@@ -1102,3 +1102,128 @@ def scale_geometry(
         time_anchor=time_anchor,
         freq_anchor=freq_anchor,
     )
+
+
+def _clip_value(
+    value: float,
+    start: Optional[float],
+    end: Optional[float],
+) -> float:
+    if start is not None:
+        value = max(value, start)
+
+    if end is not None:
+        value = min(value, end)
+
+    return value
+
+
+def _clip_time_interval(
+    geom: data.TimeInterval,
+    start_time: Optional[float] = None,
+    end_time: Optional[float] = None,
+) -> data.TimeInterval:
+    geom_start, geom_end = geom.coordinates
+    geom_start = _clip_value(geom_start, start_time, end_time)
+    geom_end = _clip_value(geom_end, start_time, end_time)
+    geom_end = max(geom_end, geom_start)
+    return data.TimeInterval(coordinates=[geom_start, geom_end])
+
+
+def _clip_time_stamp(
+    geom: data.TimeStamp,
+    start_time: Optional[float] = None,
+    end_time: Optional[float] = None,
+) -> data.TimeStamp:
+    time = geom.coordinates
+    return data.TimeStamp(coordinates=_clip_value(time, start_time, end_time))
+
+
+def _clip_bounding_box(
+    geom: data.BoundingBox,
+    start_time: Optional[float] = None,
+    end_time: Optional[float] = None,
+    low_freq: Optional[float] = None,
+    high_freq: Optional[float] = None,
+) -> data.BoundingBox:
+    geom_start_time, geom_low_freq, geom_end_time, geom_high_freq = (
+        geom.coordinates
+    )
+
+    geom_start_time = _clip_value(geom_start_time, start_time, end_time)
+    geom_end_time = _clip_value(geom_end_time, start_time, end_time)
+    geom_end_time = max(geom_end_time, geom_start_time)
+
+    geom_low_freq = _clip_value(geom_low_freq, low_freq, high_freq)
+    geom_high_freq = _clip_value(geom_high_freq, low_freq, high_freq)
+    geom_high_freq = max(geom_high_freq, geom_low_freq)
+
+    return data.BoundingBox(
+        coordinates=[
+            geom_start_time,
+            geom_low_freq,
+            geom_end_time,
+            geom_high_freq,
+        ]
+    )
+
+
+def _clip_shapely(
+    geom: data.Geometry,
+    start_time: Optional[float] = None,
+    end_time: Optional[float] = None,
+    low_freq: Optional[float] = None,
+    high_freq: Optional[float] = None,
+):
+    shp_geom = geometry_to_shapely(geom)
+
+    min_t, min_f, max_t, max_f = shp_geom.bounds
+
+    clip_box = shapely.box(
+        start_time if start_time is not None else min_t,
+        low_freq if low_freq is not None else min_f,
+        end_time if end_time is not None else max_t,
+        high_freq if high_freq is not None else max_f,
+    )
+
+    clipped_shp = shp_geom.intersection(clip_box)
+    return shapely_to_geometry(clipped_shp)
+
+
+def clip_coordinates(
+    geom: data.Geometry,
+    start_time: Optional[float] = None,
+    end_time: Optional[float] = None,
+    low_freq: Optional[float] = None,
+    high_freq: Optional[float] = None,
+) -> data.Geometry:
+    if geom.type == "BoundingBox":
+        return _clip_bounding_box(
+            geom,
+            start_time=start_time,
+            end_time=end_time,
+            low_freq=low_freq,
+            high_freq=high_freq,
+        )
+
+    if geom.type == "TimeInterval":
+        return _clip_time_interval(
+            geom,
+            start_time=start_time,
+            end_time=end_time,
+        )
+
+    if geom.type == "TimeStamp":
+        return _clip_time_stamp(
+            geom,
+            start_time=start_time,
+            end_time=end_time,
+        )
+
+    return _clip_shapely(
+        geom,
+        start_time=start_time,
+        end_time=end_time,
+        low_freq=low_freq,
+        high_freq=high_freq,
+    )
