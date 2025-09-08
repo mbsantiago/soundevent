@@ -31,7 +31,7 @@ def test_find_feature_returns_none_if_key_not_found(random_features):
 
 
 def test_can_create_feature_without_term_and_with_key():
-    feature = data.Feature(name="name", value=10)  # type: ignore
+    feature = data.Feature(name="name", value=10)
     assert isinstance(feature.term, data.Term)
     assert feature.term.label == "name"
     assert feature.term.name == "name"
@@ -39,16 +39,16 @@ def test_can_create_feature_without_term_and_with_key():
 
 def test_feature_is_created_with_correct_term_when_using_name():
     terms.add_term(terms.f1_score, key="f1")
-    feature = data.Feature(name="f1", value=23.1)  # type: ignore
+    feature = data.Feature(name="f1", value=23.1)
     assert feature.term == terms.f1_score
 
 
 example_features = [
-    data.Feature(name="name1", value=1),  # type: ignore
-    data.Feature(name="name2", value=2),  # type: ignore
-    data.Feature(name="name3", value=3),  # type: ignore
-    data.Feature(name="name4", value=4),  # type: ignore
-    data.Feature(name="name5", value=5),  # type: ignore
+    data.Feature(name="name1", value=1),
+    data.Feature(name="name2", value=2),
+    data.Feature(name="name3", value=3),
+    data.Feature(name="name4", value=4),
+    data.Feature(name="name5", value=5),
     data.Feature(term=terms.high_freq, value=6),
 ]
 

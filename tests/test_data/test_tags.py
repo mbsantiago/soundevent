@@ -34,7 +34,7 @@ def test_find_tag_returns_none_if_key_not_found(random_tags):
 
 
 def test_can_create_tag_without_term_and_with_key():
-    tag = data.Tag(key="key", value="value")  # type: ignore
+    tag = data.Tag(key="key", value="value")
     assert isinstance(tag.term, data.Term)
     assert tag.term.label == "key"
     assert tag.term.name == "key"
@@ -42,16 +42,16 @@ def test_can_create_tag_without_term_and_with_key():
 
 def test_tag_gets_correct_term_if_using_key():
     terms.add_term(terms.scientific_name, key="species")
-    tag = data.Tag(key="species", value="Myotis myotis")  # type: ignore
+    tag = data.Tag(key="species", value="Myotis myotis")
     assert tag.term == terms.scientific_name
 
 
 example_tags = [
-    data.Tag(key="key1", value="value1"),  # type: ignore
-    data.Tag(key="key2", value="value2"),  # type: ignore
-    data.Tag(key="key3", value="value3"),  # type: ignore
-    data.Tag(key="key4", value="value4"),  # type: ignore
-    data.Tag(key="key5", value="value5"),  # type: ignore
+    data.Tag(key="key1", value="value1"),
+    data.Tag(key="key2", value="value2"),
+    data.Tag(key="key3", value="value3"),
+    data.Tag(key="key4", value="value4"),
+    data.Tag(key="key5", value="value5"),
     data.Tag(term=terms.scientific_name, value="species"),
 ]
 
