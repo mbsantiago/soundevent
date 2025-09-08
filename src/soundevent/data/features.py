@@ -77,12 +77,12 @@ class Feature(BaseModel):
         return values
 
     @overload
-    def __init__(self, /, term: Term, value: float): ...
+    def __init__(self, *, term: Term, value: float): ...
 
     @overload
-    def __init__(self, /, name: str, value: float): ...
+    def __init__(self, *, name: str, value: float): ...
 
-    def __init__(self, /, **data: Any) -> None:  # type: ignore
+    def __init__(self, **data: Any) -> None:  # type: ignore
         super().__init__(**data)
 
 
