@@ -1,0 +1,2857 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://mbsantiago.github.io/soundevent/reference/transforms/">
+      
+      
+        <link rel="prev" href="../terms/">
+      
+      
+        <link rel="next" href="../../CONTRIBUTING/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>transforms - soundevent</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../stylesheets/jquery.json-viewer.css">
+    
+      <link rel="stylesheet" href="../../css/mkdocstrings.css">
+    
+      <link rel="stylesheet" href="https://unpkg.com/katex@0/dist/katex.min.css">
+    
+      <link rel="stylesheet" href="../../sg_gallery.css">
+    
+      <link rel="stylesheet" href="../../sg_gallery-rendered-html.css">
+    
+      <link rel="stylesheet" href="../../sg_gallery-binder.css">
+    
+      <link rel="stylesheet" href="../../sg_gallery-dataframe.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#transforms_module" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="soundevent" class="md-header__button md-logo" aria-label="soundevent" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            soundevent
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              transforms
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="soundevent" class="md-nav__button md-logo" aria-label="soundevent" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    soundevent
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introduction
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../data_schemas/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Data Schemas
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Data Schemas
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data_schemas/descriptors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Descriptors
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data_schemas/audio_content/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Audio Content
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data_schemas/acoustic_objects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Acoustic Objects
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data_schemas/annotation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Annotation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data_schemas/prediction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Prediction
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data_schemas/evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Evaluation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../generated/gallery/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    User Guide
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            User Guide
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../generated/gallery/0_objects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Acoustic Objects
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../generated/gallery/1_saving_and_loading/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Saving and Loading data.
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../generated/gallery/2_loading_audio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Loading audio
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../generated/gallery/3_computing_spectrograms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Computing spectrograms
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../generated/gallery/4_geometric_operations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Geometric Operations
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../generated/gallery/5_integration_with_crowsetta/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Integrating Crowsetta with Soundevent
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../generated/gallery/6_plotting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Plotting functions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    data
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../operations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    operations
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    io
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../arrays/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    arrays
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../audio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    audio
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../geometry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    geometry
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    evaluation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../plot/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    plot
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../terms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    terms
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    transforms
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    transforms
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#soundevent.transforms" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-module"></code>&nbsp;transforms
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" transforms">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.transforms-classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Classes
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Classes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.transforms.PathTransform" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;PathTransform
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.transforms.TagsTransform" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;TagsTransform
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.transforms.TransformBase" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;TransformBase
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CONTRIBUTING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Contributing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CODE_OF_CONDUCT/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Code of Conduct
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#soundevent.transforms" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-module"></code>&nbsp;transforms
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" transforms">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.transforms-classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Classes
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Classes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.transforms.PathTransform" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;PathTransform
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.transforms.TagsTransform" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;TagsTransform
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.transforms.TransformBase" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;TransformBase
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="transforms_module">Transforms Module<a class="headerlink" href="#transforms_module" title="Permanent link">#</a></h1>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="soundevent.transforms" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-module"></code>            <code>soundevent.transforms</code>
+
+
+<a href="#soundevent.transforms" class="headerlink" title="Permanent link">#</a></h2>
+
+    <div class="doc doc-contents first">
+
+        <p>Data transformations for soundevent objects.</p>
+<p>This module provides a framework for applying transformations to soundevent data
+objects. The core of the framework is the <code>TransformBase</code> class, which defines
+a visitor pattern for traversing the complex hierarchy of soundevent data
+models.</p>
+<p>The module also includes concrete transform classes for common data
+manipulation tasks, such as modifying recording paths (<code>PathTransform</code>) or
+transforming tags (<code>TagsTransform</code>).</p>
+<p>These tools are designed to help users clean, modify, and standardize their
+bioacoustic datasets in a structured and reliable way.</p>
+
+
+
+
+
+
+<p><span class="doc-section-title">Modules:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="soundevent.transforms.base">base</span></code></td>
+            <td>
+              <div class="doc-md-description">
+                <p>Base classes for data transformations.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="soundevent.transforms.path">path</span></code></td>
+            <td>
+              <div class="doc-md-description">
+                <p>Transformations for recording paths.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="soundevent.transforms.tags">tags</span></code></td>
+            <td>
+              <div class="doc-md-description">
+                <p>Transformations for tags.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+<p><span class="doc-section-title">Classes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><a class="autorefs autorefs-internal" title="              PathTransform(transform) (soundevent.transforms.PathTransform)" href="#soundevent.transforms.PathTransform">PathTransform</a></code></td>
+            <td>
+              <div class="doc-md-description">
+                <p>A transform for modifying the path of recordings.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><a class="autorefs autorefs-internal" title="              TagsTransform(transform) (soundevent.transforms.TagsTransform)" href="#soundevent.transforms.TagsTransform">TagsTransform</a></code></td>
+            <td>
+              <div class="doc-md-description">
+                <p>A transform for modifying sequences of tags.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><a class="autorefs autorefs-internal" title="            TransformBase (soundevent.transforms.TransformBase)" href="#soundevent.transforms.TransformBase">TransformBase</a></code></td>
+            <td>
+              <div class="doc-md-description">
+                <p>Base class for creating data transformations.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+<h3 id="soundevent.transforms-classes">Classes<a href="#soundevent.transforms-classes" class="headerlink" title="Permanent link">#</a></h3>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h4 id="soundevent.transforms.PathTransform" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>              <code class="highlight language-python"><span class="n">PathTransform</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span></code>
+
+<a href="#soundevent.transforms.PathTransform" class="headerlink" title="Permanent link">#</a></h4>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="            TransformBase (soundevent.transforms.base.TransformBase)" href="#soundevent.transforms.TransformBase">TransformBase</a></code></p>
+
+
+        <p>A transform for modifying the path of recordings.</p>
+<p>This class provides a convenient way to apply a path transformation
+to all <code>Recording</code> objects within a larger data structure (like a
+<code>Dataset</code> or <code>AnnotationProject</code>). It works by overriding the
+<code>transform_path</code> method of the <code>TransformBase</code>.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>transform</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" title="collections.abc.Callable" href="https://docs.python.org/3.11/library/collections.abc.html#collections.abc.Callable">Callable</a>[[<a class="autorefs autorefs-external" title="pathlib.Path" href="https://docs.python.org/3.11/library/pathlib.html#pathlib.Path">Path</a>], <a class="autorefs autorefs-external" title="pathlib.Path" href="https://docs.python.org/3.11/library/pathlib.html#pathlib.Path">Path</a>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A function that takes a <code>pathlib.Path</code> object and returns a
+transformed <code>pathlib.Path</code> object.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<p><span class="doc-section-title">Examples:</span></p>
+    <div class="language-pycon highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">soundevent</span><span class="w"> </span><span class="kn">import</span> <span class="n">data</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">soundevent.transforms</span><span class="w"> </span><span class="kn">import</span> <span class="n">PathTransform</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="gp">&gt;&gt;&gt;</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create a sample dataset to work with</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="gp">&gt;&gt;&gt; </span><span class="n">recording</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Recording</span><span class="p">(</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="gp">... </span>    <span class="n">path</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;../relative/path/rec.wav&quot;</span><span class="p">),</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="gp">... </span>    <span class="n">duration</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="gp">... </span>    <span class="n">channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="gp">... </span>    <span class="n">samplerate</span><span class="o">=</span><span class="mi">16000</span><span class="p">,</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="gp">... </span><span class="p">)</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;test-dataset&quot;</span><span class="p">,</span> <span class="n">recordings</span><span class="o">=</span><span class="p">[</span><span class="n">recording</span><span class="p">])</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="gp">&gt;&gt;&gt;</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Define a function to make all paths absolute</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">make_absolute</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="gp">... </span>    <span class="c1"># This is a simplistic example, in reality you might need a base directory</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="gp">... </span>    <span class="k">return</span> <span class="n">path</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="gp">&gt;&gt;&gt;</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create and apply the transform</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="gp">&gt;&gt;&gt; </span><span class="n">path_transformer</span> <span class="o">=</span> <span class="n">PathTransform</span><span class="p">(</span><span class="n">transform</span><span class="o">=</span><span class="n">make_absolute</span><span class="p">)</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="gp">&gt;&gt;&gt; </span><span class="n">transformed_dataset</span> <span class="o">=</span> <span class="n">path_transformer</span><span class="o">.</span><span class="n">transform_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="gp">&gt;&gt;&gt;</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Check that the path in the transformed dataset is absolute</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="gp">&gt;&gt;&gt; </span><span class="n">transformed_dataset</span><span class="o">.</span><span class="n">recordings</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">is_absolute</span><span class="p">()</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="go">True</span>
+</span></code></pre></div>
+
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>transform</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" title="collections.abc.Callable" href="https://docs.python.org/3.11/library/collections.abc.html#collections.abc.Callable">Callable</a>[[<a class="autorefs autorefs-external" title="pathlib.Path" href="https://docs.python.org/3.11/library/pathlib.html#pathlib.Path">Path</a>], <a class="autorefs autorefs-external" title="pathlib.Path" href="https://docs.python.org/3.11/library/pathlib.html#pathlib.Path">Path</a>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A function that takes a <code>pathlib.Path</code> object and returns a
+transformed <code>pathlib.Path</code> object.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+<p><span class="doc-section-title">Methods:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            transform_path(path) (soundevent.transforms.PathTransform.transform_path)" href="#soundevent.transforms.PathTransform.transform_path">transform_path</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  <p>Apply the transformation to a path.</p>
+                </div>
+              </td>
+            </tr>
+      </tbody>
+    </table>
+
+
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><a class="autorefs autorefs-internal" title="            transform = transform
+
+  
+      instance-attribute
+   (soundevent.transforms.PathTransform.transform)" href="#soundevent.transforms.PathTransform.transform">transform</a></code></td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+<h5 id="soundevent.transforms.PathTransform-attributes">Attributes<a href="#soundevent.transforms.PathTransform-attributes" class="headerlink" title="Permanent link">#</a></h5>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h6 id="soundevent.transforms.PathTransform.transform" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <code class="highlight language-python"><span class="n">transform</span> <span class="o">=</span> <span class="n">transform</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#soundevent.transforms.PathTransform.transform" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<h5 id="soundevent.transforms.PathTransform-functions">Functions<a href="#soundevent.transforms.PathTransform-functions" class="headerlink" title="Permanent link">#</a></h5>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="soundevent.transforms.PathTransform.transform_path" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">transform_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span></code>
+
+<a href="#soundevent.transforms.PathTransform.transform_path" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Apply the transformation to a path.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>path</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" title="pathlib.Path" href="https://docs.python.org/3.11/library/pathlib.html#pathlib.Path">Path</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The path to transform.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-external" title="pathlib.Path" href="https://docs.python.org/3.11/library/pathlib.html#pathlib.Path">Path</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The transformed path.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h4 id="soundevent.transforms.TagsTransform" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>              <code class="highlight language-python"><span class="n">TagsTransform</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span></code>
+
+<a href="#soundevent.transforms.TagsTransform" class="headerlink" title="Permanent link">#</a></h4>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="            TransformBase (soundevent.transforms.base.TransformBase)" href="#soundevent.transforms.TransformBase">TransformBase</a></code></p>
+
+
+        <p>A transform for modifying sequences of tags.</p>
+<p>This class provides a way to apply a transformation to all <code>Tag</code>
+sequences within a soundevent data structure. It is useful for
+filtering, renaming, or otherwise modifying tags across an entire
+dataset.</p>
+<p>It can be initialized directly with a function that transforms a whole
+sequence of tags, or it can be constructed from a function that transforms
+a single tag using the <code>from_tag_transform</code> class method.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>transform</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" title="collections.abc.Callable" href="https://docs.python.org/3.11/library/collections.abc.html#collections.abc.Callable">Callable</a>[[<a class="autorefs autorefs-external" title="collections.abc.Sequence" href="https://docs.python.org/3.11/library/collections.abc.html#collections.abc.Sequence">Sequence</a>[<a class="autorefs autorefs-internal" title="              Tag(**data) (soundevent.data.Tag)" href="../data/#soundevent.data.Tag">Tag</a>]], <a class="autorefs autorefs-external" title="collections.abc.Sequence" href="https://docs.python.org/3.11/library/collections.abc.html#collections.abc.Sequence">Sequence</a>[<a class="autorefs autorefs-internal" title="              Tag(**data) (soundevent.data.Tag)" href="../data/#soundevent.data.Tag">Tag</a>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A function that takes a sequence of <code>Tag</code> objects and returns a
+transformed sequence of <code>Tag</code> objects.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<p><span class="doc-section-title">Examples:</span></p>
+    <div class="language-pycon highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">soundevent</span><span class="w"> </span><span class="kn">import</span> <span class="n">data</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">soundevent.transforms</span><span class="w"> </span><span class="kn">import</span> <span class="n">TagsTransform</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="gp">&gt;&gt;&gt;</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create a sample recording with a misspelled species tag</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="gp">&gt;&gt;&gt; </span><span class="n">recording</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Recording</span><span class="p">(</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="gp">... </span>    <span class="n">path</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;rec.wav&quot;</span><span class="p">),</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="gp">... </span>    <span class="n">duration</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="gp">... </span>    <span class="n">channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="gp">... </span>    <span class="n">samplerate</span><span class="o">=</span><span class="mi">16000</span><span class="p">,</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="gp">... </span>    <span class="n">tags</span><span class="o">=</span><span class="p">[</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="gp">... </span>        <span class="n">data</span><span class="o">.</span><span class="n">Tag</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;species&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;Myotis mytis&quot;</span><span class="p">),</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="gp">... </span>        <span class="n">data</span><span class="o">.</span><span class="n">Tag</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;quality&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;good&quot;</span><span class="p">),</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="gp">... </span>    <span class="p">],</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="gp">... </span><span class="p">)</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="gp">&gt;&gt;&gt;</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create a transform to correct the spelling of &quot;Myotis myotis&quot;</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">correct_species_name</span><span class="p">(</span><span class="n">tag</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">Tag</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">data</span><span class="o">.</span><span class="n">Tag</span><span class="p">:</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="gp">... </span>    <span class="k">if</span> <span class="n">tag</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;species&quot;</span> <span class="ow">and</span> <span class="n">tag</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="s2">&quot;Myotis mytis&quot;</span><span class="p">:</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="gp">... </span>        <span class="k">return</span> <span class="n">tag</span><span class="o">.</span><span class="n">model_copy</span><span class="p">(</span><span class="n">update</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;Myotis myotis&quot;</span><span class="p">})</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="gp">... </span>    <span class="k">return</span> <span class="n">tag</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="gp">&gt;&gt;&gt; </span><span class="n">corrector</span> <span class="o">=</span> <span class="n">TagsTransform</span><span class="o">.</span><span class="n">from_tag_transform</span><span class="p">(</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="gp">... </span>    <span class="n">transform</span><span class="o">=</span><span class="n">correct_species_name</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="gp">... </span><span class="p">)</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="gp">&gt;&gt;&gt; </span><span class="n">transformed_recording</span> <span class="o">=</span> <span class="n">corrector</span><span class="o">.</span><span class="n">transform_recording</span><span class="p">(</span><span class="n">recording</span><span class="p">)</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="gp">&gt;&gt;&gt;</span>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Verify that the tag value has been corrected</span>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="gp">&gt;&gt;&gt; </span><span class="n">species_tag</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a><span class="gp">... </span>    <span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">transformed_recording</span><span class="o">.</span><span class="n">tags</span> <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;species&quot;</span>
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a><span class="gp">... </span><span class="p">)</span>
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="gp">&gt;&gt;&gt; </span><span class="n">species_tag</span><span class="o">.</span><span class="n">value</span>
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a><span class="go">&#39;Myotis myotis&#39;</span>
+</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a><span class="gp">&gt;&gt;&gt;</span>
+</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Verify that other tags are untouched</span>
+</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a><span class="gp">&gt;&gt;&gt; </span><span class="n">quality_tag</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span>
+</span><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a><span class="gp">... </span>    <span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">transformed_recording</span><span class="o">.</span><span class="n">tags</span> <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;quality&quot;</span>
+</span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a><span class="gp">... </span><span class="p">)</span>
+</span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a><span class="gp">&gt;&gt;&gt; </span><span class="n">quality_tag</span><span class="o">.</span><span class="n">value</span>
+</span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a><span class="go">&#39;good&#39;</span>
+</span></code></pre></div>
+
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>transform</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" title="collections.abc.Callable" href="https://docs.python.org/3.11/library/collections.abc.html#collections.abc.Callable">Callable</a>[[<a class="autorefs autorefs-external" title="collections.abc.Sequence" href="https://docs.python.org/3.11/library/collections.abc.html#collections.abc.Sequence">Sequence</a>[<a class="autorefs autorefs-internal" title="              Tag(**data) (soundevent.data.Tag)" href="../data/#soundevent.data.Tag">Tag</a>]], <a class="autorefs autorefs-external" title="collections.abc.Sequence" href="https://docs.python.org/3.11/library/collections.abc.html#collections.abc.Sequence">Sequence</a>[<a class="autorefs autorefs-internal" title="              Tag(**data) (soundevent.data.Tag)" href="../data/#soundevent.data.Tag">Tag</a>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A function that takes a sequence of <code>Tag</code> objects and returns a
+transformed sequence of <code>Tag</code> objects.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+<p><span class="doc-section-title">Methods:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            from_tag_transform(transform)
+
+  
+      classmethod
+   (soundevent.transforms.TagsTransform.from_tag_transform)" href="#soundevent.transforms.TagsTransform.from_tag_transform">from_tag_transform</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  <p>Create a TagsTransform from a function that transforms a single tag.</p>
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            transform_tags(tags) (soundevent.transforms.TagsTransform.transform_tags)" href="#soundevent.transforms.TagsTransform.transform_tags">transform_tags</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  <p>Apply the transformation to a sequence of tags.</p>
+                </div>
+              </td>
+            </tr>
+      </tbody>
+    </table>
+
+
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><a class="autorefs autorefs-internal" title="            transform = transform
+
+  
+      instance-attribute
+   (soundevent.transforms.TagsTransform.transform)" href="#soundevent.transforms.TagsTransform.transform">transform</a></code></td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+<h5 id="soundevent.transforms.TagsTransform-attributes">Attributes<a href="#soundevent.transforms.TagsTransform-attributes" class="headerlink" title="Permanent link">#</a></h5>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h6 id="soundevent.transforms.TagsTransform.transform" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <code class="highlight language-python"><span class="n">transform</span> <span class="o">=</span> <span class="n">transform</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#soundevent.transforms.TagsTransform.transform" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<h5 id="soundevent.transforms.TagsTransform-functions">Functions<a href="#soundevent.transforms.TagsTransform-functions" class="headerlink" title="Permanent link">#</a></h5>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="soundevent.transforms.TagsTransform.from_tag_transform" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">from_tag_transform</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+<a href="#soundevent.transforms.TagsTransform.from_tag_transform" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Create a TagsTransform from a function that transforms a single tag.</p>
+<p>This factory method is a convenient way to create a <code>TagsTransform</code>
+when your logic applies to each tag individually.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>transform</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" title="collections.abc.Callable" href="https://docs.python.org/3.11/library/collections.abc.html#collections.abc.Callable">Callable</a>[[<a class="autorefs autorefs-internal" title="              Tag(**data) (soundevent.data.Tag)" href="../data/#soundevent.data.Tag">Tag</a>], <a class="autorefs autorefs-external" title="typing.Optional" href="https://docs.python.org/3.11/library/typing.html#typing.Optional">Optional</a>[<a class="autorefs autorefs-internal" title="              Tag(**data) (soundevent.data.Tag)" href="../data/#soundevent.data.Tag">Tag</a>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A function that takes a single <code>Tag</code> object and returns either a
+transformed <code>Tag</code> object or <code>None</code>. If <code>None</code> is returned, the
+tag is removed from the sequence.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="              TagsTransform(transform) (soundevent.transforms.tags.TagsTransform)" href="#soundevent.transforms.TagsTransform">TagsTransform</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A new <code>TagsTransform</code> instance.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="soundevent.transforms.TagsTransform.transform_tags" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">transform_tags</span><span class="p">(</span><span class="n">tags</span><span class="p">)</span></code>
+
+<a href="#soundevent.transforms.TagsTransform.transform_tags" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Apply the transformation to a sequence of tags.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>tags</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" title="collections.abc.Sequence" href="https://docs.python.org/3.11/library/collections.abc.html#collections.abc.Sequence">Sequence</a>[<a class="autorefs autorefs-internal" title="              Tag(**data) (soundevent.data.Tag)" href="../data/#soundevent.data.Tag">Tag</a>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The sequence of tags to transform.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-external" title="collections.abc.Sequence" href="https://docs.python.org/3.11/library/collections.abc.html#collections.abc.Sequence">Sequence</a>[<a class="autorefs autorefs-internal" title="              Tag(**data) (soundevent.data.Tag)" href="../data/#soundevent.data.Tag">Tag</a>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The transformed sequence of tags.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h4 id="soundevent.transforms.TransformBase" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <code>TransformBase</code>
+
+
+<a href="#soundevent.transforms.TransformBase" class="headerlink" title="Permanent link">#</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+
+        <p>Base class for creating data transformations.</p>
+<p>This class implements the visitor pattern to traverse the complex hierarchy
+of soundevent data objects. It provides <code>transform_*</code> methods for each type
+of data object in the soundevent ecosystem.</p>
+<p>The default implementation of each <code>transform_*</code> method returns the object
+unchanged or, for container-like objects, recursively calls the appropriate
+transform methods on their children and returns a new container with the
+transformed children.</p>
+<p>To create a custom transformation, inherit from this class and override the
+<code>transform_*</code> method for the specific object or attribute you want to
+modify.</p>
+
+
+<p><span class="doc-section-title">Examples:</span></p>
+    <div class="language-pycon highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">soundevent</span><span class="w"> </span><span class="kn">import</span> <span class="n">data</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">soundevent.transforms.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">TransformBase</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="gp">&gt;&gt;&gt;</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">UserAnonymizer</span><span class="p">(</span><span class="n">TransformBase</span><span class="p">):</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="gp">... </span>    <span class="k">def</span><span class="w"> </span><span class="nf">transform_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">User</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">data</span><span class="o">.</span><span class="n">User</span><span class="p">:</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="gp">... </span>        <span class="k">return</span> <span class="n">user</span><span class="o">.</span><span class="n">model_copy</span><span class="p">(</span><span class="n">update</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;anonymous&quot;</span><span class="p">})</span>
+</span></code></pre></div>
+
+
+
+
+
+
+
+
+
+
+<p><span class="doc-section-title">Methods:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            transform_annotation_project(annotation_project) (soundevent.transforms.TransformBase.transform_annotation_project)" href="#soundevent.transforms.TransformBase.transform_annotation_project">transform_annotation_project</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            transform_annotation_set(annotation_set) (soundevent.transforms.TransformBase.transform_annotation_set)" href="#soundevent.transforms.TransformBase.transform_annotation_set">transform_annotation_set</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            transform_annotation_task(annotation_task) (soundevent.transforms.TransformBase.transform_annotation_task)" href="#soundevent.transforms.TransformBase.transform_annotation_task">transform_annotation_task</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            transform_clip(clip) (soundevent.transforms.TransformBase.transform_clip)" href="#soundevent.transforms.TransformBase.transform_clip">transform_clip</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            transform_clip_annotation(clip_annotation) (soundevent.transforms.TransformBase.transform_clip_annotation)" href="#soundevent.transforms.TransformBase.transform_clip_annotation">transform_clip_annotation</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            transform_clip_prediction(clip_prediction) (soundevent.transforms.TransformBase.transform_clip_prediction)" href="#soundevent.transforms.TransformBase.transform_clip_prediction">transform_clip_prediction</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            transform_dataset(dataset) (soundevent.transforms.TransformBase.transform_dataset)" href="#soundevent.transforms.TransformBase.transform_dataset">transform_dataset</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            transform_evaluation_set(evaluation_set) (soundevent.transforms.TransformBase.transform_evaluation_set)" href="#soundevent.transforms.TransformBase.transform_evaluation_set">transform_evaluation_set</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            transform_features(features) (soundevent.transforms.TransformBase.transform_features)" href="#soundevent.transforms.TransformBase.transform_features">transform_features</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            transform_geometry(geometry) (soundevent.transforms.TransformBase.transform_geometry)" href="#soundevent.transforms.TransformBase.transform_geometry">transform_geometry</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            transform_model_run(model_run) (soundevent.transforms.TransformBase.transform_model_run)" href="#soundevent.transforms.TransformBase.transform_model_run">transform_model_run</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            transform_notes(notes) (soundevent.transforms.TransformBase.transform_notes)" href="#soundevent.transforms.TransformBase.transform_notes">transform_notes</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            transform_path(path) (soundevent.transforms.TransformBase.transform_path)" href="#soundevent.transforms.TransformBase.transform_path">transform_path</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            transform_predicted_tags(predicted_tags) (soundevent.transforms.TransformBase.transform_predicted_tags)" href="#soundevent.transforms.TransformBase.transform_predicted_tags">transform_predicted_tags</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            transform_prediction_set(prediction_set) (soundevent.transforms.TransformBase.transform_prediction_set)" href="#soundevent.transforms.TransformBase.transform_prediction_set">transform_prediction_set</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            transform_recording(recording) (soundevent.transforms.TransformBase.transform_recording)" href="#soundevent.transforms.TransformBase.transform_recording">transform_recording</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            transform_recording_set(recording_set) (soundevent.transforms.TransformBase.transform_recording_set)" href="#soundevent.transforms.TransformBase.transform_recording_set">transform_recording_set</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            transform_sequence(sequence) (soundevent.transforms.TransformBase.transform_sequence)" href="#soundevent.transforms.TransformBase.transform_sequence">transform_sequence</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            transform_sequence_annotation(sequence_annotation) (soundevent.transforms.TransformBase.transform_sequence_annotation)" href="#soundevent.transforms.TransformBase.transform_sequence_annotation">transform_sequence_annotation</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            transform_sequence_prediction(sequence_prediction) (soundevent.transforms.TransformBase.transform_sequence_prediction)" href="#soundevent.transforms.TransformBase.transform_sequence_prediction">transform_sequence_prediction</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            transform_sound_event(sound_event) (soundevent.transforms.TransformBase.transform_sound_event)" href="#soundevent.transforms.TransformBase.transform_sound_event">transform_sound_event</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            transform_sound_event_annotation(sound_event_annotation) (soundevent.transforms.TransformBase.transform_sound_event_annotation)" href="#soundevent.transforms.TransformBase.transform_sound_event_annotation">transform_sound_event_annotation</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            transform_sound_event_prediction(sound_event_prediction) (soundevent.transforms.TransformBase.transform_sound_event_prediction)" href="#soundevent.transforms.TransformBase.transform_sound_event_prediction">transform_sound_event_prediction</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            transform_status_badge(status_badge) (soundevent.transforms.TransformBase.transform_status_badge)" href="#soundevent.transforms.TransformBase.transform_status_badge">transform_status_badge</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            transform_tags(tags) (soundevent.transforms.TransformBase.transform_tags)" href="#soundevent.transforms.TransformBase.transform_tags">transform_tags</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            transform_user(user) (soundevent.transforms.TransformBase.transform_user)" href="#soundevent.transforms.TransformBase.transform_user">transform_user</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  
+                </div>
+              </td>
+            </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<h5 id="soundevent.transforms.TransformBase-functions">Functions<a href="#soundevent.transforms.TransformBase-functions" class="headerlink" title="Permanent link">#</a></h5>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="soundevent.transforms.TransformBase.transform_annotation_project" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">transform_annotation_project</span><span class="p">(</span><span class="n">annotation_project</span><span class="p">)</span></code>
+
+<a href="#soundevent.transforms.TransformBase.transform_annotation_project" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="soundevent.transforms.TransformBase.transform_annotation_set" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">transform_annotation_set</span><span class="p">(</span><span class="n">annotation_set</span><span class="p">)</span></code>
+
+<a href="#soundevent.transforms.TransformBase.transform_annotation_set" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="soundevent.transforms.TransformBase.transform_annotation_task" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">transform_annotation_task</span><span class="p">(</span><span class="n">annotation_task</span><span class="p">)</span></code>
+
+<a href="#soundevent.transforms.TransformBase.transform_annotation_task" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="soundevent.transforms.TransformBase.transform_clip" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">transform_clip</span><span class="p">(</span><span class="n">clip</span><span class="p">)</span></code>
+
+<a href="#soundevent.transforms.TransformBase.transform_clip" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="soundevent.transforms.TransformBase.transform_clip_annotation" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">transform_clip_annotation</span><span class="p">(</span><span class="n">clip_annotation</span><span class="p">)</span></code>
+
+<a href="#soundevent.transforms.TransformBase.transform_clip_annotation" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="soundevent.transforms.TransformBase.transform_clip_prediction" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">transform_clip_prediction</span><span class="p">(</span><span class="n">clip_prediction</span><span class="p">)</span></code>
+
+<a href="#soundevent.transforms.TransformBase.transform_clip_prediction" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="soundevent.transforms.TransformBase.transform_dataset" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">transform_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span></code>
+
+<a href="#soundevent.transforms.TransformBase.transform_dataset" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="soundevent.transforms.TransformBase.transform_evaluation_set" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">transform_evaluation_set</span><span class="p">(</span><span class="n">evaluation_set</span><span class="p">)</span></code>
+
+<a href="#soundevent.transforms.TransformBase.transform_evaluation_set" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="soundevent.transforms.TransformBase.transform_features" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">transform_features</span><span class="p">(</span><span class="n">features</span><span class="p">)</span></code>
+
+<a href="#soundevent.transforms.TransformBase.transform_features" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="soundevent.transforms.TransformBase.transform_geometry" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">transform_geometry</span><span class="p">(</span><span class="n">geometry</span><span class="p">)</span></code>
+
+<a href="#soundevent.transforms.TransformBase.transform_geometry" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="soundevent.transforms.TransformBase.transform_model_run" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">transform_model_run</span><span class="p">(</span><span class="n">model_run</span><span class="p">)</span></code>
+
+<a href="#soundevent.transforms.TransformBase.transform_model_run" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="soundevent.transforms.TransformBase.transform_notes" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">transform_notes</span><span class="p">(</span><span class="n">notes</span><span class="p">)</span></code>
+
+<a href="#soundevent.transforms.TransformBase.transform_notes" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="soundevent.transforms.TransformBase.transform_path" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">transform_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span></code>
+
+<a href="#soundevent.transforms.TransformBase.transform_path" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="soundevent.transforms.TransformBase.transform_predicted_tags" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">transform_predicted_tags</span><span class="p">(</span><span class="n">predicted_tags</span><span class="p">)</span></code>
+
+<a href="#soundevent.transforms.TransformBase.transform_predicted_tags" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="soundevent.transforms.TransformBase.transform_prediction_set" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">transform_prediction_set</span><span class="p">(</span><span class="n">prediction_set</span><span class="p">)</span></code>
+
+<a href="#soundevent.transforms.TransformBase.transform_prediction_set" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="soundevent.transforms.TransformBase.transform_recording" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">transform_recording</span><span class="p">(</span><span class="n">recording</span><span class="p">)</span></code>
+
+<a href="#soundevent.transforms.TransformBase.transform_recording" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="soundevent.transforms.TransformBase.transform_recording_set" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">transform_recording_set</span><span class="p">(</span><span class="n">recording_set</span><span class="p">)</span></code>
+
+<a href="#soundevent.transforms.TransformBase.transform_recording_set" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="soundevent.transforms.TransformBase.transform_sequence" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">transform_sequence</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span></code>
+
+<a href="#soundevent.transforms.TransformBase.transform_sequence" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="soundevent.transforms.TransformBase.transform_sequence_annotation" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">transform_sequence_annotation</span><span class="p">(</span><span class="n">sequence_annotation</span><span class="p">)</span></code>
+
+<a href="#soundevent.transforms.TransformBase.transform_sequence_annotation" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="soundevent.transforms.TransformBase.transform_sequence_prediction" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">transform_sequence_prediction</span><span class="p">(</span><span class="n">sequence_prediction</span><span class="p">)</span></code>
+
+<a href="#soundevent.transforms.TransformBase.transform_sequence_prediction" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="soundevent.transforms.TransformBase.transform_sound_event" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">transform_sound_event</span><span class="p">(</span><span class="n">sound_event</span><span class="p">)</span></code>
+
+<a href="#soundevent.transforms.TransformBase.transform_sound_event" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="soundevent.transforms.TransformBase.transform_sound_event_annotation" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">transform_sound_event_annotation</span><span class="p">(</span><span class="n">sound_event_annotation</span><span class="p">)</span></code>
+
+<a href="#soundevent.transforms.TransformBase.transform_sound_event_annotation" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="soundevent.transforms.TransformBase.transform_sound_event_prediction" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">transform_sound_event_prediction</span><span class="p">(</span><span class="n">sound_event_prediction</span><span class="p">)</span></code>
+
+<a href="#soundevent.transforms.TransformBase.transform_sound_event_prediction" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="soundevent.transforms.TransformBase.transform_status_badge" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">transform_status_badge</span><span class="p">(</span><span class="n">status_badge</span><span class="p">)</span></code>
+
+<a href="#soundevent.transforms.TransformBase.transform_status_badge" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="soundevent.transforms.TransformBase.transform_tags" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">transform_tags</span><span class="p">(</span><span class="n">tags</span><span class="p">)</span></code>
+
+<a href="#soundevent.transforms.TransformBase.transform_tags" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="soundevent.transforms.TransformBase.transform_user" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">transform_user</span><span class="p">(</span><span class="n">user</span><span class="p">)</span></code>
+
+<a href="#soundevent.transforms.TransformBase.transform_user" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy", "navigation.tracking", "navigation.indexes", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+        <script src="../../javascripts/katex.js"></script>
+      
+        <script src="https://unpkg.com/katex@0/dist/katex.min.js"></script>
+      
+        <script src="https://unpkg.com/katex@0/dist/contrib/auto-render.min.js"></script>
+      
+    
+  </body>
+</html>

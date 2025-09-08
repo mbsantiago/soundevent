@@ -1,0 +1,3657 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://mbsantiago.github.io/soundevent/reference/audio/">
+      
+      
+        <link rel="prev" href="../arrays/">
+      
+      
+        <link rel="next" href="../geometry/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>audio - soundevent</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../stylesheets/jquery.json-viewer.css">
+    
+      <link rel="stylesheet" href="../../css/mkdocstrings.css">
+    
+      <link rel="stylesheet" href="https://unpkg.com/katex@0/dist/katex.min.css">
+    
+      <link rel="stylesheet" href="../../sg_gallery.css">
+    
+      <link rel="stylesheet" href="../../sg_gallery-rendered-html.css">
+    
+      <link rel="stylesheet" href="../../sg_gallery-binder.css">
+    
+      <link rel="stylesheet" href="../../sg_gallery-dataframe.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#audio_module" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="soundevent" class="md-header__button md-logo" aria-label="soundevent" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            soundevent
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              audio
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="soundevent" class="md-nav__button md-logo" aria-label="soundevent" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    soundevent
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introduction
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../data_schemas/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Data Schemas
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Data Schemas
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data_schemas/descriptors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Descriptors
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data_schemas/audio_content/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Audio Content
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data_schemas/acoustic_objects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Acoustic Objects
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data_schemas/annotation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Annotation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data_schemas/prediction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Prediction
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data_schemas/evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Evaluation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../generated/gallery/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    User Guide
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            User Guide
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../generated/gallery/0_objects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Acoustic Objects
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../generated/gallery/1_saving_and_loading/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Saving and Loading data.
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../generated/gallery/2_loading_audio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Loading audio
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../generated/gallery/3_computing_spectrograms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Computing spectrograms
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../generated/gallery/4_geometric_operations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Geometric Operations
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../generated/gallery/5_integration_with_crowsetta/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Integrating Crowsetta with Soundevent
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../generated/gallery/6_plotting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Plotting functions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    data
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../operations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    operations
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    io
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../arrays/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    arrays
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    audio
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    audio
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#soundevent.audio" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-module"></code>&nbsp;audio
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" audio">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.audio-classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Classes
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Classes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.audio.MediaInfo" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;MediaInfo
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.audio-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Functions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.audio.compute_md5_checksum" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;compute_md5_checksum
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.audio.compute_spectrogram" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;compute_spectrogram
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.audio.filter" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;filter
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.audio.get_audio_files" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;get_audio_files
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.audio.get_media_info" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;get_media_info
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.audio.is_audio_file" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;is_audio_file
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.audio.load_audio" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;load_audio
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.audio.load_clip" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;load_clip
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.audio.load_recording" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;load_recording
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.audio.pcen" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;pcen
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.audio.resample" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;resample
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../geometry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    geometry
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    evaluation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../plot/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    plot
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../terms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    terms
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../transforms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    transforms
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CONTRIBUTING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Contributing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CODE_OF_CONDUCT/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Code of Conduct
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#soundevent.audio" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-module"></code>&nbsp;audio
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" audio">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.audio-classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Classes
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Classes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.audio.MediaInfo" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;MediaInfo
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.audio-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Functions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.audio.compute_md5_checksum" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;compute_md5_checksum
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.audio.compute_spectrogram" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;compute_spectrogram
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.audio.filter" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;filter
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.audio.get_audio_files" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;get_audio_files
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.audio.get_media_info" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;get_media_info
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.audio.is_audio_file" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;is_audio_file
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.audio.load_audio" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;load_audio
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.audio.load_clip" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;load_clip
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.audio.load_recording" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;load_recording
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.audio.pcen" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;pcen
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soundevent.audio.resample" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;resample
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="audio_module">Audio Module<a class="headerlink" href="#audio_module" title="Permanent link">#</a></h1>
+<details class="info" open="open">
+<summary>Additional dependencies</summary>
+<p>To use the <code>soundevent.audio</code> module you need to install some additional
+dependencies. Make sure you have them installed by running the following
+command:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>soundevent<span class="o">[</span>audio<span class="o">]</span>
+</span></code></pre></div>
+</details>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="soundevent.audio" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-module"></code>            <code>soundevent.audio</code>
+
+
+<a href="#soundevent.audio" class="headerlink" title="Permanent link">#</a></h2>
+
+    <div class="doc doc-contents first">
+
+        <p>Soundevent functions for handling audio files and arrays.</p>
+
+
+
+
+
+
+<p><span class="doc-section-title">Modules:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="soundevent.audio.attributes">attributes</span></code></td>
+            <td>
+              <div class="doc-md-description">
+                <p>Definition of common attributes for audio objects.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="soundevent.audio.files">files</span></code></td>
+            <td>
+              <div class="doc-md-description">
+                <p>Functions for recognizing audio files.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="soundevent.audio.io">io</span></code></td>
+            <td>
+              <div class="doc-md-description">
+                <p>Input and output functions for soundevent.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="soundevent.audio.media_info">media_info</span></code></td>
+            <td>
+              <div class="doc-md-description">
+                <p>Functions for getting media information from WAV files.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="soundevent.audio.operations">operations</span></code></td>
+            <td>
+              <div class="doc-md-description">
+                
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="soundevent.audio.spectrograms">spectrograms</span></code></td>
+            <td>
+              <div class="doc-md-description">
+                <p>Functions to compute several spectral representations of sound signals.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+<p><span class="doc-section-title">Classes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><a class="autorefs autorefs-internal" title="              MediaInfo(samplerate_hz, duration_s, samples, channels, format, subtype)
+
+  
+      dataclass
+   (soundevent.audio.MediaInfo)" href="#soundevent.audio.MediaInfo">MediaInfo</a></code></td>
+            <td>
+              <div class="doc-md-description">
+                <p>MediaInfo Class.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+<p><span class="doc-section-title">Functions:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            compute_md5_checksum(path) (soundevent.audio.compute_md5_checksum)" href="#soundevent.audio.compute_md5_checksum">compute_md5_checksum</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  <p>Compute the MD5 checksum of a file.</p>
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            compute_spectrogram(audio, window_size, hop_size, window_type='hann', detrend=False, padded=True, boundary='zeros', scale='psd', sort_dims=DEFAULT_DIM_ORDER) (soundevent.audio.compute_spectrogram)" href="#soundevent.audio.compute_spectrogram">compute_spectrogram</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  <p>Compute the spectrogram of a signal.</p>
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            filter(audio, low_freq=None, high_freq=None, order=5, dim=Dimensions.time.value) (soundevent.audio.filter)" href="#soundevent.audio.filter">filter</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  <p>Filter audio data.</p>
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            get_audio_files(path, strict=False, recursive=True, follow_symlinks=False) (soundevent.audio.get_audio_files)" href="#soundevent.audio.get_audio_files">get_audio_files</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  <p>Return a generator of audio files in a directory.</p>
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            get_media_info(path) (soundevent.audio.get_media_info)" href="#soundevent.audio.get_media_info">get_media_info</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  <p>Return the media information from the WAV file.</p>
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            is_audio_file(path, strict=False) (soundevent.audio.is_audio_file)" href="#soundevent.audio.is_audio_file">is_audio_file</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  <p>Return whether the file is an audio file.</p>
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            load_audio(path, offset=0, samples=None) (soundevent.audio.load_audio)" href="#soundevent.audio.load_audio">load_audio</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  <p>Load an audio file.</p>
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            load_clip(clip, audio_dir=None) (soundevent.audio.load_clip)" href="#soundevent.audio.load_clip">load_clip</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  <p>Load a clip from a file.</p>
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            load_recording(recording, audio_dir=None) (soundevent.audio.load_recording)" href="#soundevent.audio.load_recording">load_recording</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  <p>Load a recording from a file.</p>
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            pcen(array, smooth=0.025, gain=0.98, bias=2, power=0.5, eps=1e-06, dim=Dimensions.time.value) (soundevent.audio.pcen)" href="#soundevent.audio.pcen">pcen</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  <p>Apply PCEN to spectrogram.</p>
+                </div>
+              </td>
+            </tr>
+            <tr class="doc-section-item">
+              <td><code><a class="autorefs autorefs-internal" title="            resample(array, target_samplerate, window=None, dim=Dimensions.time.value) (soundevent.audio.resample)" href="#soundevent.audio.resample">resample</a></code></td>
+              <td>
+                <div class="doc-md-description">
+                  <p>Resample array data to a target sample rate along a given dimension.</p>
+                </div>
+              </td>
+            </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+<h3 id="soundevent.audio-classes">Classes<a href="#soundevent.audio-classes" class="headerlink" title="Permanent link">#</a></h3>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h4 id="soundevent.audio.MediaInfo" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>              <code class="highlight language-python"><span class="n">MediaInfo</span><span class="p">(</span><span class="n">samplerate_hz</span><span class="p">,</span> <span class="n">duration_s</span><span class="p">,</span> <span class="n">samples</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="nb">format</span><span class="p">,</span> <span class="n">subtype</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#soundevent.audio.MediaInfo" class="headerlink" title="Permanent link">#</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+
+        <p>MediaInfo Class.</p>
+<p>Encapsulates essential metadata about audio data for processing and
+analysis. The information stored in this dataclass can typically be
+automatically extracted from the audio file itself.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><a class="autorefs autorefs-internal" title="            channels
+
+  
+      instance-attribute
+   (soundevent.audio.MediaInfo.channels)" href="#soundevent.audio.MediaInfo.channels">channels</a></code></td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/functions.html#int">int</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The number of audio channels present in the data.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><a class="autorefs autorefs-internal" title="            duration_s
+
+  
+      instance-attribute
+   (soundevent.audio.MediaInfo.duration_s)" href="#soundevent.audio.MediaInfo.duration_s">duration_s</a></code></td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/functions.html#float">float</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The total duration of the audio, measured in seconds (s).</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><a class="autorefs autorefs-internal" title="            format
+
+  
+      instance-attribute
+   (soundevent.audio.MediaInfo.format)" href="#soundevent.audio.MediaInfo.format">format</a></code></td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/stdtypes.html#str">str</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A code representing the audio file format. </p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><a class="autorefs autorefs-internal" title="            samplerate_hz
+
+  
+      instance-attribute
+   (soundevent.audio.MediaInfo.samplerate_hz)" href="#soundevent.audio.MediaInfo.samplerate_hz">samplerate_hz</a></code></td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/functions.html#int">int</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The sampling rate of the audio, measured in Hertz (Hz). </p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><a class="autorefs autorefs-internal" title="            samples
+
+  
+      instance-attribute
+   (soundevent.audio.MediaInfo.samples)" href="#soundevent.audio.MediaInfo.samples">samples</a></code></td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/functions.html#int">int</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The total number of samples in the audio data.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><a class="autorefs autorefs-internal" title="            subtype
+
+  
+      instance-attribute
+   (soundevent.audio.MediaInfo.subtype)" href="#soundevent.audio.MediaInfo.subtype">subtype</a></code></td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/stdtypes.html#str">str</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A more specific subtype of the audio format. </p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+<h5 id="soundevent.audio.MediaInfo-attributes">Attributes<a href="#soundevent.audio.MediaInfo-attributes" class="headerlink" title="Permanent link">#</a></h5>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h6 id="soundevent.audio.MediaInfo.channels" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <code class="highlight language-python"><span class="n">channels</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#soundevent.audio.MediaInfo.channels" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>The number of audio channels present in the data.</p>
+<p>For example 1 for mono, 2 for stereo.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h6 id="soundevent.audio.MediaInfo.duration_s" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <code class="highlight language-python"><span class="n">duration_s</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#soundevent.audio.MediaInfo.duration_s" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>The total duration of the audio, measured in seconds (s).</p>
+<p>This represents the length of time the audio recording spans.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h6 id="soundevent.audio.MediaInfo.format" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <code class="highlight language-python"><span class="nb">format</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#soundevent.audio.MediaInfo.format" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>A code representing the audio file format. </p>
+<p>For example "WAV", "MP3".</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h6 id="soundevent.audio.MediaInfo.samplerate_hz" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <code class="highlight language-python"><span class="n">samplerate_hz</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#soundevent.audio.MediaInfo.samplerate_hz" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>The sampling rate of the audio, measured in Hertz (Hz). </p>
+<p>This indicates the number of samples taken per second to represent the
+analog audio signal.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h6 id="soundevent.audio.MediaInfo.samples" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <code class="highlight language-python"><span class="n">samples</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#soundevent.audio.MediaInfo.samples" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>The total number of samples in the audio data.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h6 id="soundevent.audio.MediaInfo.subtype" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <code class="highlight language-python"><span class="n">subtype</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#soundevent.audio.MediaInfo.subtype" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>A more specific subtype of the audio format. </p>
+<p>For example "PCM_16", "A_LAW". These subtypes provide additional
+information about the audio data, such as the bit depth for PCM encoded
+audio, or encoding algorithm for compressed audio formats.</p>
+
+    </div>
+
+</div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+<h3 id="soundevent.audio-functions">Functions<a href="#soundevent.audio-functions" class="headerlink" title="Permanent link">#</a></h3>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="soundevent.audio.compute_md5_checksum" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <code class="highlight language-python"><span class="n">compute_md5_checksum</span><span class="p">(</span><span class="n">path</span><span class="p">)</span></code>
+
+<a href="#soundevent.audio.compute_md5_checksum" class="headerlink" title="Permanent link">#</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Compute the MD5 checksum of a file.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>path</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="            soundevent.data.PathLike = Union[os.PathLike, str]
+
+  
+      module-attribute
+   (soundevent.data.recordings.PathLike)" href="../data/#soundevent.data.PathLike">PathLike</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Path to the file.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/stdtypes.html#str">str</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>MD5 checksum of the file.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="soundevent.audio.compute_spectrogram" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <code class="highlight language-python"><span class="n">compute_spectrogram</span><span class="p">(</span><span class="n">audio</span><span class="p">,</span> <span class="n">window_size</span><span class="p">,</span> <span class="n">hop_size</span><span class="p">,</span> <span class="n">window_type</span><span class="o">=</span><span class="s1">&#39;hann&#39;</span><span class="p">,</span> <span class="n">detrend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">padded</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">boundary</span><span class="o">=</span><span class="s1">&#39;zeros&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;psd&#39;</span><span class="p">,</span> <span class="n">sort_dims</span><span class="o">=</span><span class="n">DEFAULT_DIM_ORDER</span><span class="p">)</span></code>
+
+<a href="#soundevent.audio.compute_spectrogram" class="headerlink" title="Permanent link">#</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Compute the spectrogram of a signal.</p>
+<p>This function calculates the short-time Fourier transform (STFT), which decomposes
+a signal into overlapping windows and computes the Fourier transform of each window.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>audio</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" title="xarray.DataArray" href="https://docs.xarray.dev/en/stable/generated/xarray.DataArray.html#xarray.DataArray">DataArray</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The audio signal.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>window_size</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/functions.html#float">float</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The duration of the STFT window in seconds.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>hop_size</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/functions.html#float">float</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The duration of the STFT hop (in seconds). This determines the time
+step between consecutive STFT frames.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>window_type</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/stdtypes.html#str">str</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The type of window to use. Refer to
+<a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.get_window.html"><code>scipy.signal.get_window</code></a>
+for supported types.</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;hann&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>detrend</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" title="typing.Union" href="https://docs.python.org/3.11/library/typing.html#typing.Union">Union</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/stdtypes.html#str">str</a>, <a class="autorefs autorefs-external" title="typing.Callable" href="https://docs.python.org/3.11/library/typing.html#typing.Callable">Callable</a>, <a class="autorefs autorefs-external" title="typing.Literal" href="https://docs.python.org/3.11/library/typing.html#typing.Literal">Literal</a>[False]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Specifies how to detrend each STFT window. See
+ <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.stft.html"><code>scipy.signal.stft</code></a>
+ for options. Default is False (no detrending).</p>
+              </div>
+            </td>
+            <td>
+                  <code>False</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>padded</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/functions.html#bool">bool</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Indicates whether the input signal is zero-padded at the beginning and
+end before performing the STFT. See
+<a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.stft.html"><code>scipy.signal.stft</code></a>.
+Default is True.</p>
+              </div>
+            </td>
+            <td>
+                  <code>True</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>boundary</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" title="typing.Optional" href="https://docs.python.org/3.11/library/typing.html#typing.Optional">Optional</a>[<a class="autorefs autorefs-external" title="typing.Literal" href="https://docs.python.org/3.11/library/typing.html#typing.Literal">Literal</a>[&#39;zeros&#39;, &#39;odd&#39;, &#39;even&#39;, &#39;constant&#39;]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Specifies the boundary extension mode for padding the signal to perform
+the STFT. See
+<a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.stft.html"><code>scipy.signal.stft</code></a>.
+Default is "zeros".</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;zeros&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>scale</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" title="typing.Literal" href="https://docs.python.org/3.11/library/typing.html#typing.Literal">Literal</a>[&#39;amplitude&#39;, &#39;power&#39;, &#39;psd&#39;]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Specifies the scaling of the returned spectrogram values.
+Default is "psd".
+- "amplitude": Returns the magnitude of the STFT components.
+  Units are typically the same as the input signal (e.g., V).
+- "power": Returns the squared magnitude of the STFT components.
+  Units are the square of the input signal's units (e.g., V<strong>2).
+  This corresponds to the energy in each time-frequency bin,
+  normalized for windowing effects but not frequency bin width.
+- "psd": Returns the Power Spectral Density. Units include per
+  Hertz (e.g., V</strong>2/Hz). This scaling accounts for windowing
+  effects and frequency bin width, representing power density.</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;psd&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>sort_dims</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" title="typing.Union" href="https://docs.python.org/3.11/library/typing.html#typing.Union">Union</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/stdtypes.html#tuple">tuple</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/stdtypes.html#str">str</a>, ...], <a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/functions.html#bool">bool</a>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Controls the final dimension order of the output DataArray.
+- If <code>True</code>, transpose to <code>DEFAULT_DIM_ORDER</code>
+  (currently ("frequency", "time", "channel")).
+- If a tuple of dimension names (e.g., ("channel", "frequency", "time")),
+  transpose to that specific order. <code>missing_dims="ignore"</code> is used.
+- If <code>False</code>, do not transpose; return the array with the dimension
+  order directly resulting from the STFT calculation (see Notes).
+Default is <code>DEFAULT_DIM_ORDER</code>.</p>
+              </div>
+            </td>
+            <td>
+                  <code><span title="soundevent.audio.spectrograms.DEFAULT_DIM_ORDER">DEFAULT_DIM_ORDER</span></code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>spectrogram</code></td>            <td>
+                  <code><a class="autorefs autorefs-external" title="xarray.DataArray" href="https://docs.xarray.dev/en/stable/generated/xarray.DataArray.html#xarray.DataArray">DataArray</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The spectrogram of the audio signal. This is a three-dimensional
+xarray data array with the dimensions frequency, time, and channel.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<details class="note" open>
+  <summary>Notes</summary>
+  <p><strong>Time Bin Calculation:</strong>
+*  The time axis of the spectrogram represents the center of each STFT window.
+*  The first time bin is centered at time t=hop_size / 2.
+*  Subsequent time bins are spaced by hop_size.</p>
+<p><strong>Scaling Implementation:</strong>
+* The different <code>scale</code> options leverage <code>scipy.signal.stft</code>'s <code>scaling</code>
+    parameter and post-processing:
+    - <code>scale="amplitude"</code> uses <code>stft(scaling='spectrum')</code> and computes <code>np.abs()</code>.
+    - <code>scale="power"</code> uses <code>stft(scaling='spectrum')</code> and computes <code>np.abs()**2</code>.
+    - <code>scale="psd"</code> uses <code>stft(scaling='psd')</code> and computes <code>np.abs()**2</code>.
+* Units mentioned in the <code>scale</code> parameter description assume the input
+    signal <code>audio</code> has units of Volts (V) for illustrative purposes.</p>
+<p><strong>Dimension Ordering:</strong>
+* The intermediate dimension order, before applying <code>sort_dims</code> (i.e.,
+    the order if <code>sort_dims=False</code>), follows the structure where the
+    original time dimension (<code>axis</code>) is replaced by the frequency dimension,
+    and the new time segment dimension is appended last. For example, an
+    input with dims <code>("height", "time", "channel")</code> results in an
+    intermediate order of <code>("height", "frequency", "channel", "time")</code>.
+* By default (<code>sort_dims=True</code>), the output is transposed to match
+    <code>DEFAULT_DIM_ORDER</code>, which is <code>("frequency", "time", "channel")</code>.</p>
+</details>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="soundevent.audio.filter" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <code class="highlight language-python"><span class="nb">filter</span><span class="p">(</span><span class="n">audio</span><span class="p">,</span> <span class="n">low_freq</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">high_freq</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="n">Dimensions</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></code>
+
+<a href="#soundevent.audio.filter" class="headerlink" title="Permanent link">#</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Filter audio data.</p>
+<p>This function assumes that the input audio object is a
+:class:<code>xarray.DataArray</code> with a "samplerate" attribute and a "time"
+dimension.</p>
+<p>The filtering is done using a Butterworth filter or the specified order.
+The type of filter (lowpass/highpass/bandpass filter) is determined
+by the specified cutoff frequencies. If only one cutoff frequency is
+specified, a low pass or high pass filter is used. If both cutoff
+frequencies are specified, a band pass filter is used.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>audio</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" title="xarray.DataArray" href="https://docs.xarray.dev/en/stable/generated/xarray.DataArray.html#xarray.DataArray">DataArray</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The audio data to filter with a "samplerate" attribute and
+a "time" dimension.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>low_freq</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/functions.html#float">float</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The low cutoff frequency in Hz.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>high_freq</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/functions.html#float">float</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The high cutoff frequency in Hz.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>order</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/functions.html#int">int</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The order of the filter. By default, 5.</p>
+              </div>
+            </td>
+            <td>
+                  <code>5</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>dim</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/stdtypes.html#str">str</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The dimension along which to filter the audio data. By default,
+"time".</p>
+              </div>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="            time = 'time'
+
+  
+      class-attribute
+      instance-attribute
+   (soundevent.arrays.Dimensions.time)" href="../arrays/#soundevent.arrays.dimensions.Dimensions.time">time</a>.value</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-external" title="xarray.DataArray" href="https://docs.xarray.dev/en/stable/generated/xarray.DataArray.html#xarray.DataArray">DataArray</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The filtered audio data.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<p><span class="doc-section-title">Raises:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/exceptions.html#ValueError">ValueError</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If neither low_freq nor high_freq is specified, or if both
+are specified and low_freq &gt; high_freq.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="soundevent.audio.get_audio_files" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <code class="highlight language-python"><span class="n">get_audio_files</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">follow_symlinks</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+
+<a href="#soundevent.audio.get_audio_files" class="headerlink" title="Permanent link">#</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Return a generator of audio files in a directory.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>path</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="            soundevent.data.PathLike = Union[os.PathLike, str]
+
+  
+      module-attribute
+   (soundevent.data.recordings.PathLike)" href="../data/#soundevent.data.PathLike">PathLike</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Path to the directory.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>strict</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/functions.html#bool">bool</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Whether to check the file contents to ensure it is an audio file.
+Will take a bit longer to run, by default False.</p>
+              </div>
+            </td>
+            <td>
+                  <code>False</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>recursive</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/functions.html#bool">bool</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Whether to search the directory recursively, by default True. This
+means that all audio files in subdirectories will be included. If
+False, only the audio files at the top level of the directory will
+be included.</p>
+              </div>
+            </td>
+            <td>
+                  <code>True</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>follow_symlinks</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/functions.html#bool">bool</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Whether to follow symbolic links, by default False. Care should be
+taken when following symbolic links to avoid infinite loops.</p>
+              </div>
+            </td>
+            <td>
+                  <code>False</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Yields:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-external" title="pathlib.Path" href="https://docs.python.org/3.11/library/pathlib.html#pathlib.Path">Path</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Path to the audio file.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<p><span class="doc-section-title">Raises:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/exceptions.html#ValueError">ValueError</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If the path is not a directory.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<details class="note" open>
+  <summary>Notes</summary>
+  <p>This function uses the
+<a class="autorefs autorefs-internal" title="            is_audio_file(path, strict=False)" href="#soundevent.audio.is_audio_file"><code>is_audio_file</code></a> function to check
+if a file is an audio file. See the documentation for
+<a class="autorefs autorefs-internal" title="            is_audio_file(path, strict=False)" href="#soundevent.audio.is_audio_file"><code>is_audio_file</code></a> for more
+information on which audio file formats are supported.</p>
+</details>
+
+<p><span class="doc-section-title">Examples:</span></p>
+    <div class="language-pycon highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">soundevent.audio.files</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_audio_files</span>
+</span></code></pre></div>
+    <p>Get all audio files in a directory recursively:</p>
+    <div class="language-pycon highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">get_audio_files</span><span class="p">(</span><span class="s2">&quot;path/to/directory&quot;</span><span class="p">):</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+</span></code></pre></div>
+    <p>Get all audio files in a directory without recursion:</p>
+    <div class="language-pycon highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">get_audio_files</span><span class="p">(</span><span class="s2">&quot;path/to/directory&quot;</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+</span></code></pre></div>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="soundevent.audio.get_media_info" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <code class="highlight language-python"><span class="n">get_media_info</span><span class="p">(</span><span class="n">path</span><span class="p">)</span></code>
+
+<a href="#soundevent.audio.get_media_info" class="headerlink" title="Permanent link">#</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Return the media information from the WAV file.</p>
+<p>The information extracted from the WAV file is the audio format,
+the bit depth, the sample rate, the duration, the number of
+samples, and the number of channels.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>path</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="            soundevent.data.PathLike = Union[os.PathLike, str]
+
+  
+      module-attribute
+   (soundevent.data.recordings.PathLike)" href="../data/#soundevent.data.PathLike">PathLike</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Path to the WAV file.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>media_info</code></td>            <td>
+                  <code><a class="autorefs autorefs-internal" title="              MediaInfo(samplerate_hz, duration_s, samples, channels, format, subtype)
+
+  
+      dataclass
+   (soundevent.audio.media_info.MediaInfo)" href="#soundevent.audio.MediaInfo">MediaInfo</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Information about the WAV file.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<p><span class="doc-section-title">Raises:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/exceptions.html#ValueError">ValueError</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If the WAV file is not PCM encoded.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="soundevent.audio.is_audio_file" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <code class="highlight language-python"><span class="n">is_audio_file</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+
+<a href="#soundevent.audio.is_audio_file" class="headerlink" title="Permanent link">#</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Return whether the file is an audio file.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>path</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="            soundevent.data.PathLike = Union[os.PathLike, str]
+
+  
+      module-attribute
+   (soundevent.data.recordings.PathLike)" href="../data/#soundevent.data.PathLike">PathLike</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Path to the file.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>strict</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/functions.html#bool">bool</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Whether to check the file contents to ensure it is an audio file.
+Will take a bit longer to run, by default False.</p>
+              </div>
+            </td>
+            <td>
+                  <code>False</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/functions.html#bool">bool</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Whether the file is an audio file.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<details class="note" open>
+  <summary>Notes</summary>
+  <p>The list of supported audio file extensions
+contains most of the audio files formats supported by the <code>libsndfile</code>
+library. See: https://libsndfile.github.io/libsndfile/</p>
+<p>Some formats were excluded as they do not support seeking and
+thus are not suitable for random access.</p>
+<p>Supported formats:</p>
+<ul>
+<li>aiff</li>
+<li>au</li>
+<li>avr</li>
+<li>caf</li>
+<li>flac</li>
+<li>htk</li>
+<li>ircam</li>
+<li>mat4</li>
+<li>mat5</li>
+<li>mp3</li>
+<li>mpc2k</li>
+<li>nist</li>
+<li>ogg</li>
+<li>paf</li>
+<li>pvf</li>
+<li>rf64</li>
+<li>sds</li>
+<li>svx</li>
+<li>voc</li>
+<li>w64</li>
+<li>wav</li>
+<li>wavex</li>
+<li>wve</li>
+</ul>
+</details>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="soundevent.audio.load_audio" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <code class="highlight language-python"><span class="n">load_audio</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+<a href="#soundevent.audio.load_audio" class="headerlink" title="Permanent link">#</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Load an audio file.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>path</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="            soundevent.data.PathLike = Union[os.PathLike, str]
+
+  
+      module-attribute
+   (soundevent.data.PathLike)" href="../data/#soundevent.data.PathLike">PathLike</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The path to the audio file.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>offset</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/functions.html#int">int</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The offset in samples from the start of the audio file.</p>
+              </div>
+            </td>
+            <td>
+                  <code>0</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>samples</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" title="typing.Optional" href="https://docs.python.org/3.11/library/typing.html#typing.Optional">Optional</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/functions.html#int">int</a>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The number of samples to load. If None, load the entire file.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td></td>            <td>
+                  <code><a class="autorefs autorefs-external" title="numpy.ndarray" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray">ndarray</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The audio data.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+<td><code>samplerate</code></td>            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/functions.html#int">int</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The sample rate of the audio file in Hz.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="soundevent.audio.load_clip" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <code class="highlight language-python"><span class="n">load_clip</span><span class="p">(</span><span class="n">clip</span><span class="p">,</span> <span class="n">audio_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+<a href="#soundevent.audio.load_clip" class="headerlink" title="Permanent link">#</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Load a clip from a file.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>clip</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="            Clip (soundevent.data.Clip)" href="../data/#soundevent.data.Clip">Clip</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The clip to load.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>audio_dir</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" title="typing.Optional" href="https://docs.python.org/3.11/library/typing.html#typing.Optional">Optional</a>[<a class="autorefs autorefs-internal" title="            soundevent.data.PathLike = Union[os.PathLike, str]
+
+  
+      module-attribute
+   (soundevent.data.PathLike)" href="../data/#soundevent.data.PathLike">PathLike</a>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The directory containing the audio file. If None, the
+recording path is assumed to be relative to the current
+working directory or an absolute path.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>audio</code></td>            <td>
+                  <code><a class="autorefs autorefs-external" title="xarray.DataArray" href="https://docs.xarray.dev/en/stable/generated/xarray.DataArray.html#xarray.DataArray">DataArray</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The loaded clip. The returned clip stores the samplerate
+and time expansion of the recording from which it was
+extracted.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="soundevent.audio.load_recording" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <code class="highlight language-python"><span class="n">load_recording</span><span class="p">(</span><span class="n">recording</span><span class="p">,</span> <span class="n">audio_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+<a href="#soundevent.audio.load_recording" class="headerlink" title="Permanent link">#</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Load a recording from a file.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>recording</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="            Recording (soundevent.data.Recording)" href="../data/#soundevent.data.Recording">Recording</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The recording to load.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>audio_dir</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" title="typing.Optional" href="https://docs.python.org/3.11/library/typing.html#typing.Optional">Optional</a>[<a class="autorefs autorefs-internal" title="            soundevent.data.PathLike = Union[os.PathLike, str]
+
+  
+      module-attribute
+   (soundevent.data.PathLike)" href="../data/#soundevent.data.PathLike">PathLike</a>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The directory containing the audio file. If None, the
+recording path is assumed to be relative to the current
+working directory or an absolute path.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>audio</code></td>            <td>
+                  <code><a class="autorefs autorefs-external" title="xarray.DataArray" href="https://docs.xarray.dev/en/stable/generated/xarray.DataArray.html#xarray.DataArray">DataArray</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The loaded recording.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="soundevent.audio.pcen" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <code class="highlight language-python"><span class="n">pcen</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="mf">0.025</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="mf">0.98</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">power</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-06</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="n">Dimensions</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></code>
+
+<a href="#soundevent.audio.pcen" class="headerlink" title="Permanent link">#</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Apply PCEN to spectrogram.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>array</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" title="xarray.DataArray" href="https://docs.xarray.dev/en/stable/generated/xarray.DataArray.html#xarray.DataArray">DataArray</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The spectrogram to which to apply PCEN.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>smooth</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/functions.html#float">float</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The time constant for smoothing the input spectrogram. By default,
+0.025.</p>
+              </div>
+            </td>
+            <td>
+                  <code>0.025</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>gain</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/functions.html#float">float</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The gain factor for the PCEN transform. By default, 0.98.</p>
+              </div>
+            </td>
+            <td>
+                  <code>0.98</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>bias</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/functions.html#float">float</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The bias factor for the PCEN transform. By default, 2.</p>
+              </div>
+            </td>
+            <td>
+                  <code>2</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>power</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/functions.html#float">float</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The power factor for the PCEN transform. By default, 0.5.</p>
+              </div>
+            </td>
+            <td>
+                  <code>0.5</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>eps</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/functions.html#float">float</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>An epsilon value to prevent division by zero. By default, 1e-6.</p>
+              </div>
+            </td>
+            <td>
+                  <code>1e-06</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>dim</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/stdtypes.html#str">str</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The dimension along which to apply PCEN.</p>
+              </div>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="            time = 'time'
+
+  
+      class-attribute
+      instance-attribute
+   (soundevent.arrays.Dimensions.time)" href="../arrays/#soundevent.arrays.dimensions.Dimensions.time">time</a>.value</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="DataArray">DataArray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Spectrogram with PCEN applied.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<details class="note" open>
+  <summary>Notes</summary>
+  <p>This function applies the Per-Channel Energy Normalization (PCEN) transform
+to a spectrogram, as described in [1].</p>
+<p>The PCEN transform is defined as:</p>
+<div class="arithmatex">\[
+PCEN(X) = \left(\frac{X}{(\epsilon + S)^{\alpha}} + \delta\right)^r - \delta^r
+\]</div>
+<p>where <span class="arithmatex">\(X\)</span> is the input spectrogram, <span class="arithmatex">\(S\)</span> is the smoothed version of the
+input spectrogram, <span class="arithmatex">\(\alpha\)</span> is the power factor, <span class="arithmatex">\(\delta\)</span> is the bias
+factor, and <span class="arithmatex">\(r\)</span> is the gain factor.</p>
+<p>The smoothed version of the input spectrogram is computed using a
+first-order IIR filter:</p>
+<div class="arithmatex">\[
+S_t = (1 - \beta) S_{t-1} + \beta X_t
+\]</div>
+<p>where <span class="arithmatex">\(\beta\)</span> is the smoothing factor.</p>
+<p>The default values for the parameters are taken from the PCEN paper [1].</p>
+</details>
+
+<details class="references" open>
+  <summary>References</summary>
+  <p>[1] Wang, Y., Getreuer, P., Hughes, T., Lyon, R. F., &amp; Saurous, R. A.
+(2017, March). Trainable frontend for robust and far-field keyword
+spotting. In 2017 IEEE International Conference on Acoustics, Speech and
+Signal Processing (ICASSP) (pp. 5670-5674). IEEE.</p>
+</details>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="soundevent.audio.resample" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <code class="highlight language-python"><span class="n">resample</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">target_samplerate</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="n">Dimensions</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></code>
+
+<a href="#soundevent.audio.resample" class="headerlink" title="Permanent link">#</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Resample array data to a target sample rate along a given dimension.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>array</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" title="xarray.DataArray" href="https://docs.xarray.dev/en/stable/generated/xarray.DataArray.html#xarray.DataArray">DataArray</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The data array to resample.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>target_samplerate</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/functions.html#int">int</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The target sample rate of the resampled data in Hz.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>window</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" title="typing.Optional" href="https://docs.python.org/3.11/library/typing.html#typing.Optional">Optional</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/stdtypes.html#str">str</a>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The window to use for resampling. See
+<a class="autorefs autorefs-external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.resample.html#scipy.signal.resample">scipy.signal.resample</a> for details.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>dim</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/stdtypes.html#str">str</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The dimension along which to resample the audio data. By default,
+"time".</p>
+              </div>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="            time = 'time'
+
+  
+      class-attribute
+      instance-attribute
+   (soundevent.arrays.Dimensions.time)" href="../arrays/#soundevent.arrays.dimensions.Dimensions.time">time</a>.value</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-external" title="xarray.DataArray" href="https://docs.xarray.dev/en/stable/generated/xarray.DataArray.html#xarray.DataArray">DataArray</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The resampled audio data.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<details class="note" open>
+  <summary>Notes</summary>
+  <p>This function uses <a class="autorefs autorefs-external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.resample.html#scipy.signal.resample">scipy.signal.resample</a> to
+resample the input data array to the target sample rate. This function
+uses the Fourier method to resample the data, which is suitable for
+resampling audio data. For other resampling methods, consider using
+the <a class="autorefs autorefs-external" href="https://docs.xarray.dev/en/stable/generated/xarray.DataArray.interp.html#xarray.DataArray.interp">xarray.DataArray.interp</a> method.</p>
+</details>
+
+<p><span class="doc-section-title">Raises:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3.11/library/exceptions.html#ValueError">ValueError</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If the input audio object is not a :class:<code>xarray.DataArray</code>, or if
+it does not have a "samplerate" attribute, or if it does not have a
+"time" dimension.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy", "navigation.tracking", "navigation.indexes", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+        <script src="../../javascripts/katex.js"></script>
+      
+        <script src="https://unpkg.com/katex@0/dist/katex.min.js"></script>
+      
+        <script src="https://unpkg.com/katex@0/dist/contrib/auto-render.min.js"></script>
+      
+    
+  </body>
+</html>

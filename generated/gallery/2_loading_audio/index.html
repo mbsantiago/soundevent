@@ -1,0 +1,1469 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://mbsantiago.github.io/soundevent/generated/gallery/2_loading_audio/">
+      
+      
+        <link rel="prev" href="../1_saving_and_loading/">
+      
+      
+        <link rel="next" href="../3_computing_spectrograms/">
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>Loading audio - soundevent</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../../stylesheets/jquery.json-viewer.css">
+    
+      <link rel="stylesheet" href="../../../css/mkdocstrings.css">
+    
+      <link rel="stylesheet" href="https://unpkg.com/katex@0/dist/katex.min.css">
+    
+      <link rel="stylesheet" href="../../../sg_gallery.css">
+    
+      <link rel="stylesheet" href="../../../sg_gallery-rendered-html.css">
+    
+      <link rel="stylesheet" href="../../../sg_gallery-binder.css">
+    
+      <link rel="stylesheet" href="../../../sg_gallery-dataframe.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#loading_audio" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="soundevent" class="md-header__button md-logo" aria-label="soundevent" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            soundevent
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Loading audio
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="soundevent" class="md-nav__button md-logo" aria-label="soundevent" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    soundevent
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introduction
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../data_schemas/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Data Schemas
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Data Schemas
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../data_schemas/descriptors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Descriptors
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../data_schemas/audio_content/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Audio Content
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../data_schemas/acoustic_objects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Acoustic Objects
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../data_schemas/annotation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Annotation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../data_schemas/prediction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Prediction
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../data_schemas/evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Evaluation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    User Guide
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            User Guide
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0_objects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Acoustic Objects
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1_saving_and_loading/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Saving and Loading data.
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Loading audio
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Loading audio
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#getting_a_recording_object" class="md-nav__link">
+    <span class="md-ellipsis">
+      Getting a Recording object
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#loading_the_audio" class="md-nav__link">
+    <span class="md-ellipsis">
+      Loading the audio
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#selecting_clips_from_a_recording" class="md-nav__link">
+    <span class="md-ellipsis">
+      Selecting clips from a recording
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3_computing_spectrograms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Computing spectrograms
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4_geometric_operations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Geometric Operations
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5_integration_with_crowsetta/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Integrating Crowsetta with Soundevent
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6_plotting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Plotting functions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    data
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/operations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    operations
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    io
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/arrays/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    arrays
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/audio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    audio
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/geometry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    geometry
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    evaluation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/plot/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    plot
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/terms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    terms
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/transforms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    transforms
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../CONTRIBUTING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Contributing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../CODE_OF_CONDUCT/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Code of Conduct
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#getting_a_recording_object" class="md-nav__link">
+    <span class="md-ellipsis">
+      Getting a Recording object
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#loading_the_audio" class="md-nav__link">
+    <span class="md-ellipsis">
+      Loading the audio
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#selecting_clips_from_a_recording" class="md-nav__link">
+    <span class="md-ellipsis">
+      Selecting clips from a recording
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<!--
+ DO NOT EDIT.
+ THIS FILE WAS AUTOMATICALLY GENERATED BY mkdocs-gallery.
+ TO MAKE CHANGES, EDIT THE SOURCE PYTHON FILE:
+ "docs/user_guide/2_loading_audio.py"
+ LINE NUMBERS ARE GIVEN BELOW.
+-->
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a href="#download_links">here</a>
+to download the full example code</p>
+</div>
+<h1 id="loading_audio">Loading audio<a class="headerlink" href="#loading_audio" title="Permanent link">#</a></h1>
+<p>One of the fundamental operations in computational bioacoustics is <strong>reading</strong>
+audio files into a workable format. In <code>soundevent</code>, we use
+<a class="autorefs autorefs-external" href="https://docs.xarray.dev/en/stable/generated/xarray.DataArray.html#xarray.DataArray"><code>xarray.DataArray</code></a> objects to hold loaded audio data.
+<a class="autorefs autorefs-external" href="https://docs.xarray.dev/en/stable/generated/xarray.DataArray.html#xarray.DataArray"><code>xarray.DataArray</code></a> objects are an extension of
+<a class="autorefs autorefs-external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray"><code>numpy</code></a> arrays, so there's no need to learn new concepts
+if you are already familiar with <a class="autorefs autorefs-external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray"><code>numpy</code></a> arrays.</p>
+<div class="admonition note">
+<p class="admonition-title">Why use <code>xarray.DataArray</code> objects?</p>
+<p><code>xarray.DataArray</code> objects offer two key benefits: coordinates for easier
+referencing of time-related locations in the array, and the ability to
+store additional metadata such as <code>samplerate</code>, <code>time_expansion</code>, and
+specify that the temporal units are seconds. To learn more about
+<code>xarray.DataArray</code> objects, see the
+<a href="https://docs.xarray.dev/en/stable/getting-started-guide/why-xarray.html">xarray documentation</a>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Supported audio formats</p>
+<p><code>soundevent</code> supports most of the audio file formats supported by the
+<a href="https://python-soundfile.readthedocs.io/"><code>soundfile</code></a> library. Some
+formats were excluded because they do not support seeking and are not
+suitable for random access. This still includes most of the common audio
+file formats, such as WAV, FLAC, AIFF, and MP3. For a full list of
+supported formats, see the
+<a class="autorefs autorefs-internal" title="            is_audio_file(path, strict=False)" href="../../../reference/audio/#soundevent.audio.is_audio_file">audio.is_audio_file</a> documentation.</p>
+</div>
+<!-- GENERATED FROM PYTHON SOURCE LINES 34-40 -->
+
+<h2 id="getting_a_recording_object">Getting a Recording object<a class="headerlink" href="#getting_a_recording_object" title="Permanent link">#</a></h2>
+<p>To create a <a class="autorefs autorefs-internal" title="            Recording" href="../../../reference/data/#soundevent.data.Recording"><code>data.Recording</code></a> object from an
+audio file, you can use the
+<a class="autorefs autorefs-internal" title="            from_file(path, time_expansion=1, compute_hash=True, **kwargs)
+
+  
+      classmethod
+  " href="../../../reference/data/#soundevent.data.Recording.from_file"><code>from_file</code></a> method. This method
+extracts the metadata from the file and populates the <code>Recording</code> object with
+the relevant information.</p>
+<!-- GENERATED FROM PYTHON SOURCE LINES 40-46 -->
+
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">soundevent</span><span class="w"> </span><span class="kn">import</span> <span class="n">data</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">recording</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Recording</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="s2">&quot;sample_audio.wav&quot;</span><span class="p">)</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">recording</span><span class="p">))</span>
+</span></code></pre></div>
+<p class="mkd-glr-script-out">Out:</p>
+<div class="language-shell mkd-glr-script-out-disp highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Recording<span class="o">(</span><span class="nv">path</span><span class="o">=</span>PosixPath<span class="o">(</span><span class="s1">&#39;sample_audio.wav&#39;</span><span class="o">))</span>
+</span></code></pre></div>
+<!-- GENERATED FROM PYTHON SOURCE LINES 47-51 -->
+
+<h2 id="loading_the_audio">Loading the audio<a class="headerlink" href="#loading_the_audio" title="Permanent link">#</a></h2>
+<p>Once you have a <a class="autorefs autorefs-internal" title="            Recording" href="../../../reference/data/#soundevent.data.Recording"><code>data.Recording</code></a> object, you can
+load the audio data using the
+<a class="autorefs autorefs-internal" title="            load_recording(recording, audio_dir=None)" href="../../../reference/audio/#soundevent.audio.load_recording"><code>audio.load_recording</code></a> function:</p>
+<!-- GENERATED FROM PYTHON SOURCE LINES 51-57 -->
+
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">soundevent</span><span class="w"> </span><span class="kn">import</span> <span class="n">audio</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">wav</span> <span class="o">=</span> <span class="n">audio</span><span class="o">.</span><span class="n">load_recording</span><span class="p">(</span><span class="n">recording</span><span class="p">)</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nb">print</span><span class="p">(</span><span class="n">wav</span><span class="p">)</span>
+</span></code></pre></div>
+<p class="mkd-glr-script-out">Out:</p>
+<div class="language-shell mkd-glr-script-out-disp highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>&lt;xarray.DataArray<span class="w"> </span><span class="o">(</span>time:<span class="w"> </span><span class="m">66150</span>,<span class="w"> </span>channel:<span class="w"> </span><span class="m">1</span><span class="o">)</span>&gt;<span class="w"> </span>Size:<span class="w"> </span>529kB
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>array<span class="o">([[</span><span class="w"> </span><span class="m">9</span>.15527344e-05<span class="o">]</span>,
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">       </span><span class="o">[</span><span class="w"> </span><span class="m">2</span>.13623047e-04<span class="o">]</span>,
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">       </span><span class="o">[</span><span class="w"> </span><span class="m">0</span>.00000000e+00<span class="o">]</span>,
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">       </span>...,
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">       </span><span class="o">[</span>-3.66210938e-04<span class="o">]</span>,
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">       </span><span class="o">[</span>-1.30310059e-02<span class="o">]</span>,
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">       </span><span class="o">[</span>-6.92749023e-03<span class="o">]])</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>Coordinates:
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">  </span>*<span class="w"> </span><span class="nb">time</span><span class="w">     </span><span class="o">(</span><span class="nb">time</span><span class="o">)</span><span class="w"> </span>float64<span class="w"> </span>529kB<span class="w"> </span><span class="m">0</span>.0<span class="w"> </span><span class="m">4</span>.535e-05<span class="w"> </span><span class="m">9</span>.07e-05<span class="w"> </span>...<span class="w"> </span><span class="m">3</span>.0<span class="w"> </span><span class="m">3</span>.0<span class="w"> </span><span class="m">3</span>.0
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">  </span>*<span class="w"> </span>channel<span class="w">  </span><span class="o">(</span>channel<span class="o">)</span><span class="w"> </span>int64<span class="w"> </span>8B<span class="w"> </span><span class="m">0</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>Attributes:
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">    </span>recording_id:<span class="w">   </span>9568a146-1f68-4af5-b2e1-52229ca096ba
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">    </span>path:<span class="w">           </span>sample_audio.wav
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">    </span>units:<span class="w">          </span>V
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">    </span>standard_name:<span class="w">  </span>amplitude
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">    </span>long_name:<span class="w">      </span>Amplitude
+</span></code></pre></div>
+<!-- GENERATED FROM PYTHON SOURCE LINES 58-62 -->
+
+<p>Note that the returned object is an <a class="autorefs autorefs-external" href="https://docs.xarray.dev/en/stable/generated/xarray.DataArray.html#xarray.DataArray"><code>xarray.DataArray</code></a>
+object with two dimensions: time and channel. The time coordinate represents
+the array of times in seconds corresponding to the samples in the
+xarray.DataArray object.</p>
+<!-- GENERATED FROM PYTHON SOURCE LINES 64-68 -->
+
+<h2 id="selecting_clips_from_a_recording">Selecting clips from a recording<a class="headerlink" href="#selecting_clips_from_a_recording" title="Permanent link">#</a></h2>
+<p>You can use the <a class="autorefs autorefs-external" href="https://docs.xarray.dev/en/stable/generated/xarray.DataArray.sel.html#xarray.DataArray.sel"><code>sel</code></a> method of xarray.DataArray to
+select a clip from the recording. This is useful when you have the full file
+loaded into memory and want to extract a specific clip:</p>
+<!-- GENERATED FROM PYTHON SOURCE LINES 68-73 -->
+
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># You can select a clip by specifying the start and end times in seconds.</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">subwav</span> <span class="o">=</span> <span class="n">wav</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">subwav</span><span class="p">))</span>
+</span></code></pre></div>
+<p class="mkd-glr-script-out">Out:</p>
+<div class="language-shell mkd-glr-script-out-disp highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>&lt;xarray.DataArray<span class="w"> </span><span class="o">(</span>time:<span class="w"> </span><span class="m">22051</span>,<span class="w"> </span>channel:<span class="w"> </span><span class="m">1</span><span class="o">)</span>&gt;<span class="w"> </span>Size:<span class="w"> </span>176kB
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>array<span class="o">([[</span><span class="w"> </span><span class="m">9</span>.15527344e-05<span class="o">]</span>,
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">       </span><span class="o">[</span><span class="w"> </span><span class="m">2</span>.13623047e-04<span class="o">]</span>,
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">       </span><span class="o">[</span><span class="w"> </span><span class="m">0</span>.00000000e+00<span class="o">]</span>,
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">       </span>...,
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">       </span><span class="o">[</span>-9.88769531e-03<span class="o">]</span>,
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">       </span><span class="o">[</span>-6.65283203e-03<span class="o">]</span>,
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">       </span><span class="o">[</span>-1.06811523e-03<span class="o">]])</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>Coordinates:
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">  </span>*<span class="w"> </span><span class="nb">time</span><span class="w">     </span><span class="o">(</span><span class="nb">time</span><span class="o">)</span><span class="w"> </span>float64<span class="w"> </span>176kB<span class="w"> </span><span class="m">0</span>.0<span class="w"> </span><span class="m">4</span>.535e-05<span class="w"> </span><span class="m">9</span>.07e-05<span class="w"> </span>...<span class="w"> </span><span class="m">0</span>.9999<span class="w"> </span><span class="m">1</span>.0<span class="w"> </span><span class="m">1</span>.0
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">  </span>*<span class="w"> </span>channel<span class="w">  </span><span class="o">(</span>channel<span class="o">)</span><span class="w"> </span>int64<span class="w"> </span>8B<span class="w"> </span><span class="m">0</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>Attributes:
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">    </span>recording_id:<span class="w">   </span>9568a146-1f68-4af5-b2e1-52229ca096ba
+</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">    </span>path:<span class="w">           </span>sample_audio.wav
+</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">    </span>units:<span class="w">          </span>V
+</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="w">    </span>standard_name:<span class="w">  </span>amplitude
+</span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="w">    </span>long_name:<span class="w">      </span>Amplitude
+</span></code></pre></div>
+<!-- GENERATED FROM PYTHON SOURCE LINES 74-77 -->
+
+<p>Alternatively, if you only need to load a clip from the file without loading
+the entire file into memory, you can use the
+<a class="autorefs autorefs-internal" title="            load_clip(clip, audio_dir=None)" href="../../../reference/audio/#soundevent.audio.load_clip"><code>audio.load_clip</code></a> function:</p>
+<!-- GENERATED FROM PYTHON SOURCE LINES 77-86 -->
+
+<div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">clip</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Clip</span><span class="p">(</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>    <span class="n">recording</span><span class="o">=</span><span class="n">recording</span><span class="p">,</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    <span class="n">start_time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    <span class="n">end_time</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="p">)</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="n">subwav2</span> <span class="o">=</span> <span class="n">audio</span><span class="o">.</span><span class="n">load_clip</span><span class="p">(</span><span class="n">clip</span><span class="p">)</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">subwav2</span><span class="p">))</span>
+</span></code></pre></div>
+<p class="mkd-glr-script-out">Out:</p>
+<div class="language-shell mkd-glr-script-out-disp highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>&lt;xarray.DataArray<span class="w"> </span><span class="o">(</span>time:<span class="w"> </span><span class="m">22050</span>,<span class="w"> </span>channel:<span class="w"> </span><span class="m">1</span><span class="o">)</span>&gt;<span class="w"> </span>Size:<span class="w"> </span>176kB
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>array<span class="o">([[</span><span class="w"> </span><span class="m">9</span>.15527344e-05<span class="o">]</span>,
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">       </span><span class="o">[</span><span class="w"> </span><span class="m">2</span>.13623047e-04<span class="o">]</span>,
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">       </span><span class="o">[</span><span class="w"> </span><span class="m">0</span>.00000000e+00<span class="o">]</span>,
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">       </span>...,
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">       </span><span class="o">[</span>-1.11694336e-02<span class="o">]</span>,
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">       </span><span class="o">[</span>-9.88769531e-03<span class="o">]</span>,
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">       </span><span class="o">[</span>-6.65283203e-03<span class="o">]])</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>Coordinates:
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">  </span>*<span class="w"> </span><span class="nb">time</span><span class="w">     </span><span class="o">(</span><span class="nb">time</span><span class="o">)</span><span class="w"> </span>float64<span class="w"> </span>176kB<span class="w"> </span><span class="m">0</span>.0<span class="w"> </span><span class="m">4</span>.535e-05<span class="w"> </span><span class="m">9</span>.07e-05<span class="w"> </span>...<span class="w"> </span><span class="m">0</span>.9999<span class="w"> </span><span class="m">0</span>.9999<span class="w"> </span><span class="m">1</span>.0
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">  </span>*<span class="w"> </span>channel<span class="w">  </span><span class="o">(</span>channel<span class="o">)</span><span class="w"> </span>int64<span class="w"> </span>8B<span class="w"> </span><span class="m">0</span>
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>Attributes:
+</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="w">    </span>recording_id:<span class="w">   </span>9568a146-1f68-4af5-b2e1-52229ca096ba
+</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="w">    </span>clip_id:<span class="w">        </span>fa74e966-4fc6-4378-bcbb-6d2cf6657610
+</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="w">    </span>path:<span class="w">           </span>sample_audio.wav
+</span><span id="__span-7-16"><a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="w">    </span>units:<span class="w">          </span>V
+</span><span id="__span-7-17"><a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="w">    </span>standard_name:<span class="w">  </span>amplitude
+</span><span id="__span-7-18"><a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="w">    </span>long_name:<span class="w">      </span>Amplitude
+</span></code></pre></div>
+<!-- GENERATED FROM PYTHON SOURCE LINES 87-93 -->
+
+<p>In most cases, the results from <code>wav.sel</code> and <code>audio.load_clip</code> will be the
+same, except for the last sample. However, the difference is negligible, and
+the <a class="autorefs autorefs-internal" title="            load_clip(clip, audio_dir=None)" href="../../../reference/audio/#soundevent.audio.load_clip"><code>audio.load_clip</code></a> function is generally
+preferred for efficiency.</p>
+<p>You can verify the similarity of the clips:</p>
+<!-- GENERATED FROM PYTHON SOURCE LINES 93-97 -->
+
+<div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">subwav</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">subwav2</span><span class="p">))</span>
+</span></code></pre></div>
+<p class="mkd-glr-script-out">Out:</p>
+<div class="language-shell mkd-glr-script-out-disp highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>True
+</span></code></pre></div>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  2.369 seconds)
+<strong>Estimated memory usage:</strong> 88 MB</p>
+<div id="download_links"></div>
+
+<p><a class="md-button center" href="../2_loading_audio.py"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32v242.7l-73.4-73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l128 128c12.5 12.5 32.8 12.5 45.3 0l128-128c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L288 274.7zM64 352c-35.3 0-64 28.7-64 64v32c0 35.3 28.7 64 64 64h384c35.3 0 64-28.7 64-64v-32c0-35.3-28.7-64-64-64H346.5l-45.3 45.3c-25 25-65.5 25-90.5 0L165.5 352zm368 56a24 24 0 1 1 0 48 24 24 0 1 1 0-48"/></svg></span> Download Python source code: 2_loading_audio.py</a></p>
+<p><a class="md-button center" href="../2_loading_audio.ipynb"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32v242.7l-73.4-73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l128 128c12.5 12.5 32.8 12.5 45.3 0l128-128c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L288 274.7zM64 352c-35.3 0-64 28.7-64 64v32c0 35.3 28.7 64 64 64h384c35.3 0 64-28.7 64-64v-32c0-35.3-28.7-64-64-64H346.5l-45.3 45.3c-25 25-65.5 25-90.5 0L165.5 352zm368 56a24 24 0 1 1 0 48 24 24 0 1 1 0-48"/></svg></span> Download Jupyter notebook: 2_loading_audio.ipynb</a></p>
+<p><a class="mkd-glr-signature" href="https://smarie.github.io/mkdocs-gallery">Gallery generated by mkdocs-gallery</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.copy", "navigation.tracking", "navigation.indexes", "navigation.top", "toc.follow"], "search": "../../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+        <script src="../../../javascripts/katex.js"></script>
+      
+        <script src="https://unpkg.com/katex@0/dist/katex.min.js"></script>
+      
+        <script src="https://unpkg.com/katex@0/dist/contrib/auto-render.min.js"></script>
+      
+    
+  </body>
+</html>
