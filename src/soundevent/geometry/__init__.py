@@ -13,6 +13,14 @@ truths for evaluation. The geometry module simplifies these tasks by providing
 a clear and efficient interface for handling sound event geometries.
 """
 
+from soundevent.geometry.affinity import (
+    compute_bbox_iou,
+    compute_frequency_iou,
+    compute_geometric_iou,
+    compute_spectral_closeness,
+    compute_temporal_closeness,
+    compute_temporal_iou,
+)
 from soundevent.geometry.conversion import (
     geometry_to_shapely,
     shapely_to_geometry,
@@ -21,9 +29,13 @@ from soundevent.geometry.features import compute_geometric_features
 from soundevent.geometry.html import geometry_to_html
 from soundevent.geometry.operations import (
     buffer_geometry,
+    compute_bbox_area,
     compute_bounds,
     compute_interval_overlap,
+    compute_interval_width,
     get_geometry_point,
+    get_point_in_frequency,
+    get_point_in_time,
     group_sound_events,
     have_frequency_overlap,
     intervals_overlap,
@@ -35,12 +47,22 @@ from soundevent.geometry.operations import (
 
 __all__ = [
     "buffer_geometry",
+    "compute_bbox_area",
+    "compute_bbox_iou",
     "compute_bounds",
+    "compute_frequency_iou",
     "compute_geometric_features",
+    "compute_geometric_iou",
     "compute_interval_overlap",
+    "compute_interval_width",
+    "compute_spectral_closeness",
+    "compute_temporal_closeness",
+    "compute_temporal_iou",
     "geometry_to_html",
     "geometry_to_shapely",
     "get_geometry_point",
+    "get_point_in_frequency",
+    "get_point_in_time",
     "group_sound_events",
     "have_frequency_overlap",
     "have_frequency_overlap",
