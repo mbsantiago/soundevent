@@ -14,6 +14,7 @@ a clear and efficient interface for handling sound event geometries.
 """
 
 from soundevent.geometry.affinity import (
+    AffinityFn,
     compute_bbox_iou,
     compute_frequency_iou,
     compute_geometric_iou,
@@ -27,6 +28,10 @@ from soundevent.geometry.conversion import (
 )
 from soundevent.geometry.features import compute_geometric_features
 from soundevent.geometry.html import geometry_to_html
+from soundevent.geometry.match import (
+    match_geometries_greedy,
+    match_geometries_optimal,
+)
 from soundevent.geometry.operations import (
     buffer_geometry,
     compute_bbox_area,
@@ -46,6 +51,7 @@ from soundevent.geometry.operations import (
 )
 
 __all__ = [
+    "AffinityFn",
     "buffer_geometry",
     "compute_bbox_area",
     "compute_bbox_iou",
@@ -68,6 +74,8 @@ __all__ = [
     "have_frequency_overlap",
     "intervals_overlap",
     "is_in_clip",
+    "match_geometries_greedy",
+    "match_geometries_optimal",
     "rasterize",
     "scale_geometry",
     "shapely_to_geometry",

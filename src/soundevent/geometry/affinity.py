@@ -1,5 +1,7 @@
 """Measures of affinity between geometries."""
 
+from typing import Callable
+
 from soundevent import data
 from soundevent.geometry.operations import (
     compute_bbox_area,
@@ -12,6 +14,7 @@ from soundevent.geometry.operations import (
 )
 
 __all__ = [
+    "AffinityFn",
     "compute_bbox_iou",
     "compute_frequency_iou",
     "compute_geometric_iou",
@@ -21,6 +24,8 @@ __all__ = [
     "compute_temporal_closeness",
     "compute_temporal_iou",
 ]
+
+AffinityFn = Callable[[data.Geometry, data.Geometry], float]
 
 
 def compute_temporal_closeness(
