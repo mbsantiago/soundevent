@@ -1,14 +1,12 @@
 """Measures of affinity between geometries."""
 
 from soundevent import data
-from soundevent.geometry import (
-    compute_bounds,
-    geometry_to_shapely,
-)
 from soundevent.geometry.operations import (
     compute_bbox_area,
+    compute_bounds,
     compute_interval_overlap,
     compute_interval_width,
+    geometry_to_shapely,
     get_point_in_frequency,
     get_point_in_time,
 )
