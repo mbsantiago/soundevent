@@ -34,9 +34,13 @@ from soundevent.geometry.conversion import (
 
 __all__ = [
     "buffer_geometry",
+    "compute_bbox_area",
     "compute_bounds",
     "compute_interval_overlap",
+    "compute_interval_width",
     "get_geometry_point",
+    "get_point_in_frequency",
+    "get_point_in_time",
     "group_sound_events",
     "have_frequency_overlap",
     "have_temporal_overlap",
@@ -1102,3 +1106,161 @@ def scale_geometry(
         time_anchor=time_anchor,
         freq_anchor=freq_anchor,
     )
+
+
+def compute_bbox_area(
+    bbox: Tuple[float, float, float, float],
+) -> float:
+    """Compute the area of a bounding box.
+
+    Parameters
+    ----------
+    bbox
+        The bounding box coordinates. The expected format is a tuple of four
+        floats: `(start_time, low_freq, end_time, high_freq)`.
+
+    Returns
+    -------
+    float
+        The computed area of the bounding box (duration × bandwidth).
+
+    Notes
+    -----
+    Because time and frequency usually have different units (e.g., seconds vs. Hertz),
+    the calculated "area" mixes these dimensions.
+
+    In practice, frequency values (often in the thousands) are much larger than
+    time values (often small floats). This means the frequency dimension usually
+    dominates the area calculation. To ensure both dimensions contribute equally,
+    it is recommended to use the
+    [`scale_geometry`][soundevent.geometry.scale_geometry] function to balance
+    the coordinates before computing the area.
+    """
+    start_time, low_freq, end_time, high_freq = bbox
+
+    if low_freq > high_freq:
+        low_freq, high_freq = high_freq, low_freq
+
+    if start_time > end_time:
+        start_time, end_time = end_time, start_time
+
+    return (end_time - start_time) * (high_freq - low_freq)
+
+
+def compute_interval_width(
+    interval: Tuple[float, float],
+) -> float:
+    """Compute the width of an interval.
+
+    Parameters
+    ----------
+    interval
+        The interval to compute the width of. The expected format is a tuple
+        of two floats: `(start, end)`.
+
+    Returns
+    -------
+    float
+        The computed width of the interval.
+
+    Notes
+    -----
+    If the start time is greater than the end time, the function swaps the
+    start and end times before computing the width.
+    """
+    start, end = interval
+
+    if start > end:
+        start, end = end, start
+
+    return end - start
+
+
+def get_point_in_time(
+    geometry: data.Geometry,
+    ratio: float = 0,
+) -> float:
+    """Compute a specific time point relative to the geometry's duration.
+
+    Parameters
+    ----------
+    geometry : data.Geometry
+        The geometry object.
+    ratio : float, optional
+        The relative position within the time interval (0.0 to 1.0).
+        Defaults to 0.
+
+    Returns
+    -------
+    float
+        The calculated timestamp in seconds.
+
+    Raises
+    ------
+    ValueError
+        If the ratio is not between 0 and 1.
+
+    Notes
+    -----
+    This function projects the geometry onto the time axis (finding the
+    bounding box) and selects a point based on the provided ratio using
+    linear interpolation:
+
+        time = start_time + ratio * (end_time - start_time)
+
+    **Common Ratios**
+
+    * **0.0**: Returns the **start time** (onset) of the event.
+    * **0.5**: Returns the **temporal center** (midpoint) of the event.
+    * **1.0**: Returns the **end time** (offset) of the event.
+    """
+    if ratio < 0 or ratio > 1:
+        raise ValueError("The ratio must be between 0 and 1.")
+
+    start_time, _, end_time, _ = compute_bounds(geometry)
+    return start_time + ratio * (end_time - start_time)
+
+
+def get_point_in_frequency(
+    geometry: data.Geometry,
+    ratio: float = 0,
+) -> float:
+    """Compute a specific frequency point relative to the geometry's bandwidth.
+
+    Parameters
+    ----------
+    geometry : data.Geometry
+        The geometry object.
+    ratio : float, optional
+        The relative position within the frequency interval (0.0 to 1.0).
+        Defaults to 0.
+
+    Returns
+    -------
+    float
+        The calculated frequency in Hertz.
+
+    Raises
+    ------
+    ValueError
+        If the ratio is not between 0 and 1.
+
+    Notes
+    -----
+    This function projects the geometry onto the frequency axis (finding
+    the bounding box) and selects a point based on the provided ratio
+    using linear interpolation:
+
+        freq = low_freq + ratio * (high_freq - low_freq)
+
+    **Common Ratios**
+
+    * **0.0**: Returns the **lowest frequency** component.
+    * **0.5**: Returns the **center frequency** (midpoint).
+    * **1.0**: Returns the **highest frequency** component.
+    """
+    if ratio < 0 or ratio > 1:
+        raise ValueError("The ratio must be between 0 and 1.")
+
+    _, low_freq, _, high_freq = compute_bounds(geometry)
+    return low_freq + ratio * (high_freq - low_freq)
