@@ -26,6 +26,7 @@ __all__ = [
 ]
 
 AffinityFn = Callable[[data.Geometry, data.Geometry], float]
+"""Type for functions that compute similarity scores between geometries."""
 
 
 def compute_temporal_closeness(

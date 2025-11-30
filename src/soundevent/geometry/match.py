@@ -36,6 +36,8 @@ from soundevent.geometry.affinity import AffinityFn, compute_geometric_iou
 __all__ = [
     "match_geometries_optimal",
     "match_geometries_greedy",
+    "select_optimal_matches",
+    "select_greedy_matches",
 ]
 
 
@@ -108,7 +110,7 @@ def match_geometries_greedy(
     affinity: Union[np.ndarray, AffinityFn, None] = None,
     affinity_threshold: float = 0,
 ) -> Iterable[Tuple[Optional[int], Optional[int], float]]:
-    """Match geometries using a greedy, row-order strategy.
+    """Match geometries using a greedy strategy.
 
     Parameters
     ----------
