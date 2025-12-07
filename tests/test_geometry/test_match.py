@@ -161,66 +161,86 @@ class TestSelectOptimalMatches:
     def test_square_matrix(self):
         matrix = np.array([[1.0, 0.0], [0.0, 1.0]])
         matches = list(select_optimal_matches(matrix))
-        assert (0, 0) in matches
-        assert (1, 1) in matches
+        assert (0, 0, 1.0) in matches
+        assert (1, 1, 1.0) in matches
 
     def test_rectangular_more_rows(self):
         matrix = np.array([[1.0], [0.5]])
         matches = list(select_optimal_matches(matrix))
-        assert (0, 0) in matches
-        assert (1, None) in matches
+        assert (0, 0, 1.0) in matches
+        assert (1, None, 0.0) in matches
 
     def test_rectangular_more_cols(self):
         matrix = np.array([[1.0, 0.5]])
         matches = list(select_optimal_matches(matrix))
-        assert (0, 0) in matches
-        assert (None, 1) in matches
+        assert (0, 0, 1.0) in matches
+        assert (None, 1, 0.0) in matches
 
     def test_zero_matrix(self):
-        # Optimal matching algorithm still assigns to maximize score.
-        # If all are 0, any valid assignment is optimal.
         matrix = np.zeros((2, 2))
         matches = list(select_optimal_matches(matrix))
-        # It should return 2 pairs of indices.
         matched_rows = [m[0] for m in matches if m[0] is not None]
         matched_cols = [m[1] for m in matches if m[1] is not None]
         assert len(matched_rows) == 2
         assert len(matched_cols) == 2
+        assert all(score == 0.0 for _, _, score in matches)
 
     def test_matrix_with_no_rows(self):
         matrix = np.zeros((0, 2))
         matches = list(select_optimal_matches(matrix))
         assert len(matches) == 2
-        assert (None, 0) in matches
-        assert (None, 1) in matches
+        assert (None, 0, 0.0) in matches
+        assert (None, 1, 0.0) in matches
 
     def test_matrix_with_no_cols(self):
         matrix = np.zeros((2, 0))
         matches = list(select_optimal_matches(matrix))
         assert len(matches) == 2
-        assert (0, None) in matches
-        assert (1, None) in matches
+        assert (0, None, 0.0) in matches
+        assert (1, None, 0.0) in matches
+
+    def test_threshold(self):
+        matrix = np.array([[1.0, 0.4], [0.4, 0.3]])
+        matches = list(select_optimal_matches(matrix, threshold=0.5))
+        assert (0, 0, 1.0) in matches
+        assert (1, None, 0.0) in matches
+        assert (None, 1, 0.0) in matches
+
+    def test_threshold_exact(self):
+        matrix = np.array([[0.5]])
+        matches = list(select_optimal_matches(matrix, threshold=0.5))
+        assert (0, None, 0.0) in matches
+        assert (None, 0, 0.0) in matches
+
+    def test_threshold_all_filtered(self):
+        matrix = np.array([[0.1, 0.1], [0.1, 0.1]])
+        matches = list(select_optimal_matches(matrix, threshold=0.5))
+        assert len(matches) == 4
+        assert all(
+            source is None or target is None for source, target, _ in matches
+        )
+        assert all(score == 0.0 for _, _, score in matches)
 
 
 class TestSelectGreedyMatches:
     def test_square_matrix(self):
         matrix = np.array([[0.9, 0.1], [0.8, 0.5]])
         matches = list(select_greedy_matches(matrix))
-        assert (0, 0) in matches
-        assert (1, 1) in matches
+        assert (0, 0, 0.9) in matches
+        assert (1, 1, 0.5) in matches
 
     def test_matrix_more_rows(self):
         matrix = np.array([[1.0], [0.5]])
         matches = list(select_greedy_matches(matrix))
-        assert (0, 0) in matches
-        assert (1, None) in matches
+        assert (0, 0, 1.0) in matches
+        assert (1, None, 0.0) in matches
 
     def test_matrix_more_cols(self):
         matrix = np.array([[1.0, 0.5]])
         matches = list(select_greedy_matches(matrix))
         assert len(matches) == 2
-        assert (0, 0) in matches
-        assert (None, 1) in matches
+        assert (0, 0, 1.0) in matches
+        assert (None, 1, 0.0) in matches
 
     def test_empty_matrix(self):
         matrix = np.zeros((0, 0))
@@ -231,34 +251,34 @@ class TestSelectGreedyMatches:
         matrix = np.zeros((0, 2))
         matches = list(select_greedy_matches(matrix))
         assert len(matches) == 2
-        assert (None, 0) in matches
-        assert (None, 1) in matches
+        assert (None, 0, 0.0) in matches
+        assert (None, 1, 0.0) in matches
 
     def test_matrix_with_no_cols(self):
         matrix = np.zeros((2, 0))
         matches = list(select_greedy_matches(matrix))
         assert len(matches) == 2
-        assert (0, None) in matches
-        assert (1, None) in matches
+        assert (0, None, 0.0) in matches
+        assert (1, None, 0.0) in matches
 
     def test_strict_conflict_behavior(self):
         matrix = np.array([[1.0, 0.0], [0.9, 0.5]])
 
         matches_default = list(select_greedy_matches(matrix, strict=False))
-        assert (0, 0) in matches_default
-        assert (1, 1) in matches_default
+        assert (0, 0, 1.0) in matches_default
+        assert (1, 1, 0.5) in matches_default
         assert len(matches_default) == 2
 
         matches_strict = list(select_greedy_matches(matrix, strict=True))
-        assert (0, 0) in matches_strict
-        assert (1, None) in matches_strict
-        assert (None, 1) in matches_strict
+        assert (0, 0, 1.0) in matches_strict
+        assert (1, None, 0.0) in matches_strict
+        assert (None, 1, 0.0) in matches_strict
 
     def test_strict_no_conflict(self):
         matrix = np.array([[1.0, 0.0], [0.0, 1.0]])
         matches = list(select_greedy_matches(matrix, strict=True))
-        assert (0, 0) in matches
-        assert (1, 1) in matches
+        assert (0, 0, 1.0) in matches
+        assert (1, 1, 1.0) in matches
         assert len(matches) == 2
 
     def test_strict_multi_row_contention(self):
@@ -271,11 +291,47 @@ class TestSelectGreedyMatches:
         )
 
         matches = list(select_greedy_matches(matrix, strict=True))
-        assert (0, 0) in matches
-        assert (1, None) in matches
-        assert (2, None) in matches
-        assert (None, 1) in matches
-        assert (None, 2) in matches
+        assert (0, 0, 1.0) in matches
+        assert (1, None, 0.0) in matches
+        assert (2, None, 0.0) in matches
+        assert (None, 1, 0.0) in matches
+        assert (None, 2, 0.0) in matches
+
+    def test_threshold(self):
+        matrix = np.array([[1.0, 0.5], [0.4, 0.8]])
+        matches = list(select_greedy_matches(matrix, threshold=0.9))
+        assert (0, 0, 1.0) in matches
+        assert (1, None, 0.0) in matches
+        assert (None, 1, 0.0) in matches
+
+    def test_threshold_strict(self):
+        matrix = np.array(
+            [
+                [0.8, 0.9],
+                [0.8, 0.4],
+            ]
+        )
+        matches = list(
+            select_greedy_matches(matrix, strict=True, threshold=0.85)
+        )
+        assert (0, 1, 0.9) in matches
+        assert (1, None, 0.0) in matches
+        assert (None, 0, 0.0) in matches
+
+    def test_threshold_exact(self):
+        matrix = np.array([[0.5]])
+        matches = list(select_greedy_matches(matrix, threshold=0.5))
+        assert (0, None, 0.0) in matches
+        assert (None, 0, 0.0) in matches
+
+    def test_threshold_all_filtered(self):
+        matrix = np.array([[0.4, 0.4], [0.4, 0.4]])
+        matches = list(select_greedy_matches(matrix, threshold=0.5))
+        assert len(matches) == 4
+        assert all(
+            source is None or target is None for source, target, _ in matches
+        )
+        assert all(score == 0.0 for _, _, score in matches)
 
 
 class TestAffinityValidation:

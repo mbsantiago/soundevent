@@ -85,22 +85,12 @@ def match_geometries_optimal(
     """
     affinity_matrix = _validate_affinity_matrix(source, target, affinity)
 
-    matches = select_optimal_matches(affinity_matrix)
+    matches = select_optimal_matches(
+        affinity_matrix,
+        threshold=affinity_threshold,
+    )
 
-    for match1, match2 in matches:
-        # If not matched then affinity is 0
-        if match1 is None or match2 is None:
-            yield match1, match2, 0
-            continue
-
-        affinity_score = float(affinity_matrix[match1, match2])
-
-        # If it does not meet the threshold they should not be paired
-        if affinity_score <= affinity_threshold:
-            yield match1, None, 0
-            yield None, match2, 0
-            continue
-
+    for match1, match2, affinity_score in matches:
         yield match1, match2, affinity_score
 
 
@@ -109,6 +99,7 @@ def match_geometries_greedy(
     target: Sequence[Geometry],
     affinity: Union[np.ndarray, AffinityFn, None] = None,
     affinity_threshold: float = 0,
+    strict: bool = False,
 ) -> Iterable[Tuple[Optional[int], Optional[int], float]]:
     """Match geometries using a greedy strategy.
 
@@ -136,6 +127,11 @@ def match_geometries_greedy(
     score : float
         The affinity score between the matched geometries. Returns 0.0 for
         unmatched items.
+    strict : bool, optional
+        Determines the matching behavior when the best target is already taken:
+        - If ``False`` (default), the algorithm finds the next best
+          available target (best available match).
+        - If ``True``, the source is left unmatched (best match or nothing).
 
     Notes
     -----
@@ -149,22 +145,13 @@ def match_geometries_greedy(
     """
     affinity_matrix = _validate_affinity_matrix(source, target, affinity)
 
-    matches = select_greedy_matches(affinity_matrix)
+    matches = select_greedy_matches(
+        affinity_matrix,
+        strict=strict,
+        threshold=affinity_threshold,
+    )
 
-    for match1, match2 in matches:
-        # If not matched then affinity is 0
-        if match1 is None or match2 is None:
-            yield match1, match2, 0
-            continue
-
-        affinity_score = float(affinity_matrix[match1, match2])
-
-        # If it does not meet the threshold they should not be paired
-        if affinity_score <= affinity_threshold:
-            yield match1, None, 0
-            yield None, match2, 0
-            continue
-
+    for match1, match2, affinity_score in matches:
         yield match1, match2, affinity_score
 
 
@@ -198,7 +185,8 @@ def _validate_affinity_matrix(
 
 def select_optimal_matches(
     affinity_matrix: np.ndarray,
-) -> Iterable[Tuple[Optional[int], Optional[int]]]:
+    threshold: float = 0,
+) -> Iterable[Tuple[Optional[int], Optional[int], float]]:
     """Find the optimal assignment that maximizes the total affinity score.
 
     Parameters
@@ -213,6 +201,9 @@ def select_optimal_matches(
         The row index (source).
     col_index : int or None
         The column index (target).
+    affinity_score : float
+        The affinity score between the matched rows and columns. Returns 0
+        for unmatched items.
 
     Notes
     -----
@@ -228,21 +219,28 @@ def select_optimal_matches(
     )
 
     for row, column in zip(assiged_rows, assigned_columns):
-        yield row, column
+        value = float(affinity_matrix[row, column])
+
+        # Ignore matches with affinity below the threshold
+        if value <= threshold:
+            continue
+
+        yield row, column, value
         rows.remove(row)
         cols.remove(column)
 
     for row in rows:
-        yield row, None
+        yield row, None, 0
 
     for column in cols:
-        yield None, column
+        yield None, column, 0
 
 
 def select_greedy_matches(
     affinity_matrix: np.ndarray,
     strict: bool = False,
-) -> Iterable[Tuple[Optional[int], Optional[int]]]:
+    threshold: float = 0,
+) -> Iterable[Tuple[Optional[int], Optional[int], float]]:
     """Select matches greedily based on the row order.
 
     Parameters
@@ -255,6 +253,10 @@ def select_greedy_matches(
         - If ``False`` (default), the algorithm finds the next best
           available column (best available match).
         - If ``True``, the row is left unmatched (best match or nothing).
+    threshold : float, optional
+        The lower bound for a valid match. Matches with affinity less than or
+        equal to this value are discarded. Defaults to 0 (discarding
+        zero-affinity matches).
 
     Yields
     ------
@@ -264,6 +266,9 @@ def select_greedy_matches(
     col_index : int or None
         The column index. If ``None``, this indicates a row that could
         not be matched.
+    affinity_score : float
+        The affinity score between the matched rows and columns. Returns 0
+        for unmatched items.
 
     Notes
     -----
@@ -275,57 +280,69 @@ def select_greedy_matches(
 
     if n_rows == 0:
         for col in available_cols:
-            yield None, col
+            yield None, col, 0
         return
 
     if n_cols == 0:
         for row in range(n_rows):
-            yield row, None
+            yield row, None, 0
         return
 
     for index, row in enumerate(affinity_matrix):
         # If there are no columns left, return None
         if not available_cols:
-            yield index, None
+            yield index, None, 0
             continue
 
         # Select the best column
-        col = _select_greedy_match(row, available_cols, strict=strict)
+        col, score = _select_greedy_match(
+            row,
+            available_cols,
+            strict=strict,
+            threshold=threshold,
+        )
 
         if col is None:
             # If no column is available return None
-            yield index, None
+            yield index, None, 0
             continue
 
         # Yield the selected column and mark it as assigned
-        yield index, col
+        yield index, col, score
         available_cols.remove(col)
 
     for missing_col in available_cols:
-        yield None, missing_col
+        yield None, missing_col, 0
 
 
 def _select_greedy_match(
     row: np.ndarray,
     available_cols: Set[int],
     strict: bool = False,
-) -> Optional[int]:
+    threshold: float = 0,
+) -> Tuple[Optional[int], float]:
     """Find the best available column for a single row."""
     if strict:
         best_col = int(np.argmax(row))
+        score = float(row[best_col])
 
-        if best_col not in available_cols:
-            return None
+        if best_col not in available_cols or score <= threshold:
+            return None, 0
 
-        return best_col
+        return best_col, score
 
     sorted_indices = np.argsort(row)[::-1]
 
     for col_index in sorted_indices:
-        # If the column is already assigned, skip it
+        score = float(row[col_index])
+
+        # Stop if the score is too low
+        if score <= threshold:
+            break
+
         if col_index not in available_cols:
             continue
 
-        return int(col_index)
+        return int(col_index), score
 
-    return None
+    return None, 0
