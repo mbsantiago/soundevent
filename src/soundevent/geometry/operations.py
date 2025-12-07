@@ -68,19 +68,19 @@ def compute_bounds(
         The bounds of the geometry. The bounds are returned in the
         following order: start_time, low_freq, end_time, high_freq.
     """
-    if geometry.type == "TimeStamp":
+    if isinstance(geometry, data.TimeStamp):
         time = geometry.coordinates
         return time, 0, time, data.MAX_FREQUENCY
 
-    if geometry.type == "TimeInterval":
+    if isinstance(geometry, data.TimeInterval):
         start_time, end_time = geometry.coordinates
         return start_time, 0, end_time, data.MAX_FREQUENCY
 
-    if geometry.type == "BoundingBox":
+    if isinstance(geometry, data.BoundingBox):
         start_time, low_freq, end_time, high_freq = geometry.coordinates
         return start_time, low_freq, end_time, high_freq
 
-    if geometry.type == "Point":
+    if isinstance(geometry, data.Point):
         time, frequency = geometry.coordinates
         return time, frequency, time, frequency
 
@@ -210,11 +210,13 @@ def buffer_geometry(
             "The time buffer and the frequency buffer must be non negative."
         )
 
-    if geometry.type == "TimeStamp":
+    if isinstance(geometry, data.TimeStamp):
         return buffer_timestamp(geometry, time_buffer=time_buffer)
-    if geometry.type == "TimeInterval":
+
+    if isinstance(geometry, data.TimeInterval):
         return buffer_interval(geometry, time_buffer=time_buffer)
-    if geometry.type == "BoundingBox":
+
+    if isinstance(geometry, data.BoundingBox):
         return buffer_bounding_box_geometry(
             geometry,
             time_buffer=time_buffer,
@@ -941,16 +943,16 @@ def shift_geometry(
     time: float = 0,
     freq: float = 0,
 ) -> data.Geometry:
-    if geom.type == "Point":
+    if isinstance(geom, data.Point):
         return _shift_point(geom, time=time, freq=freq)
 
-    if geom.type == "BoundingBox":
+    if isinstance(geom, data.BoundingBox):
         return _shift_bounding_box(geom, time=time, freq=freq)
 
-    if geom.type == "TimeInterval":
+    if isinstance(geom, data.TimeInterval):
         return _shift_time_interval(geom, time=time)
 
-    if geom.type == "TimeStamp":
+    if isinstance(geom, data.TimeStamp):
         return _shift_time_stamp(geom, time=time)
 
     return _shift_shapely(geom, time=time, freq=freq)
@@ -1067,7 +1069,7 @@ def scale_geometry(
     data.Geometry
         The scaled geometry.
     """
-    if geom.type == "Point":
+    if isinstance(geom, data.Point):
         return _scale_point(
             geom,
             time=time,
@@ -1076,7 +1078,7 @@ def scale_geometry(
             freq_anchor=freq_anchor,
         )
 
-    if geom.type == "BoundingBox":
+    if isinstance(geom, data.BoundingBox):
         return _scale_bounding_box(
             geom,
             time=time,
@@ -1085,14 +1087,14 @@ def scale_geometry(
             freq_anchor=freq_anchor,
         )
 
-    if geom.type == "TimeInterval":
+    if isinstance(geom, data.TimeInterval):
         return _scale_time_interval(
             geom,
             time=time,
             time_anchor=time_anchor,
         )
 
-    if geom.type == "TimeStamp":
+    if isinstance(geom, data.TimeStamp):
         return _scale_time_stamp(
             geom,
             time=time,

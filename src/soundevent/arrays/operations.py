@@ -554,6 +554,7 @@ def to_db(
     if callable(ref):
         ref = ref(arr)
 
+    assert isinstance(ref, float)
     if ref <= 0:
         raise ValueError("ref must be greater than 0.")
 
