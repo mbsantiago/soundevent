@@ -25,7 +25,7 @@ dimension width (`get_dim_width`), and estimate dimension step size
 """
 
 from enum import Enum
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Optional, Tuple
 
 import numpy as np
 import xarray as xr
@@ -232,7 +232,7 @@ def create_time_range(
 
         step = 1.0 / samplerate
 
-    attrs: Dict[str, Any] = {
+    attrs = {
         DimAttrs.units.value: TIME_UNITS,
         DimAttrs.standard_name.value: TIME_STANDARD_NAME,
         DimAttrs.long_name.value: TIME_LONG_NAME,
@@ -282,7 +282,7 @@ def create_frequency_range(
     xarray.Variable
         Variable containing the frequency range values.
     """
-    attrs: Dict[str, Any] = {
+    attrs = {
         DimAttrs.units.value: FREQUENCY_UNITS,
         DimAttrs.standard_name.value: FREQUENCY_STANDARD_NAME,
         DimAttrs.long_name.value: FREQUENCY_LONG_NAME,
