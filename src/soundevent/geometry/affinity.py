@@ -19,8 +19,6 @@ __all__ = [
     "compute_frequency_iou",
     "compute_geometric_iou",
     "compute_spectral_closeness",
-    "compute_spectral_closeness",
-    "compute_temporal_closeness",
     "compute_temporal_closeness",
     "compute_temporal_iou",
 ]

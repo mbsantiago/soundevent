@@ -133,7 +133,11 @@ class TestMatchGeometriesGreedy:
             ]
         )
         matches_1 = list(
-            match_geometries_greedy(source, target, affinity=affinity_matrix)
+            match_geometries_greedy(
+                source,
+                target,
+                affinity=affinity_matrix,
+            )
         )
 
         affinity_matrix_reversed = np.array(
@@ -145,7 +149,9 @@ class TestMatchGeometriesGreedy:
 
         matches_2 = list(
             match_geometries_greedy(
-                source, target, affinity=affinity_matrix_reversed
+                source,
+                target,
+                affinity=affinity_matrix_reversed,
             )
         )
         assert matches_1 != matches_2
@@ -181,6 +187,20 @@ class TestSelectOptimalMatches:
         assert len(matched_rows) == 2
         assert len(matched_cols) == 2
 
+    def test_matrix_with_no_rows(self):
+        matrix = np.zeros((0, 2))
+        matches = list(select_optimal_matches(matrix))
+        assert len(matches) == 2
+        assert (None, 0) in matches
+        assert (None, 1) in matches
+
+    def test_matrix_with_no_cols(self):
+        matrix = np.zeros((2, 0))
+        matches = list(select_optimal_matches(matrix))
+        assert len(matches) == 2
+        assert (0, None) in matches
+        assert (1, None) in matches
+
 
 class TestSelectGreedyMatches:
     def test_square_matrix(self):
@@ -189,22 +209,73 @@ class TestSelectGreedyMatches:
         assert (0, 0) in matches
         assert (1, 1) in matches
 
-    def test_rectangular_more_rows(self):
+    def test_matrix_more_rows(self):
         matrix = np.array([[1.0], [0.5]])
         matches = list(select_greedy_matches(matrix))
         assert (0, 0) in matches
         assert (1, None) in matches
 
-    def test_rectangular_more_cols(self):
+    def test_matrix_more_cols(self):
         matrix = np.array([[1.0, 0.5]])
         matches = list(select_greedy_matches(matrix))
+        assert len(matches) == 2
         assert (0, 0) in matches
-        assert len(matches) == 1
+        assert (None, 1) in matches
 
     def test_empty_matrix(self):
         matrix = np.zeros((0, 0))
         matches = list(select_greedy_matches(matrix))
         assert len(matches) == 0
+
+    def test_matrix_with_no_rows(self):
+        matrix = np.zeros((0, 2))
+        matches = list(select_greedy_matches(matrix))
+        assert len(matches) == 2
+        assert (None, 0) in matches
+        assert (None, 1) in matches
+
+    def test_matrix_with_no_cols(self):
+        matrix = np.zeros((2, 0))
+        matches = list(select_greedy_matches(matrix))
+        assert len(matches) == 2
+        assert (0, None) in matches
+        assert (1, None) in matches
+
+    def test_strict_conflict_behavior(self):
+        matrix = np.array([[1.0, 0.0], [0.9, 0.5]])
+
+        matches_default = list(select_greedy_matches(matrix, strict=False))
+        assert (0, 0) in matches_default
+        assert (1, 1) in matches_default
+        assert len(matches_default) == 2
+
+        matches_strict = list(select_greedy_matches(matrix, strict=True))
+        assert (0, 0) in matches_strict
+        assert (1, None) in matches_strict
+        assert (None, 1) in matches_strict
+
+    def test_strict_no_conflict(self):
+        matrix = np.array([[1.0, 0.0], [0.0, 1.0]])
+        matches = list(select_greedy_matches(matrix, strict=True))
+        assert (0, 0) in matches
+        assert (1, 1) in matches
+        assert len(matches) == 2
+
+    def test_strict_multi_row_contention(self):
+        matrix = np.array(
+            [
+                [1.0, 0.5, 0.1],
+                [0.9, 0.5, 0.1],
+                [0.8, 0.5, 0.1],
+            ]
+        )
+
+        matches = list(select_greedy_matches(matrix, strict=True))
+        assert (0, 0) in matches
+        assert (1, None) in matches
+        assert (2, None) in matches
+        assert (None, 1) in matches
+        assert (None, 2) in matches
 
 
 class TestAffinityValidation:

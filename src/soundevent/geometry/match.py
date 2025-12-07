@@ -25,7 +25,7 @@ Both functions yield tuples of ``(source_index, target_index, score)``.
 """
 
 from itertools import product
-from typing import Iterable, Optional, Sequence, Tuple, Union
+from typing import Iterable, Optional, Sequence, Set, Tuple, Union
 
 import numpy as np
 from scipy.optimize import linear_sum_assignment
@@ -241,50 +241,91 @@ def select_optimal_matches(
 
 def select_greedy_matches(
     affinity_matrix: np.ndarray,
+    strict: bool = False,
 ) -> Iterable[Tuple[Optional[int], Optional[int]]]:
     """Select matches greedily based on the row order.
 
     Parameters
     ----------
     affinity_matrix : np.ndarray
-        A 2D array of scores.
+        A 2D array of scores where rows represent sources and columns
+        represent targets.
+    strict : bool, optional
+        Determines the matching behavior when the best column is already taken:
+        - If ``False`` (default), the algorithm finds the next best
+          available column (best available match).
+        - If ``True``, the row is left unmatched (best match or nothing).
 
     Yields
     ------
     row_index : int or None
-        The row index (source).
+        The row index. If ``None``, this indicates a leftover column that
+        was not matched.
     col_index : int or None
-        The column index (target).
+        The column index. If ``None``, this indicates a row that could
+        not be matched.
 
     Notes
     -----
-    This iterates over rows 0 to N. For each row, it selects the column
-    with the highest value that hasn't already been assigned.
+    This algorithm iterates over rows 0 to N. Because matches are consumed
+    greedily, the order of the rows in the input matrix affects the outcome.
     """
-    rows = set(range(affinity_matrix.shape[0]))
-    cols = set(range(affinity_matrix.shape[1]))
+    n_rows, n_cols = affinity_matrix.shape
+    available_cols = set(range(n_cols))
+
+    if n_rows == 0:
+        for col in available_cols:
+            yield None, col
+        return
+
+    if n_cols == 0:
+        for row in range(n_rows):
+            yield row, None
+        return
 
     for index, row in enumerate(affinity_matrix):
-        # Mark row as assigned
-        rows.remove(index)
-
-        # Sort indices by affinity descending
-        sorted_indices = np.argsort(row)[::-1]
-
-        for col_index in sorted_indices:
-            # If the column is already assigned, skip it
-            if col_index not in cols:
-                continue
-
-            yield index, int(col_index)
-            cols.remove(col_index)
-            break
-        else:
+        # If there are no columns left, return None
+        if not available_cols:
             yield index, None
+            continue
 
-        # Stop when all columns are assigned
-        if len(cols) == 0:
-            break
+        # Select the best column
+        col = _select_greedy_match(row, available_cols, strict=strict)
 
-    for misisng_row in rows:
-        yield misisng_row, None
+        if col is None:
+            # If no column is available return None
+            yield index, None
+            continue
+
+        # Yield the selected column and mark it as assigned
+        yield index, col
+        available_cols.remove(col)
+
+    for missing_col in available_cols:
+        yield None, missing_col
+
+
+def _select_greedy_match(
+    row: np.ndarray,
+    available_cols: Set[int],
+    strict: bool = False,
+) -> Optional[int]:
+    """Find the best available column for a single row."""
+    if strict:
+        best_col = int(np.argmax(row))
+
+        if best_col not in available_cols:
+            return None
+
+        return best_col
+
+    sorted_indices = np.argsort(row)[::-1]
+
+    for col_index in sorted_indices:
+        # If the column is already assigned, skip it
+        if col_index not in available_cols:
+            continue
+
+        return int(col_index)
+
+    return None
