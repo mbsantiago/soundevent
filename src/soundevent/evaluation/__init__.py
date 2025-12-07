@@ -7,7 +7,11 @@ from soundevent.evaluation.encoding import (
     multilabel_encoding,
     prediction_encoding,
 )
-from soundevent.evaluation.match import match_geometries
+from soundevent.evaluation.match import (
+    Match,
+    match_detections_and_gts,
+    match_geometries,
+)
 from soundevent.evaluation.tasks import (
     clip_classification,
     clip_multilabel_classification,
@@ -16,11 +20,13 @@ from soundevent.evaluation.tasks import (
 )
 
 __all__ = [
+    "Match",
     "classification_encoding",
     "clip_classification",
     "clip_multilabel_classification",
     "compute_affinity",
     "create_tag_encoder",
+    "match_detections_and_gts",
     "match_geometries",
     "multilabel_encoding",
     "prediction_encoding",
