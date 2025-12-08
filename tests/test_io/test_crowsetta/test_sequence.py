@@ -1,6 +1,9 @@
 """Test suite for the soundevent.io.crowsetta.sequence module."""
 
+import os
 from typing import List
+
+os.environ["DISABLE_PANDERA_IMPORT_WARNING"] = "True"
 
 import crowsetta
 import numpy as np

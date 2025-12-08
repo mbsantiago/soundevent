@@ -1,5 +1,9 @@
 """Test suite for the soundevent.io.crowsetta.segments module."""
 
+import os
+
+os.environ["DISABLE_PANDERA_IMPORT_WARNING"] = "True"
+
 import crowsetta
 import pytest
 

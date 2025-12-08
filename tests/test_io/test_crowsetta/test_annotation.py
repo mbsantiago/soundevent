@@ -1,7 +1,10 @@
 """Test suite for the soundevent.io.crowsetta.annotation module."""
 
 import datetime
+import os
 from pathlib import Path
+
+os.environ["DISABLE_PANDERA_IMPORT_WARNING"] = "True"
 
 import crowsetta
 import pytest

@@ -4,6 +4,10 @@ This module provides a set of functions to facilitate the export and import of
 data in the soundevent format to and from the Crowsetta format.
 """
 
+import os
+
+os.environ["DISABLE_PANDERA_IMPORT_WARNING"] = "True"
+
 from soundevent.io.crowsetta.annotation import (
     annotation_from_clip_annotation,
     annotation_to_clip_annotation,
