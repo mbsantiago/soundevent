@@ -32,9 +32,14 @@ available formats:
 
 """
 
+import os
+
+# Disable a warning related to Pandera (a dependency of Crowsetta)
+os.environ["DISABLE_PANDERA_IMPORT_WARNING"] = "True"
+
 import crowsetta
 
-print(crowsetta.data.available_formats())
+print(crowsetta.formats.as_list())
 
 # %%
 # ### Loading Example Raven Annotations
@@ -42,37 +47,12 @@ print(crowsetta.data.available_formats())
 # Let's walk through the process of loading example Raven annotations using
 # Crowsetta.
 
-import os
-import tempfile
+raven_annotations = crowsetta.example("Recording1")
 
-with tempfile.TemporaryDirectory() as tmpdirname:
-    # Extract the example data files to a temporary directory
-    data_dir = os.path.join(tmpdirname, "crowsetta_data")
-    crowsetta.data.extract_data_files(user_data_dir=data_dir)
+# Convert the annotations to the standard crowsetta format
+annotations = raven_annotations.to_annot()
 
-    # Select a Raven example file
-    example_file = crowsetta.data.get("raven", user_data_dir=data_dir)
-
-    # Create a Raven transcriber
-    transcriber = crowsetta.Transcriber("raven")
-
-    # Load the Raven annotations
-    # For this example, we assume the annotations correspond to a test audio
-    # file.
-    raven_annotations = transcriber.from_file(
-        example_file.annot_path,
-        annot_col="Species",
-        audio_path="sample_audio.wav",
-    )
-
-    print(raven_annotations)
-
-    # Convert the annotations to the standard crowsetta format
-    annotations = raven_annotations.to_annot()
-
-print(f"Citation: {example_file.citation}")
 print(f"Loaded {len(annotations.bboxes)} bounding box annotations")
-print("Notated file: ", annotations.notated_path)
 
 # %%
 # ## Converting to Soundevent format
@@ -81,9 +61,18 @@ print("Notated file: ", annotations.notated_path)
 # to convert them to Soundevent format.
 
 import soundevent.io.crowsetta as cr
+from soundevent.data import Recording
 
 # Convert Crowsetta Annotations to Soundevent ClipAnnotation
-clip_annotation = cr.annotation_to_clip_annotation(annotations)
+clip_annotation = cr.annotation_to_clip_annotation(
+    annotations,
+    recording=Recording(
+        path="Recording1.wav",
+        duration=1,
+        samplerate=16000,
+        channels=1,
+    ),
+)
 
 # Print JSON representation of the ClipAnnotation object
 print(
