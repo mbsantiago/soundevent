@@ -1,5 +1,5 @@
 import datetime
-from typing import Dict, List, Literal, Optional
+from typing import Dict, List, Literal
 from uuid import UUID
 
 from pydantic import BaseModel
@@ -68,10 +68,12 @@ class EvaluationAdapter:
         sound_event_adapter: SoundEventAdapter | None = None,
         sequence_adapter: SequenceAdapter | None = None,
         clip_adapter: ClipAdapter | None = None,
-        sound_event_annotation_adapter: SoundEventAnnotationAdapter | None = None,
+        sound_event_annotation_adapter: SoundEventAnnotationAdapter
+        | None = None,
         sequence_annotation_adapter: SequenceAnnotationAdapter | None = None,
         clip_annotations_adapter: ClipAnnotationsAdapter | None = None,
-        sound_event_prediction_adapter: SoundEventPredictionAdapter | None = None,
+        sound_event_prediction_adapter: SoundEventPredictionAdapter
+        | None = None,
         sequence_prediction_adapter: SequencePredictionAdapter | None = None,
         clip_predictions_adapter: ClipPredictionsAdapter | None = None,
         clip_evaluation_adapter: ClipEvaluationAdapter | None = None,

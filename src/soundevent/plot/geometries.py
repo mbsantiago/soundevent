@@ -1,6 +1,6 @@
 """Functions for plotting sound event geometries."""
 
-from typing import Dict, Optional, Protocol, Tuple
+from typing import Dict, Protocol, Tuple
 
 import shapely
 from matplotlib.axes import Axes

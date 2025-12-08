@@ -7,7 +7,7 @@ the `crowsetta.Annotation` format used by the Crowsetta tool.
 
 import os
 from pathlib import Path
-from typing import List, Literal, Optional
+from typing import List, Literal
 
 import crowsetta
 
@@ -201,7 +201,9 @@ def annotation_to_clip_annotation(
             )
         )
 
-    crowsetta_sequences: List[crowsetta.Sequence] | crowsetta.Sequence = getattr(annot, "seq", [])
+    crowsetta_sequences: List[crowsetta.Sequence] | crowsetta.Sequence = (
+        getattr(annot, "seq", [])
+    )
 
     if not isinstance(crowsetta_sequences, list):
         crowsetta_sequences = [crowsetta_sequences]

@@ -6,8 +6,6 @@ and facilitate data sharing. This clarity helps integrate with
 existing data corpora.
 """
 
-from typing import Optional
-
 from pydantic import BaseModel, ConfigDict, Field
 
 __all__ = [

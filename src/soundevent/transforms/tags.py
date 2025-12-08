@@ -1,7 +1,6 @@
 """Transformations for tags."""
 
 from collections.abc import Callable, Sequence
-from typing import Optional
 
 from soundevent import data
 from soundevent.transforms.base import TransformBase

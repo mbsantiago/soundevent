@@ -58,7 +58,6 @@ You can disable plugin loading by setting the environment variable
 import logging
 import os
 from importlib.metadata import entry_points
-from typing import Optional
 
 from soundevent.terms.api import get_global_term_registry
 from soundevent.terms.io import register_term_set

@@ -8,7 +8,7 @@ predictions (`ProcessedClip`), matches between predicted and ground truth
 annotations (`Match` instances), and computed evaluation metrics.
 """
 
-from typing import Optional, Sequence
+from typing import Sequence
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field, model_validator

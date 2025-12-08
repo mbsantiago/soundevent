@@ -1,6 +1,6 @@
 """Submodule of io module containing type definitions."""
 
-from typing import Generic, Literal, Optional, Protocol, TypeVar
+from typing import Generic, Literal, Protocol, TypeVar
 
 from soundevent import data
 

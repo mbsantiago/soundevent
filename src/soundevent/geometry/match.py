@@ -25,7 +25,7 @@ Both functions yield tuples of ``(source_index, target_index, score)``.
 """
 
 from itertools import product
-from typing import Iterable, Optional, Sequence, Set, Tuple, Union
+from typing import Iterable, Sequence, Set, Tuple
 
 import numpy as np
 from scipy.optimize import linear_sum_assignment

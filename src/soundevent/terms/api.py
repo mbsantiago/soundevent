@@ -14,7 +14,7 @@ allowing them to operate on a specific `TermRegistry` instance for a single
 call, without affecting the global state.
 """
 
-from typing import List, Optional
+from typing import List
 
 from soundevent import data
 from soundevent.terms.registry import TermRegistry

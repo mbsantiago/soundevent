@@ -1,7 +1,7 @@
 """Functions for plotting tags."""
 
 from itertools import cycle
-from typing import Dict, Optional
+from typing import Dict
 
 import numpy as np
 from matplotlib import colormaps

@@ -6,7 +6,7 @@ within the soundevent package.
 """
 
 import warnings
-from typing import Any, Optional
+from typing import Any
 
 from pydantic import BaseModel, computed_field, model_validator
 

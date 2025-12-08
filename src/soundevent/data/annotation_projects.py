@@ -7,7 +7,7 @@ annotators, and the set of permissible tags. It serves as a central container
 for managing and tracking the progress of an annotation effort.
 """
 
-from typing import List, Optional
+from typing import List
 
 from pydantic import Field, model_validator
 

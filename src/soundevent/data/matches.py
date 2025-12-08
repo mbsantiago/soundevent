@@ -35,7 +35,7 @@ relationships between sound events from different sources, allowing for
 comparative studies and insights in bioacoustic research.
 """
 
-from typing import Optional, Sequence
+from typing import Sequence
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field, model_validator

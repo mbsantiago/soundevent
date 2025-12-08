@@ -23,7 +23,7 @@ specific syllables).
 
 import warnings
 from collections.abc import Iterable
-from typing import Any, Optional, overload
+from typing import Any, overload
 
 from pydantic import BaseModel, Field, model_validator
 

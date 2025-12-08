@@ -25,7 +25,7 @@ dimension width (`get_dim_width`), and estimate dimension step size
 """
 
 from enum import Enum
-from typing import Any, Optional, Tuple
+from typing import Any, Tuple
 
 import numpy as np
 import xarray as xr

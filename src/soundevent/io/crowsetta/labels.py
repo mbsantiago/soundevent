@@ -9,7 +9,7 @@ the conversion of labels to tags and vice versa, and they allow users to
 customize the conversion process using various options.
 """
 
-from typing import Callable, Dict, List, Optional, Sequence, Union
+from typing import Callable, Dict, List, Sequence
 
 from soundevent import data
 

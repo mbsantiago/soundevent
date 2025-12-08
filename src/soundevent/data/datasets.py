@@ -1,7 +1,6 @@
 """Datasets."""
 
 from pathlib import Path
-from typing import Optional
 
 from soundevent.data.recording_sets import RecordingSet
 from soundevent.data.recordings import PathLike, Recording

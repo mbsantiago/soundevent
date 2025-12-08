@@ -1,6 +1,6 @@
 """Tag Encoder Module."""
 
-from typing import Optional, Protocol, Sequence
+from typing import Protocol, Sequence
 
 import numpy as np
 

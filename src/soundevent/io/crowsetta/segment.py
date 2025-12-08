@@ -1,6 +1,6 @@
 """crowsetta.segment module."""
 
-from typing import List, Optional, Tuple
+from typing import List, Tuple
 
 import crowsetta
 

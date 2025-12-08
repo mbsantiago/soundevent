@@ -1,6 +1,6 @@
 """Functions for plotting annotations."""
 
-from typing import Iterable, Optional
+from typing import Iterable
 
 from matplotlib.axes import Axes
 

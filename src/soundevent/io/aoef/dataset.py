@@ -1,4 +1,4 @@
-from typing import Literal, Optional
+from typing import Literal
 
 from .recording_set import RecordingSetAdapter, RecordingSetObject
 from soundevent import data

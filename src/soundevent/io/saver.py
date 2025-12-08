@@ -5,8 +5,6 @@ sound event data. Data can be saved in formats compatible with the
 `soundevent.io.load` function.
 """
 
-from typing import Optional
-
 from soundevent import data
 from soundevent.io.aoef import save as aoef_save
 from soundevent.io.formats import infer_format

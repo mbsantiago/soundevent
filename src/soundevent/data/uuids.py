@@ -1,7 +1,6 @@
 """UUID generation logic for soundevent objects."""
 
 import uuid
-from typing import Optional
 
 from soundevent.constants import uuid_namespace
 

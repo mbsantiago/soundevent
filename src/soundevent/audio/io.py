@@ -5,7 +5,7 @@ Currently only supports reading and writing of .wav files.
 
 from io import BytesIO
 from pathlib import Path
-from typing import Optional, Tuple
+from typing import Tuple
 
 import numpy as np
 import soundfile as sf

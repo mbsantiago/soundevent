@@ -1,7 +1,7 @@
 """Common types and interfaces within bioacoustic analysis."""
 
 from abc import ABC, abstractmethod
-from typing import List, Optional
+from typing import List
 
 from soundevent import data
 

@@ -22,7 +22,7 @@ characteristic distributions, and statistical analysis.
 
 import warnings
 from collections.abc import Sequence
-from typing import Any, Optional, overload
+from typing import Any, overload
 
 from pydantic import BaseModel, model_validator
 

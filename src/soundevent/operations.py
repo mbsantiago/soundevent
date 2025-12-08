@@ -6,7 +6,6 @@ This module provides generic operations for manipulating sound event data.
 import math
 import uuid
 from collections.abc import Generator
-from typing import Optional
 
 from soundevent import data
 from soundevent.constants import uuid_namespace

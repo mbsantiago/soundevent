@@ -1,6 +1,6 @@
 """Functions to compute several spectral representations of sound signals."""
 
-from typing import Callable, Literal, Optional, Union
+from typing import Callable, Literal
 
 import numpy as np
 import xarray as xr

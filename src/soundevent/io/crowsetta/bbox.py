@@ -6,7 +6,7 @@ bounding box geometries, and `crowsetta.BBox` objects used by the Crowsetta
 tool.
 """
 
-from typing import List, Optional, Tuple
+from typing import List, Tuple
 
 from crowsetta import BBox
 

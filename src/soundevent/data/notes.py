@@ -43,7 +43,6 @@ and researchers involved in the project.
 """
 
 import datetime
-from typing import Optional
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field

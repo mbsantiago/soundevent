@@ -79,7 +79,7 @@ ac:captureDevice,Capture Device,"The device used to create the resource.",
 import csv
 import json
 from pathlib import Path
-from typing import Callable, Dict, List, Literal, Optional
+from typing import Callable, Dict, List, Literal
 
 from pydantic import BaseModel, Field, ValidationError
 

@@ -1,4 +1,4 @@
-from typing import List, Literal, Optional
+from typing import List, Literal
 
 from .annotation_set import AnnotationSetAdapter, AnnotationSetObject
 from soundevent import data

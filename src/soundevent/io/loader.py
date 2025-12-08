@@ -4,7 +4,7 @@ This module provides a flexible `load` function to load different types of sound
 event data.
 """
 
-from typing import Dict, Literal, Optional, overload
+from typing import Dict, Literal, overload
 
 from soundevent import data
 from soundevent.io import aoef

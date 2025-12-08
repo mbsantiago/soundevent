@@ -1,6 +1,6 @@
 """Sequence object in AOEF format."""
 
-from typing import Dict, List, Optional
+from typing import Dict, List
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel

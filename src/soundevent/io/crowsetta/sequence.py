@@ -5,7 +5,7 @@ This module facilitates the conversion between sequences of
 `crowsetta.Sequence` objects employed by the Crowsetta tool.
 """
 
-from typing import List, Optional, Sequence
+from typing import List, Sequence
 
 import crowsetta
 

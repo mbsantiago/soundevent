@@ -7,11 +7,9 @@ from typing import (
     Generic,
     Iterable,
     Iterator,
-    Optional,
     Sequence,
     Tuple,
     TypeVar,
-    Union,
 )
 
 import numpy as np
@@ -76,7 +74,10 @@ def match_detections_and_gts(
     ground_truths: Sequence[GroundTruth],
     affinity: np.ndarray | Callable[[Detection, GroundTruth], float],
     affinity_threshold: float = 0,
-    score: np.ndarray | Callable[[Detection], float] | Sequence[float] | None = None,
+    score: np.ndarray
+    | Callable[[Detection], float]
+    | Sequence[float]
+    | None = None,
     strict_match: bool = False,
 ) -> Iterator[Match[Detection, GroundTruth]]:
     """Match predictions to ground truths greedily based on confidence scores.

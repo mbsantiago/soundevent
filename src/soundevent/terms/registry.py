@@ -9,7 +9,7 @@ registry-specific error handling.
 
 from collections.abc import Callable, MutableMapping
 from functools import partial
-from typing import Dict, Optional
+from typing import Dict
 
 from soundevent.data import Term
 

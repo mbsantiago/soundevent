@@ -1,6 +1,6 @@
 """Common utilities for plotting."""
 
-from typing import Optional, Tuple
+from typing import Tuple
 
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes

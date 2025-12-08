@@ -1,5 +1,5 @@
 import warnings
-from typing import Any, Literal, Optional
+from typing import Any, Literal
 
 from pydantic import BaseModel, computed_field, model_validator
 

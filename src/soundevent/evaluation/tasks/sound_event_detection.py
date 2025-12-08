@@ -4,7 +4,6 @@ from typing import (
     Callable,
     Generic,
     Iterator,
-    Optional,
     Protocol,
     Sequence,
     Tuple,

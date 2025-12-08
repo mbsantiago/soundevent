@@ -1,6 +1,6 @@
 import sys
 from abc import ABC, abstractmethod
-from typing import Dict, Generic, Hashable, List, Optional, TypeVar
+from typing import Dict, Generic, Hashable, List, TypeVar
 from uuid import UUID
 
 from pydantic import BaseModel

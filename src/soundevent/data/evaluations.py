@@ -8,7 +8,7 @@ metrics, and a set of `EvaluatedExample` instances.
 """
 
 import datetime
-from typing import Optional, Sequence
+from typing import Sequence
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field

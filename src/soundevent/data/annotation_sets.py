@@ -14,7 +14,7 @@ agreed upon by multiple annotators.
 """
 
 import datetime
-from typing import List, Optional
+from typing import List
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field

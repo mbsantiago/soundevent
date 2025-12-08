@@ -1,5 +1,3 @@
-from typing import Optional
-
 import numpy as np
 import xarray as xr
 from scipy import signal

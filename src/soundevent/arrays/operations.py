@@ -1,6 +1,6 @@
 """Module for manipulation of xarray.DataArray objects."""
 
-from typing import Any, Callable, List, Literal, Optional, Union
+from typing import Any, Callable, List, Literal
 
 import numpy as np
 import xarray as xr
