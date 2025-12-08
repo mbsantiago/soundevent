@@ -317,7 +317,7 @@ def _select_matches(
         maximize=True,
     )
 
-    for row, column in zip(assiged_rows, assigned_columns):
+    for row, column in zip(assiged_rows, assigned_columns, strict=True):
         yield row, column
         rows.remove(row)
         cols.remove(column)

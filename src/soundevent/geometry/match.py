@@ -218,7 +218,7 @@ def select_optimal_matches(
         maximize=True,
     )
 
-    for row, column in zip(assigned_rows, assigned_columns):
+    for row, column in zip(assigned_rows, assigned_columns, strict=True):
         value = float(affinity_matrix[row, column])
 
         # Ignore matches with affinity below the threshold

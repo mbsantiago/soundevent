@@ -36,41 +36,20 @@ def convert_time_to_sample(recording: data.Recording, time: float) -> int:
     return int(time * recording.samplerate)
 
 
-crowsetta_version = crowsetta.__version__[0]
-
-if crowsetta_version == "4":
-
-    def create_crowsetta_segment(
-        onset_s: Optional[float] = None,
-        offset_s: Optional[float] = None,
-        onset_sample: Optional[int] = None,
-        offset_sample: Optional[int] = None,
-        label: Optional[str] = None,
-    ) -> crowsetta.Segment:
-        return crowsetta.Segment.from_keyword(
-            label=label,
-            onset_s=onset_s,
-            offset_s=offset_s,
-            onset_sample=onset_sample,
-            offset_sample=offset_sample,
-        )
-
-else:
-
-    def create_crowsetta_segment(
-        onset_s: Optional[float] = None,
-        offset_s: Optional[float] = None,
-        onset_sample: Optional[int] = None,
-        offset_sample: Optional[int] = None,
-        label: Optional[str] = None,
-    ) -> crowsetta.Segment:
-        return crowsetta.Segment(
-            onset_s=onset_s,  # type: ignore
-            offset_s=offset_s,  # type: ignore
-            onset_sample=onset_sample,  # type: ignore
-            offset_sample=offset_sample,  # type: ignore
-            label=label,  # type: ignore
-        )
+def create_crowsetta_segment(
+    onset_s: Optional[float] = None,
+    offset_s: Optional[float] = None,
+    onset_sample: Optional[int] = None,
+    offset_sample: Optional[int] = None,
+    label: Optional[str] = None,
+) -> crowsetta.Segment:
+    return crowsetta.Segment(
+        onset_s=onset_s,  # type: ignore
+        offset_s=offset_s,  # type: ignore
+        onset_sample=onset_sample,  # type: ignore
+        offset_sample=offset_sample,  # type: ignore
+        label=label,  # type: ignore
+    )
 
 
 def segment_from_annotation(

@@ -20,7 +20,9 @@ def test_create_time_range_with_step():
     time_range = arrays.create_time_range(start_time=0, end_time=10, step=1)
     assert isinstance(time_range, xr.Variable)
     assert time_range.shape == (10,)
-    assert time_range.data.tolist() == list(range(0, 10))
+    np.testing.assert_allclose(
+        np.asarray(time_range.data), np.array(range(0, 10))
+    )
     assert time_range.attrs["step"] == 1
 
 
@@ -33,7 +35,9 @@ def test_create_time_range_with_samplerate():
     )
     assert isinstance(time_range, xr.Variable)
     assert time_range.shape == (1000,)
-    assert time_range.data.tolist() == [0.01 * i for i in range(1000)]
+    np.testing.assert_allclose(
+        np.asarray(time_range.data), np.array([0.01 * i for i in range(1000)])
+    )
     assert time_range.attrs["step"] == 0.01
 
 
@@ -59,7 +63,10 @@ def test_create_frequency_range_with_step():
     )
     assert isinstance(frequency_range, xr.Variable)
     assert frequency_range.shape == (10,)
-    assert frequency_range.data.tolist() == list(range(0, 1000, 100))
+    np.testing.assert_allclose(
+        np.asarray(frequency_range.data),
+        np.array(list(range(0, 1000, 100))),
+    )
 
 
 def test_set_dim_attrs_is_succesful():

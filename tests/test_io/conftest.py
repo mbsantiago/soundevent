@@ -289,12 +289,8 @@ def clip_predictions(
 
 
 @pytest.fixture
-def prediction_set(
-    clip_predictions: data.ClipPrediction,
-):
-    return data.PredictionSet(
-        clip_predictions=[clip_predictions],
-    )
+def prediction_set(clip_predictions: data.ClipPrediction):
+    return data.PredictionSet(clip_predictions=[clip_predictions])
 
 
 @pytest.fixture
@@ -305,7 +301,10 @@ def model_run(
         name="Test Model Run",
         description="Test Model Run Description",
         clip_predictions=[clip_predictions],
-        version="1.0.0",
+        model=data.Model(
+            info=data.ModelInfo(name="Test Model"),
+            version="1.0.0",
+        ),
     )
 
 

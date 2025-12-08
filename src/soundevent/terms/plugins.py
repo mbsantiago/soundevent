@@ -57,17 +57,12 @@ You can disable plugin loading by setting the environment variable
 
 import logging
 import os
-import sys
+from importlib.metadata import entry_points
 from typing import Optional
 
 from soundevent.terms.api import get_global_term_registry
 from soundevent.terms.io import register_term_set
 from soundevent.terms.registry import TermRegistry
-
-if sys.version_info < (3, 10):
-    from importlib_metadata import entry_points
-else:
-    from importlib.metadata import entry_points
 
 __all__ = [
     "discover_and_load_plugins",
@@ -110,15 +105,7 @@ def discover_plugins():
             return eps.select(group="soundevent.terms")
 
         # Some backports may return a mapping
-        if isinstance(eps, dict):
-            return eps.get("soundevent.terms", [])
-
-        # Fallback: filter sequence by group attribute
-        return [
-            ep
-            for ep in eps
-            if getattr(ep, "group", None) == "soundevent.terms"
-        ]
+        return eps.get("soundevent.terms", [])
 
     except TypeError:
         # Older API supporting the `group=` kwarg
