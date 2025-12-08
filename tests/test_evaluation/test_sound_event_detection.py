@@ -129,35 +129,6 @@ class TestEvaluateSoundEventDetection:
         assert matchB.prediction == detB
         assert matchB.annotation == annB
 
-    def test_filtering_non_geometric_annotations(self, clip):
-        geo = data.TimeInterval(coordinates=[0.1, 0.2])
-        se_geo = data.SoundEvent(geometry=geo, recording=clip.recording)
-        ann_geo = data.SoundEventAnnotation(sound_event=se_geo)
-
-        se_non_geo = data.SoundEvent(geometry=None, recording=clip.recording)
-        ann_non_geo = data.SoundEventAnnotation(sound_event=se_non_geo)
-
-        det = MockDetection(uuid=clip.uuid, geometry=geo, score=1.0)
-
-        pred_clip = MockClipPrediction(clip=clip, detections=[det])
-        ann_clip = data.ClipAnnotation(
-            clip=clip, sound_events=[ann_geo, ann_non_geo]
-        )
-
-        results = list(
-            evaluate_sound_event_detection(
-                clip_predictions=[pred_clip],
-                clip_annotations=[ann_clip],
-                affinity=mock_affinity_fn,
-                score=mock_score_fn,
-            )
-        )
-
-        assert len(results) == 1
-        match = results[0][1]
-        assert match.prediction == det
-        assert match.annotation == ann_geo
-
     def test_integration_happy_path(self, clip):
         geo = data.TimeInterval(coordinates=[0.0, 0.0])
 

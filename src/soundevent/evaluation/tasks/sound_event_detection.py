@@ -8,7 +8,6 @@ from typing import (
     Protocol,
     Sequence,
     Tuple,
-    Union,
 )
 
 import numpy as np
@@ -138,58 +137,15 @@ def evaluate_sound_event_detection(
         clip_prediction = pred_mapping[uuid]
         clip_annotation = ann_mapping[uuid]
         clip = clip_prediction.clip
-
-        for match in evaluate_clip_prediction(
-            clip_prediction,
-            clip_annotation,
-            affinity=affinity,
+        for match in match_detections_and_gts(
+            detections=clip_prediction.detections,
+            ground_truths=clip_annotation.sound_events,
             affinity_threshold=affinity_threshold,
+            affinity=affinity,
             score=score,
             strict_match=strict_match,
         ):
             yield clip, match
-
-
-def evaluate_clip_prediction(
-    clip_detections: ClipPrediction[Detection],
-    clip_annotation: data.ClipAnnotation,
-    affinity: Union[
-        np.ndarray,
-        Callable[[Detection, data.SoundEventAnnotation], float],
-    ],
-    affinity_threshold: float = 0,
-    score: Union[
-        np.ndarray,
-        Callable[[Detection], float],
-        Sequence[float],
-        None,
-    ] = None,
-    strict_match: bool = False,
-) -> Iterator[Match[Detection, data.SoundEventAnnotation]]:
-    if clip_detections.clip != clip_annotation.clip:
-        raise ValueError(
-            "The clip of the detections and the annotation do not match."
-            f"Detections clip: {clip_detections.clip}, "
-            f"Annotation clip: {clip_annotation.clip}. "
-            "Please make sure to order the clip predictions and annotations "
-            "in the same order."
-        )
-
-    ground_truths = [
-        sound_event
-        for sound_event in clip_annotation.sound_events
-        if sound_event.sound_event.geometry is not None
-    ]
-    detections = clip_detections.detections
-
-    return match_detections_and_gts(
-        detections=detections,
-        ground_truths=ground_truths,
-        affinity_threshold=affinity_threshold,
-        affinity=affinity,
-        score=score,
-        strict_match=strict_match,
-    )
 
 
 def sound_event_detection(
