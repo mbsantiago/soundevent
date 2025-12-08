@@ -55,12 +55,13 @@ from pathlib import Path
 from typing import List, Optional, Union
 from uuid import UUID, uuid4
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from soundevent.data.features import Feature
 from soundevent.data.notes import Note
 from soundevent.data.tags import Tag
 from soundevent.data.users import User
+from soundevent.data.uuids import generate_recording_uuid
 
 __all__ = [
     "Recording",
@@ -272,6 +273,15 @@ class Recording(BaseModel):
         repr=False,
     )
     """A list of notes associated with the recording."""
+
+    @model_validator(mode="after")
+    def _set_uuid_from_hash(self) -> "Recording":
+        if "uuid" in self.model_fields_set:
+            return self
+
+        if self.hash is not None:
+            self.uuid = generate_recording_uuid(self.hash)
+        return self
 
     @classmethod
     def from_file(
