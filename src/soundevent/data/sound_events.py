@@ -63,7 +63,7 @@ class SoundEvent(BaseModel):
     """
 
     uuid: UUID = Field(default_factory=uuid4, repr=False)
-    geometry: Optional[Geometry]
+    geometry: Geometry
     recording: Recording
     features: List[Feature] = Field(default_factory=list, repr=False)
 
