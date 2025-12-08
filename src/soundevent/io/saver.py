@@ -16,8 +16,8 @@ from soundevent.io.types import DataCollections, Saver
 def save(
     obj: DataCollections,
     path: data.PathLike,
-    audio_dir: Optional[data.PathLike] = None,
-    format: Optional[str] = "aoef",
+    audio_dir: data.PathLike | None = None,
+    format: str | None = "aoef",
     **kwargs,
 ) -> None:
     """Save a data object to a file.

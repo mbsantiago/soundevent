@@ -26,8 +26,8 @@ class GeometryPlotter(Protocol):
 
 def plot_geometry(
     geometry: data.Geometry,
-    ax: Optional[Axes] = None,
-    figsize: Optional[Tuple[float, float]] = None,
+    ax: Axes | None = None,
+    figsize: Tuple[float, float] | None = None,
     **kwargs,
 ) -> Axes:
     """Plot a geometry in the given ax."""

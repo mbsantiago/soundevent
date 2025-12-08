@@ -16,20 +16,20 @@ class RecordingSetObject(BaseModel):
 
     uuid: UUID
     collection_type: Literal["recording_set"] = "recording_set"
-    created_on: Optional[datetime.datetime] = None
+    created_on: datetime.datetime | None = None
     recordings: List[RecordingObject]
-    tags: Optional[List[TagObject]] = None
-    users: Optional[List[UserObject]] = None
+    tags: List[TagObject] | None = None
+    users: List[UserObject] | None = None
 
 
 class RecordingSetAdapter:
     def __init__(
         self,
-        audio_dir: Optional[data.PathLike] = None,
-        user_adapter: Optional[UserAdapter] = None,
-        tag_adapter: Optional[TagAdapter] = None,
-        note_adapter: Optional[NoteAdapter] = None,
-        recording_adapter: Optional[RecordingAdapter] = None,
+        audio_dir: data.PathLike | None = None,
+        user_adapter: UserAdapter | None = None,
+        tag_adapter: TagAdapter | None = None,
+        note_adapter: NoteAdapter | None = None,
+        recording_adapter: RecordingAdapter | None = None,
     ):
         self.user_adapter = user_adapter or UserAdapter()
         self.tag_adapter = tag_adapter or TagAdapter()

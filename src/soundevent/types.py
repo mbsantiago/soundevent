@@ -37,7 +37,7 @@ class ClassMapper(ABC):
     def encode(
         self,
         sound_event_annotation: data.SoundEventAnnotation,
-    ) -> Optional[str]:
+    ) -> str | None:
         """Encode a sound event annotation into a class label.
 
         The user should implement this method to encode a sound event annotation
@@ -60,7 +60,7 @@ class ClassMapper(ABC):
     def transform(
         self,
         sound_event_annotation: data.SoundEventAnnotation,
-    ) -> Optional[int]:
+    ) -> int | None:
         """Transform a sound event annotation into a class index.
 
         Parameters

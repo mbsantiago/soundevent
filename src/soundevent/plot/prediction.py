@@ -16,13 +16,13 @@ __all__ = [
 
 def plot_prediction(
     prediction: data.SoundEventPrediction,
-    ax: Optional[Axes] = None,
+    ax: Axes | None = None,
     position: Positions = "top-right",
-    color_mapper: Optional[TagColorMapper] = None,
+    color_mapper: TagColorMapper | None = None,
     time_offset: float = 0.001,
     freq_offset: float = 1000,
     max_alpha: float = 0.5,
-    color: Optional[str] = None,
+    color: str | None = None,
     **kwargs,
 ) -> Axes:
     """Plot a sound event prediction on a spectrogram.
@@ -99,14 +99,14 @@ def plot_prediction(
 
 def plot_predictions(
     predictions: Iterable[data.SoundEventPrediction],
-    ax: Optional[Axes] = None,
+    ax: Axes | None = None,
     position: Positions = "top-right",
-    color_mapper: Optional[TagColorMapper] = None,
+    color_mapper: TagColorMapper | None = None,
     time_offset: float = 0.001,
     freq_offset: float = 1000,
     legend: bool = True,
     max_alpha: float = 0.5,
-    color: Optional[str] = None,
+    color: str | None = None,
     **kwargs,
 ):
     """Plot a collection of sound event predictions on a spectrogram.

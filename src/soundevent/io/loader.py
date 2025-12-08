@@ -19,8 +19,8 @@ __all__ = [
 @overload
 def load(  # type: ignore
     path: data.PathLike,
-    audio_dir: Optional[data.PathLike] = None,
-    format: Optional[str] = "aoef",
+    audio_dir: data.PathLike | None = None,
+    format: str | None = "aoef",
     type: Literal["recording_set"] = "recording_set",  # type: ignore
 ) -> data.RecordingSet:  # type: ignore
     ...  # pragma: no cover
@@ -29,8 +29,8 @@ def load(  # type: ignore
 @overload
 def load(  # type: ignore
     path: data.PathLike,
-    audio_dir: Optional[data.PathLike] = None,
-    format: Optional[str] = "aoef",
+    audio_dir: data.PathLike | None = None,
+    format: str | None = "aoef",
     type: Literal["dataset"] = "dataset",  # type: ignore
 ) -> data.Dataset:  # type: ignore
     ...  # pragma: no cover
@@ -39,8 +39,8 @@ def load(  # type: ignore
 @overload
 def load(  # type: ignore
     path: data.PathLike,
-    audio_dir: Optional[data.PathLike] = None,
-    format: Optional[str] = "aoef",
+    audio_dir: data.PathLike | None = None,
+    format: str | None = "aoef",
     type: Literal["annotation_set"] = "annotation_set",  # type: ignore
 ) -> data.AnnotationSet:  # type: ignore
     ...  # pragma: no cover
@@ -49,8 +49,8 @@ def load(  # type: ignore
 @overload
 def load(  # type: ignore
     path: data.PathLike,
-    audio_dir: Optional[data.PathLike] = None,
-    format: Optional[str] = "aoef",
+    audio_dir: data.PathLike | None = None,
+    format: str | None = "aoef",
     type: Literal["annotation_project"] = "annotation_project",  # type: ignore
 ) -> data.AnnotationProject:  # type: ignore
     ...  # pragma: no cover
@@ -59,8 +59,8 @@ def load(  # type: ignore
 @overload
 def load(  # type: ignore
     path: data.PathLike,
-    audio_dir: Optional[data.PathLike] = None,
-    format: Optional[str] = "aoef",
+    audio_dir: data.PathLike | None = None,
+    format: str | None = "aoef",
     type: Literal["prediction_set"] = "prediction_set",  # type: ignore
 ) -> data.PredictionSet:  # type: ignore
     ...  # pragma: no cover
@@ -69,8 +69,8 @@ def load(  # type: ignore
 @overload
 def load(  # type: ignore
     path: data.PathLike,
-    audio_dir: Optional[data.PathLike] = None,
-    format: Optional[str] = "aoef",
+    audio_dir: data.PathLike | None = None,
+    format: str | None = "aoef",
     type: Literal["model_run"] = "model_run",  # type: ignore
 ) -> data.ModelRun:  # type: ignore
     ...  # pragma: no cover
@@ -79,8 +79,8 @@ def load(  # type: ignore
 @overload
 def load(  # type: ignore
     path: data.PathLike,
-    audio_dir: Optional[data.PathLike] = None,
-    format: Optional[str] = "aoef",
+    audio_dir: data.PathLike | None = None,
+    format: str | None = "aoef",
     type: Literal["evaluation_set"] = "evaluation_set",  # type: ignore
 ) -> data.EvaluationSet:  # type: ignore
     ...  # pragma: no cover
@@ -89,8 +89,8 @@ def load(  # type: ignore
 @overload
 def load(  # type: ignore
     path: data.PathLike,
-    audio_dir: Optional[data.PathLike] = None,
-    format: Optional[str] = "aoef",
+    audio_dir: data.PathLike | None = None,
+    format: str | None = "aoef",
     type: Literal["evaluation"] = "evaluation",  # type: ignore
 ) -> data.Evaluation:  # type: ignore
     ...  # pragma: no cover
@@ -98,9 +98,9 @@ def load(  # type: ignore
 
 def load(
     path: data.PathLike,
-    audio_dir: Optional[data.PathLike] = None,
-    format: Optional[str] = "aoef",
-    type: Optional[DataType] = None,  # type: ignore
+    audio_dir: data.PathLike | None = None,
+    format: str | None = "aoef",
+    type: DataType | None = None,  # type: ignore
 ) -> DataCollections:
     """Load data from a file.
 

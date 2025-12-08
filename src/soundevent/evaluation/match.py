@@ -62,8 +62,8 @@ class Match(Generic[Detection, GroundTruth]):
         is None.
     """
 
-    prediction: Optional[Detection]
-    annotation: Optional[GroundTruth]
+    prediction: Detection | None
+    annotation: GroundTruth | None
     affinity_score: float
     prediction_score: float
 
@@ -74,17 +74,9 @@ class Match(Generic[Detection, GroundTruth]):
 def match_detections_and_gts(
     detections: Sequence[Detection],
     ground_truths: Sequence[GroundTruth],
-    affinity: Union[
-        np.ndarray,
-        Callable[[Detection, GroundTruth], float],
-    ],
+    affinity: np.ndarray | Callable[[Detection, GroundTruth], float],
     affinity_threshold: float = 0,
-    score: Union[
-        np.ndarray,
-        Callable[[Detection], float],
-        Sequence[float],
-        None,
-    ] = None,
+    score: np.ndarray | Callable[[Detection], float] | Sequence[float] | None = None,
     strict_match: bool = False,
 ) -> Iterator[Match[Detection, GroundTruth]]:
     """Match predictions to ground truths greedily based on confidence scores.
@@ -173,7 +165,7 @@ def match_detections_and_gts(
 def _validate_affinity_matrix(
     source: Sequence[Detection],
     target: Sequence[GroundTruth],
-    affinity: Union[np.ndarray, Callable[[Detection, GroundTruth], float]],
+    affinity: np.ndarray | Callable[[Detection, GroundTruth], float],
 ) -> np.ndarray:
     n_rows = len(source)
     n_cols = len(target)
@@ -203,7 +195,7 @@ def match_geometries(
     time_buffer: float = 0.01,
     freq_buffer: float = 100,
     affinity_threshold: float = 0,
-) -> Iterable[Tuple[Optional[int], Optional[int], float]]:
+) -> Iterable[Tuple[int | None, int | None, float]]:
     """Match geometries between a source and a target sequence.
 
     The matching is performed by first computing an affinity matrix between
@@ -289,7 +281,7 @@ def match_geometries(
 
 def _select_matches(
     cost_matrix: np.ndarray,
-) -> Iterable[Tuple[Optional[int], Optional[int]]]:
+) -> Iterable[Tuple[int | None, int | None]]:
     """Select matches from a cost matrix.
 
     This function uses the Hungarian algorithm to find the optimal assignment of

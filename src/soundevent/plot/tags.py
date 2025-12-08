@@ -45,7 +45,7 @@ def plot_tag(
     time: float,
     frequency: float,
     color: str,
-    ax: Optional[Axes] = None,
+    ax: Axes | None = None,
     size: int = 10,
     alpha: float = 1,
     **kwargs,

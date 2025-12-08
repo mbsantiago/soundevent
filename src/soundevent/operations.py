@@ -15,7 +15,7 @@ from soundevent.constants import uuid_namespace
 def segment_clip(
     clip: data.Clip,
     duration: float,
-    hop: Optional[float] = None,
+    hop: float | None = None,
     include_incomplete: bool = False,
 ) -> Generator[data.Clip, None, None]:
     """Segments a clip into smaller clips of a specified duration.

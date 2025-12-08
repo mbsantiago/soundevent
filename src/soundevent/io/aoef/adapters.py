@@ -39,7 +39,7 @@ D = TypeVar("D", bound=BaseModel)
 class AdapterProtocol(Protocol, Generic[C, D]):
     def __init__(
         self,
-        audio_dir: Optional[data.PathLike] = None,
+        audio_dir: data.PathLike | None = None,
     ): ...
 
     def to_aoef(self, obj: C) -> D: ...
@@ -131,7 +131,7 @@ class DataAdapter(
 
         return self._soundevent_store[obj_id]
 
-    def from_id(self, obj_id: AOEFKey) -> Optional[SoundEventObject]:
+    def from_id(self, obj_id: AOEFKey) -> SoundEventObject | None:
         """Get object from ID."""
         return self._soundevent_store.get(obj_id)
 
@@ -154,7 +154,7 @@ class DataAdapter(
 
         return obj_id
 
-    def values(self) -> Optional[List[AOEFObject]]:
+    def values(self) -> List[AOEFObject] | None:
         """Get all registered objects."""
         if not self._aoef_store:
             return None

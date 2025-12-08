@@ -25,7 +25,7 @@ __all__ = [
 def load_audio(
     path: data.PathLike,
     offset: int = 0,
-    samples: Optional[int] = None,
+    samples: int | None = None,
 ) -> Tuple[np.ndarray, int]:
     """Load an audio file.
 
@@ -57,7 +57,7 @@ def load_audio(
 
 def load_recording(
     recording: data.Recording,
-    audio_dir: Optional[data.PathLike] = None,
+    audio_dir: data.PathLike | None = None,
 ) -> xr.DataArray:
     """Load a recording from a file.
 
@@ -104,7 +104,7 @@ def load_recording(
 
 def load_clip(
     clip: data.Clip,
-    audio_dir: Optional[data.PathLike] = None,
+    audio_dir: data.PathLike | None = None,
 ) -> xr.DataArray:
     """Load a clip from a file.
 

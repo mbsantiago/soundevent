@@ -112,7 +112,7 @@ def discover_plugins():
         return list(entry_points(group="soundevent.terms"))
 
 
-def discover_and_load_plugins(term_registry: Optional[TermRegistry] = None):
+def discover_and_load_plugins(term_registry: TermRegistry | None = None):
     """Discover and load term sets from installed plugins.
 
     This function scans for Python packages that have registered themselves

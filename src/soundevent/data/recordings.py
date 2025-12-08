@@ -52,7 +52,6 @@ related fields.
 import datetime
 import os
 from pathlib import Path
-from typing import List, Optional, Union
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
@@ -69,7 +68,7 @@ __all__ = [
 ]
 
 
-PathLike = Union[os.PathLike, str]
+PathLike = os.PathLike | str
 """PathLike: A type alias for a path-like object."""
 
 
@@ -170,7 +169,7 @@ class Recording(BaseModel):
     Default is 1.0, indicating no time expansion.
     """
 
-    hash: Optional[str] = Field(
+    hash: str | None = Field(
         default=None,
         serialization_alias="ac:hashValue",
         title="Hash",
@@ -183,7 +182,7 @@ class Recording(BaseModel):
     Default is None.
     """
 
-    date: Optional[datetime.date] = Field(
+    date: datetime.date | None = Field(
         default=None,
         repr=False,
         deprecated=False,
@@ -193,7 +192,7 @@ class Recording(BaseModel):
     Default is None.
     """
 
-    time: Optional[datetime.time] = Field(
+    time: datetime.time | None = Field(
         default=None,
         repr=False,
         deprecated=False,
@@ -203,7 +202,7 @@ class Recording(BaseModel):
     Default is None.
     """
 
-    latitude: Optional[float] = Field(
+    latitude: float | None = Field(
         default=None,
         serialization_alias="dwc:decimalLatitude",
         title="Decimal Latitude",
@@ -218,7 +217,7 @@ class Recording(BaseModel):
     Default is None.
     """
 
-    longitude: Optional[float] = Field(
+    longitude: float | None = Field(
         default=None,
         serialization_alias="dwc:decimalLongitude",
         title="Decimal Longitude",
@@ -229,7 +228,7 @@ class Recording(BaseModel):
         },
     )
 
-    license: Optional[str] = Field(
+    license: str | None = Field(
         default=None,
         serialization_alias="dcterms:license",
         title="License",
@@ -238,7 +237,7 @@ class Recording(BaseModel):
         json_schema_extra={"$id": "http://purl.org/dc/terms/license"},
     )
 
-    owners: List[User] = Field(
+    owners: list[User] = Field(
         default_factory=list,
         serialization_alias="xmpRights:Owner",
         title="Copyright Owner",
@@ -247,7 +246,7 @@ class Recording(BaseModel):
         json_schema_extra={"$id": "http://ns.adobe.com/xap/1.0/rights/Owner"},
     )
 
-    rights: Optional[str] = Field(
+    rights: str | None = Field(
         default=None,
         serialization_alias="dcterms:rights",
         title="Copyright Statement",
@@ -256,19 +255,19 @@ class Recording(BaseModel):
         json_schema_extra={"$id": "http://purl.org/dc/terms/rights"},
     )
 
-    tags: List[Tag] = Field(
+    tags: list[Tag] = Field(
         default_factory=list,
         repr=False,
     )
     """A list of tags associated with the recording."""
 
-    features: List[Feature] = Field(
+    features: list[Feature] = Field(
         default_factory=list,
         repr=False,
     )
     """A list of features associated with the recording."""
 
-    notes: List[Note] = Field(
+    notes: list[Note] = Field(
         default_factory=list,
         repr=False,
     )

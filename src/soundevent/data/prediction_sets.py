@@ -49,8 +49,8 @@ class PredictionSet(BaseModel):
 
     uuid: UUID = Field(default_factory=uuid4)
     clip_predictions: List[ClipPrediction] = Field(default_factory=list)
-    name: Optional[str] = None
-    description: Optional[str] = None
+    name: str | None = None
+    description: str | None = None
 
     created_on: datetime.datetime = Field(
         default_factory=datetime.datetime.now

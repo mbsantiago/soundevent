@@ -7,7 +7,7 @@ the `crowsetta.Annotation` format used by the Crowsetta tool.
 
 import os
 from pathlib import Path
-from typing import List, Literal, Optional, Union
+from typing import List, Literal, Optional
 
 import crowsetta
 
@@ -21,7 +21,7 @@ from soundevent.io.crowsetta.sequence import (
     sequence_to_annotations,
 )
 
-PathLike = Union[str, Path, os.PathLike]
+PathLike = str | Path | os.PathLike
 
 
 __all__ = [
@@ -33,7 +33,7 @@ __all__ = [
 def annotation_from_clip_annotation(
     annot: data.ClipAnnotation,
     annot_path: PathLike,
-    annotation_fmt: Union[Literal["bbox"], Literal["seq"]],
+    annotation_fmt: Literal["bbox"] | Literal["seq"],
     ignore_errors: bool = True,
     cast_geometry: bool = True,
     **kwargs,
@@ -113,12 +113,12 @@ def annotation_from_clip_annotation(
 
 def annotation_to_clip_annotation(
     annot: crowsetta.Annotation,
-    recording: Optional[data.Recording] = None,
-    tags: Optional[List[data.Tag]] = None,
-    notes: Optional[List[data.Note]] = None,
+    recording: data.Recording | None = None,
+    tags: List[data.Tag] | None = None,
+    notes: List[data.Note] | None = None,
     adjust_time_expansion: bool = True,
-    created_by: Optional[data.User] = None,
-    recording_kwargs: Optional[dict] = None,
+    created_by: data.User | None = None,
+    recording_kwargs: dict | None = None,
     **kwargs,
 ) -> data.ClipAnnotation:
     """Convert a Crowsetta annotation to a ClipAnnotation.
@@ -201,9 +201,7 @@ def annotation_to_clip_annotation(
             )
         )
 
-    crowsetta_sequences: Union[
-        List[crowsetta.Sequence], crowsetta.Sequence
-    ] = getattr(annot, "seq", [])
+    crowsetta_sequences: List[crowsetta.Sequence] | crowsetta.Sequence = getattr(annot, "seq", [])
 
     if not isinstance(crowsetta_sequences, list):
         crowsetta_sequences = [crowsetta_sequences]

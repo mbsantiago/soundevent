@@ -11,11 +11,11 @@ from soundevent import data
 
 class MatchObject(BaseModel):
     uuid: UUID
-    source: Optional[UUID] = None
-    target: Optional[UUID] = None
+    source: UUID | None = None
+    target: UUID | None = None
     affinity: float
-    score: Optional[float] = None
-    metrics: Optional[Dict[str, float]] = None
+    score: float | None = None
+    metrics: Dict[str, float] | None = None
 
 
 class MatchAdapter(DataAdapter[data.Match, MatchObject, UUID, UUID]):

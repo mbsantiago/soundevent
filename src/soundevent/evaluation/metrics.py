@@ -19,7 +19,7 @@ Metric = Callable[[Any, np.ndarray], float]
 
 
 def classification_score(
-    y_true: Optional[int],
+    y_true: int | None,
     y_score: np.ndarray,
 ) -> float:
     if y_true is None:
@@ -29,7 +29,7 @@ def classification_score(
 
 
 def true_class_probability(
-    y_true: Optional[int],
+    y_true: int | None,
     y_score: np.ndarray,
 ) -> float:
     if y_true is None:
@@ -39,7 +39,7 @@ def true_class_probability(
 
 
 def balanced_accuracy(
-    y_true: Sequence[Optional[int]],
+    y_true: Sequence[int | None],
     y_score: np.ndarray,
 ) -> float:
     num_classes = y_score.shape[1]
@@ -55,7 +55,7 @@ def balanced_accuracy(
 
 
 def accuracy(
-    y_true: Sequence[Optional[int]],
+    y_true: Sequence[int | None],
     y_score: np.ndarray,
 ) -> float:
     num_classes = y_score.shape[1]
@@ -71,7 +71,7 @@ def accuracy(
 
 
 def top_3_accuracy(
-    y_true: Sequence[Optional[int]],
+    y_true: Sequence[int | None],
     y_score: np.ndarray,
 ) -> float:
     num_classes = y_score.shape[1]

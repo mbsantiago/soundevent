@@ -15,9 +15,9 @@ class ClipEvaluationObject(BaseModel):
     uuid: UUID
     annotations: UUID
     predictions: UUID
-    matches: Optional[List[UUID]] = None
-    metrics: Optional[Dict[str, float]] = None
-    score: Optional[float] = None
+    matches: List[UUID] | None = None
+    metrics: Dict[str, float] | None = None
+    score: float | None = None
 
 
 class ClipEvaluationAdapter(

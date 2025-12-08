@@ -11,10 +11,10 @@ class UserObject(BaseModel):
     """Schema definition for a user object in AOEF format."""
 
     uuid: UUID
-    username: Optional[str] = None
-    email: Optional[str] = None
-    name: Optional[str] = None
-    institution: Optional[str] = None
+    username: str | None = None
+    email: str | None = None
+    name: str | None = None
+    institution: str | None = None
 
 
 class UserAdapter(DataAdapter[data.User, UserObject, UUID, UUID]):

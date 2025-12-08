@@ -13,9 +13,9 @@ class NoteObject(BaseModel):
 
     uuid: UUID
     message: str
-    created_by: Optional[UUID] = None
+    created_by: UUID | None = None
     is_issue: bool = False
-    created_on: Optional[datetime.datetime] = None
+    created_on: datetime.datetime | None = None
 
 
 class NoteAdapter:

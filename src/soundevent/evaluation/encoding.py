@@ -32,7 +32,7 @@ class Encoder(Protocol):
 
     num_classes: int
 
-    def encode(self, tag: data.Tag) -> Optional[int]:
+    def encode(self, tag: data.Tag) -> int | None:
         """Encode a tag into an integer.
 
         Parameters
@@ -86,7 +86,7 @@ class SimpleEncoder(Encoder):
         }
         self.num_classes = len(tags)
 
-    def encode(self, tag: data.Tag) -> Optional[int]:
+    def encode(self, tag: data.Tag) -> int | None:
         return self._mapping.get((tag.term, tag.value))
 
     def decode(self, index: int) -> data.Tag:
@@ -112,7 +112,7 @@ def create_tag_encoder(tags: Sequence[data.Tag]) -> SimpleEncoder:
 def classification_encoding(
     tags: Sequence[data.Tag],
     encoder: Encoder,
-) -> Optional[int]:
+) -> int | None:
     """Encode a list of tags into an integer value.
 
     This function is commonly used for mapping a list of tags to a compact

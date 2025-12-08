@@ -59,7 +59,7 @@ class StatusBadge(BaseModel):
     """
 
     state: AnnotationState
-    owner: Optional[User] = None
+    owner: User | None = None
     created_on: datetime.datetime = Field(
         default_factory=datetime.datetime.now
     )

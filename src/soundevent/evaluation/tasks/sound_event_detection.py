@@ -62,7 +62,7 @@ def evaluate_sound_event_detection(
     clip_predictions: Sequence[ClipPrediction[Detection]],
     clip_annotations: Sequence[data.ClipAnnotation],
     affinity: Callable[[Detection, data.SoundEventAnnotation], float],
-    score: Optional[Callable[[Detection], float]] = None,
+    score: Callable[[Detection], float] | None = None,
     affinity_threshold: float = 0,
     strict_match: bool = False,
 ) -> Iterator[
@@ -220,8 +220,8 @@ def evaluate_clip(
     clip_annotations: data.ClipAnnotation,
     clip_predictions: data.ClipPrediction,
     encoder: Encoder,
-) -> tuple[list[Optional[int]], list[np.ndarray], data.ClipEvaluation]:
-    true_classes: list[Optional[int]] = []
+) -> tuple[list[int | None], list[np.ndarray], data.ClipEvaluation]:
+    true_classes: list[int | None] = []
     predicted_classes_scores: list[np.ndarray] = []
     matches: list[data.Match] = []
 
@@ -319,7 +319,7 @@ def evaluate_sound_event(
     sound_event_prediction: data.SoundEventPrediction,
     sound_event_annotation: data.SoundEventAnnotation,
     encoder: Encoder,
-) -> tuple[Optional[int], np.ndarray, data.Match]:
+) -> tuple[int | None, np.ndarray, data.Match]:
     true_class = classification_encoding(
         tags=sound_event_annotation.tags,
         encoder=encoder,
@@ -346,7 +346,7 @@ def evaluate_sound_event(
 
 
 def _mean(
-    scores: Sequence[Optional[float]],
+    scores: Sequence[float | None],
 ) -> float:
     valid_scores = [score for score in scores if score is not None]
 

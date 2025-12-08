@@ -31,7 +31,7 @@ class ModelInfo(BaseModel):
     """
 
     name: str
-    description: Optional[str] = None
+    description: str | None = None
 
 
 class Model(BaseModel):
@@ -70,7 +70,7 @@ class ModelRun(PredictionSet):
 
     @computed_field
     @property
-    def version(self) -> Optional[str]:
+    def version(self) -> str | None:
         """Provides backward-compatible access to 'version'. Deprecated."""
         warnings.warn(
             "Accessing 'version' directly on ModelRun is deprecated. "

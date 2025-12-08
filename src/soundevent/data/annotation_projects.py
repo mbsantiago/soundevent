@@ -44,7 +44,7 @@ class AnnotationProject(AnnotationSet):
         that requires annotation as part of this project.
     """
 
-    instructions: Optional[str] = None
+    instructions: str | None = None
     annotation_tags: List[Tag] = Field(default_factory=list, repr=False)
     tasks: List[AnnotationTask] = Field(default_factory=list, repr=False)
 

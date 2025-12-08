@@ -22,18 +22,18 @@ __all__ = [
 EMPTY_LABEL = "__empty__"
 
 
-LabelToTagFn = Callable[[str], Union[List[data.Tag], data.Tag]]
-LabelToTagMap = Dict[str, Union[List[data.Tag], data.Tag]]
+LabelToTagFn = Callable[[str], List[data.Tag] | data.Tag]
+LabelToTagMap = Dict[str, List[data.Tag] | data.Tag]
 
 
 def label_to_tags(
     label: str,
-    tag_fn: Optional[LabelToTagFn] = None,
-    tag_mapping: Optional[LabelToTagMap] = None,
-    term_mapping: Optional[Dict[str, data.Term]] = None,
-    key_mapping: Optional[Dict[str, str]] = None,
-    key: Optional[str] = None,
-    term: Optional[data.Term] = None,
+    tag_fn: LabelToTagFn | None = None,
+    tag_mapping: LabelToTagMap | None = None,
+    term_mapping: Dict[str, data.Term] | None = None,
+    key_mapping: Dict[str, str] | None = None,
+    key: str | None = None,
+    term: data.Term | None = None,
     fallback: str = "crowsetta",
     empty_labels: Sequence[str] = (EMPTY_LABEL,),
 ) -> List[data.Tag]:
@@ -113,8 +113,8 @@ def label_to_tags(
 
 def label_from_tag(
     tag: data.Tag,
-    label_fn: Optional[Callable[[data.Tag], str]] = None,
-    label_mapping: Optional[Dict[data.Tag, str]] = None,
+    label_fn: Callable[[data.Tag], str] | None = None,
+    label_mapping: Dict[data.Tag, str] | None = None,
     value_only: bool = False,
     separator: str = ":",
 ) -> str:
@@ -170,9 +170,9 @@ def label_from_tag(
 
 def label_from_tags(
     tags: Sequence[data.Tag],
-    seq_label_fn: Optional[Callable[[Sequence[data.Tag]], str]] = None,
-    select_by_key: Optional[str] = None,
-    index: Optional[int] = None,
+    seq_label_fn: Callable[[Sequence[data.Tag]], str] | None = None,
+    select_by_key: str | None = None,
+    index: int | None = None,
     separator: str = ",",
     empty_label: str = EMPTY_LABEL,
     **kwargs,

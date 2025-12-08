@@ -9,7 +9,7 @@ class DatasetObject(RecordingSetObject):
 
     collection_type: Literal["dataset"] = "dataset"  # type: ignore
     name: str
-    description: Optional[str] = None
+    description: str | None = None
 
 
 class DatasetAdapter(RecordingSetAdapter):

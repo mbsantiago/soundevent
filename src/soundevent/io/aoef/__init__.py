@@ -27,7 +27,7 @@ risk of errors and inconsistencies.
 
 import datetime
 from pathlib import Path
-from typing import Any, Dict, Optional, Set, TypeVar, Union
+from typing import Any, TypeVar
 
 from pydantic import BaseModel, Field
 
@@ -89,21 +89,21 @@ class AOEFObject(BaseModel):
     created_on: datetime.datetime = Field(
         default_factory=datetime.datetime.now
     )
-    data: Union[
-        EvaluationObject,
-        DatasetObject,
-        AnnotationProjectObject,
-        EvaluationSetObject,
-        ModelRunObject,
-        AnnotationSetObject,
-        PredictionSetObject,
-        RecordingSetObject,
-    ] = Field(discriminator="collection_type")
+    data: (
+        EvaluationObject
+        | DatasetObject
+        | AnnotationProjectObject
+        | EvaluationSetObject
+        | ModelRunObject
+        | AnnotationSetObject
+        | PredictionSetObject
+        | RecordingSetObject
+    ) = Field(discriminator="collection_type")
 
 
 def to_aeof(
     obj: DataCollections,
-    audio_dir: Optional[data.PathLike] = None,
+    audio_dir: data.PathLike | None = None,
 ) -> AOEFObject:
     """Convert a data object to an AOEF object."""
     for _, data_cls, adapter_cls in ADAPTERS:
@@ -119,7 +119,7 @@ def to_aeof(
 
 def to_soundevent(
     aoef_object: AOEFObject,
-    audio_dir: Optional[data.PathLike] = None,
+    audio_dir: data.PathLike | None = None,
 ) -> DataCollections:
     """Convert an AOEF object to a data object."""
     for adapter_type, _, adapter_cls in ADAPTERS:
@@ -134,8 +134,8 @@ def to_soundevent(
 
 def load(
     path: data.PathLike,
-    audio_dir: Optional[data.PathLike] = None,
-    type: Optional[DataType] = None,
+    audio_dir: data.PathLike | None = None,
+    type: DataType | None = None,
 ) -> DataCollections:
     """Load an AOEF object from a JSON file."""
     path = Path(path)
@@ -162,13 +162,13 @@ def load(
     return to_soundevent(aoef_object, audio_dir=audio_dir)
 
 
-IncEx = Union[Set[int], Set[str], Dict[int, Any], Dict[str, Any], None]
+IncEx = set[int] | set[str] | dict[int, Any] | dict[str, Any] | None
 
 
 def save(
     obj: DataCollections,
     path: data.PathLike,
-    audio_dir: Optional[data.PathLike] = None,
+    audio_dir: data.PathLike | None = None,
     exclude: IncEx = None,
 ) -> None:
     """Save an AOEF object to a JSON file."""

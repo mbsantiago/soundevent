@@ -104,7 +104,7 @@ class TagsTransform(TransformBase):
     @classmethod
     def from_tag_transform(
         cls,
-        transform: Callable[[data.Tag], Optional[data.Tag]],
+        transform: Callable[[data.Tag], data.Tag | None],
     ):
         """Create a TagsTransform from a function that transforms a single tag.
 

@@ -117,8 +117,8 @@ def bbox_to_annotation(
     bbox: BBox,
     recording: data.Recording,
     adjust_time_expansion: bool = True,
-    notes: Optional[List[data.Note]] = None,
-    created_by: Optional[data.User] = None,
+    notes: List[data.Note] | None = None,
+    created_by: data.User | None = None,
     **kwargs,
 ) -> data.SoundEventAnnotation:
     """Convert a crowsetta bounding box annotation to a soundevent annotation.

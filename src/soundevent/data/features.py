@@ -88,14 +88,14 @@ class Feature(BaseModel):
 
 def find_feature(
     features: Sequence[Feature],
-    term: Optional[Term] = None,
-    term_name: Optional[str] = None,
-    term_label: Optional[str] = None,
-    name: Optional[str] = None,
-    label: Optional[str] = None,
-    default: Optional[Feature] = None,
+    term: Term | None = None,
+    term_name: str | None = None,
+    term_label: str | None = None,
+    name: str | None = None,
+    label: str | None = None,
+    default: Feature | None = None,
     raises: bool = False,
-) -> Optional[Feature]:
+) -> Feature | None:
     """Find the first matching feature based on a single criterion.
 
     Searches an iterable of Feature objects and returns the first one that
@@ -257,13 +257,13 @@ def find_feature(
 
 def find_feature_value(
     features: Sequence[Feature],
-    term: Optional[Term] = None,
-    term_name: Optional[str] = None,
-    term_label: Optional[str] = None,
-    name: Optional[str] = None,
-    default: Optional[float] = None,
+    term: Term | None = None,
+    term_name: str | None = None,
+    term_label: str | None = None,
+    name: str | None = None,
+    default: float | None = None,
     raises: bool = False,
-) -> Optional[float]:
+) -> float | None:
     """Find the value of the first matching feature.
 
     Searches a sequence of [Feature][soundevent.data.Feature] objects using

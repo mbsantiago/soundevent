@@ -37,11 +37,11 @@ def convert_time_to_sample(recording: data.Recording, time: float) -> int:
 
 
 def create_crowsetta_segment(
-    onset_s: Optional[float] = None,
-    offset_s: Optional[float] = None,
-    onset_sample: Optional[int] = None,
-    offset_sample: Optional[int] = None,
-    label: Optional[str] = None,
+    onset_s: float | None = None,
+    offset_s: float | None = None,
+    onset_sample: int | None = None,
+    offset_sample: int | None = None,
+    label: str | None = None,
 ) -> crowsetta.Segment:
     return crowsetta.Segment(
         onset_s=onset_s,  # type: ignore
@@ -118,8 +118,8 @@ def segment_to_annotation(
     segment: crowsetta.Segment,
     recording: data.Recording,
     adjust_time_expansion: bool = True,
-    notes: Optional[List[data.Note]] = None,
-    created_by: Optional[data.User] = None,
+    notes: List[data.Note] | None = None,
+    created_by: data.User | None = None,
     **kwargs,
 ) -> data.SoundEventAnnotation:
     """Convert a crowsetta segment to a soundevent time interval annotation.

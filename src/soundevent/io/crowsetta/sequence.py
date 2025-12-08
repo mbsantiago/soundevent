@@ -83,7 +83,7 @@ def sequence_to_annotations(
     sequence: crowsetta.Sequence,
     recording: data.Recording,
     adjust_time_expansion: bool = True,
-    created_by: Optional[data.User] = None,
+    created_by: data.User | None = None,
     **kwargs,
 ) -> List[data.SoundEventAnnotation]:
     """Convert a Crowsetta sequence to a list of soundevent annotations.

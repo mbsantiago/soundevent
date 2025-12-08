@@ -16,7 +16,7 @@ CLIP_NAMESPACE = uuid.uuid5(uuid_namespace, "clip")
 
 
 def generate_recording_uuid(
-    checksum: Optional[str] = None,
+    checksum: str | None = None,
 ) -> uuid.UUID:
     """Generate a UUID for a recording.
 

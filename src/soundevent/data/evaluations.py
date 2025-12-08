@@ -31,4 +31,4 @@ class Evaluation(BaseModel):
     evaluation_task: str
     clip_evaluations: Sequence[ClipEvaluation] = Field(default_factory=list)
     metrics: Sequence[Feature] = Field(default_factory=list)
-    score: Optional[float] = Field(default=None, alias="score")
+    score: float | None = Field(default=None, alias="score")

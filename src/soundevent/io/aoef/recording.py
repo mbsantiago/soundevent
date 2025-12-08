@@ -20,17 +20,17 @@ class RecordingObject(BaseModel):
     duration: float
     channels: int
     samplerate: int
-    time_expansion: Optional[float] = None
-    hash: Optional[str] = None
-    date: Optional[datetime.date] = None
-    time: Optional[datetime.time] = None
-    latitude: Optional[float] = None
-    longitude: Optional[float] = None
-    tags: Optional[List[int]] = None
-    features: Optional[Dict[str, float]] = None
-    notes: Optional[List[NoteObject]] = None
-    owners: Optional[List[UUID]] = None
-    rights: Optional[str] = None
+    time_expansion: float | None = None
+    hash: str | None = None
+    date: datetime.date | None = None
+    time: datetime.time | None = None
+    latitude: float | None = None
+    longitude: float | None = None
+    tags: List[int] | None = None
+    features: Dict[str, float] | None = None
+    notes: List[NoteObject] | None = None
+    owners: List[UUID] | None = None
+    rights: str | None = None
 
 
 class RecordingAdapter(
@@ -41,7 +41,7 @@ class RecordingAdapter(
         user_adapter: UserAdapter,
         tag_adapter: TagAdapter,
         note_adapter: NoteAdapter,
-        audio_dir: Optional[data.PathLike] = None,
+        audio_dir: data.PathLike | None = None,
     ):
         super().__init__()
         self._user_adapter = user_adapter

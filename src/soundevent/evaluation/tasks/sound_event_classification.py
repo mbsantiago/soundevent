@@ -106,8 +106,8 @@ def _evaluate_clip(
     clip_annotations: data.ClipAnnotation,
     clip_predictions: data.ClipPrediction,
     encoder: Encoder,
-) -> Tuple[List[Optional[int]], List[np.ndarray], data.ClipEvaluation]:
-    true_classes: List[Optional[int]] = []
+) -> Tuple[List[int | None], List[np.ndarray], data.ClipEvaluation]:
+    true_classes: List[int | None] = []
     predicted_classes_scores: List[np.ndarray] = []
     matches: List[data.Match] = []
 
@@ -162,7 +162,7 @@ def _evaluate_sound_event(
     sound_event_prediction: data.SoundEventPrediction,
     sound_event_annotation: data.SoundEventAnnotation,
     encoder: Encoder,
-) -> Tuple[Optional[int], np.ndarray, data.Match]:
+) -> Tuple[int | None, np.ndarray, data.Match]:
     true_class = classification_encoding(
         tags=sound_event_annotation.tags,
         encoder=encoder,

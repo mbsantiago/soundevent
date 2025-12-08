@@ -19,8 +19,8 @@ __all__ = [
 
 def _get_filter(
     samplerate: int,
-    low_freq: Optional[float] = None,
-    high_freq: Optional[float] = None,
+    low_freq: float | None = None,
+    high_freq: float | None = None,
     order: int = 5,
 ) -> np.ndarray:
     if low_freq is None and high_freq is None:
@@ -63,8 +63,8 @@ def _get_filter(
 
 def filter(
     audio: xr.DataArray,
-    low_freq: Optional[float] = None,
-    high_freq: Optional[float] = None,
+    low_freq: float | None = None,
+    high_freq: float | None = None,
     order: int = 5,
     dim: str = Dimensions.time.value,
 ) -> xr.DataArray:
@@ -136,7 +136,7 @@ def filter(
 def resample(
     array: xr.DataArray,
     target_samplerate: int,
-    window: Optional[str] = None,
+    window: str | None = None,
     dim: str = Dimensions.time.value,
 ) -> xr.DataArray:
     """Resample array data to a target sample rate along a given dimension.

@@ -54,7 +54,7 @@ class Term(BaseModel):
         repr=False,
     )
 
-    uri: Optional[str] = Field(
+    uri: str | None = Field(
         serialization_alias="dcterms:URI",
         default=None,
         title="URI",
@@ -77,7 +77,7 @@ class Term(BaseModel):
 
     # Additional attributes according to the DCMI Metadata
 
-    comment: Optional[str] = Field(
+    comment: str | None = Field(
         serialization_alias="rdfs:comment",
         default=None,
         title="Comment",
@@ -88,7 +88,7 @@ class Term(BaseModel):
         },
     )
 
-    see: Optional[str] = Field(
+    see: str | None = Field(
         default=None,
         serialization_alias="rdsf:seeAlso",
         title="See",
@@ -99,7 +99,7 @@ class Term(BaseModel):
         },
     )
 
-    subproperty_of: Optional[str] = Field(
+    subproperty_of: str | None = Field(
         default=None,
         serialization_alias="rdfs:subpropertyOf",
         title="Subproperty Of",
@@ -110,7 +110,7 @@ class Term(BaseModel):
         },
     )
 
-    subclass_of: Optional[str] = Field(
+    subclass_of: str | None = Field(
         default=None,
         serialization_alias="rdfs:subclassOf",
         title="Subclass Of",
@@ -121,7 +121,7 @@ class Term(BaseModel):
         },
     )
 
-    domain: Optional[str] = Field(
+    domain: str | None = Field(
         default=None,
         serialization_alias="rdfs:domain",
         title="Domain",
@@ -134,7 +134,7 @@ class Term(BaseModel):
         },
     )
 
-    domain_includes: Optional[str] = Field(
+    domain_includes: str | None = Field(
         default=None,
         serialization_alias="dcam:domainIncludes",
         title="Domain Includes",
@@ -143,7 +143,7 @@ class Term(BaseModel):
         json_schema_extra={"$id": "http://purl.org/dc/dcam/domainIncludes"},
     )
 
-    term_range: Optional[str] = Field(
+    term_range: str | None = Field(
         default=None,
         serialization_alias="rdfs:range",
         alias="range",
@@ -157,7 +157,7 @@ class Term(BaseModel):
         repr=False,
     )
 
-    range_includes: Optional[str] = Field(
+    range_includes: str | None = Field(
         default=None,
         serialization_alias="dcam:rangeIncludes",
         title="Range Includes",
@@ -166,7 +166,7 @@ class Term(BaseModel):
         json_schema_extra={"$id": "http://purl.org/dc/dcam/rangeIncludes"},
     )
 
-    member_of: Optional[str] = Field(
+    member_of: str | None = Field(
         default=None,
         serialization_alias="dcam:memberOf",
         title="Member Of",
@@ -175,7 +175,7 @@ class Term(BaseModel):
         json_schema_extra={"$id": "http://purl.org/dc/dcam/memberOf"},
     )
 
-    instance_of: Optional[str] = Field(
+    instance_of: str | None = Field(
         default=None,
         serialization_alias="instanceOf",
         title="Instance Of",
@@ -183,7 +183,7 @@ class Term(BaseModel):
         repr=False,
     )
 
-    equivalent_property: Optional[str] = Field(
+    equivalent_property: str | None = Field(
         default=None,
         serialization_alias="owl:equivalentProperty",
         title="Equivalent Property",
@@ -194,7 +194,7 @@ class Term(BaseModel):
         },
     )
 
-    description: Optional[str] = Field(
+    description: str | None = Field(
         default=None,
         serialization_alias="dcterms:description",
         title="Description",
@@ -203,7 +203,7 @@ class Term(BaseModel):
         json_schema_extra={"$id": "http://purl.org/dc/terms/description"},
     )
 
-    scope_note: Optional[str] = Field(
+    scope_note: str | None = Field(
         default=None,
         serialization_alias="skos:scopeNote",
         title="Scope Note",

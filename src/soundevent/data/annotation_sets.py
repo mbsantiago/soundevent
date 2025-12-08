@@ -57,5 +57,5 @@ class AnnotationSet(BaseModel):
     created_on: datetime.datetime = Field(
         default_factory=datetime.datetime.now
     )
-    name: Optional[str] = None
-    description: Optional[str] = None
+    name: str | None = None
+    description: str | None = None

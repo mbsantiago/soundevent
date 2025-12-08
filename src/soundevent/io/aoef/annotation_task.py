@@ -14,8 +14,8 @@ class StatusBadgeObject(BaseModel):
     """Schema definition for a status badge object in AOEF format."""
 
     state: data.AnnotationState
-    owner: Optional[UUID] = None
-    created_on: Optional[datetime.datetime] = None
+    owner: UUID | None = None
+    created_on: datetime.datetime | None = None
 
 
 class AnnotationTaskObject(BaseModel):
@@ -23,8 +23,8 @@ class AnnotationTaskObject(BaseModel):
 
     uuid: UUID
     clip: UUID
-    status_badges: Optional[List[StatusBadgeObject]] = None
-    created_on: Optional[datetime.datetime] = None
+    status_badges: List[StatusBadgeObject] | None = None
+    created_on: datetime.datetime | None = None
 
 
 class AnnotationTaskAdapter(

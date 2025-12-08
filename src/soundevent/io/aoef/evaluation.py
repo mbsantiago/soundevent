@@ -37,53 +37,45 @@ from soundevent import data
 class EvaluationObject(BaseModel):
     uuid: UUID
     collection_type: Literal["evaluation"] = "evaluation"
-    created_on: Optional[datetime.datetime] = None
+    created_on: datetime.datetime | None = None
     evaluation_task: str
-    users: Optional[List[UserObject]] = None
-    tags: Optional[List[TagObject]] = None
-    recordings: Optional[List[RecordingObject]] = None
-    clips: Optional[List[ClipObject]] = None
-    sound_events: Optional[List[SoundEventObject]] = None
-    sequences: Optional[List[SequenceObject]] = None
-    sound_event_annotations: Optional[List[SoundEventAnnotationObject]] = None
-    sequence_annotations: Optional[List[SequenceAnnotationObject]] = None
-    clip_annotations: Optional[List[ClipAnnotationsObject]] = None
-    sound_event_predictions: Optional[List[SoundEventPredictionObject]] = None
-    sequence_predictions: Optional[List[SequencePredictionObject]] = None
-    clip_predictions: Optional[List[ClipPredictionsObject]] = None
-    clip_evaluations: Optional[List[ClipEvaluationObject]] = None
-    metrics: Optional[Dict[str, float]] = None
-    score: Optional[float] = None
-    matches: Optional[List[MatchObject]] = None
+    users: List[UserObject] | None = None
+    tags: List[TagObject] | None = None
+    recordings: List[RecordingObject] | None = None
+    clips: List[ClipObject] | None = None
+    sound_events: List[SoundEventObject] | None = None
+    sequences: List[SequenceObject] | None = None
+    sound_event_annotations: List[SoundEventAnnotationObject] | None = None
+    sequence_annotations: List[SequenceAnnotationObject] | None = None
+    clip_annotations: List[ClipAnnotationsObject] | None = None
+    sound_event_predictions: List[SoundEventPredictionObject] | None = None
+    sequence_predictions: List[SequencePredictionObject] | None = None
+    clip_predictions: List[ClipPredictionsObject] | None = None
+    clip_evaluations: List[ClipEvaluationObject] | None = None
+    metrics: Dict[str, float] | None = None
+    score: float | None = None
+    matches: List[MatchObject] | None = None
 
 
 class EvaluationAdapter:
     def __init__(
         self,
-        audio_dir: Optional[data.PathLike] = None,
-        user_adapter: Optional[UserAdapter] = None,
-        tag_adapter: Optional[TagAdapter] = None,
-        note_adapter: Optional[NoteAdapter] = None,
-        recording_adapter: Optional[RecordingAdapter] = None,
-        sound_event_adapter: Optional[SoundEventAdapter] = None,
-        sequence_adapter: Optional[SequenceAdapter] = None,
-        clip_adapter: Optional[ClipAdapter] = None,
-        sound_event_annotation_adapter: Optional[
-            SoundEventAnnotationAdapter
-        ] = None,
-        sequence_annotation_adapter: Optional[
-            SequenceAnnotationAdapter
-        ] = None,
-        clip_annotations_adapter: Optional[ClipAnnotationsAdapter] = None,
-        sound_event_prediction_adapter: Optional[
-            SoundEventPredictionAdapter
-        ] = None,
-        sequence_prediction_adapter: Optional[
-            SequencePredictionAdapter
-        ] = None,
-        clip_predictions_adapter: Optional[ClipPredictionsAdapter] = None,
-        clip_evaluation_adapter: Optional[ClipEvaluationAdapter] = None,
-        match_adapter: Optional[MatchAdapter] = None,
+        audio_dir: data.PathLike | None = None,
+        user_adapter: UserAdapter | None = None,
+        tag_adapter: TagAdapter | None = None,
+        note_adapter: NoteAdapter | None = None,
+        recording_adapter: RecordingAdapter | None = None,
+        sound_event_adapter: SoundEventAdapter | None = None,
+        sequence_adapter: SequenceAdapter | None = None,
+        clip_adapter: ClipAdapter | None = None,
+        sound_event_annotation_adapter: SoundEventAnnotationAdapter | None = None,
+        sequence_annotation_adapter: SequenceAnnotationAdapter | None = None,
+        clip_annotations_adapter: ClipAnnotationsAdapter | None = None,
+        sound_event_prediction_adapter: SoundEventPredictionAdapter | None = None,
+        sequence_prediction_adapter: SequencePredictionAdapter | None = None,
+        clip_predictions_adapter: ClipPredictionsAdapter | None = None,
+        clip_evaluation_adapter: ClipEvaluationAdapter | None = None,
+        match_adapter: MatchAdapter | None = None,
     ):
         self.audio_dir = audio_dir
         self.user_adapter = user_adapter or UserAdapter()

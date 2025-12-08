@@ -18,11 +18,11 @@ class ClipAnnotationsObject(BaseModel):
 
     uuid: UUID
     clip: UUID
-    tags: Optional[List[int]] = None
-    sound_events: Optional[List[UUID]] = None
-    sequences: Optional[List[UUID]] = None
-    notes: Optional[List[NoteObject]] = None
-    created_on: Optional[datetime.datetime] = None
+    tags: List[int] | None = None
+    sound_events: List[UUID] | None = None
+    sequences: List[UUID] | None = None
+    notes: List[NoteObject] | None = None
+    created_on: datetime.datetime | None = None
 
 
 class ClipAnnotationsAdapter(
