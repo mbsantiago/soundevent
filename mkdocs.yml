@@ -19,7 +19,12 @@ nav:
       - arrays: reference/arrays.md
       - audio: reference/audio.md
       - geometry: reference/geometry.md
-      - evaluation: reference/evaluation.md
+      - evaluation:
+          - reference/evaluation/index.md
+          - reference/evaluation/sound_event_detection.md
+          - reference/evaluation/sound_event_classification.md
+          - reference/evaluation/clip_classification.md
+          - reference/evaluation/clip_multilabel_classification.md
       - plot: reference/plot.md
       - terms: reference/terms.md
       - transforms: reference/transforms.md

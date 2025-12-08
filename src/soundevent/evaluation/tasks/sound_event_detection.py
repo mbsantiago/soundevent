@@ -1,6 +1,14 @@
 """Sound event detection evaluation."""
 
-from typing import Optional, Sequence
+from typing import (
+    Callable,
+    Generic,
+    Iterator,
+    Optional,
+    Protocol,
+    Sequence,
+    Tuple,
+)
 
 import numpy as np
 
@@ -12,12 +20,18 @@ from soundevent.evaluation.encoding import (
     create_tag_encoder,
     prediction_encoding,
 )
-from soundevent.evaluation.match import match_geometries
+from soundevent.evaluation.match import (
+    Detection,
+    Match,
+    match_detections_and_gts,
+    match_geometries,
+)
 from soundevent.evaluation.tasks.common import iterate_over_valid_clips
 
 __all__ = [
     "sound_event_detection",
     "evaluate_clip",
+    "evaluate_sound_event_detection",
 ]
 
 SOUNDEVENT_METRICS: Sequence[tuple[data.Term, metrics.Metric]] = (
@@ -35,6 +49,103 @@ RUN_METRICS: Sequence[tuple[data.Term, metrics.Metric]] = (
     (terms.accuracy, metrics.accuracy),
     (terms.top_3_accuracy, metrics.top_3_accuracy),
 )
+
+
+class ClipPrediction(Protocol, Generic[Detection]):
+    """Protocol defining the requirements for a clip prediction object."""
+
+    clip: data.Clip
+    detections: Sequence[Detection]
+
+
+def evaluate_sound_event_detection(
+    clip_predictions: Sequence[ClipPrediction[Detection]],
+    clip_annotations: Sequence[data.ClipAnnotation],
+    affinity: Callable[[Detection, data.SoundEventAnnotation], float],
+    score: Optional[Callable[[Detection], float]] = None,
+    affinity_threshold: float = 0,
+    strict_match: bool = False,
+) -> Iterator[
+    Tuple[
+        data.Clip,
+        Match[Detection, data.SoundEventAnnotation],
+    ]
+]:
+    """Evaluate sound event detections against ground truth annotations.
+
+    This function matches predictions to annotations for each clip
+    individually.
+
+    Parameters
+    ----------
+    clip_predictions
+        A sequence of prediction objects. Each object must contain a reference
+        to the clip and a sequence of detections.
+    clip_annotations
+        A sequence of ground truth annotations corresponding to the same clips.
+    affinity
+        A function that computes the affinity score (e.g., IoU) between a
+        detection and a ground truth annotation.
+    score
+        A function to extract the confidence score from a detection. Used to
+        sort detections greedily. If None, detections are processed in the
+        order provided.
+    affinity_threshold
+        The minimum affinity score required for a valid match. Matches with
+        scores less than or equal to this value are discarded. Defaults to 0.0.
+    strict_match
+        If True, a detection is only matched if its highest affinity target
+        is available. If False (default), it falls back to the next best
+        available target.
+
+    Yields
+    ------
+    clip : data.Clip
+        The clip associated with the match.
+    match : Match[Detection, data.SoundEventAnnotation]
+        A named tuple containing the matching results, see [`Match`][Match].
+
+    Raises
+    ------
+    ValueError
+        If the number of predictions and annotations differs, or if the sets of
+        clip UUIDs do not match exactly.
+    """
+    if len(clip_predictions) != len(clip_annotations):
+        raise ValueError(
+            "The number of clip predictions and annotations must match. "
+            f"Got {len(clip_predictions)} predictions and "
+            f"{len(clip_annotations)} annotations."
+        )
+
+    pred_mapping = {pred.clip.uuid: pred for pred in clip_predictions}
+    ann_mapping = {ann.clip.uuid: ann for ann in clip_annotations}
+
+    if set(pred_mapping.keys()) != set(ann_mapping.keys()):
+        missing_in_pred = set(ann_mapping.keys()) - set(pred_mapping.keys())
+        missing_in_ann = set(pred_mapping.keys()) - set(ann_mapping.keys())
+        raise ValueError(
+            "The clip predictions and annotations must be mapped to the same "
+            "clips. "
+            f"Missing in predictions: {missing_in_pred}. "
+            f"Missing in annotations: {missing_in_ann}."
+        )
+
+    clip_uuids = set(pred_mapping.keys())
+
+    for uuid in clip_uuids:
+        clip_prediction = pred_mapping[uuid]
+        clip_annotation = ann_mapping[uuid]
+        clip = clip_prediction.clip
+        for match in match_detections_and_gts(
+            detections=clip_prediction.detections,
+            ground_truths=clip_annotation.sound_events,
+            affinity_threshold=affinity_threshold,
+            affinity=affinity,
+            score=score,
+            strict_match=strict_match,
+        ):
+            yield clip, match
 
 
 def sound_event_detection(

@@ -110,7 +110,7 @@ def to_aeof(
         if isinstance(obj, data_cls):
             adapter = adapter_cls(audio_dir=audio_dir)
             return AOEFObject(
-                data=adapter.to_aoef(obj),
+                data=adapter.to_aoef(obj),  # type: ignore
                 created_on=datetime.datetime.now(),
             )
 

@@ -25,7 +25,7 @@ dimension width (`get_dim_width`), and estimate dimension step size
 """
 
 from enum import Enum
-from typing import Optional, Tuple
+from typing import Any, Optional, Tuple
 
 import numpy as np
 import xarray as xr
@@ -123,7 +123,7 @@ def create_range_dim(
     step: Optional[float] = None,
     size: Optional[int] = None,
     dtype: DTypeLike = np.float64,
-    **attrs,
+    **attrs: Any,
 ) -> xr.Variable:
     """Create a range dimension.
 
@@ -232,18 +232,20 @@ def create_time_range(
 
         step = 1.0 / samplerate
 
+    attrs = {
+        DimAttrs.units.value: TIME_UNITS,
+        DimAttrs.standard_name.value: TIME_STANDARD_NAME,
+        DimAttrs.long_name.value: TIME_LONG_NAME,
+        **attrs,
+    }
+
     return create_range_dim(
         name=name,
         start=start_time,
         stop=end_time,
         step=step,
         dtype=dtype,
-        **{
-            DimAttrs.units.value: TIME_UNITS,
-            DimAttrs.standard_name.value: TIME_STANDARD_NAME,
-            DimAttrs.long_name.value: TIME_LONG_NAME,
-            **attrs,
-        },
+        **attrs,
     )
 
 
@@ -280,18 +282,20 @@ def create_frequency_range(
     xarray.Variable
         Variable containing the frequency range values.
     """
+    attrs = {
+        DimAttrs.units.value: FREQUENCY_UNITS,
+        DimAttrs.standard_name.value: FREQUENCY_STANDARD_NAME,
+        DimAttrs.long_name.value: FREQUENCY_LONG_NAME,
+        **attrs,
+    }
+
     return create_range_dim(
         name=name,
         start=low_freq,
         stop=high_freq,
         step=step,
         dtype=dtype,
-        **{
-            DimAttrs.units.value: FREQUENCY_UNITS,
-            DimAttrs.standard_name.value: FREQUENCY_STANDARD_NAME,
-            DimAttrs.long_name.value: FREQUENCY_LONG_NAME,
-            **attrs,
-        },
+        **attrs,
     )
 
 

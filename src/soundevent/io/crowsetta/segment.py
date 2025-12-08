@@ -18,7 +18,7 @@ def convert_geometry_to_interval(
     geometry: data.Geometry,
     cast_to_segment: bool = False,
 ) -> Tuple[float, float]:
-    if geometry.type != "TimeInterval":
+    if not isinstance(geometry, data.TimeInterval):
         if not cast_to_segment:
             raise ValueError(
                 "Cannot convert to a crowsetta segment "

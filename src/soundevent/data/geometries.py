@@ -54,7 +54,7 @@ location and extent of sound events within a recording.
 
 import json
 from abc import ABC
-from typing import Dict, List, Literal, Type, Union
+from typing import Annotated, Dict, List, Literal, Type, Union
 
 from pydantic import BaseModel, Field, ValidationError, field_validator
 
@@ -150,14 +150,6 @@ class BaseGeometry(BaseModel, ABC):
         """
         type_field = cls.model_fields["type"]
         return type_field.default
-
-    def _repr_html_(self) -> str:
-        try:
-            from soundevent.geometry import geometry_to_html
-
-            return geometry_to_html(self)  # type: ignore
-        except ImportError:
-            return repr(self)
 
 
 class TimeStamp(BaseGeometry):
@@ -697,16 +689,19 @@ class MultiPolygon(BaseGeometry):
         return v
 
 
-Geometry = Union[
-    TimeStamp,
-    TimeInterval,
-    Point,
-    LineString,
-    Polygon,
-    BoundingBox,
-    MultiPoint,
-    MultiLineString,
-    MultiPolygon,
+Geometry = Annotated[
+    Union[
+        TimeStamp,
+        TimeInterval,
+        Point,
+        LineString,
+        Polygon,
+        BoundingBox,
+        MultiPoint,
+        MultiLineString,
+        MultiPolygon,
+    ],
+    Field(discriminator="type"),
 ]
 """Geometry Type.
 
@@ -802,12 +797,12 @@ def geometry_validate(
         if "type" not in obj:
             raise ValueError("Object must have a type key.")
 
-        geom_type = obj["type"]
+        geom_type: GeometryType = obj["type"]  # type: ignore
     else:
         if not hasattr(obj, "type"):
             raise ValueError(f"Object {obj} does not have a type attribute.")
 
-        geom_type = obj.type  # type: ignore
+        geom_type: GeometryType = obj.type  # type: ignore
 
     if geom_type not in GEOMETRY_MAPPING:
         raise ValueError(f"Object {obj} does not have a geometry valid type.")

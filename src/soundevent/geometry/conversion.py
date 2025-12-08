@@ -255,23 +255,31 @@ def geometry_to_shapely(
     shapely.Geometry
         The converted shapely geometry.
     """
-    if geom.type == "TimeStamp":
+    if isinstance(geom, data.TimeStamp):
         return time_stamp_to_shapely(geom)
-    if geom.type == "TimeInterval":
+
+    if isinstance(geom, data.TimeInterval):
         return time_interval_to_shapely(geom)
-    if geom.type == "Point":
+
+    if isinstance(geom, data.Point):
         return point_to_shapely(geom)
-    if geom.type == "LineString":
+
+    if isinstance(geom, data.LineString):
         return linestring_to_shapely(geom)
-    if geom.type == "Polygon":
+
+    if isinstance(geom, data.Polygon):
         return polygon_to_shapely(geom)
-    if geom.type == "BoundingBox":
+
+    if isinstance(geom, data.BoundingBox):
         return bounding_box_to_shapely(geom)
-    if geom.type == "MultiPoint":
+
+    if isinstance(geom, data.MultiPoint):
         return multipoint_to_shapely(geom)
-    if geom.type == "MultiLineString":
+
+    if isinstance(geom, data.MultiLineString):
         return multilinestring_to_shapely(geom)
-    if geom.type == "MultiPolygon":
+
+    if isinstance(geom, data.MultiPolygon):
         return multipolygon_to_shapely(geom)
 
     raise NotImplementedError(f"Unknown geometry type: {geom.type}")

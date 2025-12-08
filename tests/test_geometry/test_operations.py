@@ -11,9 +11,13 @@ from soundevent import arrays, data
 from soundevent.data.geometries import BaseGeometry
 from soundevent.geometry.operations import (
     buffer_geometry,
+    compute_bbox_area,
     compute_bounds,
     compute_interval_overlap,
+    compute_interval_width,
     get_geometry_point,
+    get_point_in_frequency,
+    get_point_in_time,
     group_sound_events,
     have_frequency_overlap,
     have_temporal_overlap,
@@ -876,3 +880,123 @@ def test_scale_multipoint_geometry():
     # Different factors
     scaled_geom = scale_geometry(geom, time=2, freq=0.5)
     assert scaled_geom == data.MultiPoint(coordinates=[[20, 10], [60, 20]])
+
+
+class TestComputeBBoxArea:
+    """Tests for compute_bbox_area."""
+
+    def test_compute_bbox_area_standard(self):
+        """Test area computation for a standard bounding box."""
+        bbox = (0.0, 0.0, 1.0, 100.0)
+        assert compute_bbox_area(bbox) == 100.0
+
+    def test_compute_bbox_area_inverted_time(self):
+        """Test area computation handles inverted time coordinates."""
+        bbox = (1.0, 0.0, 0.0, 100.0)
+        assert compute_bbox_area(bbox) == 100.0
+
+    def test_compute_bbox_area_inverted_freq(self):
+        """Test area computation handles inverted frequency coordinates."""
+        bbox = (0.0, 100.0, 1.0, 0.0)
+        assert compute_bbox_area(bbox) == 100.0
+
+    def test_compute_bbox_area_zero_time(self):
+        """Test area is zero when duration is zero."""
+        bbox = (0.0, 0.0, 0.0, 100.0)
+        assert compute_bbox_area(bbox) == 0.0
+
+    def test_compute_bbox_area_zero_freq(self):
+        """Test area is zero when bandwidth is zero."""
+        bbox = (0.0, 0.0, 1.0, 0.0)
+        assert compute_bbox_area(bbox) == 0.0
+
+
+class TestComputeIntervalWidth:
+    """Tests for compute_interval_width."""
+
+    def test_compute_interval_width_standard(self):
+        """Test width computation for a standard interval."""
+        interval = (0.0, 1.0)
+        assert compute_interval_width(interval) == 1.0
+
+    def test_compute_interval_width_inverted(self):
+        """Test width computation handles inverted intervals."""
+        interval = (1.0, 0.0)
+        assert compute_interval_width(interval) == 1.0
+
+    def test_compute_interval_width_zero(self):
+        """Test width is zero for point intervals."""
+        interval = (1.0, 1.0)
+        assert compute_interval_width(interval) == 0.0
+
+
+class TestGetPointInTime:
+    """Tests for get_point_in_time."""
+
+    def test_get_point_in_time_interval_start(self):
+        """Test getting start time from an interval."""
+        geom = data.TimeInterval(coordinates=[0.0, 10.0])
+        assert get_point_in_time(geom, 0.0) == 0.0
+
+    def test_get_point_in_time_interval_center(self):
+        """Test getting center time from an interval."""
+        geom = data.TimeInterval(coordinates=[0.0, 10.0])
+        assert get_point_in_time(geom, 0.5) == 5.0
+
+    def test_get_point_in_time_interval_end(self):
+        """Test getting end time from an interval."""
+        geom = data.TimeInterval(coordinates=[0.0, 10.0])
+        assert get_point_in_time(geom, 1.0) == 10.0
+
+    def test_get_point_in_time_timestamp(self):
+        """Test getting time from a timestamp (always same value)."""
+        geom = data.TimeStamp(coordinates=5.0)
+        assert get_point_in_time(geom, 0.5) == 5.0
+
+    def test_get_point_in_time_invalid_low(self):
+        """Test error raised for ratio < 0."""
+        geom = data.TimeStamp(coordinates=5.0)
+        with pytest.raises(ValueError):
+            get_point_in_time(geom, -0.1)
+
+    def test_get_point_in_time_invalid_high(self):
+        """Test error raised for ratio > 1."""
+        geom = data.TimeStamp(coordinates=5.0)
+        with pytest.raises(ValueError):
+            get_point_in_time(geom, 1.1)
+
+
+class TestGetPointInFrequency:
+    """Tests for get_point_in_frequency."""
+
+    def test_get_point_in_frequency_bbox_start(self):
+        """Test getting low freq from a bbox."""
+        geom = data.BoundingBox(coordinates=[0.0, 0.0, 1.0, 100.0])
+        assert get_point_in_frequency(geom, 0.0) == 0.0
+
+    def test_get_point_in_frequency_bbox_center(self):
+        """Test getting center freq from a bbox."""
+        geom = data.BoundingBox(coordinates=[0.0, 0.0, 1.0, 100.0])
+        assert get_point_in_frequency(geom, 0.5) == 50.0
+
+    def test_get_point_in_frequency_bbox_end(self):
+        """Test getting high freq from a bbox."""
+        geom = data.BoundingBox(coordinates=[0.0, 0.0, 1.0, 100.0])
+        assert get_point_in_frequency(geom, 1.0) == 100.0
+
+    def test_get_point_in_frequency_point(self):
+        """Test getting freq from a point (always same value)."""
+        geom = data.Point(coordinates=[0.0, 50.0])
+        assert get_point_in_frequency(geom, 0.5) == 50.0
+
+    def test_get_point_in_frequency_invalid_low(self):
+        """Test error raised for ratio < 0."""
+        geom = data.Point(coordinates=[0.0, 50.0])
+        with pytest.raises(ValueError):
+            get_point_in_frequency(geom, -0.1)
+
+    def test_get_point_in_frequency_invalid_high(self):
+        """Test error raised for ratio > 1."""
+        geom = data.Point(coordinates=[0.0, 50.0])
+        with pytest.raises(ValueError):
+            get_point_in_frequency(geom, 1.1)

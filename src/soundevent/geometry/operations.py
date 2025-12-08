@@ -34,9 +34,13 @@ from soundevent.geometry.conversion import (
 
 __all__ = [
     "buffer_geometry",
+    "compute_bbox_area",
     "compute_bounds",
     "compute_interval_overlap",
+    "compute_interval_width",
     "get_geometry_point",
+    "get_point_in_frequency",
+    "get_point_in_time",
     "group_sound_events",
     "have_frequency_overlap",
     "have_temporal_overlap",
@@ -64,19 +68,19 @@ def compute_bounds(
         The bounds of the geometry. The bounds are returned in the
         following order: start_time, low_freq, end_time, high_freq.
     """
-    if geometry.type == "TimeStamp":
+    if isinstance(geometry, data.TimeStamp):
         time = geometry.coordinates
         return time, 0, time, data.MAX_FREQUENCY
 
-    if geometry.type == "TimeInterval":
+    if isinstance(geometry, data.TimeInterval):
         start_time, end_time = geometry.coordinates
         return start_time, 0, end_time, data.MAX_FREQUENCY
 
-    if geometry.type == "BoundingBox":
+    if isinstance(geometry, data.BoundingBox):
         start_time, low_freq, end_time, high_freq = geometry.coordinates
         return start_time, low_freq, end_time, high_freq
 
-    if geometry.type == "Point":
+    if isinstance(geometry, data.Point):
         time, frequency = geometry.coordinates
         return time, frequency, time, frequency
 
@@ -206,11 +210,13 @@ def buffer_geometry(
             "The time buffer and the frequency buffer must be non negative."
         )
 
-    if geometry.type == "TimeStamp":
+    if isinstance(geometry, data.TimeStamp):
         return buffer_timestamp(geometry, time_buffer=time_buffer)
-    if geometry.type == "TimeInterval":
+
+    if isinstance(geometry, data.TimeInterval):
         return buffer_interval(geometry, time_buffer=time_buffer)
-    if geometry.type == "BoundingBox":
+
+    if isinstance(geometry, data.BoundingBox):
         return buffer_bounding_box_geometry(
             geometry,
             time_buffer=time_buffer,
@@ -937,16 +943,16 @@ def shift_geometry(
     time: float = 0,
     freq: float = 0,
 ) -> data.Geometry:
-    if geom.type == "Point":
+    if isinstance(geom, data.Point):
         return _shift_point(geom, time=time, freq=freq)
 
-    if geom.type == "BoundingBox":
+    if isinstance(geom, data.BoundingBox):
         return _shift_bounding_box(geom, time=time, freq=freq)
 
-    if geom.type == "TimeInterval":
+    if isinstance(geom, data.TimeInterval):
         return _shift_time_interval(geom, time=time)
 
-    if geom.type == "TimeStamp":
+    if isinstance(geom, data.TimeStamp):
         return _shift_time_stamp(geom, time=time)
 
     return _shift_shapely(geom, time=time, freq=freq)
@@ -1063,7 +1069,7 @@ def scale_geometry(
     data.Geometry
         The scaled geometry.
     """
-    if geom.type == "Point":
+    if isinstance(geom, data.Point):
         return _scale_point(
             geom,
             time=time,
@@ -1072,7 +1078,7 @@ def scale_geometry(
             freq_anchor=freq_anchor,
         )
 
-    if geom.type == "BoundingBox":
+    if isinstance(geom, data.BoundingBox):
         return _scale_bounding_box(
             geom,
             time=time,
@@ -1081,14 +1087,14 @@ def scale_geometry(
             freq_anchor=freq_anchor,
         )
 
-    if geom.type == "TimeInterval":
+    if isinstance(geom, data.TimeInterval):
         return _scale_time_interval(
             geom,
             time=time,
             time_anchor=time_anchor,
         )
 
-    if geom.type == "TimeStamp":
+    if isinstance(geom, data.TimeStamp):
         return _scale_time_stamp(
             geom,
             time=time,
@@ -1102,3 +1108,161 @@ def scale_geometry(
         time_anchor=time_anchor,
         freq_anchor=freq_anchor,
     )
+
+
+def compute_bbox_area(
+    bbox: Tuple[float, float, float, float],
+) -> float:
+    """Compute the area of a bounding box.
+
+    Parameters
+    ----------
+    bbox
+        The bounding box coordinates. The expected format is a tuple of four
+        floats: `(start_time, low_freq, end_time, high_freq)`.
+
+    Returns
+    -------
+    float
+        The computed area of the bounding box (duration × bandwidth).
+
+    Notes
+    -----
+    Because time and frequency usually have different units (e.g., seconds vs. Hertz),
+    the calculated "area" mixes these dimensions.
+
+    In practice, frequency values (often in the thousands) are much larger than
+    time values (often small floats). This means the frequency dimension usually
+    dominates the area calculation. To ensure both dimensions contribute equally,
+    it is recommended to use the
+    [`scale_geometry`][soundevent.geometry.scale_geometry] function to balance
+    the coordinates before computing the area.
+    """
+    start_time, low_freq, end_time, high_freq = bbox
+
+    if low_freq > high_freq:
+        low_freq, high_freq = high_freq, low_freq
+
+    if start_time > end_time:
+        start_time, end_time = end_time, start_time
+
+    return (end_time - start_time) * (high_freq - low_freq)
+
+
+def compute_interval_width(
+    interval: Tuple[float, float],
+) -> float:
+    """Compute the width of an interval.
+
+    Parameters
+    ----------
+    interval
+        The interval to compute the width of. The expected format is a tuple
+        of two floats: `(start, end)`.
+
+    Returns
+    -------
+    float
+        The computed width of the interval.
+
+    Notes
+    -----
+    If the start time is greater than the end time, the function swaps the
+    start and end times before computing the width.
+    """
+    start, end = interval
+
+    if start > end:
+        start, end = end, start
+
+    return end - start
+
+
+def get_point_in_time(
+    geometry: data.Geometry,
+    ratio: float = 0,
+) -> float:
+    """Compute a specific time point relative to the geometry's duration.
+
+    Parameters
+    ----------
+    geometry : data.Geometry
+        The geometry object.
+    ratio : float, optional
+        The relative position within the time interval (0.0 to 1.0).
+        Defaults to 0.
+
+    Returns
+    -------
+    float
+        The calculated timestamp in seconds.
+
+    Raises
+    ------
+    ValueError
+        If the ratio is not between 0 and 1.
+
+    Notes
+    -----
+    This function projects the geometry onto the time axis (finding the
+    bounding box) and selects a point based on the provided ratio using
+    linear interpolation:
+
+        time = start_time + ratio * (end_time - start_time)
+
+    **Common Ratios**
+
+    * **0.0**: Returns the **start time** (onset) of the event.
+    * **0.5**: Returns the **temporal center** (midpoint) of the event.
+    * **1.0**: Returns the **end time** (offset) of the event.
+    """
+    if ratio < 0 or ratio > 1:
+        raise ValueError("The ratio must be between 0 and 1.")
+
+    start_time, _, end_time, _ = compute_bounds(geometry)
+    return start_time + ratio * (end_time - start_time)
+
+
+def get_point_in_frequency(
+    geometry: data.Geometry,
+    ratio: float = 0,
+) -> float:
+    """Compute a specific frequency point relative to the geometry's bandwidth.
+
+    Parameters
+    ----------
+    geometry : data.Geometry
+        The geometry object.
+    ratio : float, optional
+        The relative position within the frequency interval (0.0 to 1.0).
+        Defaults to 0.
+
+    Returns
+    -------
+    float
+        The calculated frequency in Hertz.
+
+    Raises
+    ------
+    ValueError
+        If the ratio is not between 0 and 1.
+
+    Notes
+    -----
+    This function projects the geometry onto the frequency axis (finding
+    the bounding box) and selects a point based on the provided ratio
+    using linear interpolation:
+
+        freq = low_freq + ratio * (high_freq - low_freq)
+
+    **Common Ratios**
+
+    * **0.0**: Returns the **lowest frequency** component.
+    * **0.5**: Returns the **center frequency** (midpoint).
+    * **1.0**: Returns the **highest frequency** component.
+    """
+    if ratio < 0 or ratio > 1:
+        raise ValueError("The ratio must be between 0 and 1.")
+
+    _, low_freq, _, high_freq = compute_bounds(geometry)
+    return low_freq + ratio * (high_freq - low_freq)
