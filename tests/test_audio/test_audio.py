@@ -1,5 +1,6 @@
 """Test suite for audio loading functions."""
 
+from decimal import Decimal
 from pathlib import Path
 from uuid import uuid4
 
@@ -114,8 +115,16 @@ def test_load_clip_with_relative_path_and_audio_dir(
 @given(
     samplerate=st.sampled_from([8_000, 16_000, 44_100, 256_000]),
     channels=st.integers(min_value=1, max_value=2),
-    clip_duration=st.decimals(min_value=0.01, max_value=1, places=6),
-    clip_start=st.decimals(min_value=0, max_value=1, places=6),
+    clip_duration=st.decimals(
+        min_value=Decimal(0.01),
+        max_value=Decimal(1.0),
+        places=6,
+    ),
+    clip_start=st.decimals(
+        min_value=Decimal(0.0),
+        max_value=Decimal(1.0),
+        places=6,
+    ),
     time_expansion=st.sampled_from([1, 5, 10, 20]),
 )
 @settings(
