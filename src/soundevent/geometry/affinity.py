@@ -63,6 +63,9 @@ def compute_temporal_closeness(
     points derived from the ``ratio``. The score decays linearly from 1 to 0
     as the distance grows from 0 to ``max_distance``.
     """
+    if max_distance <= 0:
+        raise ValueError("max_distance must be greater than 0")
+
     point1 = get_point_in_time(geometry1, ratio)
     point2 = get_point_in_time(geometry2, ratio)
 
@@ -109,6 +112,9 @@ def compute_spectral_closeness(
     points derived from the ``ratio``. The score decays linearly from 1 to 0 as
     the distance grows from 0 to ``max_distance``.
     """
+    if max_distance <= 0:
+        raise ValueError("max_distance must be greater than 0")
+
     point1 = get_point_in_frequency(geometry1, ratio)
     point2 = get_point_in_frequency(geometry2, ratio)
 
