@@ -61,7 +61,13 @@ def generate_clip_uuid(
     -------
     uuid.UUID
         The generated UUID.
+
+    Notes
+    -----
+    The temporal information is rounded to 6 decimal places to avoid
+    potential issues with floating point precision in different platforms.
     """
-    # Create a unique string identifier for the clip
-    identifier = f"{recording_uuid}:{start_time}:{end_time}"
+    identifier = (
+        f"{recording_uuid}:{round(start_time, 6)}:{round(end_time, 6)}"
+    )
     return uuid.uuid5(CLIP_NAMESPACE, identifier)
