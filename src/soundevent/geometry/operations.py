@@ -363,7 +363,10 @@ def rasterize(
     ]
 
     rast = features.rasterize(
-        [(geom, val) for geom, val in zip(shapely_geometries, values)],
+        [
+            (geom, val)
+            for geom, val in zip(shapely_geometries, values, strict=True)
+        ],
         array.shape,
         default_value=1,
         dtype=dtype,
@@ -849,7 +852,7 @@ def group_sound_events(
     _, labels = connected_components(similarity_matrix)
 
     sequences = defaultdict(data.Sequence)
-    for sound_event, label in zip(sound_events, labels):
+    for sound_event, label in zip(sound_events, labels, strict=True):
         sequence = sequences[label]
         sequence.sound_events.append(sound_event)
 

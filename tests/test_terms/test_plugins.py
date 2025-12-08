@@ -60,7 +60,7 @@ def test_no_plugins_found(monkeypatch):
     monkeypatch.setenv("SOUNDEVENT_LOAD_TERM_PLUGINS", True)
 
     with patch("soundevent.terms.plugins.entry_points") as mock_entry_points:
-        mock_entry_points.return_value = []
+        mock_entry_points.return_value = {}
         mock_register_term_set = MagicMock()
         with patch(
             "soundevent.terms.plugins.register_term_set",

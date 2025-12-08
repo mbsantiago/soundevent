@@ -108,5 +108,5 @@ def test_segment_clip_uuid_generation_is_deterministic(
     segments1 = list(segment_clip(clip, duration=2.0, hop=1.0))
     segments2 = list(segment_clip(clip, duration=2.0, hop=1.0))
 
-    for segment1, segment2 in zip(segments1, segments2):
+    for segment1, segment2 in zip(segments1, segments2, strict=True):
         assert segment1.uuid == segment2.uuid

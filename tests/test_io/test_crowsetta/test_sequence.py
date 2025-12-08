@@ -49,7 +49,7 @@ def sound_event_annotations(
             notes=[data.Note(message="random note", created_by=user)],
             tags=[tag],
         )
-        for sound_event, tag in zip(sound_events, tags)
+        for sound_event, tag in zip(sound_events, tags, strict=True)
     ]
 
 
