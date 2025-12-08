@@ -183,7 +183,7 @@ def resample(
     times = array.coords[dim].values
     num_samples = int(times.size * ratio)
 
-    resampled, resampled_times = signal.resample(
+    resampled, resampled_times = signal.resample(  # type: ignore
         array.values,
         num_samples,
         t=times,
