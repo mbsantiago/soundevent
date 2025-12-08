@@ -115,6 +115,11 @@ def match_geometries_greedy(
         IoU][soundevent.geometry.compute_geometric_iou].
     affinity_threshold
         The minimum score required to consider a match valid.
+    strict : bool, optional
+        Determines the matching behavior when the best target is already taken:
+        - If ``False`` (default), the algorithm finds the next best
+          available target (best available match).
+        - If ``True``, the source is left unmatched (best match or nothing).
 
     Yields
     ------
@@ -127,11 +132,6 @@ def match_geometries_greedy(
     score : float
         The affinity score between the matched geometries. Returns 0.0 for
         unmatched items.
-    strict : bool, optional
-        Determines the matching behavior when the best target is already taken:
-        - If ``False`` (default), the algorithm finds the next best
-          available target (best available match).
-        - If ``True``, the source is left unmatched (best match or nothing).
 
     Notes
     -----
@@ -213,12 +213,12 @@ def select_optimal_matches(
     rows = set(range(affinity_matrix.shape[0]))
     cols = set(range(affinity_matrix.shape[1]))
 
-    assiged_rows, assigned_columns = linear_sum_assignment(
+    assigned_rows, assigned_columns = linear_sum_assignment(
         affinity_matrix,
         maximize=True,
     )
 
-    for row, column in zip(assiged_rows, assigned_columns):
+    for row, column in zip(assigned_rows, assigned_columns):
         value = float(affinity_matrix[row, column])
 
         # Ignore matches with affinity below the threshold

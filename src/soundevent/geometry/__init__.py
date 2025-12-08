@@ -71,7 +71,6 @@ __all__ = [
     "get_point_in_time",
     "group_sound_events",
     "have_frequency_overlap",
-    "have_frequency_overlap",
     "intervals_overlap",
     "is_in_clip",
     "match_geometries_greedy",

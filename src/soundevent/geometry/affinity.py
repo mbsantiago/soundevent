@@ -3,12 +3,12 @@
 from typing import Callable
 
 from soundevent import data
+from soundevent.geometry.conversion import geometry_to_shapely
 from soundevent.geometry.operations import (
     compute_bbox_area,
     compute_bounds,
     compute_interval_overlap,
     compute_interval_width,
-    geometry_to_shapely,
     get_point_in_frequency,
     get_point_in_time,
 )

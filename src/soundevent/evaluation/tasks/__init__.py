@@ -7,11 +7,13 @@ from soundevent.evaluation.tasks.sound_event_classification import (
 )
 from soundevent.evaluation.tasks.sound_event_detection import (
     evaluate_sound_event_detection,
+    sound_event_detection,
 )
 
 __all__ = [
     "clip_classification",
     "clip_multilabel_classification",
-    "sound_event_classification",
     "evaluate_sound_event_detection",
+    "sound_event_classification",
+    "sound_event_detection",
 ]
