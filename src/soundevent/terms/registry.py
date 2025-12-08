@@ -9,7 +9,7 @@ registry-specific error handling.
 
 from collections.abc import Callable, MutableMapping
 from functools import partial
-from typing import Dict, Optional
+from typing import Dict
 
 from soundevent.data import Term
 
@@ -43,8 +43,8 @@ class TermOverrideError(KeyError, TermRegistryError):
     def __init__(
         self,
         message: str,
-        key: Optional[str] = None,
-        term: Optional[Term] = None,
+        key: str | None = None,
+        term: Term | None = None,
     ):
         super().__init__(message)
         self.key = key
@@ -74,8 +74,8 @@ class TermNotFoundError(KeyError, TermRegistryError):
     def __init__(
         self,
         message: str,
-        key: Optional[str] = None,
-        criteria: Optional[dict] = None,
+        key: str | None = None,
+        criteria: dict | None = None,
     ):
         super().__init__(message)
         self.key = key
@@ -107,7 +107,7 @@ class MultipleTermsFoundError(LookupError, TermRegistryError):
         message: str,
         criteria: dict,
         count: int,
-        matches: Optional[list[Term]] = None,
+        matches: list[Term] | None = None,
     ):
         super().__init__(message)
         self.criteria = criteria
@@ -134,7 +134,7 @@ class TermRegistry(MutableMapping[str, Term]):
         The internal dictionary holding the registered terms.
     """
 
-    def __init__(self, terms: Optional[Dict[str, Term]] = None):
+    def __init__(self, terms: Dict[str, Term] | None = None):
         """Initialize the TermRegistry.
 
         Parameters
@@ -235,7 +235,7 @@ class TermRegistry(MutableMapping[str, Term]):
     def add_term(
         self,
         term: Term,
-        key: Optional[str] = None,
+        key: str | None = None,
         force: bool = False,
     ) -> None:
         """Register a term, optionally defaulting the key to `term.name`.
@@ -270,7 +270,7 @@ class TermRegistry(MutableMapping[str, Term]):
 
         self._terms[key] = term
 
-    def get(self, key: str, default: Optional[Term] = None) -> Optional[Term]:  # type: ignore
+    def get(self, key: str, default: Term | None = None) -> Term | None:  # type: ignore
         """Retrieve a term by key, returning a default if not found.
 
         Mimics `dict.get()`. Returns `None` by default if the key is not
@@ -316,9 +316,9 @@ class TermRegistry(MutableMapping[str, Term]):
 
     def get_by(
         self,
-        label: Optional[str] = None,
-        name: Optional[str] = None,
-        uri: Optional[str] = None,
+        label: str | None = None,
+        name: str | None = None,
+        uri: str | None = None,
     ) -> Term:
         """Retrieve one term by an exact match on a single attribute.
 
@@ -382,11 +382,11 @@ class TermRegistry(MutableMapping[str, Term]):
 
     def find(
         self,
-        label: Optional[str] = None,
-        name: Optional[str] = None,
-        uri: Optional[str] = None,
-        definition: Optional[str] = None,
-        q: Optional[str] = None,
+        label: str | None = None,
+        name: str | None = None,
+        uri: str | None = None,
+        definition: str | None = None,
+        q: str | None = None,
         ignore_case: bool = True,
     ) -> list[Term]:
         """Find terms by substring match; returns multiple terms.

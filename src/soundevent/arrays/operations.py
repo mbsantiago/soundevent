@@ -1,6 +1,6 @@
 """Module for manipulation of xarray.DataArray objects."""
 
-from typing import Any, Callable, List, Literal, Optional, Union
+from typing import Any, Callable, List, Literal
 
 import numpy as np
 import xarray as xr
@@ -34,8 +34,8 @@ __all__ = [
 def crop_dim(
     arr: xr.DataArray,
     dim: str,
-    start: Optional[float] = None,
-    stop: Optional[float] = None,
+    start: float | None = None,
+    stop: float | None = None,
     right_closed: bool = False,
     left_closed: bool = True,
     eps: float = 10e-6,
@@ -122,8 +122,8 @@ def crop_dim(
 def extend_dim(
     arr: xr.DataArray,
     dim: str,
-    start: Optional[float] = None,
-    stop: Optional[float] = None,
+    start: float | None = None,
+    stop: float | None = None,
     fill_value: float = 0,
     eps: float = 10e-6,
     left_closed: bool = True,
@@ -317,7 +317,7 @@ def set_value_at_pos(
       * x        (x) ... 0 1 2
       * y        (y) ... 0 1 2
     """
-    indexer: List[Union[slice, int]] = [slice(None) for _ in range(array.ndim)]
+    indexer: List[slice | int] = [slice(None) for _ in range(array.ndim)]
 
     for dim, coord in query.items():
         dim_index: int = array.get_axis_num(dim)  # type: ignore
@@ -491,10 +491,10 @@ def resize(
 
 def to_db(
     arr: xr.DataArray,
-    ref: Union[float, Callable[[xr.DataArray], float]] = 1.0,
+    ref: float | Callable[[xr.DataArray], float] = 1.0,
     amin: float = 1e-10,
-    min_db: Optional[float] = -80.0,
-    max_db: Optional[float] = None,
+    min_db: float | None = -80.0,
+    max_db: float | None = None,
     power: int = 1,
 ) -> xr.DataArray:
     """Compute the decibel values of a data array.
@@ -584,8 +584,8 @@ def to_db(
 def adjust_dim_range(
     array: xr.DataArray,
     dim: str,
-    start: Optional[float] = None,
-    stop: Optional[float] = None,
+    start: float | None = None,
+    stop: float | None = None,
     fill_value: float = 0,
 ) -> xr.DataArray:
     """Adjust the range of a specified dimension in an xarray DataArray.

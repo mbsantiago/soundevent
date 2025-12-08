@@ -57,6 +57,11 @@ erDiagram
     fingerprint for each file, derived solely from its content. This way, even if
     the name switches, the essence of the recording remains unmistakably
     identified.
+    
+    If a hash is present, the **Recording** UUID will be deterministically generated
+    from this hash (unless a UUID is explicitly provided). This ensures that the
+    same audio file results in the same **Recording** object identity across
+    different sessions.
 
 ??? note "Audiovisual Core Metadata Schema"
 

@@ -14,7 +14,7 @@ allowing them to operate on a specific `TermRegistry` instance for a single
 call, without affecting the global state.
 """
 
-from typing import List, Optional
+from typing import List
 
 from soundevent import data
 from soundevent.terms.registry import TermRegistry
@@ -62,7 +62,7 @@ def set_global_term_registry(term_registry: TermRegistry) -> None:
     _registry = term_registry
 
 
-def has_term(key: str, term_registry: Optional[TermRegistry] = None) -> bool:
+def has_term(key: str, term_registry: TermRegistry | None = None) -> bool:
     """
     Check if a term exists in the registry.
 
@@ -87,9 +87,9 @@ def has_term(key: str, term_registry: Optional[TermRegistry] = None) -> bool:
 
 def get_term(
     key: str,
-    default: Optional[data.Term] = None,
-    term_registry: Optional[TermRegistry] = None,
-) -> Optional[data.Term]:
+    default: data.Term | None = None,
+    term_registry: TermRegistry | None = None,
+) -> data.Term | None:
     """
     Retrieve a term by its key.
 
@@ -116,8 +116,8 @@ def get_term(
 
 def add_term(
     term: data.Term,
-    key: Optional[str] = None,
-    term_registry: Optional[TermRegistry] = None,
+    key: str | None = None,
+    term_registry: TermRegistry | None = None,
     force: bool = False,
 ) -> None:
     """
@@ -150,7 +150,7 @@ def add_term(
 
 def remove_term(
     key: str,
-    term_registry: Optional[TermRegistry] = None,
+    term_registry: TermRegistry | None = None,
 ) -> None:
     """
     Remove a term from the registry by its key.
@@ -175,10 +175,10 @@ def remove_term(
 
 
 def get_term_by(
-    label: Optional[str] = None,
-    name: Optional[str] = None,
-    uri: Optional[str] = None,
-    term_registry: Optional[TermRegistry] = None,
+    label: str | None = None,
+    name: str | None = None,
+    uri: str | None = None,
+    term_registry: TermRegistry | None = None,
 ) -> data.Term:
     """
     Retrieve one term by an exact match on a single attribute.
@@ -222,13 +222,13 @@ def get_term_by(
 
 
 def find_term(
-    label: Optional[str] = None,
-    name: Optional[str] = None,
-    uri: Optional[str] = None,
-    definition: Optional[str] = None,
-    q: Optional[str] = None,
+    label: str | None = None,
+    name: str | None = None,
+    uri: str | None = None,
+    definition: str | None = None,
+    q: str | None = None,
     ignore_case: bool = True,
-    term_registry: Optional[TermRegistry] = None,
+    term_registry: TermRegistry | None = None,
 ) -> List[data.Term]:
     """
     Find terms by substring match.

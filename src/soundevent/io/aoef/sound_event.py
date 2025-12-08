@@ -1,4 +1,3 @@
-from typing import Dict, Optional
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel
@@ -13,8 +12,8 @@ class SoundEventObject(BaseModel):
 
     uuid: UUID
     recording: UUID
-    geometry: Optional[data.Geometry] = None
-    features: Optional[Dict[str, float]] = None
+    geometry: data.Geometry
+    features: dict[str, float] | None = None
 
 
 class SoundEventAdapter(

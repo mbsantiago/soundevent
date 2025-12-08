@@ -5,8 +5,6 @@ sound event data. Data can be saved in formats compatible with the
 `soundevent.io.load` function.
 """
 
-from typing import Optional
-
 from soundevent import data
 from soundevent.io.aoef import save as aoef_save
 from soundevent.io.formats import infer_format
@@ -16,8 +14,8 @@ from soundevent.io.types import DataCollections, Saver
 def save(
     obj: DataCollections,
     path: data.PathLike,
-    audio_dir: Optional[data.PathLike] = None,
-    format: Optional[str] = "aoef",
+    audio_dir: data.PathLike | None = None,
+    format: str | None = "aoef",
     **kwargs,
 ) -> None:
     """Save a data object to a file.

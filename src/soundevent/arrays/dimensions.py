@@ -25,7 +25,7 @@ dimension width (`get_dim_width`), and estimate dimension step size
 """
 
 from enum import Enum
-from typing import Any, Optional, Tuple
+from typing import Any, Tuple
 
 import numpy as np
 import xarray as xr
@@ -120,8 +120,8 @@ def create_range_dim(
     name: str,
     start: float,
     stop: float,
-    step: Optional[float] = None,
-    size: Optional[int] = None,
+    step: float | None = None,
+    size: int | None = None,
     dtype: DTypeLike = np.float64,
     **attrs: Any,
 ) -> xr.Variable:
@@ -191,8 +191,8 @@ def create_range_dim(
 def create_time_range(
     start_time: float,
     end_time: float,
-    step: Optional[float] = None,
-    samplerate: Optional[float] = None,
+    step: float | None = None,
+    samplerate: float | None = None,
     name: str = Dimensions.time.value,
     dtype: DTypeLike = np.float64,
     **attrs,
@@ -513,9 +513,9 @@ def get_dim_step(
 def create_time_dim_from_array(
     coods: np.ndarray,
     name: str = Dimensions.time.value,
-    dtype: Optional[DTypeLike] = None,
-    step: Optional[float] = None,
-    samplerate: Optional[float] = None,
+    dtype: DTypeLike | None = None,
+    step: float | None = None,
+    samplerate: float | None = None,
     estimate_step: bool = False,
     **kwargs,
 ) -> xr.Variable:
@@ -567,9 +567,9 @@ def create_time_dim_from_array(
 def create_frequency_dim_from_array(
     coods: np.ndarray,
     name: str = Dimensions.frequency.value,
-    step: Optional[float] = None,
+    step: float | None = None,
     estimate_step: bool = False,
-    dtype: Optional[DTypeLike] = None,
+    dtype: DTypeLike | None = None,
     **kwargs,
 ) -> xr.Variable:
     """Create a frequency dimension from an array of frequency values.

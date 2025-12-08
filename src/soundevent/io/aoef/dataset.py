@@ -1,4 +1,4 @@
-from typing import Literal, Optional
+from typing import Literal
 
 from .recording_set import RecordingSetAdapter, RecordingSetObject
 from soundevent import data
@@ -9,7 +9,7 @@ class DatasetObject(RecordingSetObject):
 
     collection_type: Literal["dataset"] = "dataset"  # type: ignore
     name: str
-    description: Optional[str] = None
+    description: str | None = None
 
 
 class DatasetAdapter(RecordingSetAdapter):

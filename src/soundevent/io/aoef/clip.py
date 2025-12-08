@@ -1,4 +1,4 @@
-from typing import Dict, Optional
+from typing import Dict
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel
@@ -15,7 +15,7 @@ class ClipObject(BaseModel):
     recording: UUID
     start_time: float
     end_time: float
-    features: Optional[Dict[str, float]] = None
+    features: Dict[str, float] | None = None
 
 
 class ClipAdapter(DataAdapter[data.Clip, ClipObject, UUID, UUID]):

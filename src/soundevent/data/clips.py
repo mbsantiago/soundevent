@@ -41,6 +41,7 @@ from pydantic import BaseModel, Field, model_validator
 
 from soundevent.data.features import Feature
 from soundevent.data.recordings import Recording
+from soundevent.data.uuids import generate_clip_uuid
 
 __all__ = [
     "Clip",
@@ -98,6 +99,18 @@ class Clip(BaseModel):
         if values["start_time"] > values["end_time"]:
             raise ValueError("start_time must be less than end_time")
         return values
+
+    @model_validator(mode="after")
+    def _set_uuid_from_attributes(self) -> "Clip":
+        if "uuid" in self.model_fields_set:
+            return self
+
+        self.uuid = generate_clip_uuid(
+            self.recording.uuid,
+            self.start_time,
+            self.end_time,
+        )
+        return self
 
     @property
     def duration(self) -> float:

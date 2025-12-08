@@ -1,5 +1,5 @@
 import datetime
-from typing import List, Literal, Optional
+from typing import List, Literal
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel
@@ -25,39 +25,36 @@ from soundevent import data
 
 class AnnotationSetObject(BaseModel):
     uuid: UUID
-    name: Optional[str] = None
-    description: Optional[str] = None
+    name: str | None = None
+    description: str | None = None
     collection_type: Literal["annotation_set"] = "annotation_set"
-    users: Optional[List[UserObject]] = None
-    tags: Optional[List[TagObject]] = None
-    recordings: Optional[List[RecordingObject]] = None
-    sound_events: Optional[List[SoundEventObject]] = None
-    sequences: Optional[List[SequenceObject]] = None
-    clips: Optional[List[ClipObject]] = None
-    sound_event_annotations: Optional[List[SoundEventAnnotationObject]] = None
-    sequence_annotations: Optional[List[SequenceAnnotationObject]] = None
-    clip_annotations: Optional[List[ClipAnnotationsObject]] = None
-    created_on: Optional[datetime.datetime] = None
+    users: List[UserObject] | None = None
+    tags: List[TagObject] | None = None
+    recordings: List[RecordingObject] | None = None
+    sound_events: List[SoundEventObject] | None = None
+    sequences: List[SequenceObject] | None = None
+    clips: List[ClipObject] | None = None
+    sound_event_annotations: List[SoundEventAnnotationObject] | None = None
+    sequence_annotations: List[SequenceAnnotationObject] | None = None
+    clip_annotations: List[ClipAnnotationsObject] | None = None
+    created_on: datetime.datetime | None = None
 
 
 class AnnotationSetAdapter:
     def __init__(
         self,
-        audio_dir: Optional[data.PathLike] = None,
-        user_adapter: Optional[UserAdapter] = None,
-        tag_adapter: Optional[TagAdapter] = None,
-        note_adapter: Optional[NoteAdapter] = None,
-        recording_adapter: Optional[RecordingAdapter] = None,
-        sound_event_adapter: Optional[SoundEventAdapter] = None,
-        sequence_adapter: Optional[SequenceAdapter] = None,
-        clip_adapter: Optional[ClipAdapter] = None,
-        sound_event_annotations_adapter: Optional[
-            SoundEventAnnotationAdapter
-        ] = None,
-        sequence_annotations_adapter: Optional[
-            SequenceAnnotationAdapter
-        ] = None,
-        clip_annotation_adapter: Optional[ClipAnnotationsAdapter] = None,
+        audio_dir: data.PathLike | None = None,
+        user_adapter: UserAdapter | None = None,
+        tag_adapter: TagAdapter | None = None,
+        note_adapter: NoteAdapter | None = None,
+        recording_adapter: RecordingAdapter | None = None,
+        sound_event_adapter: SoundEventAdapter | None = None,
+        sequence_adapter: SequenceAdapter | None = None,
+        clip_adapter: ClipAdapter | None = None,
+        sound_event_annotations_adapter: SoundEventAnnotationAdapter
+        | None = None,
+        sequence_annotations_adapter: SequenceAnnotationAdapter | None = None,
+        clip_annotation_adapter: ClipAnnotationsAdapter | None = None,
     ):
         self.user_adapter = user_adapter or UserAdapter()
         self.tag_adapter = tag_adapter or TagAdapter()

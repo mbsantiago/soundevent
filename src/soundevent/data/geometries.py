@@ -54,7 +54,7 @@ location and extent of sound events within a recording.
 
 import json
 from abc import ABC
-from typing import Annotated, Dict, List, Literal, Type, Union
+from typing import Annotated, Literal, Type
 
 from pydantic import BaseModel, Field, ValidationError, field_validator
 
@@ -86,17 +86,17 @@ MultiPointName = Literal["MultiPoint"]
 MultiLineStringName = Literal["MultiLineString"]
 MultiPolygonName = Literal["MultiPolygon"]
 
-GeometryType = Union[
-    TimeStampName,
-    TimeIntervalName,
-    BoundingBoxName,
-    PointName,
-    LineStringName,
-    PolygonName,
-    MultiPointName,
-    MultiLineStringName,
-    MultiPolygonName,
-]
+GeometryType = (
+    TimeStampName
+    | TimeIntervalName
+    | BoundingBoxName
+    | PointName
+    | LineStringName
+    | PolygonName
+    | MultiPointName
+    | MultiLineStringName
+    | MultiPolygonName
+)
 
 Time = float
 """Time in seconds."""
@@ -208,12 +208,12 @@ class TimeInterval(BaseGeometry):
 
     type: TimeIntervalName = "TimeInterval"
 
-    coordinates: List[Time] = Field(
+    coordinates: list[Time] = Field(
         description="The time interval of the sound event.",
     )
 
     @field_validator("coordinates")
-    def _validate_time_interval(cls, v: List[Time]) -> List[Time]:
+    def _validate_time_interval(cls, v: list[Time]) -> list[Time]:
         """Validate that the time interval is valid.
 
         Parameters
@@ -265,13 +265,13 @@ class Point(BaseGeometry):
 
     type: PointName = "Point"
 
-    coordinates: List[float] = Field(
+    coordinates: list[float] = Field(
         ...,
         description="The points of the sound event.",
     )
 
     @field_validator("coordinates")
-    def _validate_coordinates(cls, v: List[float]) -> List[float]:
+    def _validate_coordinates(cls, v: list[float]) -> list[float]:
         """Validate that the coordinates are valid.
 
         Parameters
@@ -321,13 +321,13 @@ class LineString(BaseGeometry):
 
     type: LineStringName = "LineString"
 
-    coordinates: List[List[float]] = Field(
+    coordinates: list[list[float]] = Field(
         ...,
         description="The line of the sound event.",
     )
 
     @field_validator("coordinates")
-    def _validate_coordinates(cls, v: List[List[float]]) -> List[List[float]]:
+    def _validate_coordinates(cls, v: list[list[float]]) -> list[list[float]]:
         """Validate that the coordinates are valid.
 
         Parameters
@@ -349,7 +349,7 @@ class LineString(BaseGeometry):
         return v
 
     @field_validator("coordinates")
-    def _is_ordered_by_time(cls, v: List[List[float]]) -> List[List[float]]:
+    def _is_ordered_by_time(cls, v: list[list[float]]) -> list[list[float]]:
         """Validate that the line is ordered by time."""
         start_time = v[0][0]
         end_time = v[-1][0]
@@ -386,15 +386,15 @@ class Polygon(BaseGeometry):
 
     type: PolygonName = "Polygon"
 
-    coordinates: List[List[List[float]]] = Field(
+    coordinates: list[list[list[float]]] = Field(
         ...,
         description="The polygon of the sound event.",
     )
 
     @field_validator("coordinates")
     def _validate_coordinates(
-        cls, v: List[List[List[float]]]
-    ) -> List[List[List[float]]]:
+        cls, v: list[list[list[float]]]
+    ) -> list[list[list[float]]]:
         """Validate that the coordinates are valid.
 
         Parameters
@@ -448,13 +448,13 @@ class BoundingBox(BaseGeometry):
 
     type: BoundingBoxName = "BoundingBox"
 
-    coordinates: List[float] = Field(
+    coordinates: list[float] = Field(
         ...,
         description="The bounding box of the sound event.",
     )
 
     @field_validator("coordinates")
-    def _validate_coordinates(cls, v: List[float]) -> List[float]:
+    def _validate_coordinates(cls, v: list[float]) -> list[float]:
         """Validate that the coordinates are valid.
 
         Parameters
@@ -514,13 +514,13 @@ class MultiPoint(BaseGeometry):
 
     type: MultiPointName = "MultiPoint"
 
-    coordinates: List[List[float]] = Field(
+    coordinates: list[list[float]] = Field(
         ...,
         description="The points of the sound event.",
     )
 
     @field_validator("coordinates")
-    def _validate_coordinates(cls, v: List[List[float]]) -> List[List[float]]:
+    def _validate_coordinates(cls, v: list[list[float]]) -> list[list[float]]:
         """Validate that the coordinates are valid.
 
         Parameters
@@ -571,15 +571,15 @@ class MultiLineString(BaseGeometry):
 
     type: MultiLineStringName = "MultiLineString"
 
-    coordinates: List[List[List[float]]] = Field(
+    coordinates: list[list[list[float]]] = Field(
         ...,
         description="The lines of the sound event.",
     )
 
     @field_validator("coordinates")
     def _validate_coordinates(
-        cls, v: List[List[List[float]]]
-    ) -> List[List[List[float]]]:
+        cls, v: list[list[list[float]]]
+    ) -> list[list[list[float]]]:
         """Validate that the coordinates are valid.
 
         Parameters
@@ -606,8 +606,8 @@ class MultiLineString(BaseGeometry):
 
     @field_validator("coordinates")
     def _each_line_is_ordered_by_time(
-        cls, v: List[List[List[float]]]
-    ) -> List[List[List[float]]]:
+        cls, v: list[list[list[float]]]
+    ) -> list[list[list[float]]]:
         """Validate that each line is ordered by time."""
         for index in range(len(v)):
             line = v[index]
@@ -647,15 +647,15 @@ class MultiPolygon(BaseGeometry):
 
     type: MultiPolygonName = "MultiPolygon"
 
-    coordinates: List[List[List[List[float]]]] = Field(
+    coordinates: list[list[list[list[float]]]] = Field(
         ...,
         description="The polygons of the sound event.",
     )
 
     @field_validator("coordinates")
     def _validate_coordinates(
-        cls, v: List[List[List[List[float]]]]
-    ) -> List[List[List[List[float]]]]:
+        cls, v: list[list[list[list[float]]]]
+    ) -> list[list[list[list[float]]]]:
         """Validate that the coordinates are valid.
 
         Parameters
@@ -690,17 +690,15 @@ class MultiPolygon(BaseGeometry):
 
 
 Geometry = Annotated[
-    Union[
-        TimeStamp,
-        TimeInterval,
-        Point,
-        LineString,
-        Polygon,
-        BoundingBox,
-        MultiPoint,
-        MultiLineString,
-        MultiPolygon,
-    ],
+    TimeStamp
+    | TimeInterval
+    | Point
+    | LineString
+    | Polygon
+    | BoundingBox
+    | MultiPoint
+    | MultiLineString
+    | MultiPolygon,
     Field(discriminator="type"),
 ]
 """Geometry Type.
@@ -731,7 +729,7 @@ Available Geometries:
 """
 
 
-ALL_GEOMETRY_TYPES: List[Type[Geometry]] = [
+ALL_GEOMETRY_TYPES: list[Type[Geometry]] = [
     TimeStamp,
     TimeInterval,
     Point,
@@ -744,7 +742,7 @@ ALL_GEOMETRY_TYPES: List[Type[Geometry]] = [
 ]
 
 
-GEOMETRY_MAPPING: Dict[GeometryType, Type[Geometry]] = {
+GEOMETRY_MAPPING: dict[GeometryType, Type[Geometry]] = {
     geom.geom_type(): geom for geom in ALL_GEOMETRY_TYPES
 }
 

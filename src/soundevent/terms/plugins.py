@@ -58,7 +58,6 @@ You can disable plugin loading by setting the environment variable
 import logging
 import os
 from importlib.metadata import entry_points
-from typing import Optional
 
 from soundevent.terms.api import get_global_term_registry
 from soundevent.terms.io import register_term_set
@@ -112,7 +111,7 @@ def discover_plugins():
         return list(entry_points(group="soundevent.terms"))
 
 
-def discover_and_load_plugins(term_registry: Optional[TermRegistry] = None):
+def discover_and_load_plugins(term_registry: TermRegistry | None = None):
     """Discover and load term sets from installed plugins.
 
     This function scans for Python packages that have registered themselves

@@ -14,7 +14,7 @@ agreed upon by multiple annotators.
 """
 
 import datetime
-from typing import List, Optional
+from typing import List
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
@@ -57,5 +57,5 @@ class AnnotationSet(BaseModel):
     created_on: datetime.datetime = Field(
         default_factory=datetime.datetime.now
     )
-    name: Optional[str] = None
-    description: Optional[str] = None
+    name: str | None = None
+    description: str | None = None

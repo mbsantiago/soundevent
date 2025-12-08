@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Tuple
 from uuid import UUID
 
 from pydantic import BaseModel
@@ -14,10 +14,10 @@ from soundevent import data
 class ClipPredictionsObject(BaseModel):
     uuid: UUID
     clip: UUID
-    sound_events: Optional[List[UUID]] = None
-    sequences: Optional[List[UUID]] = None
-    tags: Optional[List[Tuple[int, float]]] = None
-    features: Optional[Dict[str, float]] = None
+    sound_events: List[UUID] | None = None
+    sequences: List[UUID] | None = None
+    tags: List[Tuple[int, float]] | None = None
+    features: Dict[str, float] | None = None
 
 
 class ClipPredictionsAdapter(

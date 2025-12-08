@@ -25,7 +25,7 @@ Both functions yield tuples of ``(source_index, target_index, score)``.
 """
 
 from itertools import product
-from typing import Iterable, Optional, Sequence, Set, Tuple, Union
+from typing import Iterable, Sequence, Set, Tuple
 
 import numpy as np
 from scipy.optimize import linear_sum_assignment
@@ -44,9 +44,9 @@ __all__ = [
 def match_geometries_optimal(
     source: Sequence[Geometry],
     target: Sequence[Geometry],
-    affinity: Union[np.ndarray, AffinityFn, None] = None,
+    affinity: np.ndarray | AffinityFn | None = None,
     affinity_threshold: float = 0,
-) -> Iterable[Tuple[Optional[int], Optional[int], float]]:
+) -> Iterable[Tuple[int | None, int | None, float]]:
     """Match geometries to maximize total affinity.
 
     Parameters
@@ -97,10 +97,10 @@ def match_geometries_optimal(
 def match_geometries_greedy(
     source: Sequence[Geometry],
     target: Sequence[Geometry],
-    affinity: Union[np.ndarray, AffinityFn, None] = None,
+    affinity: np.ndarray | AffinityFn | None = None,
     affinity_threshold: float = 0,
     strict: bool = False,
-) -> Iterable[Tuple[Optional[int], Optional[int], float]]:
+) -> Iterable[Tuple[int | None, int | None, float]]:
     """Match geometries using a greedy strategy.
 
     Parameters
@@ -158,7 +158,7 @@ def match_geometries_greedy(
 def _validate_affinity_matrix(
     source: Sequence[Geometry],
     target: Sequence[Geometry],
-    affinity: Union[np.ndarray, AffinityFn, None],
+    affinity: np.ndarray | AffinityFn | None,
 ) -> np.ndarray:
     n_rows = len(source)
     n_cols = len(target)
@@ -186,7 +186,7 @@ def _validate_affinity_matrix(
 def select_optimal_matches(
     affinity_matrix: np.ndarray,
     threshold: float = 0,
-) -> Iterable[Tuple[Optional[int], Optional[int], float]]:
+) -> Iterable[Tuple[int | None, int | None, float]]:
     """Find the optimal assignment that maximizes the total affinity score.
 
     Parameters
@@ -240,7 +240,7 @@ def select_greedy_matches(
     affinity_matrix: np.ndarray,
     strict: bool = False,
     threshold: float = 0,
-) -> Iterable[Tuple[Optional[int], Optional[int], float]]:
+) -> Iterable[Tuple[int | None, int | None, float]]:
     """Select matches greedily based on the row order.
 
     Parameters
@@ -320,7 +320,7 @@ def _select_greedy_match(
     available_cols: Set[int],
     strict: bool = False,
     threshold: float = 0,
-) -> Tuple[Optional[int], float]:
+) -> Tuple[int | None, float]:
     """Find the best available column for a single row."""
     if strict:
         best_col = int(np.argmax(row))

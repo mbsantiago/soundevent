@@ -7,7 +7,7 @@ annotators, and the set of permissible tags. It serves as a central container
 for managing and tracking the progress of an annotation effort.
 """
 
-from typing import List, Optional
+from typing import List
 
 from pydantic import Field, model_validator
 
@@ -44,7 +44,7 @@ class AnnotationProject(AnnotationSet):
         that requires annotation as part of this project.
     """
 
-    instructions: Optional[str] = None
+    instructions: str | None = None
     annotation_tags: List[Tag] = Field(default_factory=list, repr=False)
     tasks: List[AnnotationTask] = Field(default_factory=list, repr=False)
 

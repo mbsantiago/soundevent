@@ -53,20 +53,6 @@ def segment() -> crowsetta.Segment:
     )
 
 
-def test_segment_from_annotation_fails_on_empty_geometry(
-    recording: data.Recording,
-):
-    sound_event_annotation = data.SoundEventAnnotation(
-        sound_event=data.SoundEvent(
-            recording=recording,
-            geometry=None,
-        ),
-    )
-
-    with pytest.raises(ValueError):
-        crowsetta_io.segment_from_annotation(sound_event_annotation)
-
-
 def test_segment_to_annotation_without_onset_and_offset_in_seconds(
     recording: data.Recording,
 ):

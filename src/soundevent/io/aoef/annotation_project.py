@@ -1,4 +1,4 @@
-from typing import List, Literal, Optional
+from typing import List, Literal
 
 from .annotation_set import AnnotationSetAdapter, AnnotationSetObject
 from .annotation_task import AnnotationTaskAdapter, AnnotationTaskObject
@@ -11,15 +11,15 @@ class AnnotationProjectObject(AnnotationSetObject):
     """Schema definition for an annotation project object in AOEF format."""
 
     collection_type: ColType = "annotation_project"  # type: ignore
-    instructions: Optional[str] = None
-    project_tags: Optional[List[int]] = None
-    tasks: Optional[List[AnnotationTaskObject]] = None
+    instructions: str | None = None
+    project_tags: List[int] | None = None
+    tasks: List[AnnotationTaskObject] | None = None
 
 
 class AnnotationProjectAdapter(AnnotationSetAdapter):
     def __init__(
         self,
-        annotation_task_adapter: Optional[AnnotationTaskAdapter] = None,
+        annotation_task_adapter: AnnotationTaskAdapter | None = None,
         **kwargs,
     ):
         super().__init__(**kwargs)

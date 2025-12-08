@@ -1,6 +1,6 @@
 """Common utilities for plotting."""
 
-from typing import Optional, Tuple
+from typing import Tuple
 
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
@@ -9,7 +9,7 @@ __all__ = ["create_axes"]
 
 
 def create_axes(
-    figsize: Optional[Tuple[float, float]] = None,
+    figsize: Tuple[float, float] | None = None,
 ) -> Axes:
     """Create a new figure and axes.
 

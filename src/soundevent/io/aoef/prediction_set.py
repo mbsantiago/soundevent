@@ -1,5 +1,5 @@
 import datetime
-from typing import List, Literal, Optional
+from typing import List, Literal
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel
@@ -25,39 +25,36 @@ from soundevent import data
 
 class PredictionSetObject(BaseModel):
     uuid: UUID
-    name: Optional[str] = None
-    description: Optional[str] = None
-    created_on: Optional[datetime.datetime] = None
+    name: str | None = None
+    description: str | None = None
+    created_on: datetime.datetime | None = None
     collection_type: Literal["prediction_set"] = "prediction_set"
-    users: Optional[List[UserObject]] = None
-    tags: Optional[List[TagObject]] = None
-    recordings: Optional[List[RecordingObject]] = None
-    sound_events: Optional[List[SoundEventObject]] = None
-    sequences: Optional[List[SequenceObject]] = None
-    clips: Optional[List[ClipObject]] = None
-    sound_event_predictions: Optional[List[SoundEventPredictionObject]] = None
-    sequence_predictions: Optional[List[SequencePredictionObject]] = None
-    clip_predictions: Optional[List[ClipPredictionsObject]] = None
+    users: List[UserObject] | None = None
+    tags: List[TagObject] | None = None
+    recordings: List[RecordingObject] | None = None
+    sound_events: List[SoundEventObject] | None = None
+    sequences: List[SequenceObject] | None = None
+    clips: List[ClipObject] | None = None
+    sound_event_predictions: List[SoundEventPredictionObject] | None = None
+    sequence_predictions: List[SequencePredictionObject] | None = None
+    clip_predictions: List[ClipPredictionsObject] | None = None
 
 
 class PredictionSetAdapter:
     def __init__(
         self,
-        audio_dir: Optional[data.PathLike] = None,
-        user_adapter: Optional[UserAdapter] = None,
-        tag_adapter: Optional[TagAdapter] = None,
-        recording_adapter: Optional[RecordingAdapter] = None,
-        note_adapter: Optional[NoteAdapter] = None,
-        sound_event_adapter: Optional[SoundEventAdapter] = None,
-        sequence_adapter: Optional[SequenceAdapter] = None,
-        clip_adapter: Optional[ClipAdapter] = None,
-        sound_event_prediction_adapter: Optional[
-            SoundEventPredictionAdapter
-        ] = None,
-        sequence_prediction_adapter: Optional[
-            SequencePredictionAdapter
-        ] = None,
-        clip_predictions_adapter: Optional[ClipPredictionsAdapter] = None,
+        audio_dir: data.PathLike | None = None,
+        user_adapter: UserAdapter | None = None,
+        tag_adapter: TagAdapter | None = None,
+        recording_adapter: RecordingAdapter | None = None,
+        note_adapter: NoteAdapter | None = None,
+        sound_event_adapter: SoundEventAdapter | None = None,
+        sequence_adapter: SequenceAdapter | None = None,
+        clip_adapter: ClipAdapter | None = None,
+        sound_event_prediction_adapter: SoundEventPredictionAdapter
+        | None = None,
+        sequence_prediction_adapter: SequencePredictionAdapter | None = None,
+        clip_predictions_adapter: ClipPredictionsAdapter | None = None,
     ):
         self.user_adapter = user_adapter or UserAdapter()
         self.tag_adapter = tag_adapter or TagAdapter()

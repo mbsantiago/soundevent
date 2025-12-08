@@ -1,7 +1,7 @@
 """Functions for plotting tags."""
 
 from itertools import cycle
-from typing import Dict, Optional
+from typing import Dict
 
 import numpy as np
 from matplotlib import colormaps
@@ -45,7 +45,7 @@ def plot_tag(
     time: float,
     frequency: float,
     color: str,
-    ax: Optional[Axes] = None,
+    ax: Axes | None = None,
     size: int = 10,
     alpha: float = 1,
     **kwargs,

@@ -1,6 +1,6 @@
 """Submodule of io module containing type definitions."""
 
-from typing import Generic, Literal, Optional, Protocol, TypeVar, Union
+from typing import Generic, Literal, Protocol, TypeVar
 
 from soundevent import data
 
@@ -24,16 +24,16 @@ DataType = Literal[
     "recording_set",
 ]
 
-DataCollections = Union[
-    data.Dataset,
-    data.AnnotationSet,
-    data.AnnotationProject,
-    data.PredictionSet,
-    data.ModelRun,
-    data.EvaluationSet,
-    data.Evaluation,
-    data.RecordingSet,
-]
+DataCollections = (
+    data.Dataset
+    | data.AnnotationSet
+    | data.AnnotationProject
+    | data.PredictionSet
+    | data.ModelRun
+    | data.EvaluationSet
+    | data.Evaluation
+    | data.RecordingSet
+)
 """Type alias for all data collection types."""
 
 D = TypeVar("D", contravariant=True, bound=DataCollections)
@@ -46,7 +46,7 @@ class Saver(Protocol, Generic[D]):
         self,
         obj: D,
         path: data.PathLike,
-        audio_dir: Optional[data.PathLike] = None,
+        audio_dir: data.PathLike | None = None,
     ) -> None:
         """Save object to path."""
         ...  # pragma: no cover
@@ -58,8 +58,8 @@ class Loader(Protocol, Generic[T]):
     def __call__(
         self,
         path: data.PathLike,
-        audio_dir: Optional[data.PathLike] = None,
-        type: Optional[DataType] = None,
+        audio_dir: data.PathLike | None = None,
+        type: DataType | None = None,
     ) -> T:
         """Load object from path."""
         ...  # pragma: no cover

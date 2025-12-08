@@ -1,7 +1,6 @@
 """Transformations for tags."""
 
 from collections.abc import Callable, Sequence
-from typing import Optional
 
 from soundevent import data
 from soundevent.transforms.base import TransformBase
@@ -104,7 +103,7 @@ class TagsTransform(TransformBase):
     @classmethod
     def from_tag_transform(
         cls,
-        transform: Callable[[data.Tag], Optional[data.Tag]],
+        transform: Callable[[data.Tag], data.Tag | None],
     ):
         """Create a TagsTransform from a function that transforms a single tag.
 

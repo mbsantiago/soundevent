@@ -1,6 +1,6 @@
 """Sequence object in AOEF format."""
 
-from typing import Dict, List, Optional
+from typing import Dict, List
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel
@@ -15,8 +15,8 @@ class SequenceObject(BaseModel):
 
     uuid: UUID
     sound_events: List[UUID]
-    features: Optional[Dict[str, float]] = None
-    parent: Optional[UUID] = None
+    features: Dict[str, float] | None = None
+    parent: UUID | None = None
 
 
 class SequenceAdapter(DataAdapter[data.Sequence, SequenceObject, UUID, UUID]):

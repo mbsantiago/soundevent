@@ -63,8 +63,9 @@ regions of interest:
 [**Sound Events**][soundevent.data.SoundEvent] take the spotlight in this
 package, serving as the key players representing distinct sounds within the
 audio content. These "events" unfold within specific time intervals and
-frequency ranges, and the `soundevent` package ensures their precise
-localization using handy **Geometry** objects.
+frequency ranges. In `soundevent`, every **Sound Event** must be associated
+with a [**Geometry**][soundevent.data.Geometry] object that defines its precise
+location in time and frequency.
 
 Adding a layer of richness to these **Sound Events** is the ability to
 characterize them through **Features**. These **Features** provide quantitative
@@ -122,6 +123,11 @@ annotations across diverse **Recordings** and facilitates easier interpretation
 and comparison of results in audio data. Many machine learning models process
 audio files in **Clips**, reinforcing the practical adoption of the **Clip**
 structure.
+
+By default, **Clip** UUIDs are deterministically generated based on the parent
+**Recording**'s UUID and the clip's start and end times. This ensures that a
+clip representing the same segment of the same recording will always have the
+same identifier.
 
 The exploration of a **Clip**'s content is facilitated through **Features**
 attached to the **Clip**, providing numerical descriptors of its acoustic

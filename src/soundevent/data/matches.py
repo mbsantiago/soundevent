@@ -35,7 +35,7 @@ relationships between sound events from different sources, allowing for
 comparative studies and insights in bioacoustic research.
 """
 
-from typing import Optional, Sequence
+from typing import Sequence
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field, model_validator
@@ -82,10 +82,10 @@ class Match(BaseModel):
     """
 
     uuid: UUID = Field(default_factory=uuid4)
-    source: Optional[SoundEventPrediction] = None
-    target: Optional[SoundEventAnnotation] = None
+    source: SoundEventPrediction | None = None
+    target: SoundEventAnnotation | None = None
     affinity: float = Field(default=0.0, ge=0.0, le=1.0)
-    score: Optional[float] = Field(default=None, ge=0.0, le=1.0)
+    score: float | None = Field(default=None, ge=0.0, le=1.0)
     metrics: Sequence[Feature] = Field(default_factory=list)
 
     @model_validator(mode="before")

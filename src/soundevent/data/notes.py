@@ -43,7 +43,6 @@ and researchers involved in the project.
 """
 
 import datetime
-from typing import Optional
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
@@ -93,7 +92,7 @@ class Note(BaseModel):
 
     uuid: UUID = Field(default_factory=uuid4)
     message: str
-    created_by: Optional[User] = None
+    created_by: User | None = None
     is_issue: bool = False
     created_on: datetime.datetime = Field(
         default_factory=datetime.datetime.now

@@ -6,7 +6,6 @@ This module provides generic operations for manipulating sound event data.
 import math
 import uuid
 from collections.abc import Generator
-from typing import Optional
 
 from soundevent import data
 from soundevent.constants import uuid_namespace
@@ -15,7 +14,7 @@ from soundevent.constants import uuid_namespace
 def segment_clip(
     clip: data.Clip,
     duration: float,
-    hop: Optional[float] = None,
+    hop: float | None = None,
     include_incomplete: bool = False,
 ) -> Generator[data.Clip, None, None]:
     """Segments a clip into smaller clips of a specified duration.

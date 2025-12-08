@@ -8,7 +8,7 @@ predictions (`ProcessedClip`), matches between predicted and ground truth
 annotations (`Match` instances), and computed evaluation metrics.
 """
 
-from typing import Optional, Sequence
+from typing import Sequence
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field, model_validator
@@ -60,7 +60,7 @@ class ClipEvaluation(BaseModel):
     predictions: ClipPrediction
     matches: Sequence[Match] = Field(default_factory=list)
     metrics: Sequence[Feature] = Field(default_factory=list)
-    score: Optional[float] = Field(default=None, ge=0.0, le=1.0)
+    score: float | None = Field(default=None, ge=0.0, le=1.0)
 
     @model_validator(mode="after")  # type: ignore
     def _check_clips_match(self):

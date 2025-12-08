@@ -1,4 +1,4 @@
-from typing import List, Optional, Tuple
+from typing import List, Tuple
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel
@@ -13,7 +13,7 @@ class SoundEventPredictionObject(BaseModel):
     uuid: UUID
     sound_event: UUID
     score: float
-    tags: Optional[List[Tuple[int, float]]] = None
+    tags: List[Tuple[int, float]] | None = None
 
 
 class SoundEventPredictionAdapter(

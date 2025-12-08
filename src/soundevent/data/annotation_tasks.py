@@ -1,6 +1,6 @@
 import datetime
 from enum import Enum
-from typing import List, Optional
+from typing import List
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
@@ -59,7 +59,7 @@ class StatusBadge(BaseModel):
     """
 
     state: AnnotationState
-    owner: Optional[User] = None
+    owner: User | None = None
     created_on: datetime.datetime = Field(
         default_factory=datetime.datetime.now
     )

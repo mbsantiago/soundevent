@@ -23,7 +23,7 @@ specific syllables).
 
 import warnings
 from collections.abc import Iterable
-from typing import Any, Optional, overload
+from typing import Any, overload
 
 from pydantic import BaseModel, Field, model_validator
 
@@ -90,14 +90,14 @@ class Tag(BaseModel):
 
 def find_tag(
     tags: Iterable[Tag],
-    term: Optional[Term] = None,
-    term_name: Optional[str] = None,
-    term_label: Optional[str] = None,
-    label: Optional[str] = None,
-    key: Optional[str] = None,
-    default: Optional[Tag] = None,
+    term: Term | None = None,
+    term_name: str | None = None,
+    term_label: str | None = None,
+    label: str | None = None,
+    key: str | None = None,
+    default: Tag | None = None,
     raises: bool = False,
-) -> Optional[Tag]:
+) -> Tag | None:
     """Find the first matching tag based on provided criteria.
 
     Searches an iterable of Tag objects and returns the first one that
@@ -241,13 +241,13 @@ def find_tag(
 
 def find_tag_value(
     tags: Iterable[Tag],
-    key: Optional[str] = None,
-    term: Optional[Term] = None,
-    term_name: Optional[str] = None,
-    term_label: Optional[str] = None,
-    default: Optional[str] = None,
+    key: str | None = None,
+    term: Term | None = None,
+    term_name: str | None = None,
+    term_label: str | None = None,
+    default: str | None = None,
     raises: bool = False,
-) -> Optional[str]:
+) -> str | None:
     """Find the value of the first matching tag.
 
     Searches an iterable of [Tag][soundevent.data.Tag] objects using

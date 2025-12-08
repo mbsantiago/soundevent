@@ -1,5 +1,5 @@
 import warnings
-from typing import Any, Literal, Optional
+from typing import Any, Literal
 
 from pydantic import BaseModel, computed_field, model_validator
 
@@ -9,17 +9,17 @@ from soundevent import data
 
 class ModelInfoObject(BaseModel):
     name: str
-    version: Optional[str] = None
-    description: Optional[str] = None
+    version: str | None = None
+    description: str | None = None
 
 
 class ModelRunObject(PredictionSetObject):
     collection_type: Literal["model_run"] = "model_run"  # type: ignore
-    model: Optional[ModelInfoObject] = None
+    model: ModelInfoObject | None = None
 
     @computed_field
     @property
-    def version(self) -> Optional[str]:
+    def version(self) -> str | None:
         """Provides backward-compatible access to 'version'. Deprecated."""
         warnings.warn(
             "Accessing 'version' directly on ModelRun is deprecated. "

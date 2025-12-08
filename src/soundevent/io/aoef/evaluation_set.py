@@ -1,4 +1,4 @@
-from typing import List, Literal, Optional
+from typing import List, Literal
 
 from .annotation_set import AnnotationSetAdapter, AnnotationSetObject
 from soundevent import data
@@ -8,7 +8,7 @@ class EvaluationSetObject(AnnotationSetObject):
     """Schema definition for an evaluation set object in AOEF format."""
 
     collection_type: Literal["evaluation_set"] = "evaluation_set"  # type: ignore
-    evaluation_tags: Optional[List[int]] = None
+    evaluation_tags: List[int] | None = None
 
 
 class EvaluationSetAdapter(AnnotationSetAdapter):

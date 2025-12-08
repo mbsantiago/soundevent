@@ -45,7 +45,7 @@ introduce subjectivity into the analysis.
 """
 
 import datetime
-from typing import List, Optional
+from typing import List
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
@@ -105,7 +105,7 @@ class SoundEventAnnotation(BaseModel):
     sound_event: SoundEvent
     notes: List[Note] = Field(default_factory=list, repr=False)
     tags: List[Tag] = Field(default_factory=list, repr=False)
-    created_by: Optional[User] = None
+    created_by: User | None = None
     created_on: datetime.datetime = Field(
         default_factory=datetime.datetime.now,
         repr=False,

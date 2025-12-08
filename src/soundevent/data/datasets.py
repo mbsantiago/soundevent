@@ -1,7 +1,6 @@
 """Datasets."""
 
 from pathlib import Path
-from typing import Optional
 
 from soundevent.data.recording_sets import RecordingSet
 from soundevent.data.recordings import PathLike, Recording
@@ -12,14 +11,14 @@ __all__ = ["Dataset"]
 class Dataset(RecordingSet):
     name: str
 
-    description: Optional[str] = None
+    description: str | None = None
 
     @classmethod
     def from_directory(
         cls,
         path: PathLike,
         name: str,
-        description: Optional[str] = None,
+        description: str | None = None,
         recursive: bool = True,
         compute_hash: bool = True,
     ) -> "Dataset":

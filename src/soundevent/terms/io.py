@@ -79,7 +79,7 @@ ac:captureDevice,Capture Device,"The device used to create the resource.",
 import csv
 import json
 from pathlib import Path
-from typing import Callable, Dict, List, Literal, Optional
+from typing import Callable, Dict, List, Literal
 
 from pydantic import BaseModel, Field, ValidationError
 
@@ -123,7 +123,7 @@ def load_term_set_from_json(path: PathLike) -> TermSet:
     raise ValueError("Invalid JSON format for terms.")
 
 
-def _normalise_value(value: Optional[str]) -> Optional[str]:
+def _normalise_value(value: str | None) -> str | None:
     if value is None:
         return value
 
@@ -180,7 +180,7 @@ def infer_term_set_format(path: PathLike) -> TermFormat:
 
 def load_term_set_from_file(
     path: PathLike,
-    format: Optional[TermFormat] = None,
+    format: TermFormat | None = None,
 ) -> TermSet:
     """Load terms from a file into a TermSet object.
 
@@ -223,7 +223,7 @@ def load_term_set_from_file(
 
 def register_term_set(
     term_set: TermSet,
-    term_registry: Optional[TermRegistry] = None,
+    term_registry: TermRegistry | None = None,
     override_existing: bool = False,
     ignore_overrides: bool = True,
     ignore_missing_key: bool = True,
@@ -310,8 +310,8 @@ def register_term_set(
 
 def add_terms_from_file(
     path: PathLike,
-    term_registry: Optional[TermRegistry] = None,
-    format: Optional[TermFormat] = None,
+    term_registry: TermRegistry | None = None,
+    format: TermFormat | None = None,
     override_existing: bool = False,
     ignore_overrides: bool = True,
     ignore_missing_key: bool = True,

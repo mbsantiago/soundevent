@@ -1,5 +1,5 @@
 import datetime
-from typing import List, Optional
+from typing import List
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel
@@ -17,10 +17,10 @@ class SequenceAnnotationObject(BaseModel):
 
     uuid: UUID
     sequence: UUID
-    notes: Optional[List[NoteObject]] = None
-    tags: Optional[List[int]] = None
-    created_by: Optional[UUID] = None
-    created_on: Optional[datetime.datetime] = None
+    notes: List[NoteObject] | None = None
+    tags: List[int] | None = None
+    created_by: UUID | None = None
+    created_on: datetime.datetime | None = None
 
 
 class SequenceAnnotationAdapter(

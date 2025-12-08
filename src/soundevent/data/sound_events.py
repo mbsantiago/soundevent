@@ -26,7 +26,7 @@ models. Features offer valuable insights into the acoustic properties
 of the sound events.
 """
 
-from typing import List, Optional
+from typing import List
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
@@ -63,7 +63,7 @@ class SoundEvent(BaseModel):
     """
 
     uuid: UUID = Field(default_factory=uuid4, repr=False)
-    geometry: Optional[Geometry]
+    geometry: Geometry
     recording: Recording
     features: List[Feature] = Field(default_factory=list, repr=False)
 

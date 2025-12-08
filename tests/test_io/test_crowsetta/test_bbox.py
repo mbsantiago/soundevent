@@ -80,23 +80,6 @@ def test_bbox_from_annotation_fails_on_other_geometries(
         )
 
 
-def test_bbox_from_annotation_fails_on_empty_geometry(
-    recording: data.Recording,
-):
-    sound_event_annotation = data.SoundEventAnnotation(
-        sound_event=data.SoundEvent(
-            recording=recording,
-            geometry=None,
-        ),
-    )
-
-    with pytest.raises(ValueError):
-        crowsetta_io.bbox_from_annotation(
-            sound_event_annotation,
-            cast_to_bbox=False,
-        )
-
-
 def test_bbox_from_annotations_can_cast_to_bbox(
     sound_event_annotation: data.SoundEventAnnotation,
 ):

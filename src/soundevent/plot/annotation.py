@@ -1,6 +1,6 @@
 """Functions for plotting annotations."""
 
-from typing import Iterable, Optional
+from typing import Iterable
 
 from matplotlib.axes import Axes
 
@@ -18,12 +18,12 @@ __all__ = [
 
 def plot_annotation(
     annotation: data.SoundEventAnnotation,
-    ax: Optional[Axes] = None,
+    ax: Axes | None = None,
     position: Positions = "top-right",
-    color_mapper: Optional[TagColorMapper] = None,
+    color_mapper: TagColorMapper | None = None,
     time_offset: float = 0.001,
     freq_offset: float = 1000,
-    color: Optional[str] = None,
+    color: str | None = None,
     **kwargs,
 ) -> Axes:
     """Plot a sound event annotation on a spectrogram.
@@ -88,13 +88,13 @@ def plot_annotation(
 
 def plot_annotations(
     annotations: Iterable[data.SoundEventAnnotation],
-    ax: Optional[Axes] = None,
+    ax: Axes | None = None,
     position: Positions = "top-right",
-    color_mapper: Optional[TagColorMapper] = None,
+    color_mapper: TagColorMapper | None = None,
     time_offset: float = 0.001,
     freq_offset: float = 1000,
     legend: bool = True,
-    color: Optional[str] = None,
+    color: str | None = None,
     **kwargs,
 ):
     """Plot a collection of sound event annotations on a spectrogram.

@@ -2,16 +2,7 @@
 
 from collections import defaultdict
 from itertools import combinations
-from typing import (
-    Any,
-    Callable,
-    List,
-    Literal,
-    Optional,
-    Sequence,
-    Tuple,
-    Union,
-)
+from typing import Any, Callable, Literal, Sequence
 
 import numpy as np
 import shapely
@@ -54,7 +45,7 @@ __all__ = [
 
 def compute_bounds(
     geometry: data.Geometry,
-) -> Tuple[float, float, float, float]:
+) -> tuple[float, float, float, float]:
     """Compute the bounds of a geometry.
 
     Parameters
@@ -280,13 +271,13 @@ def buffer_shapely_geometry(
     return shapely_to_geometry(buffered)
 
 
-Value = Union[float, int]
+Value = float | int
 
 
 def rasterize(
-    geometries: List[data.Geometry],
+    geometries: list[data.Geometry],
     array: xr.DataArray,
-    values: Union[Value, List[Value], Tuple[Value]] = 1,
+    values: Value | list[Value] | tuple[Value] = 1,
     fill: float = 0,
     dtype: DTypeLike = np.float32,
     xdim: str = Dimensions.time.value,
@@ -402,7 +393,7 @@ Positions = Literal[
 def get_geometry_point(
     geometry: Geometry,
     position: Positions = "bottom-left",
-) -> Tuple[float, float]:
+) -> tuple[float, float]:
     """
     Calculate the coordinates of a specific point within a geometry.
 
@@ -609,7 +600,7 @@ def compute_interval_overlap(
 def intervals_overlap(
     interval1: tuple[float, float],
     interval2: tuple[float, float],
-    min_relative_overlap: Optional[float] = None,
+    min_relative_overlap: float | None = None,
     min_absolute_overlap: float = 0,
 ):
     """Check if two intervals overlap.
@@ -676,7 +667,7 @@ def have_temporal_overlap(
     geom1: data.Geometry,
     geom2: data.Geometry,
     min_absolute_overlap: float = 0,
-    min_relative_overlap: Optional[float] = None,
+    min_relative_overlap: float | None = None,
 ) -> bool:
     """Check if two geometries have temporal overlap.
 
@@ -726,7 +717,7 @@ def have_frequency_overlap(
     geom1: data.Geometry,
     geom2: data.Geometry,
     min_absolute_overlap: float = 0,
-    min_relative_overlap: Optional[float] = None,
+    min_relative_overlap: float | None = None,
 ) -> bool:
     """Check if two geometries have frequency overlap.
 
@@ -1114,7 +1105,7 @@ def scale_geometry(
 
 
 def compute_bbox_area(
-    bbox: Tuple[float, float, float, float],
+    bbox: tuple[float, float, float, float],
 ) -> float:
     """Compute the area of a bounding box.
 
@@ -1153,7 +1144,7 @@ def compute_bbox_area(
 
 
 def compute_interval_width(
-    interval: Tuple[float, float],
+    interval: tuple[float, float],
 ) -> float:
     """Compute the width of an interval.
 

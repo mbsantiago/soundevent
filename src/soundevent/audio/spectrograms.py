@@ -1,6 +1,6 @@
 """Functions to compute several spectral representations of sound signals."""
 
-from typing import Callable, Literal, Optional, Union
+from typing import Callable, Literal
 
 import numpy as np
 import xarray as xr
@@ -26,11 +26,11 @@ def compute_spectrogram(
     window_size: float,
     hop_size: float,
     window_type: str = "hann",
-    detrend: Union[str, Callable, Literal[False]] = False,
+    detrend: str | Callable | Literal[False] = False,
     padded: bool = True,
-    boundary: Optional[Literal["zeros", "odd", "even", "constant"]] = "zeros",
+    boundary: Literal["zeros", "odd", "even", "constant"] | None = "zeros",
     scale: Literal["amplitude", "power", "psd"] = "psd",
-    sort_dims: Union[tuple[str, ...], bool] = DEFAULT_DIM_ORDER,
+    sort_dims: tuple[str, ...] | bool = DEFAULT_DIM_ORDER,
 ) -> xr.DataArray:
     """Compute the spectrogram of a signal.
 
